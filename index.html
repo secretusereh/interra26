@@ -248,15 +248,15 @@
     </div>
 
     <script>
-        /* =========================================
-           1. CONFIGURACIÓN DE SUPABASE
-           ========================================= */
-        // Reemplaza estos valores con los de tu proyecto Supabase
-        const SUPABASE_URL = 'TU_URL_DE_SUPABASE'; 
-        const SUPABASE_ANON_KEY = 'TU_ANON_KEY_DE_SUPABASE';
+/* =========================================
+   1. CONFIGURACIÓN DE SUPABASE
+   ========================================= */
+const SUPABASE_URL = 'https://shllajnbiuvlwgcdaniq.supabase.co'; 
+// Usamos SOLO la clave pública (publishable / anon)
+const SUPABASE_ANON_KEY = 'sb_publishable_a_lyvHAAsTOAEoRk-idrzQ_oYPGFJ9-';
 
-        // Inicializar cliente
-        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+// Inicializamos la conexión
+const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         /* =========================================
            2. LÓGICA DE UI (ANIMACIONES AWWARDS)
