@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Interra-hub | Acceso</title>
+    <link rel="icon" type="image/png" href="interrahublogo.PNG">
+    <link rel="apple-touch-icon" href="interrahublogo.PNG">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;800&display=swap" rel="stylesheet">
@@ -34,7 +36,7 @@
             background-image: radial-gradient(circle at 50% -20%, #2a2a2a 0%, var(--bg-color) 50%);
         }
 
-        /* ── BETA BANNER ── */
+        /* ── BETA BANNER (solo móvil) ── */
         #beta-banner {
             width: 100%;
             background: linear-gradient(90deg, #1a1200, #2a1f00, #1a1200);
@@ -48,12 +50,17 @@
             position: sticky;
             top: 0;
             z-index: 900;
+            display: none;
+        }
+        @media (max-width: 768px) {
+            #beta-banner { display: block; }
         }
         #beta-banner strong { font-weight: 700; }
         #beta-banner a {
             color: var(--warning);
             text-decoration: underline;
             text-decoration-color: rgba(255,184,77,0.4);
+            font-weight: 600;
         }
         #beta-banner a:hover { opacity: 0.8; }
 
@@ -96,6 +103,7 @@
 
         .header-text { text-align: center; margin-bottom: 2rem; }
         .header-text h1 { font-weight: 800; font-size: 2.5rem; letter-spacing: -2px; }
+        .header-text h1 .dot { color: var(--accent); }
         .header-text p { color: var(--text-muted); font-weight: 300; margin-top: 0.5rem; }
 
         .forms-wrapper { position: relative; min-height: 420px; }
@@ -265,6 +273,7 @@
             letter-spacing: -1px;
             margin-bottom: 0.3rem;
         }
+        .footer-logo .dot { color: var(--accent); }
 
         .footer-potxo {
             font-size: 0.75rem;
@@ -393,7 +402,7 @@
 
     <!-- ── BETA BANNER ── -->
     <div id="beta-banner">
-        ⚠️ <strong>BETA</strong> — Si encuentras algún error, repórtalo a&nbsp;<a href="mailto:pipaonstudio@gmail.com">pipaonstudio@gmail.com</a>
+        ⚠️ <strong>BETA</strong> — Esta versión puede contener errores. &nbsp;<a href="mailto:pipaonstudio@gmail.com">Reportar</a>
     </div>
 
     <!-- ── LOADER ── -->
@@ -449,7 +458,7 @@
             <!-- Auth form -->
             <div class="auth-container" id="main-container">
                 <div class="header-text">
-                    <h1>Interra-hub.</h1>
+                    <h1>Interra-hub<span class="dot">.</span></h1>
                     <p>Bienvenido de nuevo.</p>
                 </div>
 
@@ -519,7 +528,7 @@
     <!-- ── FOOTER ── -->
     <footer>
         <div class="footer-inner">
-            <div class="footer-logo">Interra-hub.</div>
+            <div class="footer-logo">Interra-hub<span class="dot">.</span></div>
             <div class="footer-potxo">Con todo el cariño del mundo para el grupo <strong>Potxopipas</strong> 🚆 — gracias a vosotros existe esta app.</div>
 
             <div class="footer-links">
@@ -529,9 +538,9 @@
             </div>
 
             <div class="footer-studio">
-                Diseñada y desarrollada por&nbsp;<strong style="color:rgba(255,255,255,0.4);">Pipa</strong>&nbsp;·&nbsp;<a href="https://pipaonstudio.netlify.app/" target="_blank" rel="noopener">Pipaon Studio</a>&nbsp;·&nbsp;Potxopipa's Team
+                Hecha con ❤️ por <strong style="color:rgba(255,255,255,0.4);">Pipa</strong> &nbsp;·&nbsp; Potxopipa's Team
             </div>
-            <div class="footer-copy">© 2025 Interra-hub · Pipaon Studio · Todos los derechos reservados</div>
+            <div class="footer-copy">© 2025 Interra-hub · Todos los derechos reservados</div>
         </div>
     </footer>
 
@@ -544,10 +553,10 @@
             <p>El uso de esta plataforma está destinado exclusivamente a fines lícitos y personales. Queda <strong>estrictamente prohibido</strong> el uso de la aplicación para actividades ilegales, fraudulentas, difamatorias, o que vulneren derechos de terceros o la legislación vigente.</p>
 
             <h3>2. Exención de responsabilidad</h3>
-            <p>Interra-hub y Pipaon Studio se desvinculan completamente de cualquier uso indebido o ilegal que un usuario pudiera hacer de la plataforma. El usuario es el único y exclusivo responsable del contenido que introduce y de las acciones que realiza dentro de la aplicación.</p>
+            <p>Interra-hub se desvincula completamente de cualquier uso indebido o ilegal que un usuario pudiera hacer de la plataforma. El usuario es el único y exclusivo responsable del contenido que introduce y de las acciones que realiza dentro de la aplicación.</p>
 
             <h3>3. Propiedad intelectual</h3>
-            <p>Esta aplicación es un producto diseñado y creado por <a href="https://pipaonstudio.netlify.app/" target="_blank" rel="noopener"><strong>Pipaon Studio</strong></a>. Su uso público está permitido, pero <strong>copiar, reproducir, redistribuir o utilizar cualquier parte del código o diseño de esta aplicación sin autorización expresa constituye un delito y una infracción de los derechos de autor</strong> protegidos bajo la legislación aplicable.</p>
+            <p>Esta aplicación es un producto de uso público. Sin embargo, <strong>copiar, reproducir, redistribuir o utilizar cualquier parte del código o diseño de esta aplicación sin autorización expresa constituye un delito y una infracción de los derechos de autor</strong> protegidos bajo la legislación aplicable.</p>
 
             <h3>4. Correos electrónicos informativos</h3>
             <p>Al registrarte y usar la plataforma, <strong>aceptas recibir correos electrónicos de carácter informativo</strong> relacionados con la aplicación (actualizaciones, novedades, avisos). En ningún caso se enviarán correos de carácter publicitario o de terceros.</p>
