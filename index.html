@@ -3,16 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interrail App | Acceso</title>
-    
+    <title>Interrail | Acceso</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;800&display=swap" rel="stylesheet">
 
     <style>
-        /* =========================================
-           VARIABLES Y RESET (Sin cambios, estilo Awwwards)
-           ========================================= */
         :root {
             --bg-color: #0a0a0a;
             --surface: #171717;
@@ -20,15 +16,10 @@
             --text-muted: #888888;
             --accent: #ff4d4d;
             --success: #4dff4d;
-            --transition: 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            --transition: 0.8s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Sora', sans-serif;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Sora', sans-serif; }
 
         body {
             background-color: var(--bg-color);
@@ -41,172 +32,117 @@
             background-image: radial-gradient(circle at 50% -20%, #2a2a2a 0%, var(--bg-color) 50%);
         }
 
-        /* =========================================
-           CONTENEDOR PRINCIPAL Y ANIMACIONES
-           ========================================= */
+        /* Pantalla de carga inicial pro */
+        #initial-loader {
+            position: fixed;
+            inset: 0;
+            background: var(--bg-color);
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.5s ease;
+        }
+
         .auth-container {
             position: relative;
             width: 100%;
             max-width: 400px;
             padding: 2rem;
-            perspective: 1000px;
-        }
-
-        .header-text {
-            text-align: center;
-            margin-bottom: 3rem;
-            animation: fadeDown 1s var(--transition) forwards;
             opacity: 0;
-            transform: translateY(-20px);
-        }
-
-        .header-text h1 {
-            font-weight: 800;
-            font-size: 2.5rem;
-            letter-spacing: -1px;
-        }
-
-        .header-text p {
-            color: var(--text-muted);
-            font-weight: 300;
-            margin-top: 0.5rem;
-        }
-
-        .forms-wrapper {
-            position: relative;
-            min-height: 350px;
-        }
-
-        .form-box {
-            position: absolute;
-            width: 100%;
-            top: 0;
-            left: 0;
+            transform: translateY(20px);
             transition: var(--transition);
-            opacity: 0;
-            pointer-events: none;
+        }
+
+        .auth-container.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .header-text { text-align: center; margin-bottom: 2rem; }
+        .header-text h1 { font-weight: 800; font-size: 2.5rem; letter-spacing: -2px; }
+        .header-text p { color: var(--text-muted); font-weight: 300; margin-top: 0.5rem; }
+
+        .forms-wrapper { position: relative; min-height: 420px; }
+        .form-box {
+            position: absolute; width: 100%; top: 0; left: 0;
+            transition: var(--transition); opacity: 0; pointer-events: none;
             transform: translateX(30px);
         }
+        .form-box.active { opacity: 1; pointer-events: all; transform: translateX(0); }
+        .form-box.slide-left { transform: translateX(-30px); }
 
-        .form-box.active {
-            opacity: 1;
-            pointer-events: all;
-            transform: translateX(0);
-        }
-
-        .form-box.slide-left {
-            transform: translateX(-30px);
-        }
-
-        /* =========================================
-           ESTILOS DE FORMULARIO
-           ========================================= */
-        .input-group {
-            margin-bottom: 1.5rem;
-            position: relative;
-        }
-
+        .input-group { margin-bottom: 1.5rem; position: relative; }
         .input-group input {
-            width: 100%;
-            background: transparent;
-            border: none;
-            border-bottom: 1px solid #333;
-            color: var(--primary);
-            font-size: 1rem;
-            padding: 0.8rem 0;
-            transition: border-color 0.3s ease;
-            outline: none;
+            width: 100%; background: transparent; border: none;
+            border-bottom: 1px solid rgba(255,255,255,0.2); color: var(--primary);
+            font-size: 1rem; padding: 0.8rem 0; outline: none; transition: border-color 0.3s;
         }
-
-        .input-group input:focus {
-            border-bottom-color: var(--primary);
-        }
-
         .input-group label {
-            position: absolute;
-            top: 0.8rem;
-            left: 0;
-            color: var(--text-muted);
-            font-weight: 300;
-            pointer-events: none;
-            transition: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            position: absolute; top: 0.8rem; left: 0;
+            color: var(--text-muted); font-weight: 300; pointer-events: none;
+            transition: 0.3s var(--transition);
         }
-
-        .input-group input:focus ~ label,
-        .input-group input:valid ~ label {
-            top: -12px;
-            font-size: 0.75rem;
-            color: var(--primary);
+        .input-group input:focus { border-bottom-color: var(--primary); }
+        .input-group input:focus ~ label, .input-group input:valid ~ label {
+            top: -12px; font-size: 0.75rem; color: var(--primary);
         }
 
         button.submit-btn {
-            width: 100%;
-            padding: 1rem;
-            background: var(--primary);
-            color: var(--bg-color);
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            font-size: 1rem;
-            cursor: pointer;
-            margin-top: 1rem;
-            transition: transform 0.2s ease, opacity 0.2s ease;
+            width: 100%; padding: 1rem; background: var(--primary);
+            color: var(--bg-color); border: none; border-radius: 12px;
+            font-weight: 600; cursor: pointer; margin-top: 0.5rem;
+            transition: all 0.3s ease; font-size: 1rem;
         }
+        button.submit-btn:hover { transform: scale(0.98); opacity: 0.9; }
 
-        button.submit-btn:hover {
-            transform: scale(0.98);
-            opacity: 0.9;
+        /* Divisor "O" */
+        .divider {
+            display: flex; align-items: center; text-align: center; margin: 1.5rem 0;
+            color: var(--text-muted); font-size: 0.85rem; font-weight: 300;
         }
+        .divider::before, .divider::after {
+            content: ''; flex: 1; border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .divider span { padding: 0 10px; }
 
-        .toggle-text {
-            text-align: center;
-            margin-top: 2rem;
-            color: var(--text-muted);
-            font-size: 0.9rem;
-            font-weight: 300;
+        /* Botón Google */
+        .google-btn {
+            width: 100%; padding: 1rem; background: transparent;
+            color: var(--primary); border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 12px; font-weight: 600; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+            transition: all 0.3s ease; font-size: 1rem;
         }
+        .google-btn:hover {
+            background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.4); transform: scale(0.98);
+        }
+        .google-btn svg { width: 20px; height: 20px; }
 
-        .toggle-text span {
-            color: var(--primary);
-            cursor: pointer;
-            font-weight: 600;
-            transition: opacity 0.3s ease;
-        }
+        .toggle-text { text-align: center; margin-top: 1.5rem; color: var(--text-muted); font-size: 0.9rem; }
+        .toggle-text span { color: var(--primary); cursor: pointer; font-weight: 600; transition: opacity 0.3s; }
+        .toggle-text span:hover { opacity: 0.7; }
 
-        .toggle-text span:hover {
-            opacity: 0.7;
-        }
-
-        .message-box {
-            margin-top: 1rem;
-            text-align: center;
-            font-size: 0.85rem;
-            min-height: 20px;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        @keyframes fadeDown {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+        .message-box { margin-top: 1rem; text-align: center; font-size: 0.85rem; min-height: 20px; opacity: 0; transition: 0.3s; }
     </style>
 </head>
 <body>
 
-    <div class="auth-container">
+    <div id="initial-loader">
+        <div style="width: 20px; height: 20px; border: 2px solid #333; border-top-color: #fff; border-radius: 50%; animation: spin 1s linear infinite;"></div>
+    </div>
+
+    <div class="auth-container" id="main-container">
         <div class="header-text">
             <h1>Interrail.</h1>
-            <p>Centraliza tu viaje.</p>
+            <p>Bienvenido de nuevo.</p>
         </div>
 
         <div class="forms-wrapper">
             <form id="login-form" class="form-box active">
                 <div class="input-group">
                     <input type="email" id="login-email" required>
-                    <label>Correo electrónico</label>
+                    <label>Email</label>
                 </div>
                 <div class="input-group">
                     <input type="password" id="login-password" required>
@@ -214,161 +150,164 @@
                 </div>
                 <button type="submit" class="submit-btn" id="login-btn">Entrar</button>
                 <div class="message-box" id="login-msg"></div>
-                <p class="toggle-text">¿No tienes cuenta? <span id="btn-to-register">Regístrate</span></p>
+
+                <div class="divider"><span>o</span></div>
+
+                <button type="button" class="google-btn" id="google-login-btn">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                        <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                        <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+                        <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+                    </svg>
+                    Continuar con Google
+                </button>
+
+                <p class="toggle-text">¿Nuevo aquí? <span id="to-reg">Regístrate</span></p>
             </form>
 
             <form id="register-form" class="form-box">
                 <div class="input-group">
-                    <input type="text" id="register-name" required>
-                    <label>Tu nombre</label>
+                    <input type="text" id="reg-name" required>
+                    <label>Nombre</label>
                 </div>
                 <div class="input-group">
-                    <input type="email" id="register-email" required>
-                    <label>Correo electrónico</label>
+                    <input type="email" id="reg-email" required>
+                    <label>Email</label>
                 </div>
                 <div class="input-group">
-                    <input type="password" id="register-password" required minlength="6">
-                    <label>Contraseña (mín. 6 caracteres)</label>
+                    <input type="password" id="reg-password" required minlength="6">
+                    <label>Contraseña</label>
                 </div>
-                <button type="submit" class="submit-btn" id="register-btn">Crear cuenta</button>
-                <div class="message-box" id="register-msg"></div>
-                <p class="toggle-text">¿Ya tienes cuenta? <span id="btn-to-login">Inicia sesión</span></p>
+                <button type="submit" class="submit-btn" id="reg-btn">Crear cuenta</button>
+                <div class="message-box" id="reg-msg"></div>
+
+                <div class="divider"><span>o</span></div>
+
+                <button type="button" class="google-btn" id="google-reg-btn">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                        <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                        <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+                        <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+                    </svg>
+                    Continuar con Google
+                </button>
+
+                <p class="toggle-text">¿Ya eres socio? <span id="to-log">Inicia sesión</span></p>
             </form>
         </div>
     </div>
 
     <script type="module">
-        /* =========================================
-           1. IMPORTAR FIREBASE DESDE CDN
-           ========================================= */
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+        // Añadido GoogleAuthProvider y signInWithPopup a las importaciones
+        import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
 
-        /* =========================================
-           2. TU CONFIGURACIÓN DE FIREBASE
-           ========================================= */
         const firebaseConfig = {
             apiKey: "AIzaSyDRkUJnDLzknFz3KOnPEm4UFsgf6R4z1Uk",
             authDomain: "interra26-22ecd.firebaseapp.com",
             projectId: "interra26-22ecd",
             storageBucket: "interra26-22ecd.firebasestorage.app",
             messagingSenderId: "960505222050",
-            appId: "1:960505222050:web:a9943c6fec9532141f98fb",
-            measurementId: "G-Q4WWX5TLK4"
+            appId: "1:960505222050:web:a9943c6fec9532141f98fb"
         };
 
-        // Inicializar Firebase
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
-
-        /* =========================================
-           3. LÓGICA DE UI (ANIMACIONES AWWARDS)
-           ========================================= */
-        const loginForm = document.getElementById('login-form');
-        const registerForm = document.getElementById('register-form');
-
-        function toggleForms() {
-            document.getElementById('login-msg').style.opacity = 0;
-            document.getElementById('register-msg').style.opacity = 0;
-
-            if (loginForm.classList.contains('active')) {
-                loginForm.classList.remove('active');
-                loginForm.classList.add('slide-left');
-                registerForm.classList.remove('slide-left');
-                registerForm.classList.add('active');
-            } else {
-                registerForm.classList.remove('active');
-                loginForm.classList.remove('slide-left');
-                loginForm.classList.add('active');
-            }
-        }
-
-        document.getElementById('btn-to-register').addEventListener('click', toggleForms);
-        document.getElementById('btn-to-login').addEventListener('click', toggleForms);
-
-        /* =========================================
-           4. LÓGICA DE BASE DE DATOS (AUTENTICACIÓN)
-           ========================================= */
         
-        // Manejo del Registro
-        registerForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            const name = document.getElementById('register-name').value;
-            const email = document.getElementById('register-email').value;
-            const password = document.getElementById('register-password').value;
-            const btn = document.getElementById('register-btn');
-            const msgBox = document.getElementById('register-msg');
+        // Inicializar el proveedor de Google
+        const googleProvider = new GoogleAuthProvider();
 
-            btn.innerHTML = 'Procesando...';
-            btn.style.opacity = '0.7';
+        const loader = document.getElementById('initial-loader');
+        const container = document.getElementById('main-container');
 
-            try {
-                // Crear usuario en Firebase
-                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-                
-                // Añadir el nombre al perfil del usuario
-                await updateProfile(userCredential.user, { displayName: name });
-
-                btn.innerHTML = 'Crear cuenta';
-                btn.style.opacity = '1';
-                msgBox.style.color = 'var(--success)';
-                msgBox.innerText = '¡Registro exitoso! Ya puedes iniciar sesión.';
-                msgBox.style.opacity = 1;
-                
-                // Vaciar formulario
-                registerForm.reset();
-
-            } catch (error) {
-                btn.innerHTML = 'Crear cuenta';
-                btn.style.opacity = '1';
-                msgBox.style.color = 'var(--accent)'; // Rojo de error
-                
-                // Traducir errores comunes de Firebase
-                if (error.code === 'auth/email-already-in-use') {
-                    msgBox.innerText = 'Este correo ya está registrado.';
-                } else if (error.code === 'auth/weak-password') {
-                    msgBox.innerText = 'La contraseña es muy débil.';
-                } else {
-                    msgBox.innerText = error.message;
-                }
-                msgBox.style.opacity = 1;
+        /* 🛡️ EL GUARDIÁN DE SESIÓN */
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                window.location.href = 'panel.html';
+            } else {
+                loader.style.opacity = '0';
+                setTimeout(() => {
+                    loader.style.display = 'none';
+                    container.classList.add('visible');
+                }, 500);
             }
         });
 
-        // Manejo del Login
-        loginForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
+        /* LÓGICA DE INTERFAZ */
+        const toReg = document.getElementById('to-reg');
+        const toLog = document.getElementById('to-log');
+        const loginForm = document.getElementById('login-form');
+        const regForm = document.getElementById('register-form');
+
+        const toggle = () => {
+            loginForm.classList.toggle('active');
+            loginForm.classList.toggle('slide-left');
+            regForm.classList.toggle('active');
             
-            const email = document.getElementById('login-email').value;
-            const password = document.getElementById('login-password').value;
+            // Limpiar mensajes al cambiar
+            document.getElementById('login-msg').style.opacity = 0;
+            document.getElementById('reg-msg').style.opacity = 0;
+        };
+
+        toReg.onclick = toggle;
+        toLog.onclick = toggle;
+
+        /* LÓGICA DE AUTH CORREO/CONTRASEÑA */
+        loginForm.onsubmit = async (e) => {
+            e.preventDefault();
             const btn = document.getElementById('login-btn');
-            const msgBox = document.getElementById('login-msg');
-
-            btn.innerHTML = 'Entrando...';
-            btn.style.opacity = '0.7';
+            const msg = document.getElementById('login-msg');
+            btn.innerText = 'Verificando...';
 
             try {
-                // Iniciar sesión en Firebase
-                await signInWithEmailAndPassword(auth, email, password);
-
-                btn.innerHTML = 'Entrar';
-                btn.style.opacity = '1';
-                msgBox.style.color = 'var(--success)';
-                msgBox.innerText = '¡Acceso concedido!';
-                msgBox.style.opacity = 1;
-                
-                // Aquí redirigirías al panel principal
-                // setTimeout(() => { window.location.href = 'panel.html'; }, 1000);
-
-            } catch (error) {
-                btn.innerHTML = 'Entrar';
-                btn.style.opacity = '1';
-                msgBox.style.color = 'var(--accent)';
-                msgBox.innerText = 'Correo o contraseña incorrectos.';
-                msgBox.style.opacity = 1;
+                await signInWithEmailAndPassword(auth, document.getElementById('login-email').value, document.getElementById('login-password').value);
+            } catch (err) {
+                btn.innerText = 'Entrar';
+                msg.innerText = "Error en las credenciales.";
+                msg.style.opacity = 1;
+                msg.style.color = 'var(--accent)';
             }
-        });
+        };
+
+        regForm.onsubmit = async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('reg-btn');
+            const msg = document.getElementById('reg-msg');
+            btn.innerText = 'Creando...';
+
+            try {
+                const cred = await createUserWithEmailAndPassword(auth, document.getElementById('reg-email').value, document.getElementById('reg-password').value);
+                await updateProfile(cred.user, { displayName: document.getElementById('reg-name').value });
+            } catch (err) {
+                btn.innerText = 'Crear cuenta';
+                msg.innerText = err.message;
+                msg.style.opacity = 1;
+                msg.style.color = 'var(--accent)';
+            }
+        };
+
+        /* LÓGICA DE AUTH GOOGLE */
+        const handleGoogleAuth = async () => {
+            try {
+                await signInWithPopup(auth, googleProvider);
+                // Si va bien, el onAuthStateChanged nos mandará al panel.html
+            } catch (error) {
+                console.error("Error con Google Auth: ", error);
+                // Mostrar alerta general en caso de error o cierre de la ventana popup
+                const msg = document.querySelector('.form-box.active .message-box');
+                msg.innerText = 'No se pudo iniciar sesión con Google.';
+                msg.style.opacity = 1;
+                msg.style.color = 'var(--accent)';
+            }
+        };
+
+        // Escuchar clics en los botones de Google (en ambos formularios)
+        document.getElementById('google-login-btn').addEventListener('click', handleGoogleAuth);
+        document.getElementById('google-reg-btn').addEventListener('click', handleGoogleAuth);
+
     </script>
+    <style>@keyframes spin { to { transform: rotate(360deg); } }</style>
 </body>
 </html>
