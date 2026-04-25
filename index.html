@@ -8,19 +8,18 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;800&display=swap" rel="stylesheet">
-    
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <style>
         /* =========================================
-           VARIABLES Y RESET
+           VARIABLES Y RESET (Sin cambios, estilo Awwwards)
            ========================================= */
         :root {
             --bg-color: #0a0a0a;
             --surface: #171717;
             --primary: #ffffff;
             --text-muted: #888888;
-            --accent: #ff4d4d; /* Un rojo sutil para errores o acentos */
+            --accent: #ff4d4d;
+            --success: #4dff4d;
             --transition: 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
@@ -39,7 +38,6 @@
             align-items: center;
             justify-content: center;
             overflow: hidden;
-            /* Efecto de fondo radial elegante */
             background-image: radial-gradient(circle at 50% -20%, #2a2a2a 0%, var(--bg-color) 50%);
         }
 
@@ -74,7 +72,6 @@
             margin-top: 0.5rem;
         }
 
-        /* Contenedor de los formularios para efecto Slide */
         .forms-wrapper {
             position: relative;
             min-height: 350px;
@@ -135,7 +132,6 @@
             transition: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        /* Animación de la etiqueta al escribir o enfocar */
         .input-group input:focus ~ label,
         .input-group input:valid ~ label {
             top: -12px;
@@ -150,7 +146,6 @@
             color: var(--bg-color);
             border: none;
             border-radius: 8px;
-            font-family: 'Sora', sans-serif;
             font-weight: 600;
             font-size: 1rem;
             cursor: pointer;
@@ -182,20 +177,15 @@
             opacity: 0.7;
         }
 
-        /* Mensajes de error del sistema */
         .message-box {
             margin-top: 1rem;
             text-align: center;
             font-size: 0.85rem;
             min-height: 20px;
-            color: var(--accent);
             opacity: 0;
             transition: opacity 0.3s ease;
         }
 
-        /* =========================================
-           KEYFRAMES
-           ========================================= */
         @keyframes fadeDown {
             to {
                 opacity: 1;
@@ -224,7 +214,7 @@
                 </div>
                 <button type="submit" class="submit-btn" id="login-btn">Entrar</button>
                 <div class="message-box" id="login-msg"></div>
-                <p class="toggle-text">¿No tienes cuenta? <span onclick="toggleForms()">Regístrate</span></p>
+                <p class="toggle-text">¿No tienes cuenta? <span id="btn-to-register">Regístrate</span></p>
             </form>
 
             <form id="register-form" class="form-box">
@@ -242,56 +232,67 @@
                 </div>
                 <button type="submit" class="submit-btn" id="register-btn">Crear cuenta</button>
                 <div class="message-box" id="register-msg"></div>
-                <p class="toggle-text">¿Ya tienes cuenta? <span onclick="toggleForms()">Inicia sesión</span></p>
+                <p class="toggle-text">¿Ya tienes cuenta? <span id="btn-to-login">Inicia sesión</span></p>
             </form>
         </div>
     </div>
 
-    <script>
-/* =========================================
-   1. CONFIGURACIÓN DE SUPABASE
-   ========================================= */
-const SUPABASE_URL = 'https://shllajnbiuvlwgcdaniq.supabase.co'; 
-// Usamos SOLO la clave pública (publishable / anon)
-const SUPABASE_ANON_KEY = 'sb_publishable_a_lyvHAAsTOAEoRk-idrzQ_oYPGFJ9-';
-
-// Inicializamos la conexión
-const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    <script type="module">
+        /* =========================================
+           1. IMPORTAR FIREBASE DESDE CDN
+           ========================================= */
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
 
         /* =========================================
-           2. LÓGICA DE UI (ANIMACIONES AWWARDS)
+           2. TU CONFIGURACIÓN DE FIREBASE
+           ========================================= */
+        const firebaseConfig = {
+            apiKey: "AIzaSyDRkUJnDLzknFz3KOnPEm4UFsgf6R4z1Uk",
+            authDomain: "interra26-22ecd.firebaseapp.com",
+            projectId: "interra26-22ecd",
+            storageBucket: "interra26-22ecd.firebasestorage.app",
+            messagingSenderId: "960505222050",
+            appId: "1:960505222050:web:a9943c6fec9532141f98fb",
+            measurementId: "G-Q4WWX5TLK4"
+        };
+
+        // Inicializar Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        /* =========================================
+           3. LÓGICA DE UI (ANIMACIONES AWWARDS)
            ========================================= */
         const loginForm = document.getElementById('login-form');
         const registerForm = document.getElementById('register-form');
 
         function toggleForms() {
-            // Limpiar mensajes
             document.getElementById('login-msg').style.opacity = 0;
             document.getElementById('register-msg').style.opacity = 0;
 
             if (loginForm.classList.contains('active')) {
-                // Ocultar Login, Mostrar Registro
                 loginForm.classList.remove('active');
                 loginForm.classList.add('slide-left');
-                
                 registerForm.classList.remove('slide-left');
                 registerForm.classList.add('active');
             } else {
-                // Ocultar Registro, Mostrar Login
                 registerForm.classList.remove('active');
-                
                 loginForm.classList.remove('slide-left');
                 loginForm.classList.add('active');
             }
         }
 
+        document.getElementById('btn-to-register').addEventListener('click', toggleForms);
+        document.getElementById('btn-to-login').addEventListener('click', toggleForms);
+
         /* =========================================
-           3. LÓGICA DE BASE DE DATOS (AUTENTICACIÓN)
+           4. LÓGICA DE BASE DE DATOS (AUTENTICACIÓN)
            ========================================= */
         
         // Manejo del Registro
         registerForm.addEventListener('submit', async (e) => {
-            e.preventDefault(); // Evita que la página recargue
+            e.preventDefault();
             
             const name = document.getElementById('register-name').value;
             const email = document.getElementById('register-email').value;
@@ -299,30 +300,38 @@ const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
             const btn = document.getElementById('register-btn');
             const msgBox = document.getElementById('register-msg');
 
-            // Estado de carga fluido
             btn.innerHTML = 'Procesando...';
             btn.style.opacity = '0.7';
 
-            // Llamada a Supabase
-            const { data, error } = await supabase.auth.signUp({
-                email: email,
-                password: password,
-                options: {
-                    data: {
-                        full_name: name // Guardamos el nombre en los metadatos
-                    }
-                }
-            });
+            try {
+                // Crear usuario en Firebase
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                
+                // Añadir el nombre al perfil del usuario
+                await updateProfile(userCredential.user, { displayName: name });
 
-            btn.innerHTML = 'Crear cuenta';
-            btn.style.opacity = '1';
-
-            if (error) {
-                msgBox.innerText = error.message;
+                btn.innerHTML = 'Crear cuenta';
+                btn.style.opacity = '1';
+                msgBox.style.color = 'var(--success)';
+                msgBox.innerText = '¡Registro exitoso! Ya puedes iniciar sesión.';
                 msgBox.style.opacity = 1;
-            } else {
-                msgBox.style.color = '#4dff4d'; // Verde éxito
-                msgBox.innerText = '¡Registro exitoso! Revisa tu email.';
+                
+                // Vaciar formulario
+                registerForm.reset();
+
+            } catch (error) {
+                btn.innerHTML = 'Crear cuenta';
+                btn.style.opacity = '1';
+                msgBox.style.color = 'var(--accent)'; // Rojo de error
+                
+                // Traducir errores comunes de Firebase
+                if (error.code === 'auth/email-already-in-use') {
+                    msgBox.innerText = 'Este correo ya está registrado.';
+                } else if (error.code === 'auth/weak-password') {
+                    msgBox.innerText = 'La contraseña es muy débil.';
+                } else {
+                    msgBox.innerText = error.message;
+                }
                 msgBox.style.opacity = 1;
             }
         });
@@ -339,24 +348,25 @@ const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
             btn.innerHTML = 'Entrando...';
             btn.style.opacity = '0.7';
 
-            const { data, error } = await supabase.auth.signInWithPassword({
-                email: email,
-                password: password,
-            });
+            try {
+                // Iniciar sesión en Firebase
+                await signInWithEmailAndPassword(auth, email, password);
 
-            btn.innerHTML = 'Entrar';
-            btn.style.opacity = '1';
-
-            if (error) {
-                msgBox.innerText = 'Credenciales incorrectas.';
-                msgBox.style.opacity = 1;
-            } else {
-                msgBox.style.color = '#4dff4d';
+                btn.innerHTML = 'Entrar';
+                btn.style.opacity = '1';
+                msgBox.style.color = 'var(--success)';
                 msgBox.innerText = '¡Acceso concedido!';
                 msgBox.style.opacity = 1;
                 
                 // Aquí redirigirías al panel principal
                 // setTimeout(() => { window.location.href = 'panel.html'; }, 1000);
+
+            } catch (error) {
+                btn.innerHTML = 'Entrar';
+                btn.style.opacity = '1';
+                msgBox.style.color = 'var(--accent)';
+                msgBox.innerText = 'Correo o contraseña incorrectos.';
+                msgBox.style.opacity = 1;
             }
         });
     </script>
