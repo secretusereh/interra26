@@ -16,6 +16,7 @@
             --text-muted: #888888;
             --accent: #ff4d4d;
             --success: #4dff4d;
+            --warning: #ffb84d;
             --transition: 0.8s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
@@ -26,13 +27,37 @@
             color: var(--primary);
             min-height: 100vh;
             display: flex;
+            flex-direction: column;
             align-items: center;
-            justify-content: center;
-            overflow: hidden;
+            justify-content: flex-start;
+            overflow-x: hidden;
             background-image: radial-gradient(circle at 50% -20%, #2a2a2a 0%, var(--bg-color) 50%);
         }
 
-        /* Pantalla de carga inicial pro */
+        /* ── BETA BANNER ── */
+        #beta-banner {
+            width: 100%;
+            background: linear-gradient(90deg, #1a1200, #2a1f00, #1a1200);
+            border-bottom: 1px solid rgba(255, 184, 77, 0.3);
+            padding: 0.6rem 1rem;
+            text-align: center;
+            font-size: 0.78rem;
+            font-weight: 400;
+            color: var(--warning);
+            letter-spacing: 0.02em;
+            position: sticky;
+            top: 0;
+            z-index: 900;
+        }
+        #beta-banner strong { font-weight: 700; }
+        #beta-banner a {
+            color: var(--warning);
+            text-decoration: underline;
+            text-decoration-color: rgba(255,184,77,0.4);
+        }
+        #beta-banner a:hover { opacity: 0.8; }
+
+        /* ── LOADER ── */
         #initial-loader {
             position: fixed;
             inset: 0;
@@ -42,6 +67,16 @@
             justify-content: center;
             align-items: center;
             transition: opacity 0.5s ease;
+        }
+
+        /* ── MAIN LAYOUT ── */
+        .page-wrapper {
+            flex: 1;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1rem;
         }
 
         .auth-container {
@@ -96,7 +131,6 @@
         }
         button.submit-btn:hover { transform: scale(0.98); opacity: 0.9; }
 
-        /* Divisor "O" */
         .divider {
             display: flex; align-items: center; text-align: center; margin: 1.5rem 0;
             color: var(--text-muted); font-size: 0.85rem; font-weight: 300;
@@ -106,7 +140,6 @@
         }
         .divider span { padding: 0 10px; }
 
-        /* Botón Google */
         .google-btn {
             width: 100%; padding: 1rem; background: transparent;
             color: var(--primary); border: 1px solid rgba(255,255,255,0.2);
@@ -124,84 +157,455 @@
         .toggle-text span:hover { opacity: 0.7; }
 
         .message-box { margin-top: 1rem; text-align: center; font-size: 0.85rem; min-height: 20px; opacity: 0; transition: 0.3s; }
+
+        /* ── INSTALL BANNER ── */
+        #install-section {
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto 1.5rem auto;
+            padding: 0 2rem;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: var(--transition);
+        }
+        #install-section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .install-card {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 14px;
+            padding: 1rem 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.9rem;
+            cursor: pointer;
+            transition: background 0.3s, border-color 0.3s;
+            text-decoration: none;
+        }
+        .install-card:hover {
+            background: rgba(255,255,255,0.07);
+            border-color: rgba(255,255,255,0.15);
+        }
+        .install-icon {
+            font-size: 1.6rem;
+            line-height: 1;
+            flex-shrink: 0;
+        }
+        .install-card-text { flex: 1; }
+        .install-card-text strong {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 2px;
+        }
+        .install-card-text span {
+            font-size: 0.72rem;
+            font-weight: 300;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+        .install-badge {
+            font-size: 0.65rem;
+            background: rgba(255,184,77,0.15);
+            color: var(--warning);
+            border: 1px solid rgba(255,184,77,0.25);
+            border-radius: 6px;
+            padding: 2px 6px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        /* iOS instruction panel */
+        #ios-instructions {
+            display: none;
+            margin-top: 0.8rem;
+            background: #1c1c1e;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 14px;
+            padding: 1rem 1.2rem;
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.75);
+            line-height: 1.7;
+        }
+        #ios-instructions ol {
+            padding-left: 1.2rem;
+            margin-top: 0.4rem;
+        }
+        #ios-instructions li { margin-bottom: 0.3rem; }
+        #ios-instructions .ios-icon {
+            display: inline-block;
+            background: rgba(255,255,255,0.1);
+            border-radius: 5px;
+            padding: 1px 6px;
+            font-size: 0.85rem;
+        }
+        #ios-instructions.open { display: block; }
+
+        /* ── FOOTER ── */
+        footer {
+            width: 100%;
+            padding: 2.5rem 2rem 2rem;
+            border-top: 1px solid rgba(255,255,255,0.06);
+            background: rgba(0,0,0,0.4);
+        }
+
+        .footer-inner {
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .footer-logo {
+            font-size: 1.4rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+            margin-bottom: 0.3rem;
+        }
+
+        .footer-potxo {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-bottom: 1.8rem;
+            font-weight: 300;
+        }
+        .footer-potxo strong {
+            color: rgba(255,255,255,0.55);
+            font-weight: 600;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 1.8rem;
+            flex-wrap: wrap;
+        }
+        .footer-links button {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 0.78rem;
+            font-family: 'Sora', sans-serif;
+            cursor: pointer;
+            padding: 0;
+            transition: color 0.2s;
+            text-decoration: underline;
+            text-underline-offset: 3px;
+            text-decoration-color: rgba(255,255,255,0.15);
+        }
+        .footer-links button:hover { color: var(--primary); }
+
+        .footer-studio {
+            font-size: 0.72rem;
+            color: rgba(255,255,255,0.2);
+            margin-bottom: 0.8rem;
+        }
+        .footer-studio a {
+            color: rgba(255,255,255,0.35);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .footer-studio a:hover { color: rgba(255,255,255,0.7); }
+
+        .footer-copy {
+            font-size: 0.7rem;
+            color: rgba(255,255,255,0.18);
+            font-weight: 300;
+        }
+
+        /* ── MODAL ── */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(6px);
+            z-index: 800;
+            align-items: flex-end;
+            justify-content: center;
+            padding: 1rem;
+        }
+        .modal-overlay.open {
+            display: flex;
+            animation: fadeIn 0.25s ease;
+        }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .modal-box {
+            background: #141414;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px;
+            width: 100%;
+            max-width: 560px;
+            max-height: 80vh;
+            overflow-y: auto;
+            padding: 2rem;
+            animation: slideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        @keyframes slideUp { from { transform: translateY(40px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+        .modal-box h2 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin-bottom: 1.2rem;
+            letter-spacing: -0.5px;
+        }
+        .modal-box p, .modal-box li {
+            font-size: 0.82rem;
+            font-weight: 300;
+            color: rgba(255,255,255,0.65);
+            line-height: 1.75;
+            margin-bottom: 0.8rem;
+        }
+        .modal-box h3 {
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: rgba(255,255,255,0.85);
+            margin: 1.2rem 0 0.4rem;
+        }
+        .modal-box ul { padding-left: 1.2rem; }
+        .modal-box strong { color: rgba(255,255,255,0.9); font-weight: 600; }
+        .modal-box a { color: rgba(255,255,255,0.6); }
+        .modal-close {
+            width: 100%;
+            margin-top: 1.5rem;
+            padding: 0.8rem;
+            background: rgba(255,255,255,0.07);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 10px;
+            color: var(--primary);
+            font-family: 'Sora', sans-serif;
+            font-size: 0.88rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .modal-close:hover { background: rgba(255,255,255,0.12); }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
 
+    <!-- ── BETA BANNER ── -->
+    <div id="beta-banner">
+        ⚠️ <strong>BETA</strong> — Esta versión puede contener errores. Si encuentras alguno, repórtalo a&nbsp;<a href="mailto:pipaonstudio@gmail.com">pipaonstudio@gmail.com</a>
+    </div>
+
+    <!-- ── LOADER ── -->
     <div id="initial-loader">
         <div style="width: 20px; height: 20px; border: 2px solid #333; border-top-color: #fff; border-radius: 50%; animation: spin 1s linear infinite;"></div>
     </div>
 
-    <div class="auth-container" id="main-container">
-        <div class="header-text">
-            <h1>Interrail.</h1>
-            <p>Bienvenido de nuevo.</p>
+    <!-- ── MAIN ── -->
+    <div class="page-wrapper">
+        <div style="width:100%;max-width:400px;">
+
+            <!-- Install section -->
+            <div id="install-section">
+                <!-- iOS card (shown on iOS) -->
+                <div id="ios-card" style="display:none;">
+                    <div class="install-card" id="ios-toggle-btn">
+                        <div class="install-icon">📲</div>
+                        <div class="install-card-text">
+                            <strong>Añadir a pantalla de inicio</strong>
+                            <span>Úsala como una app nativa desde tu iPhone</span>
+                        </div>
+                        <div class="install-badge">Beta</div>
+                    </div>
+                    <div id="ios-instructions">
+                        <strong style="color:rgba(255,255,255,0.85);font-size:0.82rem;">Cómo instalar en iOS:</strong>
+                        <ol>
+                            <li>Pulsa el botón de compartir <span class="ios-icon">⬆</span> en la barra de Safari</li>
+                            <li>Desplázate y selecciona <strong>"Añadir a pantalla de inicio"</strong></li>
+                            <li>Pulsa <strong>"Añadir"</strong> en la esquina superior derecha</li>
+                        </ol>
+                        <p style="margin-top:0.6rem;font-size:0.72rem;color:rgba(255,255,255,0.35);">
+                            ⚠️ Funcionalidad preparada para el lanzamiento oficial. En versión beta puede presentar errores.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Android card (shown on Android) -->
+                <div id="android-card" style="display:none;">
+                    <a class="install-card" href="#" id="android-apk-link">
+                        <div class="install-icon">🤖</div>
+                        <div class="install-card-text">
+                            <strong>Descargar para Android (.apk)</strong>
+                            <span>Instala la app directamente en tu dispositivo</span>
+                        </div>
+                        <div class="install-badge">Próximo</div>
+                    </a>
+                    <p style="font-size:0.7rem;color:rgba(255,255,255,0.3);margin-top:0.5rem;text-align:center;font-weight:300;">
+                        ⚠️ El .apk estará disponible en el lanzamiento oficial. Funcionalidad no disponible en beta.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Auth form -->
+            <div class="auth-container" id="main-container">
+                <div class="header-text">
+                    <h1>Interrail.</h1>
+                    <p>Bienvenido de nuevo.</p>
+                </div>
+
+                <div class="forms-wrapper">
+                    <form id="login-form" class="form-box active">
+                        <div class="input-group">
+                            <input type="email" id="login-email" required>
+                            <label>Email</label>
+                        </div>
+                        <div class="input-group">
+                            <input type="password" id="login-password" required>
+                            <label>Contraseña</label>
+                        </div>
+                        <button type="submit" class="submit-btn" id="login-btn">Entrar</button>
+                        <div class="message-box" id="login-msg"></div>
+
+                        <div class="divider"><span>o</span></div>
+
+                        <button type="button" class="google-btn" id="google-login-btn">
+                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                                <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                                <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+                                <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+                            </svg>
+                            Continuar con Google
+                        </button>
+
+                        <p class="toggle-text">¿Nuevo aquí? <span id="to-reg">Regístrate</span></p>
+                    </form>
+
+                    <form id="register-form" class="form-box">
+                        <div class="input-group">
+                            <input type="text" id="reg-name" required>
+                            <label>Nombre</label>
+                        </div>
+                        <div class="input-group">
+                            <input type="email" id="reg-email" required>
+                            <label>Email</label>
+                        </div>
+                        <div class="input-group">
+                            <input type="password" id="reg-password" required minlength="6">
+                            <label>Contraseña</label>
+                        </div>
+                        <button type="submit" class="submit-btn" id="reg-btn">Crear cuenta</button>
+                        <div class="message-box" id="reg-msg"></div>
+
+                        <div class="divider"><span>o</span></div>
+
+                        <button type="button" class="google-btn" id="google-reg-btn">
+                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                                <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                                <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+                                <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+                            </svg>
+                            Continuar con Google
+                        </button>
+
+                        <p class="toggle-text">¿Ya eres socio? <span id="to-log">Inicia sesión</span></p>
+                    </form>
+                </div>
+            </div>
         </div>
+    </div>
 
-        <div class="forms-wrapper">
-            <form id="login-form" class="form-box active">
-                <div class="input-group">
-                    <input type="email" id="login-email" required>
-                    <label>Email</label>
-                </div>
-                <div class="input-group">
-                    <input type="password" id="login-password" required>
-                    <label>Contraseña</label>
-                </div>
-                <button type="submit" class="submit-btn" id="login-btn">Entrar</button>
-                <div class="message-box" id="login-msg"></div>
+    <!-- ── FOOTER ── -->
+    <footer>
+        <div class="footer-inner">
+            <div class="footer-logo">Interrail.</div>
+            <div class="footer-potxo">Con todo el cariño del mundo para el grupo <strong>Potxopipas</strong> 🚆 — gracias a vosotros existe esta app.</div>
 
-                <div class="divider"><span>o</span></div>
+            <div class="footer-links">
+                <button id="open-tos">Términos de uso</button>
+                <button id="open-privacy">Privacidad y datos</button>
+                <button id="open-copyright">Copyright</button>
+            </div>
 
-                <button type="button" class="google-btn" id="google-login-btn">
-                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
-                        <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
-                        <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
-                        <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
-                    </svg>
-                    Continuar con Google
-                </button>
+            <div class="footer-studio">
+                Diseñada y desarrollada por&nbsp;<a href="https://pipaonstudio.netlify.app/" target="_blank" rel="noopener">Pipaon Studio</a>
+            </div>
+            <div class="footer-copy">© 2025 Interrail App · Pipaon Studio · Todos los derechos reservados</div>
+        </div>
+    </footer>
 
-                <p class="toggle-text">¿Nuevo aquí? <span id="to-reg">Regístrate</span></p>
-            </form>
+    <!-- ── MODAL: TÉRMINOS ── -->
+    <div class="modal-overlay" id="modal-tos">
+        <div class="modal-box">
+            <h2>Términos de Servicio y Condiciones de Uso</h2>
 
-            <form id="register-form" class="form-box">
-                <div class="input-group">
-                    <input type="text" id="reg-name" required>
-                    <label>Nombre</label>
-                </div>
-                <div class="input-group">
-                    <input type="email" id="reg-email" required>
-                    <label>Email</label>
-                </div>
-                <div class="input-group">
-                    <input type="password" id="reg-password" required minlength="6">
-                    <label>Contraseña</label>
-                </div>
-                <button type="submit" class="submit-btn" id="reg-btn">Crear cuenta</button>
-                <div class="message-box" id="reg-msg"></div>
+            <h3>1. Uso aceptable</h3>
+            <p>El uso de esta plataforma está destinado exclusivamente a fines lícitos y personales. Queda <strong>estrictamente prohibido</strong> el uso de la aplicación para actividades ilegales, fraudulentas, difamatorias, o que vulneren derechos de terceros o la legislación vigente.</p>
 
-                <div class="divider"><span>o</span></div>
+            <h3>2. Exención de responsabilidad</h3>
+            <p>Interrail App y Pipaon Studio se desvinculan completamente de cualquier uso indebido o ilegal que un usuario pudiera hacer de la plataforma. El usuario es el único y exclusivo responsable del contenido que introduce y de las acciones que realiza dentro de la aplicación.</p>
 
-                <button type="button" class="google-btn" id="google-reg-btn">
-                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
-                        <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
-                        <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
-                        <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
-                    </svg>
-                    Continuar con Google
-                </button>
+            <h3>3. Propiedad intelectual</h3>
+            <p>Esta aplicación es un producto diseñado y creado por <a href="https://pipaonstudio.netlify.app/" target="_blank" rel="noopener"><strong>Pipaon Studio</strong></a>. Su uso público está permitido, pero <strong>copiar, reproducir, redistribuir o utilizar cualquier parte del código o diseño de esta aplicación sin autorización expresa constituye un delito y una infracción de los derechos de autor</strong> protegidos bajo la legislación aplicable.</p>
 
-                <p class="toggle-text">¿Ya eres socio? <span id="to-log">Inicia sesión</span></p>
-            </form>
+            <h3>4. Correos electrónicos informativos</h3>
+            <p>Al registrarte y usar la plataforma, <strong>aceptas recibir correos electrónicos de carácter informativo</strong> relacionados con la aplicación (actualizaciones, novedades, avisos). En ningún caso se enviarán correos de carácter publicitario o de terceros.</p>
+
+            <h3>5. Versión beta</h3>
+            <p>La aplicación se encuentra actualmente en fase <strong>beta</strong>. Pueden existir errores, interrupciones o comportamientos inesperados. Pipaon Studio no se hace responsable de pérdidas de datos derivadas del uso en esta fase. Los errores pueden reportarse a <a href="mailto:pipaonstudio@gmail.com">pipaonstudio@gmail.com</a>.</p>
+
+            <h3>6. Modificaciones</h3>
+            <p>Pipaon Studio se reserva el derecho a modificar estos términos en cualquier momento. El uso continuado de la plataforma implica la aceptación de los términos vigentes.</p>
+
+            <button class="modal-close" onclick="closeModal('modal-tos')">Cerrar</button>
+        </div>
+    </div>
+
+    <!-- ── MODAL: PRIVACIDAD ── -->
+    <div class="modal-overlay" id="modal-privacy">
+        <div class="modal-box">
+            <h2>Privacidad y Datos</h2>
+
+            <h3>Datos que recopilamos</h3>
+            <p>La plataforma <strong>sí recopila datos</strong>. Los datos recopilados son exclusivamente los que el propio usuario introduce de forma manual en la plataforma:</p>
+            <ul>
+                <li>Si te registras <strong>por correo electrónico</strong>: dirección de email, nombre y contraseña (cifrada).</li>
+                <li>Si te registras <strong>con Google</strong>: únicamente la dirección de email. La verificación de identidad es gestionada íntegramente por Google.</li>
+                <li>Cualquier otro dato que introduzcas manualmente en los formularios o secciones de la app.</li>
+            </ul>
+
+            <h3>Gestión de datos</h3>
+            <p>Todos los datos de cuenta son administrados a través de <strong>Firebase (Google)</strong>, plataforma que cumple con los estándares de seguridad y privacidad de datos europeos (GDPR). Las contraseñas nunca se almacenan en texto plano.</p>
+
+            <h3>Recomendación de privacidad</h3>
+            <p>⚠️ <strong>Se recomienda no introducir información especialmente sensible o privada</strong> en la plataforma (datos bancarios, documentos de identidad, contraseñas de otros servicios, etc.). Introduce únicamente la información necesaria para el uso de la aplicación.</p>
+
+            <h3>Uso de los datos</h3>
+            <p>Los datos recopilados pueden ser utilizados para el correcto funcionamiento de la plataforma, para el envío de comunicaciones informativas relacionadas con la app y para la mejora del servicio. <strong>No se ceden datos a terceros con fines publicitarios.</strong></p>
+
+            <h3>Correos informativos</h3>
+            <p>Al usar la plataforma aceptas recibir correos electrónicos informativos (sin carácter publicitario) sobre novedades y actualizaciones de la app.</p>
+
+            <button class="modal-close" onclick="closeModal('modal-privacy')">Cerrar</button>
+        </div>
+    </div>
+
+    <!-- ── MODAL: COPYRIGHT ── -->
+    <div class="modal-overlay" id="modal-copyright">
+        <div class="modal-box">
+            <h2>Copyright</h2>
+            <p>© 2025 <strong>Interrail App</strong> · Todos los derechos reservados.</p>
+            <p>Esta aplicación ha sido diseñada y desarrollada íntegramente por <a href="https://pipaonstudio.netlify.app/" target="_blank" rel="noopener"><strong>Pipaon Studio</strong></a>.</p>
+            <p>El acceso y uso público de la aplicación está permitido. Sin embargo, <strong>la copia, reproducción, redistribución, ingeniería inversa o cualquier uso no autorizado del código fuente, diseño, estructura o contenido de esta aplicación queda expresamente prohibida</strong> y podrá ser perseguida conforme a la legislación de propiedad intelectual vigente.</p>
+            <p>Esta aplicación fue creada con especial dedicación para el grupo <strong>Potxopipas</strong>, cuya ilusión fue el origen y motivo de este proyecto. 🚆❤️</p>
+            <p style="font-size:0.75rem;color:rgba(255,255,255,0.3);margin-top:1rem;">Contacto: <a href="mailto:pipaonstudio@gmail.com">pipaonstudio@gmail.com</a></p>
+            <button class="modal-close" onclick="closeModal('modal-copyright')">Cerrar</button>
         </div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-        // Añadido GoogleAuthProvider y signInWithPopup a las importaciones
         import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
 
         const firebaseConfig = {
@@ -215,14 +619,13 @@
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
-        
-        // Inicializar el proveedor de Google
         const googleProvider = new GoogleAuthProvider();
 
         const loader = document.getElementById('initial-loader');
         const container = document.getElementById('main-container');
+        const installSection = document.getElementById('install-section');
 
-        /* 🛡️ EL GUARDIÁN DE SESIÓN */
+        /* 🛡️ GUARDIÁN DE SESIÓN */
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 window.location.href = 'panel.html';
@@ -231,11 +634,12 @@
                 setTimeout(() => {
                     loader.style.display = 'none';
                     container.classList.add('visible');
+                    installSection.classList.add('visible');
                 }, 500);
             }
         });
 
-        /* LÓGICA DE INTERFAZ */
+        /* TOGGLE FORMS */
         const toReg = document.getElementById('to-reg');
         const toLog = document.getElementById('to-log');
         const loginForm = document.getElementById('login-form');
@@ -245,22 +649,18 @@
             loginForm.classList.toggle('active');
             loginForm.classList.toggle('slide-left');
             regForm.classList.toggle('active');
-            
-            // Limpiar mensajes al cambiar
             document.getElementById('login-msg').style.opacity = 0;
             document.getElementById('reg-msg').style.opacity = 0;
         };
-
         toReg.onclick = toggle;
         toLog.onclick = toggle;
 
-        /* LÓGICA DE AUTH CORREO/CONTRASEÑA */
+        /* LOGIN */
         loginForm.onsubmit = async (e) => {
             e.preventDefault();
             const btn = document.getElementById('login-btn');
             const msg = document.getElementById('login-msg');
             btn.innerText = 'Verificando...';
-
             try {
                 await signInWithEmailAndPassword(auth, document.getElementById('login-email').value, document.getElementById('login-password').value);
             } catch (err) {
@@ -271,12 +671,12 @@
             }
         };
 
+        /* REGISTRO */
         regForm.onsubmit = async (e) => {
             e.preventDefault();
             const btn = document.getElementById('reg-btn');
             const msg = document.getElementById('reg-msg');
             btn.innerText = 'Creando...';
-
             try {
                 const cred = await createUserWithEmailAndPassword(auth, document.getElementById('reg-email').value, document.getElementById('reg-password').value);
                 await updateProfile(cred.user, { displayName: document.getElementById('reg-name').value });
@@ -288,26 +688,64 @@
             }
         };
 
-        /* LÓGICA DE AUTH GOOGLE */
+        /* GOOGLE AUTH */
         const handleGoogleAuth = async () => {
             try {
                 await signInWithPopup(auth, googleProvider);
-                // Si va bien, el onAuthStateChanged nos mandará al panel.html
             } catch (error) {
                 console.error("Error con Google Auth: ", error);
-                // Mostrar alerta general en caso de error o cierre de la ventana popup
                 const msg = document.querySelector('.form-box.active .message-box');
                 msg.innerText = 'No se pudo iniciar sesión con Google.';
                 msg.style.opacity = 1;
                 msg.style.color = 'var(--accent)';
             }
         };
-
-        // Escuchar clics en los botones de Google (en ambos formularios)
         document.getElementById('google-login-btn').addEventListener('click', handleGoogleAuth);
         document.getElementById('google-reg-btn').addEventListener('click', handleGoogleAuth);
-
     </script>
+
+    <script>
+        /* ── DETECCIÓN DE PLATAFORMA ── */
+        const ua = navigator.userAgent || navigator.vendor || window.opera;
+        const isIOS = /iPad|iPhone|iPod/.test(ua) && !window.MSStream;
+        const isAndroid = /android/i.test(ua);
+
+        if (isIOS) {
+            document.getElementById('ios-card').style.display = 'block';
+            document.getElementById('ios-toggle-btn').addEventListener('click', () => {
+                document.getElementById('ios-instructions').classList.toggle('open');
+            });
+        } else if (isAndroid) {
+            document.getElementById('android-card').style.display = 'block';
+            document.getElementById('android-apk-link').addEventListener('click', (e) => {
+                e.preventDefault();
+                alert('El archivo .apk estará disponible en el lanzamiento oficial de la app. ¡Muy pronto!');
+            });
+        }
+
+        /* ── MODALES ── */
+        function openModal(id) {
+            document.getElementById(id).classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('open');
+            document.body.style.overflow = '';
+        }
+        window.closeModal = closeModal;
+
+        document.getElementById('open-tos').addEventListener('click', () => openModal('modal-tos'));
+        document.getElementById('open-privacy').addEventListener('click', () => openModal('modal-privacy'));
+        document.getElementById('open-copyright').addEventListener('click', () => openModal('modal-copyright'));
+
+        // Cerrar modal al clicar fuera
+        document.querySelectorAll('.modal-overlay').forEach(overlay => {
+            overlay.addEventListener('click', (e) => {
+                if (e.target === overlay) closeModal(overlay.id);
+            });
+        });
+    </script>
+
     <style>@keyframes spin { to { transform: rotate(360deg); } }</style>
 </body>
 </html>
