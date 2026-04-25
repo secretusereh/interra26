@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interrail App | Panel de Viajes</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;800&display=swap" rel="stylesheet">
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        /* =========================================
+           VARIABLES Y RESET
+           ========================================= */
+        :root {
+            --bg-color: #0a0a0a;
+            --surface: #171717;
+            --surface-hover: #222222;
+            --primary: #ffffff;
+            --text-muted: #888888;
+            --accent: #ff4d4d;
+            --transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Sora', sans-serif; }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--primary);
+            min-height: 100vh;
+            /* Loader a pantalla completa que desaparece si hay sesión */
+            overflow-x: hidden;
+        }
+
+        /* Pantalla de carga inicial (Seguridad visual) */
+        #page-loader {
+            position: fixed;
+            inset: 0;
+            background: var(--bg-color);
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.5s ease;
+        }
+
+        /* =========================================
+           NAVEGACIÓN
+           ========================================= */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 5%;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            background: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo { font-weight: 800; font-size: 1.5rem; letter-spacing: -1px; }
+        
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .user-name { font-weight: 300; color: var(--text-muted); }
+
+        .btn-logout {
+            background: transparent;
+            color: var(--accent);
+            border: 1px solid rgba(255, 77, 77, 0.3);
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .btn-logout:hover { background: rgba(255, 77, 77, 0.1); }
+
+        /* =========================================
+           GRID DE VIAJES
+           ========================================= */
+        main { padding: 3rem 5%; max-width: 1400px; margin: 0 auto; }
+        
+        .header-section {
+            margin-bottom: 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+        .header-section h1 { font-size: 2.5rem; font-weight: 800; }
+        .header-section p { color: var(--text-muted); margin-top: 0.5rem; }
+
+        .trips-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        /* Tarjeta Base */
+        .trip-card {
+            background: var(--surface);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+            transition: var(--transition);
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        /* Tarjeta: Añadir Viaje */
+        .card-add {
+            border: 1px dashed rgba(255, 255, 255, 0.2);
+            background: transparent;
+            cursor: pointer;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+        .card-add:hover {
+            border-color: var(--primary);
+            background: rgba(255, 255, 255, 0.02);
+            transform: translateY(-5px);
+        }
+        .card-add i { color: var(--text-muted); margin-bottom: 1rem; transition: var(--transition); }
+        .card-add:hover i { color: var(--primary); transform: scale(1.1); }
+
+        /* Tarjeta: Viaje Bloqueado */
+        .trip-card.locked {
+            border-color: transparent;
+        }
+        .locked .card-content {
+            filter: blur(4px) grayscale(80%);
+            opacity: 0.5;
+            pointer-events: none;
+            user-select: none;
+        }
+        .locked-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(10, 10, 10, 0.6);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+            opacity: 0;
+            transition: var(--transition);
+        }
+        .trip-card.locked:hover .locked-overlay { opacity: 1; }
+        
+        .btn-request {
+            background: var(--primary);
+            color: var(--bg-color);
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 1rem;
+            transition: transform 0.2s;
+        }
+        .btn-request:hover { transform: scale(0.95); }
+
+        /* Tarjeta: Viaje Desbloqueado */
+        .trip-card.unlocked:hover {
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            cursor: pointer;
+        }
+
+        .role-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 0.7rem;
+            padding: 0.3rem 0.6rem;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* =========================================
+           MODAL CREAR VIAJE
+           ========================================= */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: var(--transition);
+        }
+        .modal-overlay.active { opacity: 1; pointer-events: all; }
+
+        .modal-content {
+            background: var(--surface);
+            padding: 3rem;
+            border-radius: 16px;
+            width: 100%;
+            max-width: 500px;
+            transform: translateY(30px);
+            transition: var(--transition);
+        }
+        .modal-overlay.active .modal-content { transform: translateY(0); }
+
+        .modal-content h2 { margin-bottom: 2rem; font-weight: 600; }
+        .input-group { margin-bottom: 1.5rem; }
+        .input-group label { display: block; color: var(--text-muted); font-size: 0.85rem; margin-bottom: 0.5rem; }
+        .input-group input {
+            width: 100%; padding: 1rem; background: var(--bg-color); border: 1px solid rgba(255,255,255,0.1);
+            color: white; border-radius: 8px; outline: none;
+        }
+        .input-group input:focus { border-color: var(--primary); }
+        
+        .modal-actions { display: flex; gap: 1rem; margin-top: 2rem; }
+        .btn-cancel { flex: 1; padding: 1rem; background: transparent; border: 1px solid rgba(255,255,255,0.1); color: white; border-radius: 8px; cursor: pointer; }
+        .btn-submit { flex: 1; padding: 1rem; background: var(--primary); border: none; color: var(--bg-color); border-radius: 8px; font-weight: 600; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <div id="page-loader">
+        <i data-lucide="loader-2" class="lucide-spin" style="width: 40px; height: 40px; animation: spin 1s linear infinite;"></i>
+    </div>
+
+    <nav>
+        <div class="logo">Interrail.</div>
+        <div class="user-menu">
+            <span class="user-name" id="display-user-name">Cargando...</span>
+            <button class="btn-logout" id="btn-logout">Cerrar sesión</button>
+        </div>
+    </nav>
+
+    <main>
+        <div class="header-section">
+            <div>
+                <h1>Tus Viajes</h1>
+                <p>Selecciona un viaje o solicita acceso a uno existente.</p>
+            </div>
+        </div>
+
+        <div class="trips-grid" id="trips-container">
+            <div class="trip-card card-add" id="btn-open-modal">
+                <i data-lucide="plus-circle" style="width: 48px; height: 48px;"></i>
+                <h3>Crear Nuevo Viaje</h3>
+            </div>
+            
+            </div>
+    </main>
+
+    <div class="modal-overlay" id="create-modal">
+        <div class="modal-content">
+            <h2>Nuevo Viaje</h2>
+            <form id="create-trip-form">
+                <div class="input-group">
+                    <label>Nombre del grupo / viaje</label>
+                    <input type="text" id="trip-name" required placeholder="Ej. Interrail Verano 26">
+                </div>
+                <div class="input-group">
+                    <label>Fecha de inicio</label>
+                    <input type="date" id="trip-start" required>
+                </div>
+                <div class="input-group">
+                    <label>Fecha de fin</label>
+                    <input type="date" id="trip-end" required>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-cancel" id="btn-close-modal">Cancelar</button>
+                    <button type="submit" class="btn-submit">Crear Viaje</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, getDocs, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDRkUJnDLzknFz3KOnPEm4UFsgf6R4z1Uk",
+            authDomain: "interra26-22ecd.firebaseapp.com",
+            projectId: "interra26-22ecd",
+            storageBucket: "interra26-22ecd.firebasestorage.app",
+            messagingSenderId: "960505222050",
+            appId: "1:960505222050:web:a9943c6fec9532141f98fb"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        let currentUser = null;
+        // AQUÍ ESTABLECES TU MODO DIOS. Pon el correo con el que te registres.
+        const SUPERADMIN_EMAIL = "tu_correo@gmail.com"; 
+
+        /* =========================================
+           1. PROTECCIÓN DE RUTA (GUARDIA DE SEGURIDAD)
+           ========================================= */
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                currentUser = user;
+                document.getElementById('display-user-name').innerText = user.displayName || user.email;
+                document.getElementById('page-loader').style.opacity = '0';
+                setTimeout(() => document.getElementById('page-loader').style.display = 'none', 500);
+                
+                // Cargar viajes una vez confirmada la identidad
+                loadTrips();
+            } else {
+                // Si copia el enlace y no está logueado, patada al login
+                window.location.href = 'index.html';
+            }
+        });
+
+        // Cerrar sesión
+        document.getElementById('btn-logout').addEventListener('click', () => {
+            signOut(auth).then(() => window.location.href = 'index.html');
+        });
+
+        /* =========================================
+           2. RENDERIZADO DE VIAJES (LÓGICA DE ROLES)
+           ========================================= */
+        async function loadTrips() {
+            const container = document.getElementById('trips-container');
+            // Limpiamos todo menos el botón de añadir (que siempre es el primero)
+            const addBtn = container.firstElementChild;
+            container.innerHTML = '';
+            container.appendChild(addBtn);
+
+            const querySnapshot = await getDocs(collection(db, "viajes"));
+            
+            querySnapshot.forEach((docSnap) => {
+                const trip = docSnap.data();
+                const tripId = docSnap.id;
+                
+                // Extraer mapa de miembros. Si no existe, lo creamos vacío
+                const miembros = trip.miembros || {}; 
+                const isSuperAdmin = currentUser.email === SUPERADMIN_EMAIL;
+                
+                // ¿Qué rol tiene el usuario logueado en este viaje?
+                const userRoleEnViaje = miembros[currentUser.uid]; 
+                
+                // Lógica de acceso
+                const tieneAcceso = userRoleEnViaje || isSuperAdmin;
+                
+                // Crear el HTML de la tarjeta
+                const card = document.createElement('div');
+                card.className = `trip-card ${tieneAcceso ? 'unlocked' : 'locked'}`;
+                
+                // Etiqueta visual de rol
+                let badgeHTML = '';
+                if (isSuperAdmin) badgeHTML = `<span class="role-badge" style="background: var(--accent); color: white;">Dios</span>`;
+                else if (userRoleEnViaje) badgeHTML = `<span class="role-badge">${userRoleEnViaje.replace('-', ' ')}</span>`;
+
+                card.innerHTML = `
+                    ${badgeHTML}
+                    <div class="card-content">
+                        <h2 style="font-size: 1.5rem; margin-bottom: 0.5rem;">${trip.nombre}</h2>
+                        <p style="color: var(--text-muted); font-size: 0.9rem;">
+                            <i data-lucide="calendar" style="width:14px; vertical-align:middle; margin-right:5px;"></i>
+                            ${trip.fechaInicio} / ${trip.fechaFin}
+                        </p>
+                    </div>
+                    ${!tieneAcceso ? `
+                    <div class="locked-overlay">
+                        <i data-lucide="lock" style="color: white; margin-bottom: 10px;"></i>
+                        <button class="btn-request" onclick="solicitarAcceso('${tripId}')">Solicitar Acceso</button>
+                    </div>` : ''}
+                `;
+
+                container.appendChild(card);
+            });
+
+            // Re-renderizar iconos Lucide en los nuevos elementos
+            lucide.createIcons();
+        }
+
+        /* =========================================
+           3. CREACIÓN DE VIAJES
+           ========================================= */
+        const modal = document.getElementById('create-modal');
+        document.getElementById('btn-open-modal').addEventListener('click', () => modal.classList.add('active'));
+        document.getElementById('btn-close-modal').addEventListener('click', () => modal.classList.remove('active'));
+
+        document.getElementById('create-trip-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btnSubmit = e.target.querySelector('.btn-submit');
+            btnSubmit.innerText = 'Creando...';
+
+            const nuevoViaje = {
+                nombre: document.getElementById('trip-name').value,
+                fechaInicio: document.getElementById('trip-start').value,
+                fechaFin: document.getElementById('trip-end').value,
+                creadoPor: currentUser.uid,
+                // Automáticamente el creador se hace admin del grupo
+                miembros: {
+                    [currentUser.uid]: "admin-grupo"
+                }
+            };
+
+            try {
+                await addDoc(collection(db, "viajes"), nuevoViaje);
+                modal.classList.remove('active');
+                e.target.reset();
+                btnSubmit.innerText = 'Crear Viaje';
+                loadTrips(); // Recargar la vista
+            } catch (error) {
+                console.error("Error añadiendo viaje: ", error);
+                alert("Hubo un error al crear el viaje.");
+                btnSubmit.innerText = 'Crear Viaje';
+            }
+        });
+
+        // Función vacía para el botón de solicitar acceso (se programará luego)
+        window.solicitarAcceso = function(tripId) {
+            alert(`Petición enviada para el viaje: ${tripId}. Pendiente de programar el envío al admin.`);
+        }
+
+        // Inicializar iconos
+        lucide.createIcons();
+    </script>
+</body>
+</html>
