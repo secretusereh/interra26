@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interrail | Panel de Viajes</title>
+    <title>Interrail | Panel Maestro</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,7 +17,7 @@
 
     <style>
         /* =========================================
-           VARIABLES Y DISEÑO BASE AWWWARDS
+           VARIABLES DE DISEÑO AWWWARDS
            ========================================= */
         :root {
             --bg-color: #050505;
@@ -29,7 +29,7 @@
             --accent-blue: #4da6ff;
             --success: #4dff4d;
             --border-subtle: rgba(255, 255, 255, 0.08);
-            --transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            --transition: 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Sora', sans-serif; }
@@ -40,146 +40,209 @@
             min-height: 100vh;
             overflow-x: hidden;
             background-image: 
-                radial-gradient(circle at 15% 50%, rgba(255, 255, 255, 0.03), transparent 25%),
-                radial-gradient(circle at 85% 30%, rgba(255, 255, 255, 0.02), transparent 25%);
+                radial-gradient(circle at 10% 20%, rgba(255, 255, 255, 0.03), transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(255, 255, 255, 0.02), transparent 20%);
         }
 
+        /* Pantalla de Carga Pro */
         #page-loader {
             position: fixed; inset: 0; background: var(--bg-color); z-index: 9999;
-            display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.5s ease;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            transition: opacity 0.8s ease;
         }
 
         /* =========================================
-           NAVEGACIÓN
+           NAVEGACIÓN SUPERIOR
            ========================================= */
         nav {
             display: flex; justify-content: space-between; align-items: center;
-            padding: 1.2rem 5%; background: rgba(5, 5, 5, 0.7); backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--border-subtle); position: sticky; top: 0; z-index: 100;
+            padding: 1.5rem 5%;
+            background: rgba(5, 5, 5, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-subtle);
+            position: sticky; top: 0; z-index: 100;
         }
-        .logo { font-weight: 800; font-size: 1.5rem; letter-spacing: -1px; display: flex; align-items: center; gap: 10px; }
-        .user-menu { display: flex; align-items: center; gap: 2rem; }
+
+        .logo { font-weight: 800; font-size: 1.5rem; letter-spacing: -1px; display: flex; align-items: center; gap: 12px; }
+        .user-menu { display: flex; align-items: center; gap: 2.5rem; }
         .user-name { font-weight: 300; color: var(--text-muted); font-size: 0.9rem; }
-        .btn-logout { background: transparent; color: var(--text-muted); border: none; display: flex; align-items: center; gap: 8px; cursor: pointer; transition: var(--transition); }
-        .btn-logout:hover { color: var(--accent); }
+        
+        .btn-logout {
+            background: transparent; color: var(--text-muted); border: none;
+            display: flex; align-items: center; gap: 8px; cursor: pointer; transition: var(--transition);
+        }
+        .btn-logout:hover { color: var(--accent); transform: translateX(3px); }
 
         /* =========================================
-           GRID DE VIAJES
+           CONTENIDO PRINCIPAL
            ========================================= */
-        main { padding: 4rem 5%; max-width: 1400px; margin: 0 auto; min-height: 80vh; }
-        .header-section { margin-bottom: 3.5rem; }
-        .header-section h1 { font-size: 3rem; font-weight: 800; letter-spacing: -1px; }
-        .header-section p { color: var(--text-muted); font-weight: 300; font-size: 1.1rem; margin-top: 0.5rem; }
+        main { padding: 5rem 5%; max-width: 1400px; margin: 0 auto; }
+        
+        .header-section { margin-bottom: 4rem; animation: fadeDown 1s ease; }
+        .header-section h1 { font-size: 3.5rem; font-weight: 800; letter-spacing: -2px; }
+        .header-section p { color: var(--text-muted); font-size: 1.2rem; margin-top: 0.5rem; font-weight: 300; }
 
-        .trips-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 2rem; }
-
-        @keyframes fadeUpCard {
-            from { opacity: 0; transform: translateY(30px) scale(0.95); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
+        .trips-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 2.5rem;
         }
 
+        /* Tarjeta de Viaje Base */
         .trip-card {
-            background: var(--surface); border: 1px solid var(--border-subtle); border-radius: 20px; padding: 2rem;
-            position: relative; overflow: hidden; backdrop-filter: blur(10px); min-height: 220px;
-            display: flex; flex-direction: column; justify-content: space-between; transition: var(--transition);
-            animation: fadeUpCard 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0;
+            background: var(--surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: 24px; padding: 2.5rem;
+            position: relative; overflow: hidden;
+            backdrop-filter: blur(12px);
+            min-height: 240px;
+            display: flex; flex-direction: column; justify-content: space-between;
+            transition: var(--transition);
+            opacity: 0; transform: translateY(30px);
         }
 
-        .card-add { border: 1px dashed rgba(255, 255, 255, 0.2); background: transparent; cursor: pointer; align-items: center; justify-content: center; text-align: center; }
-        .card-add:hover { border-color: var(--primary); background: rgba(255, 255, 255, 0.02); transform: translateY(-5px); }
+        .trip-card.visible {
+            opacity: 1; transform: translateY(0);
+        }
+
+        /* Tarjeta "Añadir" */
+        .card-add {
+            border: 1px dashed rgba(255, 255, 255, 0.2);
+            background: transparent; cursor: pointer;
+            justify-content: center; align-items: center; text-align: center;
+        }
+        .card-add:hover {
+            border-color: var(--primary); background: rgba(255, 255, 255, 0.02);
+            transform: scale(0.98);
+        }
         .card-add i { color: var(--text-muted); transition: var(--transition); margin-bottom: 1rem; }
-        .card-add:hover i { color: var(--primary); transform: scale(1.1) rotate(90deg); }
+        .card-add:hover i { color: var(--primary); transform: rotate(90deg) scale(1.1); }
 
-        .trip-card.unlocked:hover { border-color: rgba(255, 255, 255, 0.3); transform: translateY(-5px); box-shadow: 0 15px 35px rgba(0,0,0,0.4); cursor: pointer; background: var(--surface-hover); }
+        /* Tarjetas Desbloqueadas */
+        .trip-card.unlocked:hover {
+            border-color: rgba(255, 255, 255, 0.3); transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6); cursor: pointer;
+            background: var(--surface-hover);
+        }
 
-        /* Candado y Desenfoque */
+        /* Tarjetas Bloqueadas (Efecto Blur de verdad) */
         .trip-card.locked { border-color: transparent; }
-        .trip-card.locked .card-content { filter: blur(6px); opacity: 0.4; transition: var(--transition); pointer-events: none; }
-        .locked-overlay { position: absolute; inset: 0; background: rgba(5, 5, 5, 0.5); display: flex; flex-direction: column; justify-content: center; align-items: center; opacity: 0.8; transition: var(--transition); z-index: 10; }
-        .trip-card.locked:hover .card-content { filter: blur(8px); opacity: 0.2; }
-        .trip-card.locked:hover .locked-overlay { opacity: 1; background: rgba(5, 5, 5, 0.7); }
+        .trip-card.locked .card-content { filter: blur(8px); opacity: 0.3; pointer-events: none; }
         
-        .btn-request { background: var(--primary); color: var(--bg-color); border: none; padding: 0.8rem 1.8rem; border-radius: 30px; font-weight: 600; font-size: 0.9rem; cursor: pointer; margin-top: 1rem; transition: all 0.3s ease; display: flex; align-items: center; gap: 8px; }
-        .btn-request:hover { transform: scale(0.95); box-shadow: 0 0 20px rgba(255,255,255,0.2); }
+        .locked-overlay {
+            position: absolute; inset: 0; background: rgba(5, 5, 5, 0.6);
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            opacity: 0.9; transition: var(--transition); z-index: 10;
+        }
+        .trip-card.locked:hover .locked-overlay { opacity: 1; background: rgba(5, 5, 5, 0.8); }
 
-        .role-badge { position: absolute; top: 1.5rem; right: 1.5rem; font-size: 0.65rem; padding: 0.4rem 0.8rem; border-radius: 20px; font-weight: 600; background: rgba(255, 255, 255, 0.1); color: var(--primary); text-transform: uppercase; letter-spacing: 1px; border: 1px solid var(--border-subtle); }
+        .btn-request {
+            background: var(--primary); color: var(--bg-color); border: none;
+            padding: 1rem 2rem; border-radius: 40px; font-weight: 600; font-size: 0.95rem;
+            cursor: pointer; margin-top: 1rem; transition: var(--transition);
+            display: flex; align-items: center; gap: 10px;
+        }
+        .btn-request:hover:not(:disabled) { transform: scale(1.05); box-shadow: 0 0 25px rgba(255,255,255,0.3); }
+        .btn-request:disabled { opacity: 0.6; cursor: default; background: transparent; border: 1px solid var(--primary); color: white; }
+
+        /* Badges de Rol */
+        .role-badge {
+            position: absolute; top: 1.5rem; right: 1.5rem; font-size: 0.7rem;
+            padding: 0.5rem 1rem; border-radius: 30px; font-weight: 600;
+            background: rgba(255, 255, 255, 0.05); color: var(--primary);
+            text-transform: uppercase; letter-spacing: 1.5px; border: 1px solid var(--border-subtle);
+        }
 
         /* =========================================
-           MODAL
+           MODAL Y FORMULARIOS
            ========================================= */
-        .modal-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(10px); z-index: 1000; display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: var(--transition); }
+        .modal-overlay {
+            position: fixed; inset: 0; background: rgba(0, 0, 0, 0.9); backdrop-filter: blur(15px);
+            z-index: 1000; display: flex; justify-content: center; align-items: center;
+            opacity: 0; pointer-events: none; transition: var(--transition);
+        }
         .modal-overlay.active { opacity: 1; pointer-events: all; }
-        .modal-content { background: #111; border: 1px solid var(--border-subtle); padding: 3rem; border-radius: 24px; width: 100%; max-width: 500px; transform: translateY(40px) scale(0.95); transition: var(--transition); }
-        .modal-overlay.active .modal-content { transform: translateY(0) scale(1); }
-        .modal-content h2 { font-size: 2rem; font-weight: 600; margin-bottom: 2rem; letter-spacing: -1px; }
-        
-        .input-group { margin-bottom: 1.8rem; }
-        .input-group label { display: block; color: var(--text-muted); font-size: 0.85rem; margin-bottom: 0.8rem; }
-        .input-group input { width: 100%; padding: 1.2rem; background: rgba(255,255,255,0.03); border: 1px solid var(--border-subtle); color: white; border-radius: 12px; font-size: 1rem; outline: none; transition: border-color 0.3s; }
-        .input-group input:focus { border-color: var(--primary); background: rgba(255,255,255,0.05); }
-        
-        .modal-actions { display: flex; gap: 1rem; margin-top: 2.5rem; }
-        .btn-cancel { flex: 1; padding: 1.2rem; background: transparent; border: 1px solid var(--border-subtle); color: white; border-radius: 12px; cursor: pointer; font-weight: 600; transition: background 0.3s; }
-        .btn-cancel:hover { background: rgba(255,255,255,0.05); }
-        .btn-submit { flex: 1; padding: 1.2rem; background: var(--primary); border: none; color: var(--bg-color); border-radius: 12px; font-weight: 600; cursor: pointer; transition: transform 0.2s; }
-        .btn-submit:hover { transform: scale(0.98); }
 
-        .flatpickr-calendar { background: #1a1a1a !important; border: 1px solid var(--border-subtle) !important; box-shadow: 0 20px 50px rgba(0,0,0,0.8) !important; font-family: 'Sora', sans-serif !important; border-radius: 16px !important; z-index: 99999 !important;}
-        .flatpickr-day.selected, .flatpickr-day.startRange, .flatpickr-day.endRange, .flatpickr-day.selected.inRange, .flatpickr-day.startRange.inRange, .flatpickr-day.endRange.inRange, .flatpickr-day.selected:focus, .flatpickr-day.startRange:focus, .flatpickr-day.endRange:focus, .flatpickr-day.selected:hover, .flatpickr-day.startRange:hover, .flatpickr-day.endRange:hover, .flatpickr-day.selected.prevMonthDay, .flatpickr-day.startRange.prevMonthDay, .flatpickr-day.endRange.prevMonthDay, .flatpickr-day.selected.nextMonthDay, .flatpickr-day.startRange.nextMonthDay, .flatpickr-day.endRange.nextMonthDay { background: var(--primary) !important; color: var(--bg-color) !important; border-color: var(--primary) !important; font-weight: 600; }
-        .flatpickr-day.inRange { background: rgba(255,255,255,0.05) !important; border-color: transparent !important; box-shadow: none !important; }
+        .modal-content {
+            background: #0d0d0d; border: 1px solid var(--border-subtle); padding: 4rem;
+            border-radius: 32px; width: 100%; max-width: 550px;
+            transform: translateY(50px) scale(0.9); transition: var(--transition);
+        }
+        .modal-overlay.active .modal-content { transform: translateY(0) scale(1); }
+
+        .input-group { margin-bottom: 2rem; }
+        .input-group label { display: block; color: var(--text-muted); font-size: 0.9rem; margin-bottom: 0.8rem; font-weight: 400; }
+        .input-group input {
+            width: 100%; padding: 1.2rem; background: rgba(255,255,255,0.03);
+            border: 1px solid var(--border-subtle); color: white; border-radius: 16px;
+            font-size: 1rem; outline: none; transition: 0.3s;
+        }
+        .input-group input:focus { border-color: var(--primary); background: rgba(255,255,255,0.06); }
         
-        /* Toasts */
-        #toast-container { position: fixed; bottom: 30px; right: 30px; z-index: 20000; display: flex; flex-direction: column; gap: 10px; }
-        .toast { background: rgba(20,20,20,0.9); backdrop-filter: blur(10px); border: 1px solid var(--border-subtle); color: white; padding: 1rem 1.5rem; border-radius: 12px; display: flex; align-items: center; gap: 12px; font-size: 0.9rem; font-weight: 300; box-shadow: 0 10px 30px rgba(0,0,0,0.5); animation: slideInToast 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-        @keyframes slideInToast { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-        @keyframes slideOutToast { from { transform: translateX(0); opacity: 1; } to { transform: translateX(100%); opacity: 0; } }
+        .btn-submit {
+            width: 100%; padding: 1.3rem; background: var(--primary); border: none;
+            color: var(--bg-color); border-radius: 16px; font-weight: 800; cursor: pointer;
+            font-size: 1rem; transition: var(--transition);
+        }
+        .btn-submit:hover { letter-spacing: 1px; }
+
+        /* Notificaciones (Toasts) */
+        #toast-container { position: fixed; bottom: 40px; right: 40px; z-index: 20000; display: flex; flex-direction: column; gap: 15px; }
+        .toast {
+            background: rgba(15, 15, 15, 0.95); backdrop-filter: blur(10px); border: 1px solid var(--border-subtle);
+            color: white; padding: 1.2rem 2rem; border-radius: 18px; display: flex; align-items: center; gap: 15px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5); animation: slideIn 0.5s var(--transition) forwards;
+        }
+
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+        @keyframes fadeDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
 
     <div id="page-loader">
-        <i data-lucide="compass" style="width: 48px; height: 48px; color: var(--primary); animation: spin 2s linear infinite;"></i>
-        <p style="margin-top: 15px; color: var(--text-muted);">Sincronizando con la base de datos...</p>
+        <i data-lucide="compass" style="width: 50px; height: 50px; color: var(--primary); animation: spin 2s linear infinite;"></i>
+        <p style="margin-top: 20px; color: var(--text-muted); letter-spacing: 2px; font-size: 0.8rem;">SINCRONIZANDO NUBE</p>
     </div>
 
     <nav>
-        <div class="logo"><i data-lucide="map" style="width: 24px; color: var(--primary);"></i> Interrail.</div>
+        <div class="logo"><i data-lucide="map-pinned"></i> INTERRAIL.</div>
         <div class="user-menu">
-            <span class="user-name" id="display-user-name">Verificando...</span>
-            <button class="btn-logout" id="btn-logout"><i data-lucide="log-out" style="width: 16px;"></i> Salir</button>
+            <span class="user-name" id="display-user-name">Validando sesión...</span>
+            <button class="btn-logout" id="btn-logout">
+                <i data-lucide="power"></i> SALIR
+            </button>
         </div>
     </nav>
 
     <main>
         <div class="header-section">
-            <h1>Tus Viajes</h1>
-            <p>Selecciona tu destino o únete a la aventura de otro grupo.</p>
+            <h1>Mis Expediciones.</h1>
+            <p>Organiza tus rutas o descubre los itinerarios de la comunidad.</p>
         </div>
 
         <div class="trips-grid" id="trips-container">
-            <div class="trip-card card-add" id="btn-open-modal" style="--i: 0;">
-                <i data-lucide="plus" style="width: 48px; height: 48px;"></i>
-                <h3 style="font-weight: 600;">Planear nueva ruta</h3>
+            <div class="trip-card card-add" id="btn-open-modal" style="opacity: 1; transform: none;">
+                <i data-lucide="plus-circle" style="width: 60px; height: 60px;"></i>
+                <h3 style="font-weight: 600; font-size: 1.2rem;">Nueva Aventura</h3>
             </div>
             </div>
     </main>
 
     <div class="modal-overlay" id="create-modal">
         <div class="modal-content">
-            <h2>Crear Viaje</h2>
+            <h2 style="font-size: 2rem; font-weight: 800; margin-bottom: 2.5rem; letter-spacing: -1px;">Nueva Ruta</h2>
             <form id="create-trip-form">
                 <div class="input-group">
-                    <label>Nombre de la ruta o grupo</label>
-                    <input type="text" id="trip-name" required placeholder="Ej. Ruta Balcanes 26">
+                    <label>Nombre del Viaje</label>
+                    <input type="text" id="trip-name" required placeholder="Ej. Costa Amalfitana 2026">
                 </div>
                 <div class="input-group">
-                    <label>Fechas de la aventura (Inicio - Fin)</label>
-                    <input type="text" id="trip-range" required placeholder="Selecciona en el calendario" readonly>
+                    <label>Rango de Fechas</label>
+                    <input type="text" id="trip-range" required readonly placeholder="Selecciona el periodo">
                 </div>
-                <div class="modal-actions">
-                    <button type="button" class="btn-cancel" id="btn-close-modal">Cancelar</button>
-                    <button type="submit" class="btn-submit">Empezar a planear</button>
-                </div>
+                <button type="submit" class="btn-submit">CREAR RUTA MAESTRA</button>
+                <button type="button" id="btn-close-modal" style="background:none; border:none; color:var(--text-muted); width:100%; margin-top:2rem; cursor:pointer; font-size: 0.8rem; font-weight: 600;">CANCELAR</button>
             </form>
         </div>
     </div>
@@ -187,11 +250,13 @@
     <div id="toast-container"></div>
 
     <script type="module">
+        /* =========================================
+           LÓGICA DE FIREBASE Y BACKEND
+           ========================================= */
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
         import { getFirestore, collection, addDoc, getDocs, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
-        // 1. CONFIGURACIÓN FIREBASE
         const firebaseConfig = {
             apiKey: "AIzaSyDRkUJnDLzknFz3KOnPEm4UFsgf6R4z1Uk",
             authDomain: "interra26-22ecd.firebaseapp.com",
@@ -206,232 +271,172 @@
         const db = getFirestore(app);
 
         let currentUser = null;
-        // TU MODO DIOS. (Asegúrate de poner tu correo real)
         const SUPERADMIN_EMAIL = "tu_correo@gmail.com"; 
 
-        // 2. SISTEMA DE TOASTS
+        /* Sistema de Toasts Profesional */
         function showToast(message, type = 'success') {
             const container = document.getElementById('toast-container');
             const toast = document.createElement('div');
             toast.className = 'toast';
-            const icon = type === 'success' ? '<i data-lucide="check-circle" style="color: var(--success); width: 20px;"></i>' : '<i data-lucide="info" style="color: var(--accent); width: 20px;"></i>';
-            toast.innerHTML = `${icon} <span>${message}</span>`;
+            const icon = type === 'success' ? 'check-circle' : 'alert-circle';
+            const color = type === 'success' ? 'var(--success)' : 'var(--accent)';
+            toast.innerHTML = `<i data-lucide="${icon}" style="color: ${color}"></i> <span>${message}</span>`;
             container.appendChild(toast);
             lucide.createIcons();
-            setTimeout(() => { toast.style.animation = 'slideOutToast 0.4s forwards'; setTimeout(() => toast.remove(), 400); }, 3500);
+            setTimeout(() => {
+                toast.style.animation = 'slideIn 0.5s reverse forwards';
+                setTimeout(() => toast.remove(), 500);
+            }, 4000);
         }
 
-        // 3. INICIALIZAR CALENDARIO
-        let selectedDatesArray = [];
-        const rangePicker = flatpickr("#trip-range", {
-            mode: "range", minDate: "today", dateFormat: "d/m/Y", locale: "es", showMonths: 1, 
-            onChange: function(selectedDates) { selectedDatesArray = selectedDates; }
+        /* Calendario Pro */
+        const rangePicker = flatpickr("#trip-range", { 
+            mode: "range", 
+            minDate: "today", 
+            dateFormat: "d/m/Y", 
+            locale: "es",
+            disableMobile: "true"
         });
 
-        // 4. GUARDIÁN DE RUTAS
+        /* 🛡️ Seguridad de Ruta */
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 currentUser = user;
-                document.getElementById('display-user-name').innerText = user.displayName || user.email.split('@')[0];
+                document.getElementById('display-user-name').innerText = user.email;
                 document.getElementById('page-loader').style.opacity = '0';
-                setTimeout(() => document.getElementById('page-loader').style.display = 'none', 500);
+                setTimeout(() => document.getElementById('page-loader').style.display = 'none', 800);
                 loadTrips();
             } else {
                 window.location.href = 'index.html';
             }
         });
 
-        document.getElementById('btn-logout').addEventListener('click', () => {
-            signOut(auth).then(() => window.location.href = 'index.html');
-        });
-
-        // 5. CARGAR VIAJES CON LÓGICA DE VISOR GLOBAL DE COMUNIDAD
+        /* 🚀 Lógica de Visor Global y Carga de Datos */
         async function loadTrips() {
             const container = document.getElementById('trips-container');
-            const addBtn = container.firstElementChild;
+            const addBtn = container.querySelector('.card-add');
             container.innerHTML = '';
             container.appendChild(addBtn);
 
             try {
                 const querySnapshot = await getDocs(collection(db, "viajes"));
                 let todosLosViajes = [];
-                let esEditorGlobal = false;
-                const isSuperAdmin = currentUser.email === SUPERADMIN_EMAIL;
+                let usuarioEsEditorEnAlgunaParte = false;
 
-                // PASO 1: Escaneo para saber si es Editor de algún grupo
-                querySnapshot.forEach((docSnap) => {
-                    const trip = docSnap.data();
-                    trip.id = docSnap.id;
+                // Primer barrido: ¿Tiene permisos de editor en algún sitio?
+                querySnapshot.forEach(d => {
+                    const trip = { id: d.id, ...d.data() };
                     todosLosViajes.push(trip);
-
-                    const miRolAqui = trip.miembros ? trip.miembros[currentUser.uid] : null;
-                    if (miRolAqui === 'admin-grupo' || miRolAqui === 'editor-grupo') {
-                        esEditorGlobal = true; // Se gana el pase de Visor Global
-                    }
+                    const rol = trip.miembros ? trip.miembros[currentUser.uid] : null;
+                    if (rol === 'admin-grupo' || rol === 'editor-grupo') usuarioEsEditorEnAlgunaParte = true;
                 });
 
-                let index = 1;
+                todosLosViajes.forEach((trip, i) => {
+                    let rolAqui = trip.miembros ? trip.miembros[currentUser.uid] : null;
+                    const isGod = currentUser.email === SUPERADMIN_EMAIL;
 
-                // PASO 2: Renderizar aplicando la ley del Visor Global
-                todosLosViajes.forEach((trip) => {
-                    const tripId = trip.id;
-                    let userRoleEnViaje = trip.miembros ? trip.miembros[currentUser.uid] : null;
-                    
-                    // Lógica Visor de la Comunidad
-                    if (!userRoleEnViaje && !isSuperAdmin && esEditorGlobal) {
-                        userRoleEnViaje = 'visor-global';
+                    // APLICACIÓN LÓGICA COMUNIDAD: Editor en A = Visor en B, C, D...
+                    if (!rolAqui && !isGod && usuarioEsEditorEnAlgunaParte) {
+                        rolAqui = 'visor-global';
                     }
 
-                    const tieneAcceso = userRoleEnViaje || isSuperAdmin;
-                    
+                    const tieneAcceso = rolAqui || isGod;
                     const card = document.createElement('div');
                     card.className = `trip-card ${tieneAcceso ? 'unlocked' : 'locked'}`;
-                    card.style.setProperty('--i', index);
-                    index++;
                     
-                    // Render del Badge
-                    let badgeHTML = '';
-                    if (isSuperAdmin) {
-                        badgeHTML = `<span class="role-badge" style="background: var(--accent); border-color: var(--accent); color: white;">Nivel Dios</span>`;
-                    } else if (userRoleEnViaje) {
-                        if (userRoleEnViaje === 'visor-global') {
-                            badgeHTML = `<span class="role-badge" style="color: var(--accent-blue); border-color: var(--accent-blue);"><i data-lucide="eye" style="width:10px; display:inline; margin-right:4px;"></i>Visor (Comunidad)</span>`;
-                        } else {
-                            badgeHTML = `<span class="role-badge"><i data-lucide="user" style="width:10px; display:inline; margin-right:4px;"></i>${userRoleEnViaje.replace('-', ' ')}</span>`;
-                        }
-                    }
+                    // Delay de animación para el efecto cascada
+                    setTimeout(() => card.classList.add('visible'), i * 150);
 
-                    const fechaTxt = trip.fechaInicio && trip.fechaFin ? `${trip.fechaInicio} — ${trip.fechaFin}` : 'Fechas por definir';
-                    const yaSolicitado = trip.solicitudes && trip.solicitudes[currentUser.uid] ? true : false;
+                    let badgeContent = '';
+                    if (isGod) badgeContent = `<span class="role-badge" style="background:var(--accent); border-color:var(--accent);">NIVEL DIOS</span>`;
+                    else if (rolAqui === 'visor-global') badgeContent = `<span class="role-badge" style="color:var(--accent-blue); border-color:var(--accent-blue);">VISOR COMUNIDAD</span>`;
+                    else if (rolAqui) badgeContent = `<span class="role-badge">${rolAqui.replace('-', ' ')}</span>`;
+
+                    const solicitado = trip.solicitudes && trip.solicitudes[currentUser.uid];
 
                     card.innerHTML = `
-                        ${badgeHTML}
+                        ${badgeContent}
                         <div class="card-content">
-                            <h2 style="font-size: 1.6rem; margin-bottom: 0.8rem; font-weight: 600;">${trip.nombre}</h2>
-                            <p style="color: var(--text-muted); font-size: 0.9rem; display: flex; align-items: center; gap: 6px;">
-                                <i data-lucide="calendar" style="width:16px;"></i>
-                                ${fechaTxt}
-                            </p>
+                            <h2 style="font-weight: 800; font-size: 1.8rem; margin-bottom: 0.5rem;">${trip.nombre}</h2>
+                            <p style="color:var(--text-muted); font-size: 0.9rem;"><i data-lucide="calendar" style="width:14px; vertical-align:middle; margin-right:5px;"></i> ${trip.fechaInicio} - ${trip.fechaFin}</p>
                         </div>
                         ${!tieneAcceso ? `
-                        <div class="locked-overlay">
-                            <i data-lucide="lock" style="color: white; margin-bottom: 15px; width: 32px; height: 32px;"></i>
-                            ${yaSolicitado ? `
-                                <button class="btn-request" disabled style="background: transparent; border: 1px solid var(--primary); opacity: 0.7;">
-                                    <i data-lucide="clock" style="width:16px;"></i> Pendiente
+                            <div class="locked-overlay">
+                                <i data-lucide="lock" style="width: 30px; height: 30px; margin-bottom: 15px;"></i>
+                                <button class="btn-request" onclick="requestAccess('${trip.id}', '${trip.nombre}')" ${solicitado ? 'disabled' : ''}>
+                                    ${solicitado ? '<i data-lucide="clock"></i> SOLICITUD ENVIADA' : 'PEDIR ACCESO'}
                                 </button>
-                            ` : `
-                                <button class="btn-request" onclick="solicitarAccesoGlobal('${tripId}', '${trip.nombre}')">
-                                    Solicitar Acceso
-                                </button>
-                            `}
-                        </div>` : ''}
+                            </div>
+                        ` : ''}
                     `;
 
-                    // Navegación si tiene acceso
                     if (tieneAcceso) {
-                        card.addEventListener('click', (e) => {
-                            if(!e.target.closest('.role-badge') && !e.target.closest('.btn-request')) {
-                                window.location.href = `viaje.html?id=${tripId}`;
-                            }
-                        });
+                        card.onclick = () => {
+                            window.location.href = `viaje.html?id=${trip.id}`;
+                        }
                     }
-
                     container.appendChild(card);
                 });
                 lucide.createIcons();
             } catch (error) {
-                console.error("Error al cargar viajes:", error);
-                showToast("Error de conexión con la base de datos.", "error");
+                console.error(error);
+                showToast("Error al sincronizar viajes", "error");
             }
         }
 
-        // 6. LÓGICA DEL MODAL DE CREACIÓN
-        const modal = document.getElementById('create-modal');
-        document.getElementById('btn-open-modal').addEventListener('click', () => modal.classList.add('active'));
-        document.getElementById('btn-close-modal').addEventListener('click', () => {
-            modal.classList.remove('active');
-            document.getElementById('create-trip-form').reset();
-            rangePicker.clear();
-        });
+        /* ✉️ Lógica de Solicitudes (Fijada) */
+        window.requestAccess = async (tripId, tripName) => {
+            event.stopPropagation();
+            try {
+                const tripRef = doc(db, "viajes", tripId);
+                await setDoc(tripRef, {
+                    solicitudes: {
+                        [currentUser.uid]: currentUser.email
+                    }
+                }, { merge: true });
+                showToast(`Petición enviada para ${tripName}`);
+                loadTrips();
+            } catch (error) {
+                console.error(error);
+                showToast("No se pudo enviar la solicitud", "error");
+            }
+        };
 
-        document.getElementById('create-trip-form').addEventListener('submit', async (e) => {
+        /* 🛠️ Modal de Creación */
+        const modal = document.getElementById('create-modal');
+        document.getElementById('btn-open-modal').onclick = () => modal.classList.add('active');
+        document.getElementById('btn-close-modal').onclick = () => modal.classList.remove('active');
+
+        document.getElementById('create-trip-form').onsubmit = async (e) => {
             e.preventDefault();
-            
-            if (selectedDatesArray.length < 2) {
-                showToast("Debes seleccionar inicio y fin en el calendario.", "error");
+            const dates = rangePicker.selectedDates;
+            if (dates.length < 2) {
+                showToast("Debes elegir un rango de fechas", "error");
                 return;
             }
 
-            const btnSubmit = e.target.querySelector('.btn-submit');
-            btnSubmit.innerText = 'Planificando...';
-            btnSubmit.style.opacity = '0.7';
-
-            const formatoDB = (dateObj) => dateObj.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
-
-            const nuevoViaje = {
-                nombre: document.getElementById('trip-name').value,
-                fechaInicio: formatoDB(selectedDatesArray[0]),
-                fechaFin: formatoDB(selectedDatesArray[1]),
-                creadoPor: currentUser.uid,
-                miembros: { [currentUser.uid]: "admin-grupo" },
-                solicitudes: {},
-                eventos: [],
-                timestamp: new Date()
-            };
-
-            try {
-                await addDoc(collection(db, "viajes"), nuevoViaje);
-                modal.classList.remove('active');
-                e.target.reset();
-                rangePicker.clear();
-                showToast("¡Viaje creado con éxito!");
-                setTimeout(loadTrips, 300);
-            } catch (error) {
-                console.error("Error:", error);
-                showToast("Hubo un error al crear la ruta.", "error");
-            } finally {
-                btnSubmit.innerText = 'Empezar a planear';
-                btnSubmit.style.opacity = '1';
-            }
-        });
-
-        // 7. FUNCIÓN GLOBAL PARA SOLICITAR ACCESO (CON SETDOC SEGURO)
-        window.solicitarAccesoGlobal = async function(tripId, tripName) {
-            event.stopPropagation();
-            const btn = event.currentTarget;
+            const format = (d) => d.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
             
-            btn.innerHTML = `<i data-lucide="loader-2" class="lucide-spin" style="width:16px;"></i> Enviando...`;
-            btn.disabled = true;
-            lucide.createIcons();
-
             try {
-                const tripRef = doc(db, "viajes", tripId);
-                
-                // Usamos setDoc con merge para no borrar el viaje entero
-                await setDoc(tripRef, {
-                    solicitudes: {
-                        [currentUser.uid]: currentUser.email || "Usuario sin email"
-                    }
-                }, { merge: true });
-
-                showToast(`Petición enviada al admin de "${tripName}"`);
-                
-                btn.innerHTML = `<i data-lucide="clock" style="width:16px;"></i> Pendiente`;
-                btn.style.background = "transparent";
-                btn.style.border = "1px solid var(--primary)";
-                
+                await addDoc(collection(db, "viajes"), {
+                    nombre: document.getElementById('trip-name').value,
+                    fechaInicio: format(dates[0]),
+                    fechaFin: format(dates[1]),
+                    miembros: { [currentUser.uid]: "admin-grupo" },
+                    eventos: [],
+                    solicitudes: {},
+                    creadoEn: new Date()
+                });
+                modal.classList.remove('active');
+                showToast("Viaje creado correctamente");
+                loadTrips();
             } catch (error) {
-                console.error("Error enviando solicitud:", error);
-                showToast("Error al enviar la solicitud.", "error");
-                btn.innerHTML = "Solicitar Acceso";
-                btn.disabled = false;
+                showToast("Error al crear el viaje", "error");
             }
-            lucide.createIcons();
-        }
+        };
 
+        document.getElementById('btn-logout').onclick = () => signOut(auth);
         lucide.createIcons();
     </script>
-    <style>@keyframes spin { 100% { transform: rotate(360deg); } }</style>
 </body>
 </html>
