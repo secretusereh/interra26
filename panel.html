@@ -463,22 +463,36 @@
         });
 
         // 7. FUNCIÓN GLOBAL PARA SOLICITAR ACCESO
-        window.solicitarAccesoGlobal = function(tripId, tripName) {
-            // Impedimos que el evento suba y clique la tarjeta por error
-            event.stopPropagation();
-            
-            // TODO: En el siguiente paso, aquí guardaremos la petición en Firebase.
-            // Por ahora, activamos nuestro elegante Toast.
-            showToast(`Petición enviada al admin de "${tripName}".`);
-            
-            // Cambiar visualmente el botón para dar feedback inmediato
-            const btn = event.currentTarget;
-            btn.innerHTML = `<i data-lucide="clock" style="width:16px;"></i> Pendiente`;
-            btn.style.background = "transparent";
-            btn.style.border = "1px solid var(--primary)";
-            btn.disabled = true;
-            lucide.createIcons();
-        }
+    window.solicitarAccesoGlobal = async function(tripId, tripName) {
+    event.stopPropagation();
+    const btn = event.currentTarget;
+    
+    // Cambiar estado visual inmediatamente
+    btn.innerHTML = `<i data-lucide="loader-2" class="lucide-spin" style="width:16px;"></i> Enviando...`;
+    btn.disabled = true;
+    lucide.createIcons();
+
+    try {
+        const tripRef = doc(db, "viajes", tripId);
+        
+        // Usamos un objeto 'solicitudes' donde la llave es el UID del usuario
+        // y el valor es su email para que el Admin sepa quién es.
+        await updateDoc(tripRef, {
+            [`solicitudes.${currentUser.uid}`]: currentUser.email
+        });
+
+        showToast(`Solicitud enviada para "${tripName}"`);
+        btn.innerHTML = `<i data-lucide="clock" style="width:16px;"></i> Pendiente`;
+        btn.style.background = "transparent";
+        btn.style.border = "1px solid var(--primary)";
+    } catch (error) {
+        console.error("Error al solicitar acceso:", error);
+        showToast("Error al enviar la solicitud", "error");
+        btn.innerHTML = "Solicitar Acceso";
+        btn.disabled = false;
+    }
+    lucide.createIcons();
+}
 
         // Iniciar iconos al cargar la página
         lucide.createIcons();
