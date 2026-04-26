@@ -8,11 +8,18 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;800&display=swap" rel="stylesheet">
+    
     <script src="https://unpkg.com/lucide@latest"></script>
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/dark.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="https://npmcdn.com/flatpickr/dist/l10n/es.js"></script>
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
     <style>
         /* =========================================
@@ -45,9 +52,13 @@
             padding: 1rem 5%; background: rgba(3, 3, 3, 0.8); backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--border-subtle); position: sticky; top: 0; z-index: 100;
         }
-        .btn-back { background: transparent; color: var(--text-muted); border: none; cursor: pointer; display: flex; align-items: center; gap: 8px; font-weight: 600; transition: var(--transition); }
-        .btn-back:hover { color: var(--primary); }
+        .btn-nav { background: transparent; color: var(--text-muted); border: none; cursor: pointer; display: flex; align-items: center; gap: 8px; font-weight: 600; transition: var(--transition); }
+        .btn-nav:hover { color: var(--primary); }
+        .btn-export { color: var(--primary); background: rgba(255,255,255,0.1); padding: 0.5rem 1rem; border-radius: 20px; }
+        .btn-export:hover { background: var(--primary); color: var(--bg-color); }
+        
         .logo { font-weight: 800; font-size: 1.2rem; display: flex; align-items: center; gap: 10px; }
+        .logo img { height: 24px; object-fit: contain; }
 
         /* Loader a pantalla completa */
         #page-loader {
@@ -78,28 +89,18 @@
 
         /* Badge rojo de notificaciones */
         .tab-badge {
-            display: none;
-            background: var(--accent);
-            color: white;
-            font-size: 0.65rem;
-            font-weight: 800;
-            min-width: 18px;
-            height: 18px;
-            border-radius: 20px;
-            padding: 0 5px;
-            align-items: center;
-            justify-content: center;
-            animation: badgePop 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            line-height: 1;
+            display: none; background: var(--accent); color: white; font-size: 0.65rem; font-weight: 800;
+            min-width: 18px; height: 18px; border-radius: 20px; padding: 0 5px; align-items: center;
+            justify-content: center; animation: badgePop 0.4s cubic-bezier(0.16, 1, 0.3, 1); line-height: 1;
         }
         .tab-badge.visible { display: flex; }
-        @keyframes badgePop {
-            from { transform: scale(0); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
-        }
+        @keyframes badgePop { from { transform: scale(0); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
         .tab-content { display: none; animation: fadeIn 0.5s ease; padding: 3rem 5% 5rem; max-width: 900px; margin: 0 auto; }
         .tab-content.active { display: block; }
+
+        /* Mapa Contenedor */
+        #map-container { width: 100%; height: 500px; border-radius: 16px; border: 1px solid var(--border-subtle); z-index: 10; }
 
         /* =========================================
            TAB 1: ITINERARIO (TIMELINE)
@@ -139,8 +140,7 @@
         
         .event-card::before {
             content: ''; position: absolute; left: -26px; top: 24px; width: 12px; height: 12px;
-            background: var(--primary); border-radius: 50%; box-shadow: 0 0 10px var(--primary);
-            z-index: 2;
+            background: var(--primary); border-radius: 50%; box-shadow: 0 0 10px var(--primary); z-index: 2;
         }
         .event-card.type-transport::before { background: var(--accent-blue); box-shadow: 0 0 10px var(--accent-blue); }
         .event-card.type-hotel::before { background: var(--accent-green); box-shadow: 0 0 10px var(--accent-green); }
@@ -250,6 +250,7 @@
         @keyframes slideInToast { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
         @keyframes slideOutToast { from { transform: translateX(0); opacity: 1; } to { transform: translateX(100%); opacity: 0; } }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
@@ -260,11 +261,18 @@
     </div>
 
     <nav>
-        <button class="btn-back" onclick="window.location.href='panel.html'">
+        <button class="btn-nav" onclick="window.location.href='panel.html'">
             <i data-lucide="arrow-left"></i> Volver
         </button>
-        <div class="logo"><i data-lucide="map" style="color: var(--primary);"></i> Interrail.</div>
-        <div style="width: 80px;"></div>
+        <div class="logo">
+            <img src="interrahublogo.PNG" alt="Interrahub Logo">
+            Interrail.
+        </div>
+        <div>
+            <button class="btn-nav btn-export" onclick="generarPDF()">
+                <i data-lucide="file-down"></i> Exportar PDF
+            </button>
+        </div>
     </nav>
 
     <div class="trip-header">
@@ -274,6 +282,7 @@
 
     <div class="tabs-container">
         <button class="tab-btn active" id="tab-btn-itinerario" onclick="switchTab('itinerario', this)">Itinerario</button>
+        <button class="tab-btn" id="tab-btn-mapa" onclick="switchTab('mapa', this)">Mapa</button>
         <button class="tab-btn" id="tab-btn-usuarios" onclick="switchTab('usuarios', this)">
             Equipo y Accesos
             <span class="tab-badge" id="solicitudes-badge">0</span>
@@ -282,6 +291,13 @@
 
     <main id="tab-itinerario" class="tab-content active">
         <div id="itinerary-container"></div>
+    </main>
+
+    <main id="tab-mapa" class="tab-content">
+        <div id="map-container"></div>
+        <p style="text-align: center; color: var(--text-muted); font-size: 0.85rem; margin-top: 1rem;">
+            Generado automáticamente basándose en los eventos de tu itinerario.
+        </p>
     </main>
 
     <main id="tab-usuarios" class="tab-content">
@@ -390,12 +406,18 @@
         let currentTripData = null;
         let currentUserRole = null;
         let canEdit = false;
-        // Cache de nombres: { uid: "Nombre" }
         let userNamesCache = {};
         const SUPERADMIN_EMAIL = "tu_correo@gmail.com"; 
 
         const timePickers = flatpickr(".time-picker", { enableTime: true, noCalendar: true, dateFormat: "H:i", time_24hr: true });
         let nightsPicker = flatpickr("#hotel-nights", { mode: "range", dateFormat: "d/m/Y", locale: "es" });
+
+        // Mapa Variables
+        let map;
+        let markersLayer;
+        let routeLayer;
+        let mapInitialized = false;
+        const geocodeCache = {};
 
         // ── SISTEMA DE TOASTS ──
         function showToast(message, type = 'success') {
@@ -409,8 +431,6 @@
             setTimeout(() => { toast.style.animation = 'slideOutToast 0.4s forwards'; setTimeout(() => toast.remove(), 400); }, 3500);
         }
 
-        // ── OBTENER NOMBRE DE USUARIO DESDE FIRESTORE ──
-        // Busca en la colección "usuarios" por UID y cachea el resultado
         async function getUserName(uid) {
             if (userNamesCache[uid]) return userNamesCache[uid];
             try {
@@ -422,13 +442,11 @@
                     return nombre;
                 }
             } catch(e) {}
-            // Fallback si no existe el documento
             const fallback = `Usuario ${uid.substring(0, 6)}`;
             userNamesCache[uid] = fallback;
             return fallback;
         }
 
-        // ── SEGURIDAD Y CARGA ──
         onAuthStateChanged(auth, async (user) => {
             if (!user) { window.location.href = 'index.html'; return; }
             if (!tripId) { window.location.href = 'panel.html'; return; }
@@ -460,7 +478,6 @@
 
                 canEdit = isGod || currentUserRole === "admin-grupo" || currentUserRole === "editor-grupo";
 
-                // Badge de solicitudes: contar cuántas hay y mostrar
                 const numSolicitudes = currentTripData.solicitudes ? Object.keys(currentTripData.solicitudes).length : 0;
                 updateSolicitudesBadge(numSolicitudes);
 
@@ -470,7 +487,6 @@
 
                 if (!currentTripData.eventos) currentTripData.eventos = [];
 
-                // Pre-cargar nombres de todos los miembros en paralelo
                 const uids = Object.keys(miembros);
                 await Promise.all(uids.map(uid => getUserName(uid)));
 
@@ -486,7 +502,6 @@
             }
         }
 
-        // ── BADGE DE SOLICITUDES ──
         function updateSolicitudesBadge(count) {
             const badge = document.getElementById('solicitudes-badge');
             if (count > 0) {
@@ -497,7 +512,6 @@
             }
         }
 
-        // ── RENDERIZADO VISUAL ──
         function renderHeader() {
             document.getElementById('trip-title').innerText = currentTripData.nombre;
             document.getElementById('trip-dates').innerText = `Del ${currentTripData.fechaInicio} al ${currentTripData.fechaFin}`;
@@ -568,6 +582,65 @@
                 dayCount++;
             }
             lucide.createIcons();
+            if(mapInitialized) updateMapData(); // Actualizar mapa si añadimos cosas nuevas
+        }
+
+        // ── INICIALIZACIÓN DE LEAFLET ──
+        function initMap() {
+            if (mapInitialized) return;
+            map = L.map('map-container').setView([48.8566, 2.3522], 4); 
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors',
+                crossOrigin: true
+            }).addTo(map);
+
+            markersLayer = L.layerGroup().addTo(map);
+            routeLayer = L.polyline([], {color: 'var(--accent)', weight: 3, dashArray: '5, 10'}).addTo(map);
+            mapInitialized = true;
+        }
+
+        // ── GEOCODIFICACIÓN NATIVA CON NOMINATIM ──
+        async function geocodeAddress(query) {
+            if (!query) return null;
+            let cleanQuery = query.includes('->') ? query.split('->').pop().trim() : query;
+            if (geocodeCache[cleanQuery]) return geocodeCache[cleanQuery];
+
+            try {
+                const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(cleanQuery)}&limit=1`);
+                const data = await res.json();
+                if (data.length > 0) {
+                    const coords = [parseFloat(data[0].lat), parseFloat(data[0].lon)];
+                    geocodeCache[cleanQuery] = coords;
+                    return coords;
+                }
+            } catch(e) {
+                console.error("Geocode error", e);
+            }
+            await new Promise(r => setTimeout(r, 1000)); // Delay for Nominatim rate limit
+            return null;
+        }
+
+        async function updateMapData() {
+            if (!currentTripData || !currentTripData.eventos) return;
+            showToast("Calculando posiciones en el mapa...", "info");
+            markersLayer.clearLayers();
+            const latlngs = [];
+
+            const sortedEvents = [...currentTripData.eventos].sort((a,b) => {
+                const dA = new Date(a.dateKey); const dB = new Date(b.dateKey);
+                if(dA < dB) return -1; if(dA > dB) return 1;
+                return (a.time || '24:00').localeCompare(b.time || '24:00');
+            });
+
+            for (const ev of sortedEvents) {
+                const coords = await geocodeAddress(ev.title);
+                if (coords) {
+                    L.marker(coords).addTo(markersLayer).bindPopup(`<b>${ev.title}</b><br>${ev.dateKey}`);
+                    latlngs.push(coords);
+                }
+            }
+            routeLayer.setLatLngs(latlngs);
+            if (latlngs.length > 0) map.fitBounds(routeLayer.getBounds(), {padding: [50, 50]});
         }
 
         // ── TABS ──
@@ -576,16 +649,162 @@
             document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
             document.getElementById(`tab-${tabName}`).classList.add('active');
             btn.classList.add('active');
+
+            if(tabName === 'mapa') {
+                if(!mapInitialized) {
+                    initMap();
+                    updateMapData();
+                } else {
+                    setTimeout(() => map.invalidateSize(), 100);
+                }
+            }
         }
 
-        // ── RENDERIZADO DE MIEMBROS (con nombres reales) ──
+        // ── GENERAR PDF PREMIUM ──
+        window.generarPDF = async function() {
+            showToast("Generando PDF premium. Un momento...", "info");
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF('p', 'mm', 'a4');
+            const pageWidth = doc.internal.pageSize.getWidth();
+            const pageHeight = doc.internal.pageSize.getHeight();
+
+            // Página 1: Portada
+            doc.setFillColor(3, 3, 3); // --bg-color
+            doc.rect(0, 0, pageWidth, pageHeight, 'F');
+            doc.setTextColor(255, 255, 255);
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(36);
+            doc.text(currentTripData.nombre, pageWidth/2, pageHeight/2 - 10, {align: "center"});
+            doc.setFontSize(14);
+            doc.setFont("helvetica", "normal");
+            doc.setTextColor(150, 150, 150);
+            doc.text(`Itinerario oficial del viaje`, pageWidth/2, pageHeight/2 + 5, {align: "center"});
+            doc.text(`Del ${currentTripData.fechaInicio} al ${currentTripData.fechaFin}`, pageWidth/2, pageHeight/2 + 15, {align: "center"});
+
+            // Página 2: Mapa
+            doc.addPage();
+            doc.setFillColor(20, 20, 20); // --surface
+            doc.rect(0, 0, pageWidth, pageHeight, 'F');
+            doc.setTextColor(255, 255, 255);
+            doc.setFontSize(22);
+            doc.setFont("helvetica", "bold");
+            doc.text("Ruta del Viaje", 20, 30);
+
+            // Intentar capturar el contenedor del mapa
+            const mapEl = document.getElementById('map-container');
+            if(mapEl) {
+                try {
+                    // Forzamos a mostrarlo un segundo si estaba oculto para capturar
+                    const originalDisplay = mapEl.parentElement.style.display;
+                    mapEl.parentElement.style.display = 'block';
+                    
+                    const canvas = await html2canvas(mapEl, { useCORS: true, allowTaint: true });
+                    const imgData = canvas.toDataURL('image/jpeg', 0.8);
+                    const imgHeight = (canvas.height * (pageWidth - 40)) / canvas.width;
+                    doc.addImage(imgData, 'JPEG', 20, 45, pageWidth - 40, imgHeight);
+
+                    mapEl.parentElement.style.display = originalDisplay;
+                } catch(e) {
+                    console.error("Error capturando mapa", e);
+                    doc.setFontSize(12);
+                    doc.text("(El mapa no se ha podido renderizar por políticas de CORS)", 20, 50);
+                }
+            }
+
+            // Páginas dinámicas: Itinerario
+            doc.addPage();
+            doc.setFillColor(3, 3, 3);
+            doc.rect(0, 0, pageWidth, pageHeight, 'F');
+            let yPos = 30;
+            doc.setTextColor(255, 255, 255);
+            doc.setFontSize(22);
+            doc.setFont("helvetica", "bold");
+            doc.text("Plan de Días", 20, yPos);
+            yPos += 20;
+
+            const parseDate = (str) => { const [d,m,y] = str.split('/'); return new Date(y, m-1, d); };
+            const start = parseDate(currentTripData.fechaInicio);
+            const end = parseDate(currentTripData.fechaFin);
+            
+            const groupedEvents = {};
+            currentTripData.eventos.forEach(ev => {
+                if (!groupedEvents[ev.dateKey]) groupedEvents[ev.dateKey] = [];
+                groupedEvents[ev.dateKey].push(ev);
+            });
+
+            let current = new Date(start);
+            let dayCount = 1;
+
+            while (current <= end) {
+                if(yPos > pageHeight - 40) {
+                    doc.addPage();
+                    doc.setFillColor(3, 3, 3);
+                    doc.rect(0, 0, pageWidth, pageHeight, 'F');
+                    yPos = 30;
+                }
+
+                const dateKey = current.toISOString().split('T')[0];
+                const dateStr = current.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' });
+                const eventsToday = groupedEvents[dateKey] || [];
+                eventsToday.sort((a, b) => (a.time || '24:00').localeCompare(b.time || '24:00'));
+
+                // Título del Día
+                doc.setFontSize(16);
+                doc.setTextColor(255, 77, 77); // Accent color
+                doc.setFont("helvetica", "bold");
+                doc.text(`Día ${dayCount} — ${dateStr}`, 20, yPos);
+                yPos += 10;
+
+                doc.setTextColor(220, 220, 220);
+                if (eventsToday.length === 0) {
+                    doc.setFont("helvetica", "italic");
+                    doc.setFontSize(12);
+                    doc.text("Día libre. Explora a tu ritmo.", 25, yPos);
+                    yPos += 12;
+                } else {
+                    eventsToday.forEach(ev => {
+                        if(yPos > pageHeight - 30) {
+                            doc.addPage(); doc.setFillColor(3, 3, 3); doc.rect(0, 0, pageWidth, pageHeight, 'F'); yPos = 30;
+                        }
+                        
+                        doc.setFont("helvetica", "bold");
+                        doc.setFontSize(12);
+                        doc.text(`${ev.time || '--:--'}`, 25, yPos);
+                        
+                        doc.setFont("helvetica", "normal");
+                        doc.text(`• ${ev.title}`, 45, yPos);
+                        yPos += 6;
+
+                        if (ev.notes) {
+                            doc.setFontSize(10);
+                            doc.setTextColor(150, 150, 150);
+                            const lines = doc.splitTextToSize(ev.notes, pageWidth - 60);
+                            doc.text(lines, 48, yPos);
+                            yPos += (lines.length * 5);
+                            doc.setTextColor(220, 220, 220);
+                        }
+                        yPos += 4;
+                    });
+                }
+
+                yPos += 8; // Margen inferior del día
+                current.setDate(current.getDate() + 1);
+                dayCount++;
+            }
+
+            const fileName = `Itinerario_${currentTripData.nombre.replace(/\s+/g, '_')}.pdf`;
+            doc.save(fileName);
+            showToast("Documento guardado.");
+        }
+
+
+        // ── RESTO DE LÓGICA EXISTENTE ──
         async function renderUsers() {
             const miembrosList = document.getElementById('members-list');
             const reqList = document.getElementById('requests-list');
             miembrosList.innerHTML = '';
             reqList.innerHTML = '';
 
-            // Miembros actuales con nombre real
             for (const [uid, rol] of Object.entries(currentTripData.miembros || {})) {
                 const nombre = userNamesCache[uid] || await getUserName(uid);
                 const inicial = nombre.charAt(0).toUpperCase();
@@ -596,23 +815,19 @@
                     <div class="user-row">
                         <div class="user-info">
                             <div class="user-avatar">${inicial}</div>
-                            <div>
-                                <div style="font-weight: 600; font-size: 0.95rem;">${nombre}</div>
-                            </div>
+                            <div><div style="font-weight: 600; font-size: 0.95rem;">${nombre}</div></div>
                         </div>
                         <span class="user-role-tag" style="color: ${colorRol}; border: 1px solid ${colorRol};">${labelRol}</span>
                     </div>
                 `;
             }
 
-            // Solicitudes pendientes (solo visible para admin/dios)
             const solicitudes = currentTripData.solicitudes || {};
             const numSolicitudes = Object.keys(solicitudes).length;
             updateSolicitudesBadge(numSolicitudes);
 
             if (numSolicitudes > 0) {
                 for (const [uid, email] of Object.entries(solicitudes)) {
-                    // Intentamos obtener el nombre también para solicitudes
                     const nombreSolicitante = userNamesCache[uid] ? userNamesCache[uid] : null;
                     const displaySolicitante = nombreSolicitante || email;
                     const inicial = displaySolicitante.charAt(0).toUpperCase();
@@ -656,7 +871,6 @@
 
                 if (rolElegido !== 'deny') {
                     nuevosMiembros[uid] = rolElegido;
-                    // Pre-cargar nombre del nuevo miembro
                     await getUserName(uid);
                     showToast(`Usuario añadido como ${rolElegido.replace('-', ' ')}`);
                 } else {
@@ -668,14 +882,12 @@
                 currentTripData.miembros = nuevosMiembros;
                 currentTripData.solicitudes = nuevasSolicitudes;
                 renderUsers();
-                
             } catch (e) {
                 console.error("Error al gestionar solicitud:", e);
                 showToast("Error en la base de datos", "error");
             }
         }
 
-        // ── OMNI-MODAL ──
         let selectedDateKey = null;
         let currentModalType = 'transport';
 
@@ -696,7 +908,6 @@
             document.getElementById(`form-${type}`).classList.add('active');
         }
 
-        // Buscador Nominatim
         let searchTimeout;
         window.searchLocation = function(input) {
             clearTimeout(searchTimeout);
@@ -717,7 +928,6 @@
         }
         window.selectLocation = function(name) { document.getElementById('hotel-search').value = name; document.getElementById('hotel-results').style.display = 'none'; }
 
-        // Enviar a la nube
         document.getElementById('omni-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('btn-submit-form');
@@ -765,7 +975,6 @@
             }
         });
 
-        // Eliminar evento
         window.deleteEvent = async function(eventId) {
             try {
                 const tripRef = doc(db, "viajes", tripId);
@@ -784,6 +993,5 @@
 
         lucide.createIcons();
     </script>
-    <style>@keyframes spin { 100% { transform: rotate(360deg); } }</style>
 </body>
 </html>
