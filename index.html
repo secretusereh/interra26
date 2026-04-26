@@ -3,9 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interra-hub | Acceso</title>
-    <link rel="icon" type="image/png" href="interrahublogo.PNG">
+    
+    <title>Interra-hub | Planifica tus viajes en grupo</title>
+    <meta name="description" content="Interra-hub es la plataforma colaborativa definitiva para planificar y organizar tus viajes y rutas. Gestiona itinerarios, alojamientos y transportes en tiempo real.">
+    <meta name="keywords" content="viajes, planificador de viajes, interrail, itinerario, organización de viajes, viajes en grupo, app de viajes">
+    <meta name="author" content="Pipaon Studio">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://tudominio.com/"> <meta property="og:type" content="website">
+    <meta property="og:title" content="Interra-hub | El hub para tus viajes">
+    <meta property="og:description" content="Organiza tu próxima aventura en grupo. Mapas, itinerarios y control total en una sola app.">
+    <meta property="og:image" content="https://tudominio.com/interrahublogo.PNG"> <meta property="og:url" content="https://tudominio.com/">
+    <meta property="og:site_name" content="Interra-hub">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Interra-hub | Planifica tus viajes en grupo">
+    <meta name="twitter:description" content="Organiza tu próxima aventura en grupo. Mapas, itinerarios y control total en una sola app.">
+    <meta name="twitter:image" content="https://tudominio.com/interrahublogo.PNG"> <link rel="icon" type="image/png" href="interrahublogo.PNG">
     <link rel="apple-touch-icon" href="interrahublogo.PNG">
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;800&display=swap" rel="stylesheet">
@@ -303,20 +318,9 @@
             font-size: 1.4rem;
             font-weight: 800;
             letter-spacing: -1px;
-            margin-bottom: 0.3rem;
+            margin-bottom: 1.5rem;
         }
         .footer-logo .dot { color: var(--accent); }
-
-        .footer-potxo {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            margin-bottom: 1.8rem;
-            font-weight: 300;
-        }
-        .footer-potxo strong {
-            color: rgba(255,255,255,0.55);
-            font-weight: 600;
-        }
 
         .footer-links {
             display: flex;
@@ -432,17 +436,14 @@
 </head>
 <body>
 
-    <!-- ── BETA BANNER ── -->
     <div id="beta-banner">
         ⚠️ <strong>BETA</strong> — Esta versión puede contener errores. &nbsp;<a href="mailto:pipaonstudio@gmail.com">Reportar</a>
     </div>
 
-    <!-- ── LOADER ── -->
     <div id="initial-loader">
         <div style="width: 20px; height: 20px; border: 2px solid #333; border-top-color: #fff; border-radius: 50%; animation: spin 1s linear infinite;"></div>
     </div>
 
-    <!-- ── MODAL NOMBRE (para usuarios sin displayName) ── -->
     <div class="name-modal-overlay" id="name-modal">
         <div class="name-modal-box">
             <h2>¿Cómo te llamamos? 👋</h2>
@@ -452,13 +453,10 @@
         </div>
     </div>
 
-    <!-- ── MAIN ── -->
-    <div class="page-wrapper">
+    <main class="page-wrapper">
         <div style="width:100%;max-width:400px;">
 
-            <!-- Install section -->
             <div id="install-section">
-                <!-- iOS card (shown on iOS) -->
                 <div id="ios-card" style="display:none;">
                     <div class="install-card" id="ios-toggle-btn">
                         <div class="install-icon">📲</div>
@@ -481,7 +479,6 @@
                     </div>
                 </div>
 
-                <!-- Android card (shown on Android) -->
                 <div id="android-card" style="display:none;">
                     <a class="install-card" href="#" id="android-apk-link">
                         <div class="install-icon">🤖</div>
@@ -497,12 +494,11 @@
                 </div>
             </div>
 
-            <!-- Auth form -->
             <div class="auth-container" id="main-container">
-                <div class="header-text">
+                <header class="header-text">
                     <h1>Interra-hub<span class="dot">.</span></h1>
                     <p>Bienvenido de nuevo.</p>
-                </div>
+                </header>
 
                 <div class="forms-wrapper">
                     <form id="login-form" class="form-box active">
@@ -565,13 +561,11 @@
                 </div>
             </div>
         </div>
-    </div>
+    </main>
 
-    <!-- ── FOOTER ── -->
     <footer>
         <div class="footer-inner">
             <div class="footer-logo">Interra-hub<span class="dot">.</span></div>
-            <div class="footer-potxo">Con todo el cariño del mundo para el grupo <strong>Potxopipas</strong> 🚆 — gracias a vosotros existe esta app.</div>
 
             <div class="footer-links">
                 <button id="open-tos">Términos de uso</button>
@@ -580,13 +574,12 @@
             </div>
 
             <div class="footer-studio">
-                Hecha con ❤️ por <strong style="color:rgba(255,255,255,0.4);">Pipa</strong> &nbsp;·&nbsp; Potxopipa's Team
+                Hecha por <strong style="color:rgba(255,255,255,0.4);">Pipa</strong>
             </div>
             <div class="footer-copy">© 2025 Interra-hub · Todos los derechos reservados</div>
         </div>
     </footer>
 
-    <!-- ── MODAL: TÉRMINOS ── -->
     <div class="modal-overlay" id="modal-tos">
         <div class="modal-box">
             <h2>Términos de Servicio y Condiciones de Uso</h2>
@@ -606,7 +599,6 @@
         </div>
     </div>
 
-    <!-- ── MODAL: PRIVACIDAD ── -->
     <div class="modal-overlay" id="modal-privacy">
         <div class="modal-box">
             <h2>Privacidad y Datos</h2>
@@ -629,14 +621,12 @@
         </div>
     </div>
 
-    <!-- ── MODAL: COPYRIGHT ── -->
     <div class="modal-overlay" id="modal-copyright">
         <div class="modal-box">
             <h2>Copyright</h2>
             <p>© 2025 <strong>Interra-hub</strong> · Todos los derechos reservados.</p>
-            <p>Esta aplicación ha sido diseñada y desarrollada íntegramente por <strong>Pipa</strong>, miembro del <strong>Potxopipa's Team</strong>, a través de <a href="https://pipaonstudio.netlify.app/" target="_blank" rel="noopener"><strong>Pipaon Studio</strong></a>.</p>
+            <p>Esta aplicación ha sido diseñada y desarrollada íntegramente por <strong>Pipa</strong> a través de <a href="https://pipaonstudio.netlify.app/" target="_blank" rel="noopener"><strong>Pipaon Studio</strong></a>.</p>
             <p>El acceso y uso público de la aplicación está permitido. Sin embargo, <strong>la copia, reproducción, redistribución, ingeniería inversa o cualquier uso no autorizado del código fuente, diseño, estructura o contenido de esta aplicación queda expresamente prohibida</strong> y podrá ser perseguida conforme a la legislación de propiedad intelectual vigente.</p>
-            <p>Esta aplicación fue creada con especial dedicación para el grupo <strong>Potxopipas</strong>, cuya ilusión fue el origen y motivo de este proyecto. 🚆❤️</p>
             <p style="font-size:0.75rem;color:rgba(255,255,255,0.3);margin-top:1rem;">¿Quieres ponerte en contacto? Habla directamente con <strong style="color:rgba(255,255,255,0.45);">Pipa</strong> → <a href="mailto:pipaonstudio@gmail.com">pipaonstudio@gmail.com</a></p>
             <button class="modal-close" onclick="closeModal('modal-copyright')">Cerrar</button>
         </div>
@@ -667,26 +657,21 @@
         const nameModal = document.getElementById('name-modal');
 
         // ── GUARDAR PERFIL EN FIRESTORE ──
-        // Se llama siempre que alguien inicia sesión (login, registro o Google).
-        // Si ya existe el documento, solo actualiza email y lastSeen, no machaca el nombre.
         async function saveUserProfile(user) {
             const userRef = doc(db, "usuarios", user.uid);
             const snap = await getDoc(userRef);
 
             if (snap.exists()) {
-                // Ya existe: solo actualizamos datos no críticos
                 await setDoc(userRef, {
                     email: user.email,
                     lastSeen: new Date()
                 }, { merge: true });
 
-                // Si no tiene nombre guardado, mostramos modal
                 const data = snap.data();
                 if (!data.nombre || data.nombre.trim() === '') {
                     showNameModal(user);
                 }
             } else {
-                // Primera vez: crear perfil completo
                 const nombre = user.displayName || '';
                 await setDoc(userRef, {
                     uid: user.uid,
@@ -696,7 +681,6 @@
                     lastSeen: new Date()
                 });
 
-                // Si no tiene nombre (Google sin displayName o email/pass), preguntamos
                 if (!nombre || nombre.trim() === '') {
                     showNameModal(user);
                 }
@@ -710,7 +694,6 @@
                 if (!name) return;
                 const userRef = doc(db, "usuarios", user.uid);
                 await setDoc(userRef, { nombre: name }, { merge: true });
-                // También actualizamos displayName en Auth para consistencia
                 try { await updateProfile(user, { displayName: name }); } catch(e) {}
                 nameModal.classList.remove('active');
                 window.location.href = 'panel.html';
@@ -721,13 +704,11 @@
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 await saveUserProfile(user);
-                // Solo redirigir si no estamos esperando nombre
                 const snap = await getDoc(doc(db, "usuarios", user.uid));
                 const nombre = snap.exists() ? snap.data().nombre : '';
                 if (nombre && nombre.trim() !== '') {
                     window.location.href = 'panel.html';
                 }
-                // Si no tiene nombre, el modal ya habrá aparecido y redirige al guardar
             } else {
                 loader.style.opacity = '0';
                 setTimeout(() => {
@@ -762,7 +743,6 @@
             btn.innerText = 'Verificando...';
             try {
                 await signInWithEmailAndPassword(auth, document.getElementById('login-email').value, document.getElementById('login-password').value);
-                // onAuthStateChanged se encarga del resto
             } catch (err) {
                 btn.innerText = 'Entrar';
                 msg.innerText = "Error en las credenciales.";
@@ -781,7 +761,6 @@
                 const nombreIngresado = document.getElementById('reg-name').value.trim();
                 const cred = await createUserWithEmailAndPassword(auth, document.getElementById('reg-email').value, document.getElementById('reg-password').value);
                 await updateProfile(cred.user, { displayName: nombreIngresado });
-                // Guardar perfil directamente con el nombre que acaban de escribir
                 await setDoc(doc(db, "usuarios", cred.user.uid), {
                     uid: cred.user.uid,
                     email: cred.user.email,
@@ -789,7 +768,6 @@
                     createdAt: new Date(),
                     lastSeen: new Date()
                 });
-                // onAuthStateChanged redirigirá
             } catch (err) {
                 btn.innerText = 'Crear cuenta';
                 msg.innerText = err.message;
@@ -802,7 +780,6 @@
         const handleGoogleAuth = async () => {
             try {
                 await signInWithPopup(auth, googleProvider);
-                // onAuthStateChanged se encarga: guardará perfil y pedirá nombre si falta
             } catch (error) {
                 console.error("Error con Google Auth: ", error);
                 const msg = document.querySelector('.form-box.active .message-box');
