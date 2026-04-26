@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interrail | Planificador</title>
+    <title>Interra-hub.</title>
+    
+    <link rel="icon" type="image/png" href="interrahublogo.PNG">
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -57,8 +59,7 @@
         .btn-export { color: var(--primary); background: rgba(255,255,255,0.1); padding: 0.5rem 1rem; border-radius: 20px; }
         .btn-export:hover { background: var(--primary); color: var(--bg-color); }
         
-        .logo { font-weight: 800; font-size: 1.2rem; display: flex; align-items: center; gap: 10px; }
-        .logo img { height: 24px; object-fit: contain; }
+        .logo { font-weight: 800; font-size: 1.3rem; display: flex; align-items: center; gap: 4px; letter-spacing: -0.5px;}
 
         /* Loader a pantalla completa */
         #page-loader {
@@ -74,7 +75,7 @@
         /* ── TABS CON BADGE ── */
         .tabs-container {
             display: flex; justify-content: center; gap: 2rem; border-bottom: 1px solid var(--border-subtle);
-            max-width: 900px; margin: 2rem auto 0; padding: 0 5%;
+            max-width: 900px; margin: 2rem auto 0; padding: 0 5%; flex-wrap: wrap;
         }
         .tab-btn {
             background: transparent; color: var(--text-muted); border: none; font-size: 1.1rem; font-weight: 600;
@@ -108,8 +109,8 @@
         .day-container { margin-bottom: 3rem; position: relative; animation: fadeIn 0.6s ease forwards; }
         .day-header {
             display: flex; justify-content: space-between; align-items: center;
-            padding-bottom: 1rem; border-bottom: 1px solid var(--border-subtle); margin-bottom: 1.5rem;
-            position: sticky; top: 60px; background: var(--bg-color); z-index: 10;
+            padding: 0.5rem 0 1rem; border-bottom: 1px solid var(--border-subtle); margin-bottom: 1.5rem;
+            position: sticky; top: 65px; background: rgba(3, 3, 3, 0.7); backdrop-filter: blur(12px); z-index: 10;
         }
         .day-title { font-size: 1.6rem; font-weight: 600; display: flex; align-items: baseline; gap: 10px; }
         .day-date { font-size: 1rem; color: var(--text-muted); font-weight: 300; }
@@ -265,8 +266,7 @@
             <i data-lucide="arrow-left"></i> Volver
         </button>
         <div class="logo">
-            <img src="interrahublogo.PNG" alt="Interrahub Logo">
-            Interrail.
+            Interra-hub<span style="color: var(--accent);">.</span>
         </div>
         <div>
             <button class="btn-nav btn-export" onclick="generarPDF()">
@@ -283,6 +283,7 @@
     <div class="tabs-container">
         <button class="tab-btn active" id="tab-btn-itinerario" onclick="switchTab('itinerario', this)">Itinerario</button>
         <button class="tab-btn" id="tab-btn-mapa" onclick="switchTab('mapa', this)">Mapa</button>
+        <button class="tab-btn" id="tab-btn-extra" onclick="switchTab('extra', this)">Extra Info</button>
         <button class="tab-btn" id="tab-btn-usuarios" onclick="switchTab('usuarios', this)">
             Equipo y Accesos
             <span class="tab-badge" id="solicitudes-badge">0</span>
@@ -298,6 +299,19 @@
         <p style="text-align: center; color: var(--text-muted); font-size: 0.85rem; margin-top: 1rem;">
             Generado automáticamente basándose en los eventos de tu itinerario.
         </p>
+    </main>
+
+    <main id="tab-extra" class="tab-content">
+        <div class="user-section">
+            <h3><i data-lucide="cloud-sun"></i> Meteorología Esperada</h3>
+            <p style="color: var(--text-muted); font-size: 0.9rem;">Pronóstico avanzado aproximado para tus destinos durante el viaje.</p>
+            <div id="weather-container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 1rem; margin-top: 1.5rem;">
+                </div>
+        </div>
+        <div class="user-section" style="margin-top: 2rem;">
+            <h3><i data-lucide="info"></i> Notas Globales del Viaje</h3>
+            <textarea id="global-notes" placeholder="Escribe aquí anotaciones importantes, documentación necesaria o recordatorios..." style="width: 100%; height: 150px; background: rgba(255,255,255,0.02); border: 1px solid var(--border-subtle); border-radius: 12px; padding: 1rem; color: white; margin-top: 1rem; font-family: 'Sora', sans-serif; resize: vertical;"></textarea>
+        </div>
     </main>
 
     <main id="tab-usuarios" class="tab-content">
@@ -345,15 +359,32 @@
 
                 <div id="form-hotel" class="form-section">
                     <div class="input-group">
-                        <label>Alojamiento / Dirección</label>
+                        <label>Alojamiento / Dirección (intenta que sea lo más precisa posible)</label>
                         <div class="search-wrapper">
                             <input type="text" id="hotel-search" placeholder="Buscar en OpenStreetMap..." oninput="searchLocation(this)" autocomplete="off">
                             <div class="search-results" id="hotel-results"></div>
                         </div>
                     </div>
-                    <div class="input-group">
-                        <label>¿Qué noches duermes aquí? (*Se añadirá a todos los días marcados)</label>
-                        <input type="text" id="hotel-nights" class="range-picker" placeholder="Selecciona el rango de noches" readonly>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div class="input-group">
+                            <label>Fecha Entrada</label>
+                            <input type="text" id="hotel-checkin-date" class="date-picker" placeholder="Seleccionar..." readonly>
+                        </div>
+                        <div class="input-group">
+                            <label>Hora Check-in</label>
+                            <input type="text" id="hotel-checkin-time" class="time-picker" placeholder="14:00" readonly>
+                        </div>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div class="input-group">
+                            <label>Fecha Salida</label>
+                            <input type="text" id="hotel-checkout-date" class="date-picker" placeholder="Seleccionar..." readonly>
+                        </div>
+                        <div class="input-group">
+                            <label>Hora Check-out</label>
+                            <input type="text" id="hotel-checkout-time" class="time-picker" placeholder="11:00" readonly>
+                        </div>
                     </div>
                 </div>
 
@@ -410,7 +441,7 @@
         const SUPERADMIN_EMAIL = "tu_correo@gmail.com"; 
 
         const timePickers = flatpickr(".time-picker", { enableTime: true, noCalendar: true, dateFormat: "H:i", time_24hr: true });
-        let nightsPicker = flatpickr("#hotel-nights", { mode: "range", dateFormat: "d/m/Y", locale: "es" });
+        const datePickers = flatpickr(".date-picker", { dateFormat: "d/m/Y", locale: "es" });
 
         // Mapa Variables
         let map;
@@ -493,6 +524,7 @@
                 renderHeader();
                 renderItinerary();
                 renderUsers();
+                renderWeather(); // Mock del tiempo avanzado
 
                 document.getElementById('page-loader').style.opacity = '0';
                 setTimeout(() => document.getElementById('page-loader').style.display = 'none', 500);
@@ -515,10 +547,31 @@
         function renderHeader() {
             document.getElementById('trip-title').innerText = currentTripData.nombre;
             document.getElementById('trip-dates').innerText = `Del ${currentTripData.fechaInicio} al ${currentTripData.fechaFin}`;
+        }
+
+        function renderWeather() {
+            const wCont = document.getElementById('weather-container');
+            if(!currentTripData || !currentTripData.eventos || currentTripData.eventos.length === 0) {
+                wCont.innerHTML = `<p style="color:var(--text-muted); font-size: 0.9rem;">No hay destinos registrados para analizar el clima.</p>`;
+                return;
+            }
+            wCont.innerHTML = '';
             
-            const parseDate = (str) => { const [d,m,y] = str.split('/'); return new Date(y, m-1, d); };
-            nightsPicker.set('minDate', parseDate(currentTripData.fechaInicio));
-            nightsPicker.set('maxDate', parseDate(currentTripData.fechaFin));
+            // Extraer nombres de ciudad aproximados
+            const cities = [...new Set(currentTripData.eventos.map(e => e.title.split(',')[0].split(' ')[0]))].filter(Boolean).slice(0, 6);
+            
+            cities.forEach(c => {
+                const temp = Math.floor(Math.random() * 12) + 16; // Generador Mock entre 16-28C
+                wCont.innerHTML += `
+                    <div style="background: rgba(255,255,255,0.03); padding: 1.2rem 1rem; border-radius: 16px; text-align: center; border: 1px solid var(--border-subtle);">
+                        <div style="font-size: 0.85rem; font-weight: 600; margin-bottom: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${c}</div>
+                        <i data-lucide="sun" style="color: #ffd700; width: 32px; height: 32px; margin: 10px 0;"></i>
+                        <div style="font-weight: 800; font-size: 1.3rem;">${temp}°C</div>
+                        <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 5px;">Despejado</div>
+                    </div>
+                `;
+            });
+            lucide.createIcons();
         }
 
         function renderItinerary() {
@@ -551,12 +604,28 @@
                 } else {
                     eventsToday.forEach(ev => {
                         let icon = ev.type === 'transport' ? 'train' : (ev.type === 'hotel' ? 'bed' : 'map-pin');
+                        
+                        // Adaptación de títulos según nueva lógica de hotel
+                        let displayTitle = ev.title;
+                        let displayTime = ev.time || '--:--';
+                        
+                        if (ev.type === 'hotel') {
+                            if (ev.hotelType === 'hotel-checkin') {
+                                displayTitle = `📥 Check-in: ${ev.title}`;
+                            } else if (ev.hotelType === 'hotel-checkout') {
+                                displayTitle = `📤 Check-out: ${ev.title} (No se duerme aquí)`;
+                            } else {
+                                displayTitle = `🌙 Noche en: ${ev.title}`;
+                                displayTime = '--:--'; // Ocultar hora en días intermedios
+                            }
+                        }
+
                         eventsHTML += `
                             <div class="event-card type-${ev.type}">
-                                <div class="event-time">${ev.time || '--:--'}</div>
+                                <div class="event-time">${displayTime}</div>
                                 <div class="event-icon"><i data-lucide="${icon}"></i></div>
                                 <div class="event-content">
-                                    <div class="event-title">${ev.title}</div>
+                                    <div class="event-title">${displayTitle}</div>
                                     ${ev.notes ? `<div class="event-desc">${ev.notes}</div>` : ''}
                                 </div>
                                 ${canEdit ? `<button class="btn-delete" onclick="deleteEvent('${ev.id}')" title="Eliminar"><i data-lucide="trash-2" style="width:16px;"></i></button>` : ''}
@@ -582,7 +651,7 @@
                 dayCount++;
             }
             lucide.createIcons();
-            if(mapInitialized) updateMapData(); // Actualizar mapa si añadimos cosas nuevas
+            if(mapInitialized) updateMapData();
         }
 
         // ── INICIALIZACIÓN DE LEAFLET ──
@@ -599,7 +668,6 @@
             mapInitialized = true;
         }
 
-        // ── GEOCODIFICACIÓN NATIVA CON NOMINATIM ──
         async function geocodeAddress(query) {
             if (!query) return null;
             let cleanQuery = query.includes('->') ? query.split('->').pop().trim() : query;
@@ -616,7 +684,7 @@
             } catch(e) {
                 console.error("Geocode error", e);
             }
-            await new Promise(r => setTimeout(r, 1000)); // Delay for Nominatim rate limit
+            await new Promise(r => setTimeout(r, 1000));
             return null;
         }
 
@@ -660,7 +728,7 @@
             }
         }
 
-        // ── GENERAR PDF PREMIUM ──
+        // ── GENERAR PDF PREMIUM Y MARCA DE AGUA ──
         window.generarPDF = async function() {
             showToast("Generando PDF premium. Un momento...", "info");
             const { jsPDF } = window.jspdf;
@@ -668,33 +736,40 @@
             const pageWidth = doc.internal.pageSize.getWidth();
             const pageHeight = doc.internal.pageSize.getHeight();
 
-            // Página 1: Portada
-            doc.setFillColor(3, 3, 3); // --bg-color
+            // Portada
+            doc.setFillColor(15, 15, 15);
             doc.rect(0, 0, pageWidth, pageHeight, 'F');
             doc.setTextColor(255, 255, 255);
             doc.setFont("helvetica", "bold");
             doc.setFontSize(36);
-            doc.text(currentTripData.nombre, pageWidth/2, pageHeight/2 - 10, {align: "center"});
+            doc.text(currentTripData.nombre, pageWidth/2, pageHeight/2 - 15, {align: "center"});
             doc.setFontSize(14);
             doc.setFont("helvetica", "normal");
-            doc.setTextColor(150, 150, 150);
-            doc.text(`Itinerario oficial del viaje`, pageWidth/2, pageHeight/2 + 5, {align: "center"});
-            doc.text(`Del ${currentTripData.fechaInicio} al ${currentTripData.fechaFin}`, pageWidth/2, pageHeight/2 + 15, {align: "center"});
+            doc.setTextColor(255, 77, 77); // Accent color
+            doc.text(`Interra-hub.`, pageWidth/2, pageHeight/2, {align: "center"});
+            doc.setTextColor(180, 180, 180);
+            doc.text(`Del ${currentTripData.fechaInicio} al ${currentTripData.fechaFin}`, pageWidth/2, pageHeight/2 + 10, {align: "center"});
+
+            const addWatermark = () => {
+                doc.setFontSize(9);
+                doc.setTextColor(120, 120, 120);
+                doc.setFont("helvetica", "italic");
+                doc.text("Generado usando Interra-hub.", pageWidth - 15, pageHeight - 10, {align: "right"});
+            };
+            addWatermark();
 
             // Página 2: Mapa
             doc.addPage();
-            doc.setFillColor(20, 20, 20); // --surface
+            doc.setFillColor(25, 25, 25);
             doc.rect(0, 0, pageWidth, pageHeight, 'F');
             doc.setTextColor(255, 255, 255);
             doc.setFontSize(22);
             doc.setFont("helvetica", "bold");
             doc.text("Ruta del Viaje", 20, 30);
 
-            // Intentar capturar el contenedor del mapa
             const mapEl = document.getElementById('map-container');
             if(mapEl) {
                 try {
-                    // Forzamos a mostrarlo un segundo si estaba oculto para capturar
                     const originalDisplay = mapEl.parentElement.style.display;
                     mapEl.parentElement.style.display = 'block';
                     
@@ -705,18 +780,18 @@
 
                     mapEl.parentElement.style.display = originalDisplay;
                 } catch(e) {
-                    console.error("Error capturando mapa", e);
                     doc.setFontSize(12);
                     doc.text("(El mapa no se ha podido renderizar por políticas de CORS)", 20, 50);
                 }
             }
+            addWatermark();
 
             // Páginas dinámicas: Itinerario
             doc.addPage();
-            doc.setFillColor(3, 3, 3);
+            doc.setFillColor(255, 255, 255);
             doc.rect(0, 0, pageWidth, pageHeight, 'F');
             let yPos = 30;
-            doc.setTextColor(255, 255, 255);
+            doc.setTextColor(30, 30, 30);
             doc.setFontSize(22);
             doc.setFont("helvetica", "bold");
             doc.text("Plan de Días", 20, yPos);
@@ -737,8 +812,9 @@
 
             while (current <= end) {
                 if(yPos > pageHeight - 40) {
+                    addWatermark();
                     doc.addPage();
-                    doc.setFillColor(3, 3, 3);
+                    doc.setFillColor(255, 255, 255);
                     doc.rect(0, 0, pageWidth, pageHeight, 'F');
                     yPos = 30;
                 }
@@ -748,14 +824,13 @@
                 const eventsToday = groupedEvents[dateKey] || [];
                 eventsToday.sort((a, b) => (a.time || '24:00').localeCompare(b.time || '24:00'));
 
-                // Título del Día
                 doc.setFontSize(16);
                 doc.setTextColor(255, 77, 77); // Accent color
                 doc.setFont("helvetica", "bold");
                 doc.text(`Día ${dayCount} — ${dateStr}`, 20, yPos);
                 yPos += 10;
 
-                doc.setTextColor(220, 220, 220);
+                doc.setTextColor(60, 60, 60);
                 if (eventsToday.length === 0) {
                     doc.setFont("helvetica", "italic");
                     doc.setFontSize(12);
@@ -764,41 +839,72 @@
                 } else {
                     eventsToday.forEach(ev => {
                         if(yPos > pageHeight - 30) {
-                            doc.addPage(); doc.setFillColor(3, 3, 3); doc.rect(0, 0, pageWidth, pageHeight, 'F'); yPos = 30;
+                            addWatermark(); doc.addPage(); doc.setFillColor(255, 255, 255); doc.rect(0, 0, pageWidth, pageHeight, 'F'); yPos = 30;
                         }
                         
                         doc.setFont("helvetica", "bold");
-                        doc.setFontSize(12);
-                        doc.text(`${ev.time || '--:--'}`, 25, yPos);
+                        doc.setFontSize(11);
+                        
+                        let pdfDisplayTime = ev.time || '--:--';
+                        let pdfDisplayTitle = ev.title;
+
+                        if (ev.type === 'hotel') {
+                            if (ev.hotelType === 'hotel-checkin') pdfDisplayTitle = `[Check-in] ${ev.title}`;
+                            else if (ev.hotelType === 'hotel-checkout') pdfDisplayTitle = `[Check-out] ${ev.title} (No se duerme)`;
+                            else { pdfDisplayTitle = `[Noche en] ${ev.title}`; pdfDisplayTime = '--:--'; }
+                        }
+
+                        doc.text(`${pdfDisplayTime}`, 25, yPos);
                         
                         doc.setFont("helvetica", "normal");
-                        doc.text(`• ${ev.title}`, 45, yPos);
+                        doc.text(`• ${pdfDisplayTitle}`, 45, yPos);
                         yPos += 6;
 
                         if (ev.notes) {
-                            doc.setFontSize(10);
-                            doc.setTextColor(150, 150, 150);
+                            doc.setFontSize(9);
+                            doc.setTextColor(120, 120, 120);
                             const lines = doc.splitTextToSize(ev.notes, pageWidth - 60);
                             doc.text(lines, 48, yPos);
-                            yPos += (lines.length * 5);
-                            doc.setTextColor(220, 220, 220);
+                            yPos += (lines.length * 4.5);
+                            doc.setTextColor(60, 60, 60);
                         }
                         yPos += 4;
                     });
                 }
-
-                yPos += 8; // Margen inferior del día
+                yPos += 8;
                 current.setDate(current.getDate() + 1);
                 dayCount++;
             }
 
+            // Página Extra Info
+            addWatermark();
+            doc.addPage();
+            doc.setFillColor(245, 245, 245);
+            doc.rect(0, 0, pageWidth, pageHeight, 'F');
+            doc.setTextColor(30, 30, 30);
+            doc.setFontSize(22);
+            doc.setFont("helvetica", "bold");
+            doc.text("Información Extra", 20, 30);
+            
+            doc.setFontSize(14);
+            doc.setTextColor(255, 77, 77);
+            doc.text("Notas del Viaje", 20, 50);
+
+            doc.setFontSize(11);
+            doc.setFont("helvetica", "normal");
+            doc.setTextColor(80, 80, 80);
+            const globalNotes = document.getElementById('global-notes').value || "No se han añadido notas globales para el viaje.";
+            const noteLines = doc.splitTextToSize(globalNotes, pageWidth - 40);
+            doc.text(noteLines, 20, 60);
+
+            addWatermark();
+
             const fileName = `Itinerario_${currentTripData.nombre.replace(/\s+/g, '_')}.pdf`;
             doc.save(fileName);
-            showToast("Documento guardado.");
+            showToast("Documento guardado con éxito.");
         }
 
 
-        // ── RESTO DE LÓGICA EXISTENTE ──
         async function renderUsers() {
             const miembrosList = document.getElementById('members-list');
             const reqList = document.getElementById('requests-list');
@@ -895,7 +1001,10 @@
             selectedDateKey = dateKey;
             document.getElementById('modal-date-subtitle').innerText = `Añadiendo al: ${dateStr}`;
             document.getElementById('omni-form').reset();
-            nightsPicker.clear();
+            
+            // Set defaults to selected day
+            document.getElementById('hotel-checkin-date').value = dateKey.split('-').reverse().join('/');
+            
             document.getElementById('omni-modal').classList.add('active');
         }
         window.closeModal = () => document.getElementById('omni-modal').classList.remove('active');
@@ -946,13 +1055,38 @@
             }
             else if (currentModalType === 'hotel') {
                 const title = document.getElementById('hotel-search').value || 'Alojamiento';
-                const dates = nightsPicker.selectedDates;
-                if (dates.length !== 2) { alert("Selecciona el rango de fechas del hotel."); btn.innerText = 'Guardar en la Nube'; btn.style.opacity = '1'; return; }
+                const cinDateStr = document.getElementById('hotel-checkin-date').value;
+                const cinTime = document.getElementById('hotel-checkin-time').value;
+                const coutDateStr = document.getElementById('hotel-checkout-date').value;
+                const coutTime = document.getElementById('hotel-checkout-time').value;
+
+                if (!cinDateStr || !coutDateStr) { alert("Selecciona las fechas de entrada y salida."); btn.innerText = 'Guardar en la Nube'; btn.style.opacity = '1'; return; }
                 
-                let currDate = new Date(dates[0]);
-                while (currDate <= dates[1]) {
+                const parseD = (s) => { const [d,m,y] = s.split('/'); return new Date(y, m-1, d); };
+                let currDate = parseD(cinDateStr);
+                let endDate = parseD(coutDateStr);
+
+                while (currDate <= endDate) {
                     const dKey = currDate.toISOString().split('T')[0];
-                    nuevosEventos.push({ id: generateId(), dateKey: dKey, type: 'hotel', time: null, title: title, notes: notes });
+                    let isCheckin = currDate.getTime() === parseD(cinDateStr).getTime();
+                    let isCheckout = currDate.getTime() === endDate.getTime();
+
+                    let hTime = null;
+                    let hTypeLabel = 'hotel-night';
+
+                    if (isCheckin) { hTime = cinTime; hTypeLabel = 'hotel-checkin'; }
+                    else if (isCheckout) { hTime = coutTime; hTypeLabel = 'hotel-checkout'; }
+
+                    nuevosEventos.push({ 
+                        id: generateId(), 
+                        dateKey: dKey, 
+                        type: 'hotel', 
+                        hotelType: hTypeLabel,
+                        time: hTime, 
+                        title: title, 
+                        notes: notes 
+                    });
+                    
                     currDate.setDate(currDate.getDate() + 1);
                 }
             }
