@@ -65,8 +65,6 @@
             align-items: center; 
             gap: 4px; 
             letter-spacing: -0.5px;
-            
-            /* ESTO ES LO NUEVO PARA CENTRARLO ABSOLUTAMENTE */
             position: absolute; 
             left: 50%; 
             transform: translateX(-50%);
@@ -317,8 +315,8 @@
     <main id="tab-extra" class="tab-content">
         <div class="user-section">
             <h3><i data-lucide="cloud-sun"></i> Meteorología Esperada</h3>
-            <p style="color: var(--text-muted); font-size: 0.9rem;">Pronóstico real de Open-Meteo basado en las coordenadas de tus destinos.</p>
-            <div id="weather-container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1rem; margin-top: 1.5rem;">
+            <p style="color: var(--text-muted); font-size: 0.9rem;">Pronóstico real para los próximos 10 días de las ciudades en las que estarás durante el viaje.</p>
+            <div id="weather-container" style="margin-top: 1.5rem;">
                 <p style="color: var(--text-muted); font-size: 0.9rem;">Cargando datos meteorológicos...</p>
             </div>
         </div>
@@ -533,7 +531,6 @@
             if (tripSnap.exists()) {
                 currentTripData = tripSnap.data();
                 
-                // 👇 CÓDIGO INYECTADO 👇
                 document.getElementById('display-trip-code').innerText = currentTripData.codigoInvitacion || '-----';
                 
                 const miembros = currentTripData.miembros || {};
@@ -548,13 +545,12 @@
 
                 canEdit = isGod || currentUserRole === "admin-grupo" || currentUserRole === "editor-grupo";
 
-                // SOLUCIÓN: Notificaciones SOLO para admins/creadores
                 if (isGod || currentUserRole === "admin-grupo") {
                     document.getElementById('admin-requests-panel').style.display = 'block';
                     const numSolicitudes = currentTripData.solicitudes ? Object.keys(currentTripData.solicitudes).length : 0;
                     updateSolicitudesBadge(numSolicitudes);
                 } else {
-                    updateSolicitudesBadge(0); // Ocultar
+                    updateSolicitudesBadge(0); 
                 }
 
                 if (!currentTripData.eventos) currentTripData.eventos = [];
@@ -590,7 +586,7 @@
             document.getElementById('trip-dates').innerText = `Del ${currentTripData.fechaInicio} al ${currentTripData.fechaFin}`;
         }
 
-        // ── METEOROLOGÍA INTELIGENTE CON OPEN-METEO (Versión original sin modificar) ──
+        // ── METEOROLOGÍA INTELIGENTE: PRÓXIMOS 10 DÍAS POR CIUDAD REAL ──
         async function renderWeather() {
             const wCont = document.getElementById('weather-container');
             if(!currentTripData || !currentTripData.eventos || currentTripData.eventos.length === 0) {
@@ -598,67 +594,94 @@
                 return;
             }
             
-            wCont.innerHTML = '<p style="color:var(--text-muted); font-size: 0.9rem; width: 100%;">Consultando datos satelitales (Open-Meteo)...</p>';
+            wCont.innerHTML = '<p style="color:var(--text-muted); font-size: 0.9rem; width: 100%;">Consultando datos satelitales (Open-Meteo) para los próximos 10 días...</p>';
 
-            // Extraer ubicaciones únicas basadas en geocodificación
-            const uniqueLocations = [];
+            // 1. Extraer ciudades únicas (limpiando el query)
+            const uniqueCities = [];
             for (const ev of currentTripData.eventos) {
-                const coords = await geocodeAddress(ev.title);
-                if (coords) {
-                    // Evitar duplicados cercanos (0.1 grados ~ 11km)
-                    if (!uniqueLocations.some(l => Math.abs(l.lat - coords[0]) < 0.1 && Math.abs(l.lon - coords[1]) < 0.1)) {
-                        uniqueLocations.push({lat: coords[0], lon: coords[1], name: ev.title.split(',')[0]});
-                    }
+                let cleanQuery = ev.title.includes('->') ? ev.title.split('->').pop().trim() : ev.title;
+                let cityKey = cleanQuery.toLowerCase();
+                
+                if(!uniqueCities.find(c => c.query === cityKey)) {
+                    uniqueCities.push({query: cityKey, original: ev.title});
                 }
-                if(uniqueLocations.length >= 6) break; // Límite de rendimiento
             }
 
-            if(uniqueLocations.length === 0) {
-                 wCont.innerHTML = `<p style="color:var(--text-muted); font-size: 0.9rem;">No se encontraron coordenadas precisas en tus destinos. Intenta usar nombres de ciudades más claros.</p>`;
-                 return;
-            }
+            let htmlClima = '';
+            let validCitiesCount = 0;
 
-            wCont.innerHTML = '';
-            let weatherFound = false;
+            for (const city of uniqueCities) {
+                if(validCitiesCount >= 5) break; // Límite de 5 ciudades principales para no saturar la API
 
-            for (const loc of uniqueLocations) {
+                let coords = null;
+                let cityName = city.original.split(',')[0]; // Fallback name
+                
                 try {
-                    // Fetch real data (hasta 14 días si es gratis, cogeremos current general forecast)
-                    const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${loc.lat}&longitude=${loc.lon}&daily=temperature_2m_max,temperature_2m_min,weathercode&timezone=auto`);
+                    // Geocodificación para sacar el nombre de la ciudad real + coordenadas
+                    const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(city.query)}&limit=1&addressdetails=1`);
                     const data = await res.json();
-                    
-                    if(data.daily && data.daily.time.length > 0) {
-                        weatherFound = true;
-                        const maxT = Math.round(data.daily.temperature_2m_max[0]);
-                        const minT = Math.round(data.daily.temperature_2m_min[0]);
-                        const code = data.daily.weathercode[0];
-                        
-                        // Mapeo simple de WeatherCode (WMO) a iconos
-                        let iconName = 'sun'; let iconColor = '#ffd700'; let wText = 'Despejado';
-                        if(code >= 1 && code <= 3) { iconName = 'cloud-sun'; wText = 'Nublado'; iconColor='#e0e0e0'; }
-                        if(code >= 45 && code <= 48) { iconName = 'cloud-fog'; wText = 'Niebla'; iconColor='#b0b0b0'; }
-                        if(code >= 51 && code <= 67) { iconName = 'cloud-rain'; wText = 'Lluvia'; iconColor='#4da6ff'; }
-                        if(code >= 71 && code <= 77) { iconName = 'snowflake'; wText = 'Nieve'; iconColor='#ffffff'; }
-                        if(code >= 95) { iconName = 'cloud-lightning'; wText = 'Tormenta'; iconColor='#8a2be2'; }
-
-                        wCont.innerHTML += `
-                            <div style="background: rgba(255,255,255,0.03); padding: 1.2rem 1rem; border-radius: 16px; text-align: center; border: 1px solid var(--border-subtle);">
-                                <div style="font-size: 0.85rem; font-weight: 600; margin-bottom: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${loc.name}">${loc.name}</div>
-                                <i data-lucide="${iconName}" style="color: ${iconColor}; width: 32px; height: 32px; margin: 10px 0;"></i>
-                                <div style="font-weight: 800; font-size: 1.3rem;">${maxT}° <span style="font-size:0.8rem; color:var(--text-muted); font-weight:400;">/ ${minT}°</span></div>
-                                <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 5px;">${wText}</div>
-                            </div>
-                        `;
+                    if(data.length > 0) {
+                        coords = {lat: data[0].lat, lon: data[0].lon};
+                        const adr = data[0].address;
+                        // Extraemos la ciudad o pueblo oficial descartando la calle/número
+                        cityName = adr.city || adr.town || adr.municipality || adr.village || cityName;
                     }
-                } catch(e) {
-                     console.error("Error al obtener clima para", loc.name, e);
+                } catch(e) {}
+
+                if(coords) {
+                    try {
+                        // Pedimos los próximos 10 días desde hoy
+                        const resClima = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${coords.lat}&longitude=${coords.lon}&daily=temperature_2m_max,temperature_2m_min,weathercode&timezone=auto&forecast_days=10`);
+                        const dataClima = await resClima.json();
+
+                        htmlClima += `
+                            <div style="width: 100%; margin-bottom: 2rem;">
+                                <h4 style="font-size: 1.1rem; margin-bottom: 1rem; color: var(--primary); display:flex; align-items:center; gap:8px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 0.5rem;">
+                                    <i data-lucide="map-pin" style="color:var(--accent); width:18px;"></i> ${cityName}
+                                </h4>
+                                <div style="display: flex; gap: 10px; overflow-x: auto; padding-bottom: 10px; scrollbar-width: thin; scrollbar-color: var(--border-subtle) transparent;">
+                        `;
+
+                        // Generamos las 10 tarjetitas
+                        for(let i=0; i<dataClima.daily.time.length; i++) {
+                            const dateObj = new Date(dataClima.daily.time[i]);
+                            const dateStr = dateObj.toLocaleDateString('es-ES', { weekday: 'short', day: 'numeric' });
+                            const maxT = Math.round(dataClima.daily.temperature_2m_max[i]);
+                            const minT = Math.round(dataClima.daily.temperature_2m_min[i]);
+                            const code = dataClima.daily.weathercode[i];
+
+                            let iconName = 'sun'; let iconColor = '#ffd700';
+                            if(code >= 1 && code <= 3) { iconName = 'cloud-sun'; iconColor='#e0e0e0'; }
+                            if(code >= 45 && code <= 48) { iconName = 'cloud-fog'; iconColor='#b0b0b0'; }
+                            if(code >= 51 && code <= 67) { iconName = 'cloud-rain'; iconColor='#4da6ff'; }
+                            if(code >= 71 && code <= 77) { iconName = 'snowflake'; iconColor='#ffffff'; }
+                            if(code >= 95) { iconName = 'cloud-lightning'; iconColor='#8a2be2'; }
+
+                            // Check if it's today
+                            const isToday = new Date().toISOString().split('T')[0] === dataClima.daily.time[i];
+                            const bgStyle = isToday ? 'background: rgba(255,77,77,0.1); border-color: rgba(255,77,77,0.3);' : 'background: rgba(255,255,255,0.03); border-color: var(--border-subtle);';
+
+                            htmlClima += `
+                                <div style="min-width: 95px; padding: 1rem 0.5rem; border-radius: 12px; text-align: center; border: 1px solid; flex-shrink: 0; ${bgStyle}">
+                                    <div style="font-size: 0.8rem; color: var(--text-muted); text-transform: capitalize; margin-bottom: 8px;">${isToday ? 'Hoy' : dateStr}</div>
+                                    <i data-lucide="${iconName}" style="color: ${iconColor}; width: 28px; height: 28px; margin: 0 auto 8px;"></i>
+                                    <div style="font-weight: 800; font-size: 1.1rem; color: var(--primary);">${maxT}°</div>
+                                    <div style="font-size: 0.8rem; color: var(--text-muted);">${minT}°</div>
+                                </div>
+                            `;
+                        }
+                        htmlClima += `</div></div>`;
+                        validCitiesCount++;
+                    } catch(e) { console.error(e); }
                 }
             }
-
-            if(!weatherFound) {
-                wCont.innerHTML = `<p style="color:var(--text-muted); font-size: 0.9rem;">No hay datos meteorológicos disponibles para estas fechas o ubicaciones.</p>`;
+            
+            if(!htmlClima) {
+                wCont.innerHTML = `<p style="color:var(--text-muted); font-size: 0.9rem;">No se pudieron extraer coordenadas exactas de tus destinos.</p>`;
+            } else {
+                wCont.innerHTML = htmlClima;
+                lucide.createIcons();
             }
-            lucide.createIcons();
         }
 
         function renderItinerary() {
@@ -817,7 +840,7 @@
             }
         }
 
-        // ── GENERAR PDF PREMIUM ──
+        // ── GENERAR PDF PREMIUM CON MAPA Y MIEMBROS ──
         window.generarPDF = async function() {
             const now = new Date();
             const mesLlave = `interrahub_pdf_usage_${now.getFullYear()}_${now.getMonth()}`;
@@ -833,9 +856,59 @@
                 return;
             }
 
-            showToast("Construyendo tu PDF premium. Por favor, espera...", "info");
+            showToast("Construyendo tu PDF premium. Por favor, espera unos segundos...", "info");
 
-            // Crear un contenedor oculto para dibujar el PDF
+            // Preparar HTML del equipo (Solo admins y editores)
+            let editorsHTML = '';
+            for (const [uid, rol] of Object.entries(currentTripData.miembros || {})) {
+                if (rol === 'admin-grupo' || rol === 'editor-grupo') {
+                    const nombre = userNamesCache[uid] || 'Usuario';
+                    const labelRol = rol === 'admin-grupo' ? 'Admin' : 'Editor';
+                    editorsHTML += `<span style="display:inline-block; margin-right: 10px; margin-bottom: 10px; background: #f1f5f9; border: 1px solid #cbd5e1; color: #334155; padding: 6px 14px; border-radius: 20px; font-size: 13px;"><strong style="color: #0f172a;">${nombre}</strong> · ${labelRol}</span>`;
+                }
+            }
+            const membersSection = editorsHTML ? `
+                <div style="margin-bottom: 35px; text-align: left; padding: 20px; background: #ffffff; border: 1px solid #eaeaea; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.02);">
+                    <h3 style="font-size: 16px; color: #111; margin-top: 0; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1px;">Equipo de Organización</h3>
+                    <div>${editorsHTML}</div>
+                </div>
+            ` : '';
+
+            // Capturar el Mapa (Incluso si está oculto en otra tab)
+            let mapSection = '';
+            if (mapInitialized) {
+                try {
+                    const tabMapa = document.getElementById('tab-mapa');
+                    const wasHidden = !tabMapa.classList.contains('active');
+                    
+                    if (wasHidden) {
+                        tabMapa.style.display = 'block';
+                        tabMapa.style.opacity = '0'; // Lo ocultamos visualmente al usuario
+                        map.invalidateSize();
+                        await new Promise(r => setTimeout(r, 400)); // Damos tiempo a cargar los tiles (mapa)
+                    }
+
+                    const mapEl = document.getElementById('map-container');
+                    const canvasMap = await html2canvas(mapEl, { useCORS: true, allowTaint: true });
+                    const mapImgBase64 = canvasMap.toDataURL('image/jpeg', 0.9);
+                    
+                    if (wasHidden) {
+                        tabMapa.style.display = '';
+                        tabMapa.style.opacity = '';
+                    }
+
+                    mapSection = `
+                        <div style="margin-bottom: 40px; text-align: left;">
+                            <h3 style="font-size: 16px; color: #111; margin-top: 0; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1px;">Mapa de la Ruta</h3>
+                            <div style="border-radius: 12px; overflow: hidden; border: 1px solid #eaeaea; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+                                <img src="${mapImgBase64}" style="width: 100%; display: block;" />
+                            </div>
+                        </div>
+                    `;
+                } catch(e) { console.error("Error al capturar mapa para el PDF", e); }
+            }
+
+            // Crear el contenedor oculto general para renderizar
             const pdfContainer = document.createElement('div');
             pdfContainer.style.position = 'absolute';
             pdfContainer.style.left = '-9999px';
@@ -853,6 +926,8 @@
                     <h1 style="font-size: 38px; font-weight: 800; margin: 0; letter-spacing: -1px; color: #111;">${currentTripData.nombre}</h1>
                     <p style="color: #666; font-size: 18px; margin-top: 10px; font-weight: 400;">${currentTripData.fechaInicio} — ${currentTripData.fechaFin}</p>
                 </div>
+                ${membersSection}
+                ${mapSection}
             `;
 
             // Agrupar eventos
@@ -915,7 +990,6 @@
             document.body.appendChild(pdfContainer);
 
             try {
-                // Generamos la imagen con html2canvas
                 const canvas = await html2canvas(pdfContainer, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
                 const imgData = canvas.toDataURL('image/jpeg', 1.0);
                 
@@ -930,8 +1004,7 @@
                 pdf.addImage(imgData, 'JPEG', 0, posicionY, anchoPdf, altoPdf);
                 alturaRestante -= pdf.internal.pageSize.getHeight();
 
-                // Multipage support
-                while (alturaRestante >= 0) {
+                while (alturaRestante > 0) {
                     posicionY = alturaRestante - altoPdf;
                     pdf.addPage();
                     pdf.addImage(imgData, 'JPEG', 0, posicionY, anchoPdf, altoPdf);
@@ -1021,7 +1094,6 @@
             return user && user.email === SUPERADMIN_EMAIL;
         }
 
-        // 👇 FUNCIÓN DE COPIAR AÑADIDA 👇
         window.copiarCodigoViaje = function() {
             if (currentTripData && currentTripData.codigoInvitacion) {
                 navigator.clipboard.writeText(currentTripData.codigoInvitacion).then(() => {
@@ -1060,7 +1132,7 @@
         }
 
         window.openModal = function(dateKey, dateStr) {
-            editingEventId = null; // Modo Creación
+            editingEventId = null; 
             selectedDateKey = dateKey;
             
             document.getElementById('modal-main-title').innerText = "Añadir a la ruta";
@@ -1087,14 +1159,11 @@
             document.getElementById('modal-date-subtitle').innerText = `Día: ${ev.dateKey.split('-').reverse().join('/')}`;
             document.getElementById('omni-form').reset();
             
-            // Ocultar selector de tipos porque estamos editando uno específico
             document.getElementById('modal-type-selector').style.display = 'none';
 
-            // Seleccionar y mostrar la tab correspondiente al tipo
             const btn = document.querySelector(`.type-btn[data-type="${ev.type}"]`);
             if(btn) switchModalTab(ev.type, btn);
 
-            // Poblar campos
             document.getElementById('common-notes').value = ev.notes || '';
 
             if (ev.type === 'transport') {
@@ -1105,7 +1174,6 @@
                 document.getElementById('plan-title').value = ev.title || '';
             } else if (ev.type === 'hotel') {
                 document.getElementById('hotel-search').value = ev.title || '';
-                // Al editar un hotel multidia, por seguridad y UX, bloqueamos editar fechas completas, solo info local
                 document.getElementById('hotel-dates-wrapper').style.display = 'none';
                 document.getElementById('hotel-edit-warning').style.display = 'block';
             }
@@ -1154,7 +1222,6 @@
             
             let updatedEventos = [...currentTripData.eventos];
 
-            // SI ESTAMOS EDITANDO
             if (editingEventId) {
                 const index = updatedEventos.findIndex(ev => ev.id === editingEventId);
                 if (index !== -1) {
@@ -1171,7 +1238,6 @@
                     baseEv.notes = notes;
                 }
             } 
-            // SI ESTAMOS CREANDO
             else {
                 let nuevosEventos = [];
                 if (currentModalType === 'transport') {
