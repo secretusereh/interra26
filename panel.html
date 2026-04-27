@@ -1,799 +1,797 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5192479241046494"
-     crossorigin="anonymous"></script>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interra-hub | Panel Maestro</title>
-    
-    <link rel="icon" type="image/png" href="interrahublogo.PNG">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5192479241046494"
+     crossorigin="anonymous"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interra-hub | Panel Maestro</title>
+    
+    <link rel="icon" type="image/png" href="interrahublogo.PNG">
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;800&display=swap" rel="stylesheet">
 
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/dark.css">
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-    <script src="https://npmcdn.com/flatpickr/dist/l10n/es.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/dark.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://npmcdn.com/flatpickr/dist/l10n/es.js"></script>
 
-    <style>
-        :root {
-            --bg-color: #050505;
-            --surface: rgba(20, 20, 20, 0.6);
-            --surface-hover: rgba(30, 30, 30, 0.8);
-            --primary: #ffffff;
-            --text-muted: #888888;
-            --accent: #ff4d4d;
-            --accent-blue: #4da6ff;
-            --success: #4dff4d;
-            --border-subtle: rgba(255, 255, 255, 0.08);
-            --transition: 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-        }
+    <style>
+        :root {
+            --bg-color: #050505;
+            --surface: rgba(20, 20, 20, 0.6);
+            --surface-hover: rgba(30, 30, 30, 0.8);
+            --primary: #ffffff;
+            --text-muted: #888888;
+            --accent: #ff4d4d;
+            --accent-blue: #4da6ff;
+            --success: #4dff4d;
+            --border-subtle: rgba(255, 255, 255, 0.08);
+            --transition: 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Sora', sans-serif; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Sora', sans-serif; }
 
-        body {
-            background-color: var(--bg-color);
-            color: var(--primary);
-            min-height: 100vh;
-            overflow-x: hidden;
-            background-image: 
-                radial-gradient(circle at 10% 20%, rgba(255, 255, 255, 0.03), transparent 20%),
-                radial-gradient(circle at 90% 80%, rgba(255, 255, 255, 0.02), transparent 20%);
-        }
+        body {
+            background-color: var(--bg-color);
+            color: var(--primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(255, 255, 255, 0.03), transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(255, 255, 255, 0.02), transparent 20%);
+        }
 
-        #page-loader {
-            position: fixed; inset: 0; background: var(--bg-color); z-index: 9999;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            transition: opacity 0.8s ease;
-        }
+        #page-loader {
+            position: fixed; inset: 0; background: var(--bg-color); z-index: 9999;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            transition: opacity 0.8s ease;
+        }
 
-        nav {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 1.5rem 5%;
-            background: rgba(5, 5, 5, 0.8);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--border-subtle);
-            position: sticky; top: 0; z-index: 100;
-        }
+        nav {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 1.5rem 5%;
+            background: rgba(5, 5, 5, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-subtle);
+            position: sticky; top: 0; z-index: 100;
+        }
 
-        .logo { font-weight: 800; font-size: 1.5rem; letter-spacing: -1px; display: flex; align-items: center; gap: 12px; }
-        .user-menu { display: flex; align-items: center; gap: 2.5rem; }
-        .user-name { font-weight: 300; color: var(--text-muted); font-size: 0.9rem; }
-        
-        .btn-logout {
-            background: transparent; color: var(--text-muted); border: none;
-            display: flex; align-items: center; gap: 8px; cursor: pointer; transition: var(--transition);
-        }
-        .btn-logout:hover { color: var(--accent); transform: translateX(3px); }
+        .logo { font-weight: 800; font-size: 1.5rem; letter-spacing: -1px; display: flex; align-items: center; gap: 12px; }
+        .user-menu { display: flex; align-items: center; gap: 2.5rem; }
+        .user-name { font-weight: 300; color: var(--text-muted); font-size: 0.9rem; }
+        
+        .btn-logout {
+            background: transparent; color: var(--text-muted); border: none;
+            display: flex; align-items: center; gap: 8px; cursor: pointer; transition: var(--transition);
+        }
+        .btn-logout:hover { color: var(--accent); transform: translateX(3px); }
 
-        main { padding: 5rem 5%; max-width: 1400px; margin: 0 auto; }
-        
-        .header-section { margin-bottom: 4rem; animation: fadeDown 1s ease; }
-        .header-section h1 { font-size: 3.5rem; font-weight: 800; letter-spacing: -2px; }
-        .header-section p { color: var(--text-muted); font-size: 1.2rem; margin-top: 0.5rem; font-weight: 300; }
+        main { padding: 5rem 5%; max-width: 1400px; margin: 0 auto; }
+        
+        .header-section { margin-bottom: 4rem; animation: fadeDown 1s ease; }
+        .header-section h1 { font-size: 3.5rem; font-weight: 800; letter-spacing: -2px; }
+        .header-section p { color: var(--text-muted); font-size: 1.2rem; margin-top: 0.5rem; font-weight: 300; }
 
-        .trips-grid {
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 2.5rem;
-        }
+        .trips-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 2.5rem;
+        }
 
-        .trip-card {
-            background: var(--surface);
-            border: 1px solid var(--border-subtle);
-            border-radius: 24px; padding: 2.5rem;
-            position: relative; overflow: hidden;
-            backdrop-filter: blur(12px);
-            min-height: 240px;
-            display: flex; flex-direction: column; justify-content: space-between;
-            transition: var(--transition);
-            opacity: 0; transform: translateY(30px);
-        }
+        .trip-card {
+            background: var(--surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: 24px; padding: 2.5rem;
+            position: relative; overflow: hidden;
+            backdrop-filter: blur(12px);
+            min-height: 240px;
+            display: flex; flex-direction: column; justify-content: space-between;
+            transition: var(--transition);
+            opacity: 0; transform: translateY(30px);
+        }
 
-        .trip-card.visible {
-            opacity: 1; transform: translateY(0);
-        }
+        .trip-card.visible {
+            opacity: 1; transform: translateY(0);
+        }
 
-        .card-add {
-            border: 1px dashed rgba(255, 255, 255, 0.2);
-            background: transparent; cursor: pointer;
-            justify-content: center; align-items: center; text-align: center;
-        }
-        .card-add:hover {
-            border-color: var(--primary); background: rgba(255, 255, 255, 0.02);
-            transform: scale(0.98);
-        }
-        .card-add i { color: var(--text-muted); transition: var(--transition); margin-bottom: 1rem; }
-        .card-add:hover i { color: var(--primary); transform: rotate(90deg) scale(1.1); }
+        .card-add {
+            border: 1px dashed rgba(255, 255, 255, 0.2);
+            background: transparent; cursor: pointer;
+            justify-content: center; align-items: center; text-align: center;
+        }
+        .card-add:hover {
+            border-color: var(--primary); background: rgba(255, 255, 255, 0.02);
+            transform: scale(0.98);
+        }
+        .card-add i { color: var(--text-muted); transition: var(--transition); margin-bottom: 1rem; }
+        .card-add:hover i { color: var(--primary); transform: rotate(90deg) scale(1.1); }
 
-        .trip-card.unlocked:hover {
-            border-color: rgba(255, 255, 255, 0.3); transform: translateY(-8px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.6); cursor: pointer;
-            background: var(--surface-hover);
-        }
+        .trip-card.unlocked:hover {
+            border-color: rgba(255, 255, 255, 0.3); transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6); cursor: pointer;
+            background: var(--surface-hover);
+        }
 
-        .trip-card.locked { border-color: transparent; }
-        .trip-card.locked .card-content { filter: blur(8px); opacity: 0.3; pointer-events: none; }
-        
-        .locked-overlay {
-            position: absolute; inset: 0; background: rgba(5, 5, 5, 0.6);
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            opacity: 0.9; transition: var(--transition); z-index: 10;
-        }
-        .trip-card.locked:hover .locked-overlay { opacity: 1; background: rgba(5, 5, 5, 0.8); }
+        .trip-card.locked { border-color: transparent; }
+        .trip-card.locked .card-content { filter: blur(8px); opacity: 0.3; pointer-events: none; }
+        
+        .locked-overlay {
+            position: absolute; inset: 0; background: rgba(5, 5, 5, 0.6);
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            opacity: 0.9; transition: var(--transition); z-index: 10;
+        }
+        .trip-card.locked:hover .locked-overlay { opacity: 1; background: rgba(5, 5, 5, 0.8); }
 
-        .btn-request {
-            background: var(--primary); color: var(--bg-color); border: none;
-            padding: 1rem 2rem; border-radius: 40px; font-weight: 600; font-size: 0.95rem;
-            cursor: pointer; margin-top: 1rem; transition: var(--transition);
-            display: flex; align-items: center; gap: 10px;
-        }
-        .btn-request:hover:not(:disabled) { transform: scale(1.05); box-shadow: 0 0 25px rgba(255,255,255,0.3); }
-        .btn-request:disabled { opacity: 0.6; cursor: default; background: transparent; border: 1px solid var(--primary); color: white; }
+        .btn-request {
+            background: var(--primary); color: var(--bg-color); border: none;
+            padding: 1rem 2rem; border-radius: 40px; font-weight: 600; font-size: 0.95rem;
+            cursor: pointer; margin-top: 1rem; transition: var(--transition);
+            display: flex; align-items: center; gap: 10px;
+        }
+        .btn-request:hover:not(:disabled) { transform: scale(1.05); box-shadow: 0 0 25px rgba(255,255,255,0.3); }
+        .btn-request:disabled { opacity: 0.6; cursor: default; background: transparent; border: 1px solid var(--primary); color: white; }
 
-        .role-badge {
-            position: absolute; top: 1.5rem; right: 1.5rem; font-size: 0.7rem;
-            padding: 0.5rem 1rem; border-radius: 30px; font-weight: 600;
-            background: rgba(255, 255, 255, 0.05); color: var(--primary);
-            text-transform: uppercase; letter-spacing: 1.5px; border: 1px solid var(--border-subtle);
-        }
+        .role-badge {
+            position: absolute; top: 1.5rem; right: 1.5rem; font-size: 0.7rem;
+            padding: 0.5rem 1rem; border-radius: 30px; font-weight: 600;
+            background: rgba(255, 255, 255, 0.05); color: var(--primary);
+            text-transform: uppercase; letter-spacing: 1.5px; border: 1px solid var(--border-subtle);
+        }
 
-        /* ── BOTÓN DE ELIMINAR VIAJE ── */
-        .btn-delete-trip {
-            position: absolute;
-            bottom: 1.5rem;
-            right: 1.5rem;
-            background: rgba(255, 77, 77, 0.1);
-            color: var(--accent);
-            border: none;
-            width: 40px;
-            height: 40px;
-            border-radius: 12px;
-            cursor: pointer;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transition: var(--transition);
-            z-index: 5;
-        }
-        .btn-delete-trip:hover {
-            background: var(--accent);
-            color: white;
-            transform: scale(1.1) rotate(5deg);
-        }
+        /* ── BOTÓN DE ELIMINAR VIAJE ── */
+        .btn-delete-trip {
+            position: absolute;
+            bottom: 1.5rem;
+            right: 1.5rem;
+            background: rgba(255, 77, 77, 0.1);
+            color: var(--accent);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: var(--transition);
+            z-index: 5;
+        }
+        .btn-delete-trip:hover {
+            background: var(--accent);
+            color: white;
+            transform: scale(1.1) rotate(5deg);
+        }
 
-        /* ── MODALES ── */
-        .modal-overlay {
-            position: fixed; inset: 0; background: rgba(0, 0, 0, 0.9); backdrop-filter: blur(15px);
-            z-index: 1000; display: flex; justify-content: center; align-items: center;
-            opacity: 0; pointer-events: none; transition: var(--transition);
-        }
-        .modal-overlay.active { opacity: 1; pointer-events: all; }
+        /* ── MODALES ── */
+        .modal-overlay {
+            position: fixed; inset: 0; background: rgba(0, 0, 0, 0.9); backdrop-filter: blur(15px);
+            z-index: 1000; display: flex; justify-content: center; align-items: center;
+            opacity: 0; pointer-events: none; transition: var(--transition);
+        }
+        .modal-overlay.active { opacity: 1; pointer-events: all; }
 
-        .modal-content {
-            background: #0d0d0d; border: 1px solid var(--border-subtle); padding: 4rem;
-            border-radius: 32px; width: 100%; max-width: 550px;
-            transform: translateY(50px) scale(0.9); transition: var(--transition);
-        }
-        .modal-overlay.active .modal-content { transform: translateY(0) scale(1); }
+        .modal-content {
+            background: #0d0d0d; border: 1px solid var(--border-subtle); padding: 4rem;
+            border-radius: 32px; width: 100%; max-width: 550px;
+            transform: translateY(50px) scale(0.9); transition: var(--transition);
+        }
+        .modal-overlay.active .modal-content { transform: translateY(0) scale(1); }
 
-        .input-group { margin-bottom: 2rem; }
-        .input-group label { display: block; color: var(--text-muted); font-size: 0.9rem; margin-bottom: 0.8rem; font-weight: 400; }
-        .input-group input {
-            width: 100%; padding: 1.2rem; background: rgba(255,255,255,0.03);
-            border: 1px solid var(--border-subtle); color: white; border-radius: 16px;
-            font-size: 1rem; outline: none; transition: 0.3s;
-        }
-        .input-group input:focus { border-color: var(--primary); background: rgba(255,255,255,0.06); }
-        
-        .btn-submit {
-            width: 100%; padding: 1.3rem; background: var(--primary); border: none;
-            color: var(--bg-color); border-radius: 16px; font-weight: 800; cursor: pointer;
-            font-size: 1rem; transition: var(--transition);
-        }
-        .btn-submit:hover:not(:disabled) { letter-spacing: 1px; }
-        .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; }
+        .input-group { margin-bottom: 2rem; }
+        .input-group label { display: block; color: var(--text-muted); font-size: 0.9rem; margin-bottom: 0.8rem; font-weight: 400; }
+        .input-group input {
+            width: 100%; padding: 1.2rem; background: rgba(255,255,255,0.03);
+            border: 1px solid var(--border-subtle); color: white; border-radius: 16px;
+            font-size: 1rem; outline: none; transition: 0.3s;
+        }
+        .input-group input:focus { border-color: var(--primary); background: rgba(255,255,255,0.06); }
+        
+        .btn-submit {
+            width: 100%; padding: 1.3rem; background: var(--primary); border: none;
+            color: var(--bg-color); border-radius: 16px; font-weight: 800; cursor: pointer;
+            font-size: 1rem; transition: var(--transition);
+        }
+        .btn-submit:hover:not(:disabled) { letter-spacing: 1px; }
+        .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; }
 
-        /* ── SELECTOR DE ACCIÓN (Crear o Unirse) ── */
-        .action-selector {
-            display: flex; gap: 1.2rem; margin-bottom: 2.5rem;
-        }
-        .action-btn {
-            flex: 1; background: rgba(255,255,255,0.03); border: 1px solid var(--border-subtle);
-            color: var(--text-muted); padding: 1.5rem 1rem; border-radius: 20px;
-            cursor: pointer; transition: var(--transition); text-align: center;
-            display: flex; flex-direction: column; align-items: center; gap: 10px;
-        }
-        .action-btn span.action-label { font-weight: 700; font-size: 0.95rem; color: var(--primary); }
-        .action-btn span.action-desc { font-size: 0.75rem; color: var(--text-muted); line-height: 1.4; }
-        .action-btn:hover, .action-btn.active {
-            border-color: var(--primary); background: rgba(255,255,255,0.06); color: var(--primary);
-        }
-        .action-btn.active { background: rgba(255,255,255,0.08); }
+        /* ── SELECTOR DE ACCIÓN (Crear o Unirse) ── */
+        .action-selector {
+            display: flex; gap: 1.2rem; margin-bottom: 2.5rem;
+        }
+        .action-btn {
+            flex: 1; background: rgba(255,255,255,0.03); border: 1px solid var(--border-subtle);
+            color: var(--text-muted); padding: 1.5rem 1rem; border-radius: 20px;
+            cursor: pointer; transition: var(--transition); text-align: center;
+            display: flex; flex-direction: column; align-items: center; gap: 10px;
+        }
+        .action-btn span.action-label { font-weight: 700; font-size: 0.95rem; color: var(--primary); }
+        .action-btn span.action-desc { font-size: 0.75rem; color: var(--text-muted); line-height: 1.4; }
+        .action-btn:hover, .action-btn.active {
+            border-color: var(--primary); background: rgba(255,255,255,0.06); color: var(--primary);
+        }
+        .action-btn.active { background: rgba(255,255,255,0.08); }
 
-        /* ── PANEL DEL CÓDIGO DE VIAJE (tras creación) ── */
-        .trip-code-display {
-            background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.12);
-            border-radius: 20px; padding: 2rem; text-align: center; margin-bottom: 2rem;
-        }
-        .trip-code-display p.code-label {
-            font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase;
-            letter-spacing: 2px; margin-bottom: 1rem; font-weight: 600;
-        }
-        .trip-code-display .code-value {
-            font-size: 2.8rem; font-weight: 800; letter-spacing: 10px; color: var(--primary);
-            margin-bottom: 1rem; font-variant-numeric: tabular-nums;
-        }
-        .btn-copy-code {
-            background: transparent; border: 1px solid var(--border-subtle); color: var(--text-muted);
-            padding: 0.7rem 1.5rem; border-radius: 30px; font-size: 0.85rem; font-weight: 600;
-            cursor: pointer; transition: var(--transition); display: inline-flex; align-items: center; gap: 8px;
-        }
-        .btn-copy-code:hover { border-color: var(--primary); color: var(--primary); }
+        /* ── PANEL DEL CÓDIGO DE VIAJE (tras creación) ── */
+        .trip-code-display {
+            background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 20px; padding: 2rem; text-align: center; margin-bottom: 2rem;
+        }
+        .trip-code-display p.code-label {
+            font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase;
+            letter-spacing: 2px; margin-bottom: 1rem; font-weight: 600;
+        }
+        .trip-code-display .code-value {
+            font-size: 2.8rem; font-weight: 800; letter-spacing: 10px; color: var(--primary);
+            margin-bottom: 1rem; font-variant-numeric: tabular-nums;
+        }
+        .btn-copy-code {
+            background: transparent; border: 1px solid var(--border-subtle); color: var(--text-muted);
+            padding: 0.7rem 1.5rem; border-radius: 30px; font-size: 0.85rem; font-weight: 600;
+            cursor: pointer; transition: var(--transition); display: inline-flex; align-items: center; gap: 8px;
+        }
+        .btn-copy-code:hover { border-color: var(--primary); color: var(--primary); }
 
-        /* ── INPUT CÓDIGO GRANDE ── */
-        .code-input-big {
-            width: 100%; padding: 1.5rem; background: rgba(255,255,255,0.03);
-            border: 1px solid var(--border-subtle); color: white; border-radius: 16px;
-            font-size: 2rem; font-weight: 800; letter-spacing: 8px; text-align: center;
-            text-transform: uppercase; outline: none; transition: 0.3s;
-        }
-        .code-input-big:focus { border-color: var(--primary); background: rgba(255,255,255,0.06); }
+        /* ── INPUT CÓDIGO GRANDE ── */
+        .code-input-big {
+            width: 100%; padding: 1.5rem; background: rgba(255,255,255,0.03);
+            border: 1px solid var(--border-subtle); color: white; border-radius: 16px;
+            font-size: 2rem; font-weight: 800; letter-spacing: 8px; text-align: center;
+            text-transform: uppercase; outline: none; transition: 0.3s;
+        }
+        .code-input-big:focus { border-color: var(--primary); background: rgba(255,255,255,0.06); }
 
-        /* ── ESTADO SOLICITUD ENVIADA ── */
-        .join-success-box {
-            background: rgba(77, 255, 77, 0.05); border: 1px solid rgba(77, 255, 77, 0.2);
-            border-radius: 16px; padding: 1.5rem; text-align: center; margin-bottom: 1.5rem;
-            display: none;
-        }
-        .join-success-box.visible { display: block; }
-        .join-success-box p { color: var(--success); font-size: 0.9rem; line-height: 1.6; }
+        /* ── ESTADO SOLICITUD ENVIADA ── */
+        .join-success-box {
+            background: rgba(77, 255, 77, 0.05); border: 1px solid rgba(77, 255, 77, 0.2);
+            border-radius: 16px; padding: 1.5rem; text-align: center; margin-bottom: 1.5rem;
+            display: none;
+        }
+        .join-success-box.visible { display: block; }
+        .join-success-box p { color: var(--success); font-size: 0.9rem; line-height: 1.6; }
 
-        #toast-container { position: fixed; bottom: 40px; right: 40px; z-index: 20000; display: flex; flex-direction: column; gap: 15px; }
-        .toast {
-            background: rgba(15, 15, 15, 0.95); backdrop-filter: blur(10px); border: 1px solid var(--border-subtle);
-            color: white; padding: 1.2rem 2rem; border-radius: 18px; display: flex; align-items: center; gap: 15px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5); animation: slideIn 0.5s var(--transition) forwards;
-        }
+        #toast-container { position: fixed; bottom: 40px; right: 40px; z-index: 20000; display: flex; flex-direction: column; gap: 15px; }
+        .toast {
+            background: rgba(15, 15, 15, 0.95); backdrop-filter: blur(10px); border: 1px solid var(--border-subtle);
+            color: white; padding: 1.2rem 2rem; border-radius: 18px; display: flex; align-items: center; gap: 15px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5); animation: slideIn 0.5s var(--transition) forwards;
+        }
 
-        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-        @keyframes spin { 100% { transform: rotate(360deg); } }
-        @keyframes fadeDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
-    </style>
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+        @keyframes fadeDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
 </head>
 <body>
 
-    <div id="page-loader">
-        <i data-lucide="compass" style="width: 50px; height: 50px; color: var(--primary); animation: spin 2s linear infinite;"></i>
-        <p style="margin-top: 20px; color: var(--text-muted); letter-spacing: 2px; font-size: 0.8rem;">SINCRONIZANDO NUBE</p>
-    </div>
-
-    <nav>
-        <div class="logo"><i data-lucide="map-pinned"></i> Interra-hub<span style="color: var(--accent);">.</span></div>
-        <div class="user-menu">
-            <span class="user-name" id="display-user-name">Cargando...</span>
-            <button class="btn-logout" id="btn-logout">
-                <i data-lucide="power"></i> SALIR
-            </button>
-        </div>
-    </nav>
-
-    <main>
-                <div style="width: 100%; display: flex; justify-content: center; margin-bottom: 3rem; overflow-x: auto;">
-            <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5192479241046494"
-                 crossorigin="anonymous"></script>
-                        <ins class="adsbygoogle"
-                 style="display:inline-block;width:728px;height:90px"
-                 data-ad-client="ca-pub-5192479241046494"
-                 data-ad-slot="3152796033"></ins>
-            <script>
-                 (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
-        </div>
-
-        <div class="header-section">
-            <h1>Mis Viajes.</h1>
-            <p>Panel de viajes disponibles.</p>
-        </div>
-
-        <div class="trips-grid" id="trips-container">
-            <div class="trip-card card-add" id="btn-open-modal" style="opacity: 1; transform: none;">
-                <i data-lucide="plus-circle" style="width: 60px; height: 60px;"></i>
-                <h3 style="font-weight: 600; font-size: 1.2rem;">Nueva Aventura</h3>
-            </div>
-        </div>
-    </main>
-
-    <div class="modal-overlay" id="create-modal">
-        <div class="modal-content">
-
-            <div id="step-choose">
-                <h2 style="font-size: 2rem; font-weight: 800; margin-bottom: 0.5rem; letter-spacing: -1px;">Nueva Aventura</h2>
-                <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 2.5rem; font-weight: 300;">¿Qué quieres hacer?</p>
-                <div class="action-selector">
-                    <button class="action-btn" id="choose-create" onclick="goToStep('create')">
-                        <i data-lucide="plus-circle" style="width: 32px; height: 32px; color: var(--primary);"></i>
-                        <span class="action-label">Crear viaje</span>
-                        <span class="action-desc">Soy el organizador y quiero planificar una nueva ruta</span>
-                    </button>
-                    <button class="action-btn" id="choose-join" onclick="goToStep('join')">
-                        <i data-lucide="key-round" style="width: 32px; height: 32px; color: var(--accent-blue);"></i>
-                        <span class="action-label">Unirse</span>
-                        <span class="action-desc">Tengo un código de invitación y quiero apuntarme</span>
-                    </button>
-                </div>
-                <button type="button" onclick="closeModal()" style="background:none; border:none; color:var(--text-muted); width:100%; cursor:pointer; font-size: 0.8rem; font-weight: 600;">CANCELAR</button>
-            </div>
-
-            <div id="step-create" style="display: none;">
-                <h2 style="font-size: 2rem; font-weight: 800; margin-bottom: 2.5rem; letter-spacing: -1px;">Nueva Ruta</h2>
-                <form id="create-trip-form">
-                    <div class="input-group">
-                        <label>Nombre del Viaje</label>
-                        <input type="text" id="trip-name" required placeholder="Ej. Costa Amalfitana 2026">
-                    </div>
-                    <div class="input-group">
-                        <label>Rango de Fechas</label>
-                        <input type="text" id="trip-range" required readonly placeholder="Selecciona el periodo">
-                    </div>
-                    <button type="submit" class="btn-submit" id="btn-create-submit">CREAR RUTA</button>
-                    <button type="button" onclick="goToStep('choose')" style="background:none; border:none; color:var(--text-muted); width:100%; margin-top:1.5rem; cursor:pointer; font-size: 0.8rem; font-weight: 600;">← VOLVER</button>
-                </form>
-            </div>
-
-            <div id="step-join" style="display: none;">
-                <h2 style="font-size: 2rem; font-weight: 800; margin-bottom: 0.5rem; letter-spacing: -1px;">Unirse a un viaje</h2>
-                <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 2.5rem; font-weight: 300;">Introduce el código de 5 caracteres que te ha compartido el organizador.</p>
-                
-                <div class="join-success-box" id="join-success-box">
-                    <p>✅ <strong>Solicitud enviada correctamente.</strong><br>El organizador del viaje recibirá tu petición y te asignará un rol. Vuelve más tarde para comprobar si tienes acceso.</p>
-                </div>
-
-                <div id="join-form-inner">
-                    <div class="input-group">
-                        <label>Código del viaje</label>
-                        <input type="text" id="join-code-input" class="code-input-big" maxlength="5" placeholder="XYZAB" autocomplete="off">
-                    </div>
-                    <button type="button" class="btn-submit" id="btn-join-submit" onclick="joinByCode()">ENVIAR SOLICITUD</button>
-                </div>
-                <button type="button" onclick="goToStep('choose')" style="background:none; border:none; color:var(--text-muted); width:100%; margin-top:1.5rem; cursor:pointer; font-size: 0.8rem; font-weight: 600;">← VOLVER</button>
-            </div>
-
-            <div id="step-code" style="display: none;">
-                <div style="text-align: center; margin-bottom: 2rem;">
-                    <i data-lucide="check-circle" style="width: 48px; height: 48px; color: var(--success); margin-bottom: 1rem;"></i>
-                    <h2 style="font-size: 1.8rem; font-weight: 800; letter-spacing: -1px; margin-bottom: 0.5rem;">¡Viaje creado!</h2>
-                    <p style="color: var(--text-muted); font-size: 0.9rem; font-weight: 300;">Comparte este código con los participantes para que puedan solicitar unirse.</p>
-                </div>
-                <div class="trip-code-display">
-                    <p class="code-label">Código del viaje</p>
-                    <div class="code-value" id="generated-code-display">-----</div>
-                    <button class="btn-copy-code" onclick="copyTripCode()">
-                        <i data-lucide="copy" style="width: 14px;"></i> Copiar código
-                    </button>
-                </div>
-                <p style="color: var(--text-muted); font-size: 0.8rem; text-align: center; margin-bottom: 2rem; line-height: 1.6;">
-                    También puedes encontrar este código en la pestaña <strong style="color:white;">Equipo y Accesos</strong> dentro del viaje en cualquier momento.
-                </p>
-                <button type="button" class="btn-submit" onclick="closeModalAndRefresh()">IR A MIS VIAJES</button>
-            </div>
-
-        </div>
-    </div>
-
-    <div class="modal-overlay" id="delete-modal">
-        <div class="modal-content" style="border-color: var(--accent);">
-            <h2 style="font-size: 1.8rem; font-weight: 800; margin-bottom: 1rem; color: var(--accent); display: flex; align-items: center; gap: 10px;">
-                <i data-lucide="alert-triangle"></i> ¡Peligro!
-            </h2>
-            <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 2rem; line-height: 1.6;">
-                Estás a punto de eliminar permanentemente el viaje <strong id="delete-trip-name" style="color: white; font-size: 1.05rem;"></strong>. <br><br>
-                <span style="color: var(--accent);">Esta acción es irreversible. Se perderán absolutamente todos los itinerarios, notas meteorológicas, ubicaciones de hoteles y accesos de usuarios.</span>
-            </p>
-            <div class="input-group">
-                <label style="color: white;">Escribe <strong style="color: var(--accent);">ELIMINAR</strong> para confirmar:</label>
-                <input type="text" id="delete-confirm-input" placeholder="ELIMINAR" autocomplete="off" style="text-align: center; font-weight: bold; letter-spacing: 2px;">
-            </div>
-            <button type="button" class="btn-submit" id="btn-confirm-delete" style="background: var(--accent); color: white;">BORRAR VIAJE DEFINITIVAMENTE</button>
-            <button type="button" onclick="closeDeleteModal()" style="background:none; border:none; color:var(--text-muted); width:100%; margin-top:1.5rem; cursor:pointer; font-size: 0.8rem; font-weight: 600;">CANCELAR Y VOLVER</button>
-        </div>
-    </div>
-
-    <div id="toast-container"></div>
-
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, getDocs, doc, setDoc, getDoc, deleteDoc, query, where } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyDRkUJnDLzknFz3KOnPEm4UFsgf6R4z1Uk",
-            authDomain: "interra26-22ecd.firebaseapp.com",
-            projectId: "interra26-22ecd",
-            storageBucket: "interra26-22ecd.firebasestorage.app",
-            messagingSenderId: "960505222050",
-            appId: "1:960505222050:web:a9943c6fec9532141f98fb"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-
-        let currentUser = null;
-        let adminTripsCount = 0;
-        let generatedTripCode = null;
-        const SUPERADMIN_EMAIL = "tu_correo@gmail.com"; 
-
-        // ── TOASTS ──
-        function showToast(message, type = 'success') {
-            const container = document.getElementById('toast-container');
-            const toast = document.createElement('div');
-            toast.className = 'toast';
-            const icon = type === 'success' ? 'check-circle' : 'alert-circle';
-            const color = type === 'success' ? 'var(--success)' : 'var(--accent)';
-            toast.innerHTML = `<i data-lucide="${icon}" style="color: ${color}"></i> <span>${message}</span>`;
-            container.appendChild(toast);
-            lucide.createIcons();
-            setTimeout(() => {
-                toast.style.animation = 'slideIn 0.5s reverse forwards';
-                setTimeout(() => toast.remove(), 500);
-            }, 4000);
-        }
-
-        // ── GENERADOR DE CÓDIGO ÚNICO DE 5 CARACTERES ──
-        function generateTripCode() {
-            const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-            let code = '';
-            for (let i = 0; i < 5; i++) {
-                code += chars.charAt(Math.floor(Math.random() * chars.length));
-            }
-            return code;
-        }
-
-        // Verifica que el código no esté ya en uso en Firestore
-        async function generateUniqueCode() {
-            let code;
-            let attempts = 0;
-            do {
-                code = generateTripCode();
-                attempts++;
-                const q = query(collection(db, "viajes"), where("codigoInvitacion", "==", code));
-                const snap = await getDocs(q);
-                if (snap.empty) break;
-            } while (attempts < 10);
-            return code;
-        }
-
-        // ── FLATPICKR ──
-        const rangePicker = flatpickr("#trip-range", { 
-            mode: "range", 
-            minDate: "today", 
-            dateFormat: "d/m/Y", 
-            locale: "es",
-            disableMobile: "true"
-        });
-
-        // ── NAVEGACIÓN DE PASOS DEL MODAL ──
-        window.goToStep = function(step) {
-            if (step === 'create') {
-                const isGod = currentUser.email === SUPERADMIN_EMAIL;
-                if (adminTripsCount >= 1 && !isGod) {
-                    showToast("Límite de viajes alcanzado. Suscribete a Interra-hub PRO para poder crear viajes ilimitados.", "error");
-                    return;
-                }
-            }
-
-            document.getElementById('step-choose').style.display = 'none';
-            document.getElementById('step-create').style.display = 'none';
-            document.getElementById('step-join').style.display = 'none';
-            document.getElementById('step-code').style.display = 'none';
-
-            if (step === 'choose') document.getElementById('step-choose').style.display = 'block';
-            else if (step === 'create') document.getElementById('step-create').style.display = 'block';
-            else if (step === 'join') {
-                document.getElementById('step-join').style.display = 'block';
-                document.getElementById('join-code-input').value = '';
-                document.getElementById('join-success-box').classList.remove('visible');
-                document.getElementById('join-form-inner').style.display = 'block';
-            }
-            else if (step === 'code') document.getElementById('step-code').style.display = 'block';
-
-            lucide.createIcons();
-        }
-
-        window.closeModal = function() {
-            document.getElementById('create-modal').classList.remove('active');
-        }
-
-        window.closeModalAndRefresh = function() {
-            closeModal();
-            loadTrips();
-        }
-
-        window.copyTripCode = function() {
-            if (generatedTripCode) {
-                navigator.clipboard.writeText(generatedTripCode).then(() => {
-                    showToast("Código copiado al portapapeles");
-                });
-            }
-        }
-
-        // ── UNIRSE A UN VIAJE POR CÓDIGO ──
-        window.joinByCode = async function() {
-            const codeRaw = document.getElementById('join-code-input').value.trim().toUpperCase();
-            if (codeRaw.length !== 5) {
-                showToast("El código debe tener exactamente 5 caracteres", "error");
-                return;
-            }
-
-            const btn = document.getElementById('btn-join-submit');
-            btn.innerText = "Buscando...";
-            btn.disabled = true;
-
-            try {
-                // Buscar el viaje con ese código de invitación
-                const q = query(collection(db, "viajes"), where("codigoInvitacion", "==", codeRaw));
-                const snap = await getDocs(q);
-
-                if (snap.empty) {
-                    showToast("No se encontró ningún viaje con ese código", "error");
-                    btn.innerText = "ENVIAR SOLICITUD";
-                    btn.disabled = false;
-                    return;
-                }
-
-                const tripDoc = snap.docs[0];
-                const tripData = tripDoc.data();
-                const tripId = tripDoc.id;
-
-                // Comprobar si ya es miembro
-                if (tripData.miembros && tripData.miembros[currentUser.uid]) {
-                    showToast("¡Ya eres miembro de este viaje!", "error");
-                    btn.innerText = "ENVIAR SOLICITUD";
-                    btn.disabled = false;
-                    return;
-                }
-
-                // Comprobar si ya tiene solicitud pendiente
-                if (tripData.solicitudes && tripData.solicitudes[currentUser.uid]) {
-                    showToast("Ya tienes una solicitud pendiente en este viaje", "error");
-                    btn.innerText = "ENVIAR SOLICITUD";
-                    btn.disabled = false;
-                    return;
-                }
-
-                // Enviar solicitud
-                const tripRef = doc(db, "viajes", tripId);
-                await setDoc(tripRef, {
-                    solicitudes: {
-                        [currentUser.uid]: currentUser.email
-                    }
-                }, { merge: true });
-
-                // Mostrar confirmación en el modal
-                document.getElementById('join-form-inner').style.display = 'none';
-                document.getElementById('join-success-box').classList.add('visible');
-                showToast(`Solicitud enviada para "${tripData.nombre}"`);
-
-            } catch (error) {
-                console.error(error);
-                showToast("Error al procesar la solicitud", "error");
-                btn.innerText = "ENVIAR SOLICITUD";
-                btn.disabled = false;
-            }
-        }
-
-        // ── ASEGURAR PERFIL DE USUARIO ──
-        async function ensureUserProfile(user) {
-            const userRef = doc(db, "usuarios", user.uid);
-            const snap = await getDoc(userRef);
-            if (!snap.exists()) {
-                await setDoc(userRef, {
-                    uid: user.uid,
-                    email: user.email,
-                    nombre: user.displayName || '',
-                    createdAt: new Date(),
-                    lastSeen: new Date()
-                });
-            } else {
-                await setDoc(userRef, { lastSeen: new Date(), email: user.email }, { merge: true });
-            }
-            const finalSnap = await getDoc(userRef);
-            return finalSnap.data().nombre || user.email;
-        }
-
-        onAuthStateChanged(auth, async (user) => {
-            if (user) {
-                currentUser = user;
-                const nombreMostrar = await ensureUserProfile(user);
-                document.getElementById('display-user-name').innerText = nombreMostrar || user.email;
-                document.getElementById('page-loader').style.opacity = '0';
-                setTimeout(() => document.getElementById('page-loader').style.display = 'none', 800);
-                loadTrips();
-            } else {
-                window.location.href = 'index.html';
-            }
-        });
-
-        async function loadTrips() {
-            const container = document.getElementById('trips-container');
-            const addBtn = container.querySelector('.card-add');
-            container.innerHTML = '';
-            container.appendChild(addBtn);
-            
-            adminTripsCount = 0;
-
-            try {
-                const querySnapshot = await getDocs(collection(db, "viajes"));
-                let todosLosViajes = [];
-
-                querySnapshot.forEach(d => {
-                    const trip = { id: d.id, ...d.data() };
-                    todosLosViajes.push(trip);
-                    const rol = trip.miembros ? trip.miembros[currentUser.uid] : null;
-                    if (rol === 'admin-grupo') adminTripsCount++;
-                });
-
-                todosLosViajes.forEach((trip, i) => {
-                    let rolAqui = trip.miembros ? trip.miembros[currentUser.uid] : null;
-                    const isGod = currentUser.email === SUPERADMIN_EMAIL;
-
-                    // Solo tiene acceso si es miembro explícito o superadmin
-                    const tieneAcceso = rolAqui || isGod;
-                    const solicitado = trip.solicitudes && trip.solicitudes[currentUser.uid];
-
-                    // 👇 ESTA LÍNEA OCULTA LOS VIAJES A LOS QUE NO PERTENECES
-                    if (!tieneAcceso && !solicitado) return;
-
-                    const card = document.createElement('div');
-                    card.className = `trip-card ${tieneAcceso ? 'unlocked' : 'locked'}`;
-                    
-                    setTimeout(() => card.classList.add('visible'), i * 150);
-
-                    let badgeContent = '';
-                    if (isGod) badgeContent = `<span class="role-badge" style="background:var(--accent); border-color:var(--accent);">NIVEL DIOS</span>`;
-                    else if (rolAqui) badgeContent = `<span class="role-badge">${rolAqui.replace('-', ' ')}</span>`;
-
-                    const deleteBtnHtml = (rolAqui === 'admin-grupo' || isGod) ? `
-                        <button class="btn-delete-trip" onclick="confirmDeleteTrip(event, '${trip.id}', '${trip.nombre.replace(/'/g, "\\'")}')" title="Borrar viaje permanentemente">
-                            <i data-lucide="trash-2"></i>
-                        </button>
-                    ` : '';
-
-                    card.innerHTML = `
-                        ${badgeContent}
-                        ${deleteBtnHtml}
-                        <div class="card-content">
-                            <h2 style="font-weight: 800; font-size: 1.8rem; margin-bottom: 0.5rem; padding-right: 30px;">${trip.nombre}</h2>
-                            <p style="color:var(--text-muted); font-size: 0.9rem;"><i data-lucide="calendar" style="width:14px; vertical-align:middle; margin-right:5px;"></i> ${trip.fechaInicio} - ${trip.fechaFin}</p>
-                        </div>
-                        ${!tieneAcceso ? `
-                            <div class="locked-overlay">
-                                <i data-lucide="lock" style="width: 30px; height: 30px; margin-bottom: 15px;"></i>
-                                ${solicitado 
-                                    ? `<button class="btn-request" disabled><i data-lucide="clock"></i> SOLICITUD ENVIADA</button>`
-                                    : `<p style="color: var(--text-muted); font-size: 0.85rem; text-align: center;">Necesitas un código de invitación para acceder a este viaje.</p>`
-                                }
-                            </div>
-                        ` : ''}
-                    `;
-
-                    if (tieneAcceso) {
-                        card.onclick = () => {
-                            window.location.href = `viaje.html?id=${trip.id}`;
-                        }
-                    }
-                    container.appendChild(card);
-                });
-                lucide.createIcons();
-            } catch (error) {
-                console.error(error);
-                showToast("Error al sincronizar viajes", "error");
-            }
-        }
-
-        // ── BORRADO DE VIAJES ──
-        let tripToDeleteId = null;
-
-        window.confirmDeleteTrip = (event, tripId, tripName) => {
-            event.stopPropagation();
-            tripToDeleteId = tripId;
-            document.getElementById('delete-trip-name').innerText = tripName;
-            document.getElementById('delete-confirm-input').value = '';
-            document.getElementById('delete-modal').classList.add('active');
-        };
-
-        window.closeDeleteModal = () => {
-            tripToDeleteId = null;
-            document.getElementById('delete-modal').classList.remove('active');
-        };
-
-        document.getElementById('btn-confirm-delete').onclick = async () => {
-            const input = document.getElementById('delete-confirm-input').value;
-            if (input !== 'ELIMINAR') {
-                showToast("Debes escribir ELIMINAR en mayúsculas para confirmar", "error");
-                return;
-            }
-
-            if (tripToDeleteId) {
-                const btn = document.getElementById('btn-confirm-delete');
-                try {
-                    btn.innerText = "BORRANDO DATOS...";
-                    btn.disabled = true;
-
-                    await deleteDoc(doc(db, "viajes", tripToDeleteId));
-                    
-                    showToast("Viaje borrado de la nube permanentemente", "success");
-                    closeDeleteModal();
-                    loadTrips();
-                } catch (error) {
-                    console.error("Error borrando el viaje:", error);
-                    showToast("Error de permisos al intentar borrar", "error");
-                } finally {
-                    btn.innerText = "BORRAR VIAJE DEFINITIVAMENTE";
-                    btn.disabled = false;
-                }
-            }
-        };
-
-        // ── ABRIR MODAL PRINCIPAL ──
-        const modal = document.getElementById('create-modal');
-        
-        document.getElementById('btn-open-modal').onclick = () => {
-            // Siempre abre en el paso de elección, el límite se verifica al elegir 'create'
-            goToStep('choose');
-            modal.classList.add('active');
-        };
-
-        // ── CREACIÓN DE VIAJE ──
-        document.getElementById('create-trip-form').onsubmit = async (e) => {
-            e.preventDefault();
-            const dates = rangePicker.selectedDates;
-            if (dates.length < 2) {
-                showToast("Debes elegir un rango de fechas", "error");
-                return;
-            }
-
-            const btn = document.getElementById('btn-create-submit');
-            btn.innerText = "CREANDO...";
-            btn.disabled = true;
-
-            const format = (d) => d.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
-            
-            try {
-                // Generar código único
-                const codigoInvitacion = await generateUniqueCode();
-                generatedTripCode = codigoInvitacion;
-
-                await addDoc(collection(db, "viajes"), {
-                    nombre: document.getElementById('trip-name').value,
-                    fechaInicio: format(dates[0]),
-                    fechaFin: format(dates[1]),
-                    miembros: { [currentUser.uid]: "admin-grupo" },
-                    eventos: [],
-                    solicitudes: {},
-                    codigoInvitacion: codigoInvitacion,
-                    creadoEn: new Date()
-                });
-
-                document.getElementById('create-trip-form').reset();
-                document.getElementById('generated-code-display').innerText = codigoInvitacion;
-                goToStep('code');
-                lucide.createIcons();
-            } catch (error) {
-                console.error(error);
-                showToast("Error al crear el viaje", "error");
-            } finally {
-                btn.innerText = "CREAR RUTA";
-                btn.disabled = false;
-            }
-        };
-
-        document.getElementById('btn-logout').onclick = () => signOut(auth);
-        lucide.createIcons();
-    </script>
+    <div id="page-loader">
+        <i data-lucide="compass" style="width: 50px; height: 50px; color: var(--primary); animation: spin 2s linear infinite;"></i>
+        <p style="margin-top: 20px; color: var(--text-muted); letter-spacing: 2px; font-size: 0.8rem;">SINCRONIZANDO NUBE</p>
+    </div>
+
+    <nav>
+        <div class="logo"><i data-lucide="map-pinned"></i> Interra-hub<span style="color: var(--accent);">.</span></div>
+        <div class="user-menu">
+            <span class="user-name" id="display-user-name">Cargando...</span>
+            <button class="btn-logout" id="btn-logout">
+                <i data-lucide="power"></i> SALIR
+            </button>
+        </div>
+    </nav>
+
+    <main>
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5192479241046494"
+             crossorigin="anonymous"></script>
+        <ins class="adsbygoogle"
+             style="display:inline-block;width:728px;height:90px"
+             data-ad-client="ca-pub-5192479241046494"
+             data-ad-slot="3152796033"></ins>
+        <script>
+             (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+
+        <div class="header-section">
+            <h1>Mis Viajes.</h1>
+            <p>Panel de viajes disponibles.</p>
+        </div>
+
+        <div class="trips-grid" id="trips-container">
+            <div class="trip-card card-add" id="btn-open-modal" style="opacity: 1; transform: none;">
+                <i data-lucide="plus-circle" style="width: 60px; height: 60px;"></i>
+                <h3 style="font-weight: 600; font-size: 1.2rem;">Nueva Aventura</h3>
+            </div>
+        </div>
+    </main>
+
+    <div class="modal-overlay" id="create-modal">
+        <div class="modal-content">
+
+            <div id="step-choose">
+                <h2 style="font-size: 2rem; font-weight: 800; margin-bottom: 0.5rem; letter-spacing: -1px;">Nueva Aventura</h2>
+                <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 2.5rem; font-weight: 300;">¿Qué quieres hacer?</p>
+                <div class="action-selector">
+                    <button class="action-btn" id="choose-create" onclick="goToStep('create')">
+                        <i data-lucide="plus-circle" style="width: 32px; height: 32px; color: var(--primary);"></i>
+                        <span class="action-label">Crear viaje</span>
+                        <span class="action-desc">Soy el organizador y quiero planificar una nueva ruta</span>
+                    </button>
+                    <button class="action-btn" id="choose-join" onclick="goToStep('join')">
+                        <i data-lucide="key-round" style="width: 32px; height: 32px; color: var(--accent-blue);"></i>
+                        <span class="action-label">Unirse</span>
+                        <span class="action-desc">Tengo un código de invitación y quiero apuntarme</span>
+                    </button>
+                </div>
+                <button type="button" onclick="closeModal()" style="background:none; border:none; color:var(--text-muted); width:100%; cursor:pointer; font-size: 0.8rem; font-weight: 600;">CANCELAR</button>
+            </div>
+
+            <div id="step-create" style="display: none;">
+                <h2 style="font-size: 2rem; font-weight: 800; margin-bottom: 2.5rem; letter-spacing: -1px;">Nueva Ruta</h2>
+                <form id="create-trip-form">
+                    <div class="input-group">
+                        <label>Nombre del Viaje</label>
+                        <input type="text" id="trip-name" required placeholder="Ej. Costa Amalfitana 2026">
+                    </div>
+                    <div class="input-group">
+                        <label>Rango de Fechas</label>
+                        <input type="text" id="trip-range" required readonly placeholder="Selecciona el periodo">
+                    </div>
+                    <button type="submit" class="btn-submit" id="btn-create-submit">CREAR RUTA</button>
+                    <button type="button" onclick="goToStep('choose')" style="background:none; border:none; color:var(--text-muted); width:100%; margin-top:1.5rem; cursor:pointer; font-size: 0.8rem; font-weight: 600;">← VOLVER</button>
+                </form>
+            </div>
+
+            <div id="step-join" style="display: none;">
+                <h2 style="font-size: 2rem; font-weight: 800; margin-bottom: 0.5rem; letter-spacing: -1px;">Unirse a un viaje</h2>
+                <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 2.5rem; font-weight: 300;">Introduce el código de 5 caracteres que te ha compartido el organizador.</p>
+                
+                <div class="join-success-box" id="join-success-box">
+                    <p>✅ <strong>Solicitud enviada correctamente.</strong><br>El organizador del viaje recibirá tu petición y te asignará un rol. Vuelve más tarde para comprobar si tienes acceso.</p>
+                </div>
+
+                <div id="join-form-inner">
+                    <div class="input-group">
+                        <label>Código del viaje</label>
+                        <input type="text" id="join-code-input" class="code-input-big" maxlength="5" placeholder="XYZAB" autocomplete="off">
+                    </div>
+                    <button type="button" class="btn-submit" id="btn-join-submit" onclick="joinByCode()">ENVIAR SOLICITUD</button>
+                </div>
+                <button type="button" onclick="goToStep('choose')" style="background:none; border:none; color:var(--text-muted); width:100%; margin-top:1.5rem; cursor:pointer; font-size: 0.8rem; font-weight: 600;">← VOLVER</button>
+            </div>
+
+            <div id="step-code" style="display: none;">
+                <div style="text-align: center; margin-bottom: 2rem;">
+                    <i data-lucide="check-circle" style="width: 48px; height: 48px; color: var(--success); margin-bottom: 1rem;"></i>
+                    <h2 style="font-size: 1.8rem; font-weight: 800; letter-spacing: -1px; margin-bottom: 0.5rem;">¡Viaje creado!</h2>
+                    <p style="color: var(--text-muted); font-size: 0.9rem; font-weight: 300;">Comparte este código con los participantes para que puedan solicitar unirse.</p>
+                </div>
+                <div class="trip-code-display">
+                    <p class="code-label">Código del viaje</p>
+                    <div class="code-value" id="generated-code-display">-----</div>
+                    <button class="btn-copy-code" onclick="copyTripCode()">
+                        <i data-lucide="copy" style="width: 14px;"></i> Copiar código
+                    </button>
+                </div>
+                <p style="color: var(--text-muted); font-size: 0.8rem; text-align: center; margin-bottom: 2rem; line-height: 1.6;">
+                    También puedes encontrar este código en la pestaña <strong style="color:white;">Equipo y Accesos</strong> dentro del viaje en cualquier momento.
+                </p>
+                <button type="button" class="btn-submit" onclick="closeModalAndRefresh()">IR A MIS VIAJES</button>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="delete-modal">
+        <div class="modal-content" style="border-color: var(--accent);">
+            <h2 style="font-size: 1.8rem; font-weight: 800; margin-bottom: 1rem; color: var(--accent); display: flex; align-items: center; gap: 10px;">
+                <i data-lucide="alert-triangle"></i> ¡Peligro!
+            </h2>
+            <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 2rem; line-height: 1.6;">
+                Estás a punto de eliminar permanentemente el viaje <strong id="delete-trip-name" style="color: white; font-size: 1.05rem;"></strong>. <br><br>
+                <span style="color: var(--accent);">Esta acción es irreversible. Se perderán absolutamente todos los itinerarios, notas meteorológicas, ubicaciones de hoteles y accesos de usuarios.</span>
+            </p>
+            <div class="input-group">
+                <label style="color: white;">Escribe <strong style="color: var(--accent);">ELIMINAR</strong> para confirmar:</label>
+                <input type="text" id="delete-confirm-input" placeholder="ELIMINAR" autocomplete="off" style="text-align: center; font-weight: bold; letter-spacing: 2px;">
+            </div>
+            <button type="button" class="btn-submit" id="btn-confirm-delete" style="background: var(--accent); color: white;">BORRAR VIAJE DEFINITIVAMENTE</button>
+            <button type="button" onclick="closeDeleteModal()" style="background:none; border:none; color:var(--text-muted); width:100%; margin-top:1.5rem; cursor:pointer; font-size: 0.8rem; font-weight: 600;">CANCELAR Y VOLVER</button>
+        </div>
+    </div>
+
+    <div id="toast-container"></div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, getDocs, doc, setDoc, getDoc, deleteDoc, query, where } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDRkUJnDLzknFz3KOnPEm4UFsgf6R4z1Uk",
+            authDomain: "interra26-22ecd.firebaseapp.com",
+            projectId: "interra26-22ecd",
+            storageBucket: "interra26-22ecd.firebasestorage.app",
+            messagingSenderId: "960505222050",
+            appId: "1:960505222050:web:a9943c6fec9532141f98fb"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        let currentUser = null;
+        let adminTripsCount = 0;
+        let generatedTripCode = null;
+        const SUPERADMIN_EMAIL = "tu_correo@gmail.com"; 
+
+        // ── TOASTS ──
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            const icon = type === 'success' ? 'check-circle' : 'alert-circle';
+            const color = type === 'success' ? 'var(--success)' : 'var(--accent)';
+            toast.innerHTML = `<i data-lucide="${icon}" style="color: ${color}"></i> <span>${message}</span>`;
+            container.appendChild(toast);
+            lucide.createIcons();
+            setTimeout(() => {
+                toast.style.animation = 'slideIn 0.5s reverse forwards';
+                setTimeout(() => toast.remove(), 500);
+            }, 4000);
+        }
+
+        // ── GENERADOR DE CÓDIGO ÚNICO DE 5 CARACTERES ──
+        function generateTripCode() {
+            const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+            let code = '';
+            for (let i = 0; i < 5; i++) {
+                code += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return code;
+        }
+
+        // Verifica que el código no esté ya en uso en Firestore
+        async function generateUniqueCode() {
+            let code;
+            let attempts = 0;
+            do {
+                code = generateTripCode();
+                attempts++;
+                const q = query(collection(db, "viajes"), where("codigoInvitacion", "==", code));
+                const snap = await getDocs(q);
+                if (snap.empty) break;
+            } while (attempts < 10);
+            return code;
+        }
+
+        // ── FLATPICKR ──
+        const rangePicker = flatpickr("#trip-range", { 
+            mode: "range", 
+            minDate: "today", 
+            dateFormat: "d/m/Y", 
+            locale: "es",
+            disableMobile: "true"
+        });
+
+        // ── NAVEGACIÓN DE PASOS DEL MODAL ──
+        window.goToStep = function(step) {
+            if (step === 'create') {
+                const isGod = currentUser.email === SUPERADMIN_EMAIL;
+                if (adminTripsCount >= 1 && !isGod) {
+                    showToast("Límite de viajes alcanzado. Suscribete a Interra-hub PRO para poder crear viajes ilimitados.", "error");
+                    return;
+                }
+            }
+
+            document.getElementById('step-choose').style.display = 'none';
+            document.getElementById('step-create').style.display = 'none';
+            document.getElementById('step-join').style.display = 'none';
+            document.getElementById('step-code').style.display = 'none';
+
+            if (step === 'choose') document.getElementById('step-choose').style.display = 'block';
+            else if (step === 'create') document.getElementById('step-create').style.display = 'block';
+            else if (step === 'join') {
+                document.getElementById('step-join').style.display = 'block';
+                document.getElementById('join-code-input').value = '';
+                document.getElementById('join-success-box').classList.remove('visible');
+                document.getElementById('join-form-inner').style.display = 'block';
+            }
+            else if (step === 'code') document.getElementById('step-code').style.display = 'block';
+
+            lucide.createIcons();
+        }
+
+        window.closeModal = function() {
+            document.getElementById('create-modal').classList.remove('active');
+        }
+
+        window.closeModalAndRefresh = function() {
+            closeModal();
+            loadTrips();
+        }
+
+        window.copyTripCode = function() {
+            if (generatedTripCode) {
+                navigator.clipboard.writeText(generatedTripCode).then(() => {
+                    showToast("Código copiado al portapapeles");
+                });
+            }
+        }
+
+        // ── UNIRSE A UN VIAJE POR CÓDIGO ──
+        window.joinByCode = async function() {
+            const codeRaw = document.getElementById('join-code-input').value.trim().toUpperCase();
+            if (codeRaw.length !== 5) {
+                showToast("El código debe tener exactamente 5 caracteres", "error");
+                return;
+            }
+
+            const btn = document.getElementById('btn-join-submit');
+            btn.innerText = "Buscando...";
+            btn.disabled = true;
+
+            try {
+                // Buscar el viaje con ese código de invitación
+                const q = query(collection(db, "viajes"), where("codigoInvitacion", "==", codeRaw));
+                const snap = await getDocs(q);
+
+                if (snap.empty) {
+                    showToast("No se encontró ningún viaje con ese código", "error");
+                    btn.innerText = "ENVIAR SOLICITUD";
+                    btn.disabled = false;
+                    return;
+                }
+
+                const tripDoc = snap.docs[0];
+                const tripData = tripDoc.data();
+                const tripId = tripDoc.id;
+
+                // Comprobar si ya es miembro
+                if (tripData.miembros && tripData.miembros[currentUser.uid]) {
+                    showToast("¡Ya eres miembro de este viaje!", "error");
+                    btn.innerText = "ENVIAR SOLICITUD";
+                    btn.disabled = false;
+                    return;
+                }
+
+                // Comprobar si ya tiene solicitud pendiente
+                if (tripData.solicitudes && tripData.solicitudes[currentUser.uid]) {
+                    showToast("Ya tienes una solicitud pendiente en este viaje", "error");
+                    btn.innerText = "ENVIAR SOLICITUD";
+                    btn.disabled = false;
+                    return;
+                }
+
+                // Enviar solicitud
+                const tripRef = doc(db, "viajes", tripId);
+                await setDoc(tripRef, {
+                    solicitudes: {
+                        [currentUser.uid]: currentUser.email
+                    }
+                }, { merge: true });
+
+                // Mostrar confirmación en el modal
+                document.getElementById('join-form-inner').style.display = 'none';
+                document.getElementById('join-success-box').classList.add('visible');
+                showToast(`Solicitud enviada para "${tripData.nombre}"`);
+
+            } catch (error) {
+                console.error(error);
+                showToast("Error al procesar la solicitud", "error");
+                btn.innerText = "ENVIAR SOLICITUD";
+                btn.disabled = false;
+            }
+        }
+
+        // ── ASEGURAR PERFIL DE USUARIO ──
+        async function ensureUserProfile(user) {
+            const userRef = doc(db, "usuarios", user.uid);
+            const snap = await getDoc(userRef);
+            if (!snap.exists()) {
+                await setDoc(userRef, {
+                    uid: user.uid,
+                    email: user.email,
+                    nombre: user.displayName || '',
+                    createdAt: new Date(),
+                    lastSeen: new Date()
+                });
+            } else {
+                await setDoc(userRef, { lastSeen: new Date(), email: user.email }, { merge: true });
+            }
+            const finalSnap = await getDoc(userRef);
+            return finalSnap.data().nombre || user.email;
+        }
+
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                currentUser = user;
+                const nombreMostrar = await ensureUserProfile(user);
+                document.getElementById('display-user-name').innerText = nombreMostrar || user.email;
+                document.getElementById('page-loader').style.opacity = '0';
+                setTimeout(() => document.getElementById('page-loader').style.display = 'none', 800);
+                loadTrips();
+            } else {
+                window.location.href = 'index.html';
+            }
+        });
+
+        async function loadTrips() {
+            const container = document.getElementById('trips-container');
+            const addBtn = container.querySelector('.card-add');
+            container.innerHTML = '';
+            container.appendChild(addBtn);
+            
+            adminTripsCount = 0;
+
+            try {
+                const querySnapshot = await getDocs(collection(db, "viajes"));
+                let todosLosViajes = [];
+
+                querySnapshot.forEach(d => {
+                    const trip = { id: d.id, ...d.data() };
+                    todosLosViajes.push(trip);
+                    const rol = trip.miembros ? trip.miembros[currentUser.uid] : null;
+                    if (rol === 'admin-grupo') adminTripsCount++;
+                });
+
+                todosLosViajes.forEach((trip, i) => {
+                    let rolAqui = trip.miembros ? trip.miembros[currentUser.uid] : null;
+                    const isGod = currentUser.email === SUPERADMIN_EMAIL;
+
+                    // Solo tiene acceso si es miembro explícito o superadmin
+                    const tieneAcceso = rolAqui || isGod;
+                    const solicitado = trip.solicitudes && trip.solicitudes[currentUser.uid];
+
+                    // 👇 ESTA LÍNEA OCULTA LOS VIAJES A LOS QUE NO PERTENECES
+                    if (!tieneAcceso && !solicitado) return;
+
+                    const card = document.createElement('div');
+                    card.className = `trip-card ${tieneAcceso ? 'unlocked' : 'locked'}`;
+                    
+                    setTimeout(() => card.classList.add('visible'), i * 150);
+
+                    let badgeContent = '';
+                    if (isGod) badgeContent = `<span class="role-badge" style="background:var(--accent); border-color:var(--accent);">NIVEL DIOS</span>`;
+                    else if (rolAqui) badgeContent = `<span class="role-badge">${rolAqui.replace('-', ' ')}</span>`;
+
+                    const deleteBtnHtml = (rolAqui === 'admin-grupo' || isGod) ? `
+                        <button class="btn-delete-trip" onclick="confirmDeleteTrip(event, '${trip.id}', '${trip.nombre.replace(/'/g, "\\'")}')" title="Borrar viaje permanentemente">
+                            <i data-lucide="trash-2"></i>
+                        </button>
+                    ` : '';
+
+                    card.innerHTML = `
+                        ${badgeContent}
+                        ${deleteBtnHtml}
+                        <div class="card-content">
+                            <h2 style="font-weight: 800; font-size: 1.8rem; margin-bottom: 0.5rem; padding-right: 30px;">${trip.nombre}</h2>
+                            <p style="color:var(--text-muted); font-size: 0.9rem;"><i data-lucide="calendar" style="width:14px; vertical-align:middle; margin-right:5px;"></i> ${trip.fechaInicio} - ${trip.fechaFin}</p>
+                        </div>
+                        ${!tieneAcceso ? `
+                            <div class="locked-overlay">
+                                <i data-lucide="lock" style="width: 30px; height: 30px; margin-bottom: 15px;"></i>
+                                ${solicitado 
+                                    ? `<button class="btn-request" disabled><i data-lucide="clock"></i> SOLICITUD ENVIADA</button>`
+                                    : `<p style="color: var(--text-muted); font-size: 0.85rem; text-align: center;">Necesitas un código de invitación para acceder a este viaje.</p>`
+                                }
+                            </div>
+                        ` : ''}
+                    `;
+
+                    if (tieneAcceso) {
+                        card.onclick = () => {
+                            window.location.href = `viaje.html?id=${trip.id}`;
+                        }
+                    }
+                    container.appendChild(card);
+                });
+                lucide.createIcons();
+            } catch (error) {
+                console.error(error);
+                showToast("Error al sincronizar viajes", "error");
+            }
+        }
+
+        // ── BORRADO DE VIAJES ──
+        let tripToDeleteId = null;
+
+        window.confirmDeleteTrip = (event, tripId, tripName) => {
+            event.stopPropagation();
+            tripToDeleteId = tripId;
+            document.getElementById('delete-trip-name').innerText = tripName;
+            document.getElementById('delete-confirm-input').value = '';
+            document.getElementById('delete-modal').classList.add('active');
+        };
+
+        window.closeDeleteModal = () => {
+            tripToDeleteId = null;
+            document.getElementById('delete-modal').classList.remove('active');
+        };
+
+        document.getElementById('btn-confirm-delete').onclick = async () => {
+            const input = document.getElementById('delete-confirm-input').value;
+            if (input !== 'ELIMINAR') {
+                showToast("Debes escribir ELIMINAR en mayúsculas para confirmar", "error");
+                return;
+            }
+
+            if (tripToDeleteId) {
+                const btn = document.getElementById('btn-confirm-delete');
+                try {
+                    btn.innerText = "BORRANDO DATOS...";
+                    btn.disabled = true;
+
+                    await deleteDoc(doc(db, "viajes", tripToDeleteId));
+                    
+                    showToast("Viaje borrado de la nube permanentemente", "success");
+                    closeDeleteModal();
+                    loadTrips();
+                } catch (error) {
+                    console.error("Error borrando el viaje:", error);
+                    showToast("Error de permisos al intentar borrar", "error");
+                } finally {
+                    btn.innerText = "BORRAR VIAJE DEFINITIVAMENTE";
+                    btn.disabled = false;
+                }
+            }
+        };
+
+        // ── ABRIR MODAL PRINCIPAL ──
+        const modal = document.getElementById('create-modal');
+        
+        document.getElementById('btn-open-modal').onclick = () => {
+            // Siempre abre en el paso de elección, el límite se verifica al elegir 'create'
+            goToStep('choose');
+            modal.classList.add('active');
+        };
+
+        // ── CREACIÓN DE VIAJE ──
+        document.getElementById('create-trip-form').onsubmit = async (e) => {
+            e.preventDefault();
+            const dates = rangePicker.selectedDates;
+            if (dates.length < 2) {
+                showToast("Debes elegir un rango de fechas", "error");
+                return;
+            }
+
+            const btn = document.getElementById('btn-create-submit');
+            btn.innerText = "CREANDO...";
+            btn.disabled = true;
+
+            const format = (d) => d.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
+            
+            try {
+                // Generar código único
+                const codigoInvitacion = await generateUniqueCode();
+                generatedTripCode = codigoInvitacion;
+
+                await addDoc(collection(db, "viajes"), {
+                    nombre: document.getElementById('trip-name').value,
+                    fechaInicio: format(dates[0]),
+                    fechaFin: format(dates[1]),
+                    miembros: { [currentUser.uid]: "admin-grupo" },
+                    eventos: [],
+                    solicitudes: {},
+                    codigoInvitacion: codigoInvitacion,
+                    creadoEn: new Date()
+                });
+
+                document.getElementById('create-trip-form').reset();
+                document.getElementById('generated-code-display').innerText = codigoInvitacion;
+                goToStep('code');
+                lucide.createIcons();
+            } catch (error) {
+                console.error(error);
+                showToast("Error al crear el viaje", "error");
+            } finally {
+                btn.innerText = "CREAR RUTA";
+                btn.disabled = false;
+            }
+        };
+
+        document.getElementById('btn-logout').onclick = () => signOut(auth);
+        lucide.createIcons();
+    </script>
 </body>
 </html>
