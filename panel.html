@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Interra-hub | Panel Maestro</title>
     
-    <!-- FAVICON -->
     <link rel="icon" type="image/png" href="interrahublogo.PNG">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -294,13 +293,9 @@
         </div>
     </main>
 
-    <!-- ══════════════════════════════════════════════
-         MODAL PRINCIPAL: CREAR O UNIRSE
-         ══════════════════════════════════════════════ -->
     <div class="modal-overlay" id="create-modal">
         <div class="modal-content">
 
-            <!-- PASO 0: Selector de acción -->
             <div id="step-choose">
                 <h2 style="font-size: 2rem; font-weight: 800; margin-bottom: 0.5rem; letter-spacing: -1px;">Nueva Aventura</h2>
                 <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 2.5rem; font-weight: 300;">¿Qué quieres hacer?</p>
@@ -319,7 +314,6 @@
                 <button type="button" onclick="closeModal()" style="background:none; border:none; color:var(--text-muted); width:100%; cursor:pointer; font-size: 0.8rem; font-weight: 600;">CANCELAR</button>
             </div>
 
-            <!-- PASO 1A: Formulario de CREACIÓN -->
             <div id="step-create" style="display: none;">
                 <h2 style="font-size: 2rem; font-weight: 800; margin-bottom: 2.5rem; letter-spacing: -1px;">Nueva Ruta</h2>
                 <form id="create-trip-form">
@@ -336,7 +330,6 @@
                 </form>
             </div>
 
-            <!-- PASO 1B: Formulario de UNIRSE -->
             <div id="step-join" style="display: none;">
                 <h2 style="font-size: 2rem; font-weight: 800; margin-bottom: 0.5rem; letter-spacing: -1px;">Unirse a un viaje</h2>
                 <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 2.5rem; font-weight: 300;">Introduce el código de 5 caracteres que te ha compartido el organizador.</p>
@@ -355,7 +348,6 @@
                 <button type="button" onclick="goToStep('choose')" style="background:none; border:none; color:var(--text-muted); width:100%; margin-top:1.5rem; cursor:pointer; font-size: 0.8rem; font-weight: 600;">← VOLVER</button>
             </div>
 
-            <!-- PASO 2: Código generado (tras crear) -->
             <div id="step-code" style="display: none;">
                 <div style="text-align: center; margin-bottom: 2rem;">
                     <i data-lucide="check-circle" style="width: 48px; height: 48px; color: var(--success); margin-bottom: 1rem;"></i>
@@ -378,9 +370,6 @@
         </div>
     </div>
 
-    <!-- ══════════════════════════════════════════════
-         MODAL DE CONFIRMACIÓN DE BORRADO
-         ══════════════════════════════════════════════ -->
     <div class="modal-overlay" id="delete-modal">
         <div class="modal-content" style="border-color: var(--accent);">
             <h2 style="font-size: 1.8rem; font-weight: 800; margin-bottom: 1rem; color: var(--accent); display: flex; align-items: center; gap: 10px;">
@@ -475,6 +464,14 @@
 
         // ── NAVEGACIÓN DE PASOS DEL MODAL ──
         window.goToStep = function(step) {
+            if (step === 'create') {
+                const isGod = currentUser.email === SUPERADMIN_EMAIL;
+                if (adminTripsCount >= 1 && !isGod) {
+                    showToast("Límite de viajes alcanzado. Solo puedes organizar 1 viaje en la versión gratuita, pero puedes unirte a infinitos.", "error");
+                    return;
+                }
+            }
+
             document.getElementById('step-choose').style.display = 'none';
             document.getElementById('step-create').style.display = 'none';
             document.getElementById('step-join').style.display = 'none';
@@ -632,6 +629,10 @@
 
                     // Solo tiene acceso si es miembro explícito o superadmin
                     const tieneAcceso = rolAqui || isGod;
+                    const solicitado = trip.solicitudes && trip.solicitudes[currentUser.uid];
+
+                    // 👇 ESTA LÍNEA OCULTA LOS VIAJES A LOS QUE NO PERTENECES
+                    if (!tieneAcceso && !solicitado) return;
 
                     const card = document.createElement('div');
                     card.className = `trip-card ${tieneAcceso ? 'unlocked' : 'locked'}`;
@@ -641,8 +642,6 @@
                     let badgeContent = '';
                     if (isGod) badgeContent = `<span class="role-badge" style="background:var(--accent); border-color:var(--accent);">NIVEL DIOS</span>`;
                     else if (rolAqui) badgeContent = `<span class="role-badge">${rolAqui.replace('-', ' ')}</span>`;
-
-                    const solicitado = trip.solicitudes && trip.solicitudes[currentUser.uid];
 
                     const deleteBtnHtml = (rolAqui === 'admin-grupo' || isGod) ? `
                         <button class="btn-delete-trip" onclick="confirmDeleteTrip(event, '${trip.id}', '${trip.nombre.replace(/'/g, "\\'")}')" title="Borrar viaje permanentemente">
@@ -730,14 +729,7 @@
         const modal = document.getElementById('create-modal');
         
         document.getElementById('btn-open-modal').onclick = () => {
-            const isGod = currentUser.email === SUPERADMIN_EMAIL;
-            
-            if (adminTripsCount >= 1 && !isGod) {
-                showToast("Límite de viajes alcanzado. Suscríbete a Interra-hub PRO para crear viajes ilimitados (Próximamente).", "error");
-                return;
-            }
-            
-            // Siempre abre en el paso de elección
+            // Siempre abre en el paso de elección, el límite se verifica al elegir 'create'
             goToStep('choose');
             modal.classList.add('active');
         };
