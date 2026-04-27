@@ -59,18 +59,16 @@
         .btn-export { color: var(--primary); background: rgba(255,255,255,0.1); padding: 0.5rem 1rem; border-radius: 20px; }
         .btn-export:hover { background: var(--primary); color: var(--bg-color); }
         .logo { 
-    font-weight: 800; 
-    font-size: 1.3rem; 
-    display: flex; 
-    align-items: center; 
-    gap: 4px; 
-    letter-spacing: -0.5px;
-    
-    /* ESTO ES LO NUEVO PARA CENTRARLO ABSOLUTAMENTE */
-    position: absolute; 
-    left: 50%; 
-    transform: translateX(-50%);
-}
+            font-weight: 800; 
+            font-size: 1.3rem; 
+            display: flex; 
+            align-items: center; 
+            gap: 4px; 
+            letter-spacing: -0.5px;
+            position: absolute; 
+            left: 50%; 
+            transform: translateX(-50%);
+        }
 
         /* Loader a pantalla completa */
         #page-loader {
@@ -282,7 +280,7 @@
             Interra-hub<span style="color: var(--accent);">.</span>
         </div>
         <div>
-            <button class="btn-nav btn-export" onclick="generarPDF()">
+            <button class="btn-nav btn-export" title="Descarga todo tu itinerario en un pdf para compartir" onclick="generarPDF()">
                 <i data-lucide="file-down"></i> Exportar PDF
             </button>
         </div>
@@ -317,7 +315,7 @@
     <main id="tab-extra" class="tab-content">
         <div class="user-section">
             <h3><i data-lucide="cloud-sun"></i> Meteorología Esperada</h3>
-            <p style="color: var(--text-muted); font-size: 0.9rem;">Pronóstico real de Open-Meteo basado en las coordenadas de tus destinos.</p>
+            <p style="color: var(--text-muted); font-size: 0.9rem;">Pronóstico real de Open-Meteo para las ciudades en las que estarás cada día de tu viaje.</p>
             <div id="weather-container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1rem; margin-top: 1.5rem;">
                 <p style="color: var(--text-muted); font-size: 0.9rem;">Cargando datos meteorológicos...</p>
             </div>
@@ -340,6 +338,7 @@
                 </button>
             </div>
         </div>
+
         <div class="users-grid">
             <div class="user-section">
                 <h3><i data-lucide="users"></i> Miembros del Viaje</h3>
@@ -492,6 +491,7 @@
             toast.className = 'toast';
             const icon = type === 'success' ? '<i data-lucide="check-circle" style="color: var(--success); width:20px;"></i>' : '<i data-lucide="info" style="color: var(--accent-blue); width:20px;"></i>';
             toast.innerHTML = `${icon} <span>${message}</span>`;
+            if (type === 'error') toast.innerHTML = `<i data-lucide="alert-circle" style="color: var(--accent); width:20px;"></i> <span style="color:var(--accent); font-weight:600;">${message}</span>`;
             container.appendChild(toast);
             lucide.createIcons();
             setTimeout(() => { toast.style.animation = 'slideOutToast 0.4s forwards'; setTimeout(() => toast.remove(), 400); }, 3500);
@@ -532,7 +532,6 @@
             if (tripSnap.exists()) {
                 currentTripData = tripSnap.data();
                 
-                // 👇 CÓDIGO INYECTADO 👇
                 document.getElementById('display-trip-code').innerText = currentTripData.codigoInvitacion || '-----';
                 
                 const miembros = currentTripData.miembros || {};
@@ -547,13 +546,12 @@
 
                 canEdit = isGod || currentUserRole === "admin-grupo" || currentUserRole === "editor-grupo";
 
-                // SOLUCIÓN: Notificaciones SOLO para admins/creadores
                 if (isGod || currentUserRole === "admin-grupo") {
                     document.getElementById('admin-requests-panel').style.display = 'block';
                     const numSolicitudes = currentTripData.solicitudes ? Object.keys(currentTripData.solicitudes).length : 0;
                     updateSolicitudesBadge(numSolicitudes);
                 } else {
-                    updateSolicitudesBadge(0); // Ocultar
+                    updateSolicitudesBadge(0);
                 }
 
                 if (!currentTripData.eventos) currentTripData.eventos = [];
@@ -589,7 +587,7 @@
             document.getElementById('trip-dates').innerText = `Del ${currentTripData.fechaInicio} al ${currentTripData.fechaFin}`;
         }
 
-        // ── METEOROLOGÍA INTELIGENTE CON OPEN-METEO ──
+        // ── METEOROLOGÍA INTELIGENTE TOTALMENTE RENOVADA ──
         async function renderWeather() {
             const wCont = document.getElementById('weather-container');
             if(!currentTripData || !currentTripData.eventos || currentTripData.eventos.length === 0) {
@@ -597,67 +595,106 @@
                 return;
             }
             
-            wCont.innerHTML = '<p style="color:var(--text-muted); font-size: 0.9rem; width: 100%;">Consultando datos satelitales (Open-Meteo)...</p>';
+            wCont.innerHTML = '<p style="color:var(--text-muted); font-size: 0.9rem; width: 100%;">Consultando satélites y calculando posiciones...</p>';
 
-            // Extraer ubicaciones únicas basadas en geocodificación
-            const uniqueLocations = [];
-            for (const ev of currentTripData.eventos) {
-                const coords = await geocodeAddress(ev.title);
-                if (coords) {
-                    // Evitar duplicados cercanos (0.1 grados ~ 11km)
-                    if (!uniqueLocations.some(l => Math.abs(l.lat - coords[0]) < 0.1 && Math.abs(l.lon - coords[1]) < 0.1)) {
-                        uniqueLocations.push({lat: coords[0], lon: coords[1], name: ev.title.split(',')[0]});
-                    }
-                }
-                if(uniqueLocations.length >= 6) break; // Límite de rendimiento
-            }
+            // Agrupar eventos por día
+            const eventosPorDia = {};
+            currentTripData.eventos.forEach(ev => {
+                if(!eventosPorDia[ev.dateKey]) eventosPorDia[ev.dateKey] = [];
+                eventosPorDia[ev.dateKey].push(ev);
+            });
 
-            if(uniqueLocations.length === 0) {
-                 wCont.innerHTML = `<p style="color:var(--text-muted); font-size: 0.9rem;">No se encontraron coordenadas precisas en tus destinos. Intenta usar nombres de ciudades más claros.</p>`;
-                 return;
-            }
+            const fechasOrdenadas = Object.keys(eventosPorDia).sort();
+            if (fechasOrdenadas.length === 0) return;
 
-            wCont.innerHTML = '';
-            let weatherFound = false;
+            let htmlClima = '';
+            const hoy = new Date();
+            hoy.setHours(0,0,0,0);
 
-            for (const loc of uniqueLocations) {
+            for (const fechaString of fechasOrdenadas) {
+                const eventosDia = eventosPorDia[fechaString];
+                // Localizar el evento principal (preferiblemente donde se duerme, o un plan)
+                let eventoPrincipal = eventosDia.find(e => e.type === 'hotel') || eventosDia.find(e => e.type === 'plan') || eventosDia[0];
+                
+                const fechaCalculo = new Date(fechaString);
+                const diffDias = Math.round((fechaCalculo - hoy) / (1000 * 60 * 60 * 24));
+                const fechaMostrar = fechaCalculo.toLocaleDateString('es-ES', { weekday: 'short', day: 'numeric', month: 'short' });
+
+                // Limpiar el query y obtener geolocalización + ciudad principal
+                let cityName = eventoPrincipal.title.split(',')[0]; 
+                let coords = null;
+                
                 try {
-                    // Fetch real data (hasta 14 días si es gratis, cogeremos current general forecast)
-                    const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${loc.lat}&longitude=${loc.lon}&daily=temperature_2m_max,temperature_2m_min,weathercode&timezone=auto`);
+                    let cleanQuery = eventoPrincipal.title.includes('->') ? eventoPrincipal.title.split('->').pop().trim() : eventoPrincipal.title;
+                    const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(cleanQuery)}&limit=1&addressdetails=1`);
                     const data = await res.json();
-                    
-                    if(data.daily && data.daily.time.length > 0) {
-                        weatherFound = true;
-                        const maxT = Math.round(data.daily.temperature_2m_max[0]);
-                        const minT = Math.round(data.daily.temperature_2m_min[0]);
-                        const code = data.daily.weathercode[0];
-                        
-                        // Mapeo simple de WeatherCode (WMO) a iconos
-                        let iconName = 'sun'; let iconColor = '#ffd700'; let wText = 'Despejado';
-                        if(code >= 1 && code <= 3) { iconName = 'cloud-sun'; wText = 'Nublado'; iconColor='#e0e0e0'; }
-                        if(code >= 45 && code <= 48) { iconName = 'cloud-fog'; wText = 'Niebla'; iconColor='#b0b0b0'; }
-                        if(code >= 51 && code <= 67) { iconName = 'cloud-rain'; wText = 'Lluvia'; iconColor='#4da6ff'; }
-                        if(code >= 71 && code <= 77) { iconName = 'snowflake'; wText = 'Nieve'; iconColor='#ffffff'; }
-                        if(code >= 95) { iconName = 'cloud-lightning'; wText = 'Tormenta'; iconColor='#8a2be2'; }
-
-                        wCont.innerHTML += `
-                            <div style="background: rgba(255,255,255,0.03); padding: 1.2rem 1rem; border-radius: 16px; text-align: center; border: 1px solid var(--border-subtle);">
-                                <div style="font-size: 0.85rem; font-weight: 600; margin-bottom: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${loc.name}">${loc.name}</div>
-                                <i data-lucide="${iconName}" style="color: ${iconColor}; width: 32px; height: 32px; margin: 10px 0;"></i>
-                                <div style="font-weight: 800; font-size: 1.3rem;">${maxT}° <span style="font-size:0.8rem; color:var(--text-muted); font-weight:400;">/ ${minT}°</span></div>
-                                <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 5px;">${wText}</div>
-                            </div>
-                        `;
+                    if(data.length > 0) {
+                        coords = {lat: data[0].lat, lon: data[0].lon};
+                        const adr = data[0].address;
+                        // Extraemos inteligentemente la ciudad/pueblo para que quede bonito
+                        cityName = adr.city || adr.town || adr.municipality || adr.village || cityName;
                     }
-                } catch(e) {
-                     console.error("Error al obtener clima para", loc.name, e);
+                } catch(e) {}
+
+                // Lógica de visualización según lejanía de fechas
+                if (diffDias < 0) {
+                    htmlClima += buildWeatherCard(fechaMostrar, cityName, null, null, null, 'El día ya ha pasado.');
+                } else if (diffDias > 14) {
+                    htmlClima += buildWeatherCard(fechaMostrar, cityName, null, null, null, 'Aún es pronto (max. 14 días).');
+                } else if (coords) {
+                    try {
+                        const resClima = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${coords.lat}&longitude=${coords.lon}&daily=temperature_2m_max,temperature_2m_min,weathercode&timezone=auto`);
+                        const dataClima = await resClima.json();
+                        
+                        const idx = dataClima.daily.time.indexOf(fechaString);
+                        if(idx !== -1) {
+                            const maxT = Math.round(dataClima.daily.temperature_2m_max[idx]);
+                            const minT = Math.round(dataClima.daily.temperature_2m_min[idx]);
+                            const code = dataClima.daily.weathercode[idx];
+                            htmlClima += buildWeatherCard(fechaMostrar, cityName, maxT, minT, code, null);
+                        } else {
+                            htmlClima += buildWeatherCard(fechaMostrar, cityName, null, null, null, 'Sin datos para la fecha.');
+                        }
+                    } catch(e) {
+                        htmlClima += buildWeatherCard(fechaMostrar, cityName, null, null, null, 'Error satelital.');
+                    }
+                } else {
+                    htmlClima += buildWeatherCard(fechaMostrar, cityName, null, null, null, 'Ubicación imprecisa.');
                 }
             }
 
-            if(!weatherFound) {
-                wCont.innerHTML = `<p style="color:var(--text-muted); font-size: 0.9rem;">No hay datos meteorológicos disponibles para estas fechas o ubicaciones.</p>`;
-            }
+            wCont.innerHTML = htmlClima;
             lucide.createIcons();
+        }
+
+        // Creador de las tarjetitas del clima
+        function buildWeatherCard(dateStr, cityName, maxT, minT, code, errorMsg) {
+            if(errorMsg) {
+                return `
+                <div style="background: rgba(255,255,255,0.03); padding: 1.2rem 1rem; border-radius: 16px; text-align: center; border: 1px solid var(--border-subtle); display:flex; flex-direction:column; justify-content:center; align-items:center;">
+                    <div style="font-size: 0.75rem; color: var(--accent-blue); margin-bottom: 5px; text-transform:uppercase; font-weight:600;">${dateStr}</div>
+                    <div style="font-size: 0.95rem; font-weight: 800; margin-bottom: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%;" title="${cityName}">${cityName}</div>
+                    <i data-lucide="cloud-off" style="color: var(--text-muted); width: 24px; height: 24px; margin: 10px 0;"></i>
+                    <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 5px; line-height: 1.4;">${errorMsg}</div>
+                </div>`;
+            }
+
+            let iconName = 'sun'; let iconColor = '#ffd700'; let wText = 'Despejado';
+            if(code >= 1 && code <= 3) { iconName = 'cloud-sun'; wText = 'Nublado'; iconColor='#e0e0e0'; }
+            if(code >= 45 && code <= 48) { iconName = 'cloud-fog'; wText = 'Niebla'; iconColor='#b0b0b0'; }
+            if(code >= 51 && code <= 67) { iconName = 'cloud-rain'; wText = 'Lluvia'; iconColor='#4da6ff'; }
+            if(code >= 71 && code <= 77) { iconName = 'snowflake'; wText = 'Nieve'; iconColor='#ffffff'; }
+            if(code >= 95) { iconName = 'cloud-lightning'; wText = 'Tormenta'; iconColor='#8a2be2'; }
+
+            return `
+                <div style="background: rgba(255,255,255,0.03); padding: 1.2rem 1rem; border-radius: 16px; text-align: center; border: 1px solid var(--border-subtle);">
+                    <div style="font-size: 0.75rem; color: var(--accent-blue); margin-bottom: 5px; text-transform:uppercase; font-weight:600;">${dateStr}</div>
+                    <div style="font-size: 0.95rem; font-weight: 800; margin-bottom: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${cityName}">${cityName}</div>
+                    <i data-lucide="${iconName}" style="color: ${iconColor}; width: 32px; height: 32px; margin: 10px 0;"></i>
+                    <div style="font-weight: 800; font-size: 1.3rem;">${maxT}° <span style="font-size:0.8rem; color:var(--text-muted); font-weight:400;">/ ${minT}°</span></div>
+                    <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 5px;">${wText}</div>
+                </div>
+            `;
         }
 
         function renderItinerary() {
@@ -816,10 +853,137 @@
             }
         }
 
-        // GENERAR PDF (Omitido para no ocupar espacio innecesario, mantiene la versión original que enviaste)
+        // ── GENERAR PDF PREMIUM ──
         window.generarPDF = async function() {
-            showToast("Generando PDF premium. Revisa tu carpeta de descargas.", "info");
-            /* TODO EL CÓDIGO JSPDF IGUAL QUE ANTES */
+            const now = new Date();
+            const mesLlave = `interrahub_pdf_usage_${now.getFullYear()}_${now.getMonth()}`;
+            let usoActual = parseInt(localStorage.getItem(mesLlave) || '0');
+            
+            if (usoActual >= 3) {
+                showToast("Has llegado al máximo de PDFs permitidos mensualmente. Suscríbete a Interra-hub PRO.", "error");
+                return;
+            }
+
+            if (!currentTripData || !currentTripData.eventos || currentTripData.eventos.length === 0) {
+                showToast("El itinerario está vacío. Añade planes antes de exportar.", "info");
+                return;
+            }
+
+            showToast("Construyendo tu PDF premium. Por favor, espera...", "info");
+
+            // Crear un contenedor oculto para dibujar el PDF
+            const pdfContainer = document.createElement('div');
+            pdfContainer.style.position = 'absolute';
+            pdfContainer.style.left = '-9999px';
+            pdfContainer.style.top = '0';
+            pdfContainer.style.width = '800px';
+            pdfContainer.style.backgroundColor = '#ffffff'; // Fondo blanco puro para impresión limpia
+            pdfContainer.style.color = '#000000';
+            pdfContainer.style.padding = '50px';
+            pdfContainer.style.fontFamily = "'Sora', sans-serif";
+            pdfContainer.style.zIndex = '-1';
+            
+            let htmlFormato = `
+                <div style="text-align:center; margin-bottom: 40px; border-bottom: 2px solid #eaeaea; padding-bottom: 25px;">
+                    <div style="font-size: 16px; font-weight: 800; color: #ff4d4d; margin-bottom: 15px; letter-spacing: 2px; text-transform: uppercase;">INTERRA-HUB</div>
+                    <h1 style="font-size: 38px; font-weight: 800; margin: 0; letter-spacing: -1px; color: #111;">${currentTripData.nombre}</h1>
+                    <p style="color: #666; font-size: 18px; margin-top: 10px; font-weight: 400;">${currentTripData.fechaInicio} — ${currentTripData.fechaFin}</p>
+                </div>
+            `;
+
+            // Agrupar eventos
+            const eventosAgrupados = {};
+            currentTripData.eventos.forEach(ev => {
+                if (!eventosAgrupados[ev.dateKey]) eventosAgrupados[ev.dateKey] = [];
+                eventosAgrupados[ev.dateKey].push(ev);
+            });
+            const dKeys = Object.keys(eventosAgrupados).sort();
+
+            let cuentaDia = 1;
+            dKeys.forEach(dateKey => {
+                const evs = eventosAgrupados[dateKey];
+                evs.sort((a, b) => (a.time || '24:00').localeCompare(b.time || '24:00'));
+                
+                const fechaObj = new Date(dateKey);
+                const stringFecha = fechaObj.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' });
+
+                htmlFormato += `
+                    <div style="margin-bottom: 35px; page-break-inside: avoid;">
+                        <h2 style="font-size: 22px; font-weight: 800; color: #4da6ff; border-bottom: 2px solid #f0f0f0; padding-bottom: 10px; margin-bottom: 20px;">
+                            Día ${cuentaDia} <span style="color:#999; font-size: 16px; font-weight: 400; margin-left: 8px;">— ${stringFecha}</span>
+                        </h2>
+                `;
+
+                evs.forEach(ev => {
+                    let tituloVisual = ev.title;
+                    let tiempoVisual = ev.time || '--:--';
+                    let iconoVisual = ev.type === 'transport' ? '🚂' : (ev.type === 'hotel' ? '🏨' : '📍');
+                    let colorBorde = ev.type === 'transport' ? '#4da6ff' : (ev.type === 'hotel' ? '#4dff88' : '#ff4d4d');
+                    
+                    if (ev.type === 'hotel') {
+                        if (ev.hotelType === 'hotel-checkin') tituloVisual = `Check-in: ${ev.title}`;
+                        else if (ev.hotelType === 'hotel-checkout') tituloVisual = `Check-out: ${ev.title}`;
+                        else { tituloVisual = `Noche en: ${ev.title}`; tiempoVisual = '--:--'; }
+                    }
+
+                    htmlFormato += `
+                        <div style="display: flex; align-items: flex-start; margin-bottom: 16px; background: #fafafa; padding: 20px; border-radius: 12px; border-left: 5px solid ${colorBorde}; box-shadow: 0 4px 10px rgba(0,0,0,0.03);">
+                            <div style="font-weight: 800; font-size: 16px; min-width: 70px; color: #333; padding-top:2px;">${tiempoVisual}</div>
+                            <div style="font-size: 22px; margin: 0 20px;">${iconoVisual}</div>
+                            <div style="flex: 1;">
+                                <div style="font-weight: 700; font-size: 18px; color: #111;">${tituloVisual}</div>
+                                ${ev.notes ? `<div style="color: #666; font-size: 14px; margin-top: 6px; white-space: pre-wrap; line-height: 1.5;">${ev.notes}</div>` : ''}
+                            </div>
+                        </div>
+                    `;
+                });
+                htmlFormato += `</div>`;
+                cuentaDia++;
+            });
+
+            htmlFormato += `
+                <div style="margin-top: 60px; text-align: center; color: #888; font-size: 14px; border-top: 1px solid #eaeaea; padding-top: 25px;">
+                    Planificado y generado de forma segura a través de <strong style="color: #ff4d4d;">interra-hub.vercel.app</strong>
+                </div>
+            `;
+
+            pdfContainer.innerHTML = htmlFormato;
+            document.body.appendChild(pdfContainer);
+
+            try {
+                // Generamos la imagen con html2canvas
+                const canvas = await html2canvas(pdfContainer, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
+                const imgData = canvas.toDataURL('image/jpeg', 1.0);
+                
+                const { jsPDF } = window.jspdf;
+                const pdf = new jsPDF('p', 'mm', 'a4');
+                const anchoPdf = pdf.internal.pageSize.getWidth();
+                const altoPdf = (canvas.height * anchoPdf) / canvas.width;
+                
+                let alturaRestante = altoPdf;
+                let posicionY = 0;
+
+                pdf.addImage(imgData, 'JPEG', 0, posicionY, anchoPdf, altoPdf);
+                alturaRestante -= pdf.internal.pageSize.getHeight();
+
+                // Multipage support
+                while (alturaRestante >= 0) {
+                    posicionY = alturaRestante - altoPdf;
+                    pdf.addPage();
+                    pdf.addImage(imgData, 'JPEG', 0, posicionY, anchoPdf, altoPdf);
+                    alturaRestante -= pdf.internal.pageSize.getHeight();
+                }
+
+                pdf.save(`Itinerario_${currentTripData.nombre.replace(/\s+/g, '_')}.pdf`);
+                
+                localStorage.setItem(mesLlave, usoActual + 1);
+                showToast(`PDF Exportado correctamente (${usoActual + 1}/3 usos este mes)`, "success");
+            } catch (e) {
+                console.error(e);
+                showToast("Hubo un error al generar el PDF", "error");
+            } finally {
+                document.body.removeChild(pdfContainer);
+            }
         }
 
         async function renderUsers() {
@@ -848,7 +1012,6 @@
             const solicitudes = currentTripData.solicitudes || {};
             const numSolicitudes = Object.keys(solicitudes).length;
             
-            // Solo admins calculan el badge
             if (isGodUser() || currentUserRole === "admin-grupo") {
                 updateSolicitudesBadge(numSolicitudes);
             }
@@ -893,7 +1056,6 @@
             return user && user.email === SUPERADMIN_EMAIL;
         }
 
-        // 👇 FUNCIÓN DE COPIAR AÑADIDA 👇
         window.copiarCodigoViaje = function() {
             if (currentTripData && currentTripData.codigoInvitacion) {
                 navigator.clipboard.writeText(currentTripData.codigoInvitacion).then(() => {
@@ -932,7 +1094,7 @@
         }
 
         window.openModal = function(dateKey, dateStr) {
-            editingEventId = null; // Modo Creación
+            editingEventId = null; 
             selectedDateKey = dateKey;
             
             document.getElementById('modal-main-title').innerText = "Añadir a la ruta";
@@ -959,14 +1121,11 @@
             document.getElementById('modal-date-subtitle').innerText = `Día: ${ev.dateKey.split('-').reverse().join('/')}`;
             document.getElementById('omni-form').reset();
             
-            // Ocultar selector de tipos porque estamos editando uno específico
             document.getElementById('modal-type-selector').style.display = 'none';
 
-            // Seleccionar y mostrar la tab correspondiente al tipo
             const btn = document.querySelector(`.type-btn[data-type="${ev.type}"]`);
             if(btn) switchModalTab(ev.type, btn);
 
-            // Poblar campos
             document.getElementById('common-notes').value = ev.notes || '';
 
             if (ev.type === 'transport') {
@@ -977,7 +1136,6 @@
                 document.getElementById('plan-title').value = ev.title || '';
             } else if (ev.type === 'hotel') {
                 document.getElementById('hotel-search').value = ev.title || '';
-                // Al editar un hotel multidia, por seguridad y UX, bloqueamos editar fechas completas, solo info local
                 document.getElementById('hotel-dates-wrapper').style.display = 'none';
                 document.getElementById('hotel-edit-warning').style.display = 'block';
             }
@@ -1026,7 +1184,6 @@
             
             let updatedEventos = [...currentTripData.eventos];
 
-            // SI ESTAMOS EDITANDO
             if (editingEventId) {
                 const index = updatedEventos.findIndex(ev => ev.id === editingEventId);
                 if (index !== -1) {
@@ -1043,7 +1200,6 @@
                     baseEv.notes = notes;
                 }
             } 
-            // SI ESTAMOS CREANDO
             else {
                 let nuevosEventos = [];
                 if (currentModalType === 'transport') {
