@@ -767,17 +767,19 @@
             if(mapInitialized) updateMapData();
         }
 
-        // ── INICIALIZACIÓN DE LEAFLET ──
+        // ── INICIALIZACIÓN DE LEAFLET (PREFER CANVAS PARA HTML2CANVAS) ──
         function initMap() {
             if (mapInitialized) return;
-            map = L.map('map-container').setView([48.8566, 2.3522], 4); 
+            // IMPORTANTE: preferCanvas soluciona que HTML2Canvas no dibuje las lineas
+            map = L.map('map-container', { preferCanvas: true }).setView([48.8566, 2.3522], 4); 
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '© OpenStreetMap contributors',
                 crossOrigin: true
             }).addTo(map);
 
             markersLayer = L.layerGroup().addTo(map);
-            routeLayer = L.polyline([], {color: 'var(--accent)', weight: 3, dashArray: '5, 10'}).addTo(map);
+            // Usamos HEX directo para asegurar la foto en Canvas
+            routeLayer = L.polyline([], {color: '#ff4d4d', weight: 3, dashArray: '5, 10'}).addTo(map);
             mapInitialized = true;
         }
 
@@ -885,7 +887,7 @@
                         tabMapa.style.display = 'block';
                         tabMapa.style.opacity = '0'; // Lo ocultamos visualmente al usuario
                         map.invalidateSize();
-                        await new Promise(r => setTimeout(r, 400)); // Damos tiempo a cargar los tiles (mapa)
+                        await new Promise(r => setTimeout(r, 800)); // Damos tiempo a cargar los tiles (mapa)
                     }
 
                     const mapEl = document.getElementById('map-container');
