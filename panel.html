@@ -467,7 +467,7 @@
             if (step === 'create') {
                 const isGod = currentUser.email === SUPERADMIN_EMAIL;
                 if (adminTripsCount >= 1 && !isGod) {
-                    showToast("Límite de viajes alcanzado. Solo puedes organizar 1 viaje en la versión gratuita, pero puedes unirte a infinitos.", "error");
+                    showToast("Límite de viajes alcanzado. Suscribete a Interra-hub PRO para poder crear viajes ilimitados.", "error");
                     return;
                 }
             }
