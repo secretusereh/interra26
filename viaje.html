@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>                        Interra-hub.</title>
+    <title>Interra-hub.</title>
     
     <link rel="icon" type="image/png" href="interrahublogo.PNG">
     
@@ -58,8 +58,19 @@
         .btn-nav:hover { color: var(--primary); }
         .btn-export { color: var(--primary); background: rgba(255,255,255,0.1); padding: 0.5rem 1rem; border-radius: 20px; }
         .btn-export:hover { background: var(--primary); color: var(--bg-color); }
-        
-        .logo { font-weight: 800; font-size: 1.3rem; display: flex; align-items: center; gap: 4px; letter-spacing: -0.5px;}
+        .logo { 
+    font-weight: 800; 
+    font-size: 1.3rem; 
+    display: flex; 
+    align-items: center; 
+    gap: 4px; 
+    letter-spacing: -0.5px;
+    
+    /* ESTO ES LO NUEVO PARA CENTRARLO ABSOLUTAMENTE */
+    position: absolute; 
+    left: 50%; 
+    transform: translateX(-50%);
+}
 
         /* Loader a pantalla completa */
         #page-loader {
