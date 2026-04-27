@@ -318,6 +318,17 @@
     </main>
 
     <main id="tab-usuarios" class="tab-content">
+
+        <div class="user-section" style="margin-bottom: 2rem; text-align: center; border-color: var(--border-subtle);">
+            <h3 style="justify-content: center;"><i data-lucide="key"></i> Código de Invitación</h3>
+            <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem;">Comparte este código para que tus amigos puedan enviar una solicitud para unirse a esta aventura.</p>
+            <div style="background: rgba(255,255,255,0.03); padding: 1.5rem; border-radius: 16px; border: 1px dashed var(--border-subtle); max-width: 300px; margin: 0 auto;">
+                <div style="font-size: 2.5rem; font-weight: 800; letter-spacing: 8px; color: var(--primary); margin-bottom: 15px;" id="display-trip-code">-----</div>
+                <button class="btn-nav btn-export" style="margin: 0 auto; background: rgba(255,255,255,0.05);" onclick="copiarCodigoViaje()">
+                    <i data-lucide="copy" style="width: 16px;"></i> Copiar Código
+                </button>
+            </div>
+        </div>
         <div class="users-grid">
             <div class="user-section">
                 <h3><i data-lucide="users"></i> Miembros del Viaje</h3>
@@ -509,6 +520,9 @@
 
             if (tripSnap.exists()) {
                 currentTripData = tripSnap.data();
+                
+                // 👇 CÓDIGO INYECTADO 👇
+                document.getElementById('display-trip-code').innerText = currentTripData.codigoInvitacion || '-----';
                 
                 const miembros = currentTripData.miembros || {};
                 const isGod = user.email === SUPERADMIN_EMAIL;
@@ -866,6 +880,17 @@
         function isGodUser() {
             const user = auth.currentUser;
             return user && user.email === SUPERADMIN_EMAIL;
+        }
+
+        // 👇 FUNCIÓN DE COPIAR AÑADIDA 👇
+        window.copiarCodigoViaje = function() {
+            if (currentTripData && currentTripData.codigoInvitacion) {
+                navigator.clipboard.writeText(currentTripData.codigoInvitacion).then(() => {
+                    showToast("Código copiado al portapapeles", "success");
+                }).catch(err => {
+                    showToast("Error al copiar", "error");
+                });
+            }
         }
 
         window.gestionarSolicitud = async function(uid, rolElegido) {
