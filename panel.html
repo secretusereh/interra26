@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Interra-hub | Panel Maestro</title>
     
+    <!-- FAVICON -->
+    <link rel="icon" type="image/png" href="interrahublogo.PNG">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;800&display=swap" rel="stylesheet">
@@ -193,6 +196,61 @@
         .btn-submit:hover:not(:disabled) { letter-spacing: 1px; }
         .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; }
 
+        /* ── SELECTOR DE ACCIÓN (Crear o Unirse) ── */
+        .action-selector {
+            display: flex; gap: 1.2rem; margin-bottom: 2.5rem;
+        }
+        .action-btn {
+            flex: 1; background: rgba(255,255,255,0.03); border: 1px solid var(--border-subtle);
+            color: var(--text-muted); padding: 1.5rem 1rem; border-radius: 20px;
+            cursor: pointer; transition: var(--transition); text-align: center;
+            display: flex; flex-direction: column; align-items: center; gap: 10px;
+        }
+        .action-btn span.action-label { font-weight: 700; font-size: 0.95rem; color: var(--primary); }
+        .action-btn span.action-desc { font-size: 0.75rem; color: var(--text-muted); line-height: 1.4; }
+        .action-btn:hover, .action-btn.active {
+            border-color: var(--primary); background: rgba(255,255,255,0.06); color: var(--primary);
+        }
+        .action-btn.active { background: rgba(255,255,255,0.08); }
+
+        /* ── PANEL DEL CÓDIGO DE VIAJE (tras creación) ── */
+        .trip-code-display {
+            background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 20px; padding: 2rem; text-align: center; margin-bottom: 2rem;
+        }
+        .trip-code-display p.code-label {
+            font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase;
+            letter-spacing: 2px; margin-bottom: 1rem; font-weight: 600;
+        }
+        .trip-code-display .code-value {
+            font-size: 2.8rem; font-weight: 800; letter-spacing: 10px; color: var(--primary);
+            margin-bottom: 1rem; font-variant-numeric: tabular-nums;
+        }
+        .btn-copy-code {
+            background: transparent; border: 1px solid var(--border-subtle); color: var(--text-muted);
+            padding: 0.7rem 1.5rem; border-radius: 30px; font-size: 0.85rem; font-weight: 600;
+            cursor: pointer; transition: var(--transition); display: inline-flex; align-items: center; gap: 8px;
+        }
+        .btn-copy-code:hover { border-color: var(--primary); color: var(--primary); }
+
+        /* ── INPUT CÓDIGO GRANDE ── */
+        .code-input-big {
+            width: 100%; padding: 1.5rem; background: rgba(255,255,255,0.03);
+            border: 1px solid var(--border-subtle); color: white; border-radius: 16px;
+            font-size: 2rem; font-weight: 800; letter-spacing: 8px; text-align: center;
+            text-transform: uppercase; outline: none; transition: 0.3s;
+        }
+        .code-input-big:focus { border-color: var(--primary); background: rgba(255,255,255,0.06); }
+
+        /* ── ESTADO SOLICITUD ENVIADA ── */
+        .join-success-box {
+            background: rgba(77, 255, 77, 0.05); border: 1px solid rgba(77, 255, 77, 0.2);
+            border-radius: 16px; padding: 1.5rem; text-align: center; margin-bottom: 1.5rem;
+            display: none;
+        }
+        .join-success-box.visible { display: block; }
+        .join-success-box p { color: var(--success); font-size: 0.9rem; line-height: 1.6; }
+
         #toast-container { position: fixed; bottom: 40px; right: 40px; z-index: 20000; display: flex; flex-direction: column; gap: 15px; }
         .toast {
             background: rgba(15, 15, 15, 0.95); backdrop-filter: blur(10px); border: 1px solid var(--border-subtle);
@@ -236,24 +294,93 @@
         </div>
     </main>
 
+    <!-- ══════════════════════════════════════════════
+         MODAL PRINCIPAL: CREAR O UNIRSE
+         ══════════════════════════════════════════════ -->
     <div class="modal-overlay" id="create-modal">
         <div class="modal-content">
-            <h2 style="font-size: 2rem; font-weight: 800; margin-bottom: 2.5rem; letter-spacing: -1px;">Nueva Ruta</h2>
-            <form id="create-trip-form">
-                <div class="input-group">
-                    <label>Nombre del Viaje</label>
-                    <input type="text" id="trip-name" required placeholder="Ej. Costa Amalfitana 2026">
+
+            <!-- PASO 0: Selector de acción -->
+            <div id="step-choose">
+                <h2 style="font-size: 2rem; font-weight: 800; margin-bottom: 0.5rem; letter-spacing: -1px;">Nueva Aventura</h2>
+                <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 2.5rem; font-weight: 300;">¿Qué quieres hacer?</p>
+                <div class="action-selector">
+                    <button class="action-btn" id="choose-create" onclick="goToStep('create')">
+                        <i data-lucide="plus-circle" style="width: 32px; height: 32px; color: var(--primary);"></i>
+                        <span class="action-label">Crear viaje</span>
+                        <span class="action-desc">Soy el organizador y quiero planificar una nueva ruta</span>
+                    </button>
+                    <button class="action-btn" id="choose-join" onclick="goToStep('join')">
+                        <i data-lucide="key-round" style="width: 32px; height: 32px; color: var(--accent-blue);"></i>
+                        <span class="action-label">Unirse</span>
+                        <span class="action-desc">Tengo un código de invitación y quiero apuntarme</span>
+                    </button>
                 </div>
-                <div class="input-group">
-                    <label>Rango de Fechas</label>
-                    <input type="text" id="trip-range" required readonly placeholder="Selecciona el periodo">
+                <button type="button" onclick="closeModal()" style="background:none; border:none; color:var(--text-muted); width:100%; cursor:pointer; font-size: 0.8rem; font-weight: 600;">CANCELAR</button>
+            </div>
+
+            <!-- PASO 1A: Formulario de CREACIÓN -->
+            <div id="step-create" style="display: none;">
+                <h2 style="font-size: 2rem; font-weight: 800; margin-bottom: 2.5rem; letter-spacing: -1px;">Nueva Ruta</h2>
+                <form id="create-trip-form">
+                    <div class="input-group">
+                        <label>Nombre del Viaje</label>
+                        <input type="text" id="trip-name" required placeholder="Ej. Costa Amalfitana 2026">
+                    </div>
+                    <div class="input-group">
+                        <label>Rango de Fechas</label>
+                        <input type="text" id="trip-range" required readonly placeholder="Selecciona el periodo">
+                    </div>
+                    <button type="submit" class="btn-submit" id="btn-create-submit">CREAR RUTA</button>
+                    <button type="button" onclick="goToStep('choose')" style="background:none; border:none; color:var(--text-muted); width:100%; margin-top:1.5rem; cursor:pointer; font-size: 0.8rem; font-weight: 600;">← VOLVER</button>
+                </form>
+            </div>
+
+            <!-- PASO 1B: Formulario de UNIRSE -->
+            <div id="step-join" style="display: none;">
+                <h2 style="font-size: 2rem; font-weight: 800; margin-bottom: 0.5rem; letter-spacing: -1px;">Unirse a un viaje</h2>
+                <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 2.5rem; font-weight: 300;">Introduce el código de 5 caracteres que te ha compartido el organizador.</p>
+                
+                <div class="join-success-box" id="join-success-box">
+                    <p>✅ <strong>Solicitud enviada correctamente.</strong><br>El organizador del viaje recibirá tu petición y te asignará un rol. Vuelve más tarde para comprobar si tienes acceso.</p>
                 </div>
-                <button type="submit" class="btn-submit">CREAR RUTA</button>
-                <button type="button" id="btn-close-modal" style="background:none; border:none; color:var(--text-muted); width:100%; margin-top:2rem; cursor:pointer; font-size: 0.8rem; font-weight: 600;">CANCELAR</button>
-            </form>
+
+                <div id="join-form-inner">
+                    <div class="input-group">
+                        <label>Código del viaje</label>
+                        <input type="text" id="join-code-input" class="code-input-big" maxlength="5" placeholder="XYZAB" autocomplete="off">
+                    </div>
+                    <button type="button" class="btn-submit" id="btn-join-submit" onclick="joinByCode()">ENVIAR SOLICITUD</button>
+                </div>
+                <button type="button" onclick="goToStep('choose')" style="background:none; border:none; color:var(--text-muted); width:100%; margin-top:1.5rem; cursor:pointer; font-size: 0.8rem; font-weight: 600;">← VOLVER</button>
+            </div>
+
+            <!-- PASO 2: Código generado (tras crear) -->
+            <div id="step-code" style="display: none;">
+                <div style="text-align: center; margin-bottom: 2rem;">
+                    <i data-lucide="check-circle" style="width: 48px; height: 48px; color: var(--success); margin-bottom: 1rem;"></i>
+                    <h2 style="font-size: 1.8rem; font-weight: 800; letter-spacing: -1px; margin-bottom: 0.5rem;">¡Viaje creado!</h2>
+                    <p style="color: var(--text-muted); font-size: 0.9rem; font-weight: 300;">Comparte este código con los participantes para que puedan solicitar unirse.</p>
+                </div>
+                <div class="trip-code-display">
+                    <p class="code-label">Código del viaje</p>
+                    <div class="code-value" id="generated-code-display">-----</div>
+                    <button class="btn-copy-code" onclick="copyTripCode()">
+                        <i data-lucide="copy" style="width: 14px;"></i> Copiar código
+                    </button>
+                </div>
+                <p style="color: var(--text-muted); font-size: 0.8rem; text-align: center; margin-bottom: 2rem; line-height: 1.6;">
+                    También puedes encontrar este código en la pestaña <strong style="color:white;">Equipo y Accesos</strong> dentro del viaje en cualquier momento.
+                </p>
+                <button type="button" class="btn-submit" onclick="closeModalAndRefresh()">IR A MIS VIAJES</button>
+            </div>
+
         </div>
     </div>
 
+    <!-- ══════════════════════════════════════════════
+         MODAL DE CONFIRMACIÓN DE BORRADO
+         ══════════════════════════════════════════════ -->
     <div class="modal-overlay" id="delete-modal">
         <div class="modal-content" style="border-color: var(--accent);">
             <h2 style="font-size: 1.8rem; font-weight: 800; margin-bottom: 1rem; color: var(--accent); display: flex; align-items: center; gap: 10px;">
@@ -277,8 +404,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
-        // Añadido 'deleteDoc' a la importación de firestore
-        import { getFirestore, collection, addDoc, getDocs, doc, setDoc, getDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, getDocs, doc, setDoc, getDoc, deleteDoc, query, where } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDRkUJnDLzknFz3KOnPEm4UFsgf6R4z1Uk",
@@ -294,9 +420,11 @@
         const db = getFirestore(app);
 
         let currentUser = null;
-        let adminTripsCount = 0; // Contador para limitar creación de viajes
+        let adminTripsCount = 0;
+        let generatedTripCode = null;
         const SUPERADMIN_EMAIL = "tu_correo@gmail.com"; 
 
+        // ── TOASTS ──
         function showToast(message, type = 'success') {
             const container = document.getElementById('toast-container');
             const toast = document.createElement('div');
@@ -312,6 +440,31 @@
             }, 4000);
         }
 
+        // ── GENERADOR DE CÓDIGO ÚNICO DE 5 CARACTERES ──
+        function generateTripCode() {
+            const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+            let code = '';
+            for (let i = 0; i < 5; i++) {
+                code += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return code;
+        }
+
+        // Verifica que el código no esté ya en uso en Firestore
+        async function generateUniqueCode() {
+            let code;
+            let attempts = 0;
+            do {
+                code = generateTripCode();
+                attempts++;
+                const q = query(collection(db, "viajes"), where("codigoInvitacion", "==", code));
+                const snap = await getDocs(q);
+                if (snap.empty) break;
+            } while (attempts < 10);
+            return code;
+        }
+
+        // ── FLATPICKR ──
         const rangePicker = flatpickr("#trip-range", { 
             mode: "range", 
             minDate: "today", 
@@ -320,7 +473,109 @@
             disableMobile: "true"
         });
 
-        // Asegura que el perfil del usuario existe en Firestore
+        // ── NAVEGACIÓN DE PASOS DEL MODAL ──
+        window.goToStep = function(step) {
+            document.getElementById('step-choose').style.display = 'none';
+            document.getElementById('step-create').style.display = 'none';
+            document.getElementById('step-join').style.display = 'none';
+            document.getElementById('step-code').style.display = 'none';
+
+            if (step === 'choose') document.getElementById('step-choose').style.display = 'block';
+            else if (step === 'create') document.getElementById('step-create').style.display = 'block';
+            else if (step === 'join') {
+                document.getElementById('step-join').style.display = 'block';
+                document.getElementById('join-code-input').value = '';
+                document.getElementById('join-success-box').classList.remove('visible');
+                document.getElementById('join-form-inner').style.display = 'block';
+            }
+            else if (step === 'code') document.getElementById('step-code').style.display = 'block';
+
+            lucide.createIcons();
+        }
+
+        window.closeModal = function() {
+            document.getElementById('create-modal').classList.remove('active');
+        }
+
+        window.closeModalAndRefresh = function() {
+            closeModal();
+            loadTrips();
+        }
+
+        window.copyTripCode = function() {
+            if (generatedTripCode) {
+                navigator.clipboard.writeText(generatedTripCode).then(() => {
+                    showToast("Código copiado al portapapeles");
+                });
+            }
+        }
+
+        // ── UNIRSE A UN VIAJE POR CÓDIGO ──
+        window.joinByCode = async function() {
+            const codeRaw = document.getElementById('join-code-input').value.trim().toUpperCase();
+            if (codeRaw.length !== 5) {
+                showToast("El código debe tener exactamente 5 caracteres", "error");
+                return;
+            }
+
+            const btn = document.getElementById('btn-join-submit');
+            btn.innerText = "Buscando...";
+            btn.disabled = true;
+
+            try {
+                // Buscar el viaje con ese código de invitación
+                const q = query(collection(db, "viajes"), where("codigoInvitacion", "==", codeRaw));
+                const snap = await getDocs(q);
+
+                if (snap.empty) {
+                    showToast("No se encontró ningún viaje con ese código", "error");
+                    btn.innerText = "ENVIAR SOLICITUD";
+                    btn.disabled = false;
+                    return;
+                }
+
+                const tripDoc = snap.docs[0];
+                const tripData = tripDoc.data();
+                const tripId = tripDoc.id;
+
+                // Comprobar si ya es miembro
+                if (tripData.miembros && tripData.miembros[currentUser.uid]) {
+                    showToast("¡Ya eres miembro de este viaje!", "error");
+                    btn.innerText = "ENVIAR SOLICITUD";
+                    btn.disabled = false;
+                    return;
+                }
+
+                // Comprobar si ya tiene solicitud pendiente
+                if (tripData.solicitudes && tripData.solicitudes[currentUser.uid]) {
+                    showToast("Ya tienes una solicitud pendiente en este viaje", "error");
+                    btn.innerText = "ENVIAR SOLICITUD";
+                    btn.disabled = false;
+                    return;
+                }
+
+                // Enviar solicitud
+                const tripRef = doc(db, "viajes", tripId);
+                await setDoc(tripRef, {
+                    solicitudes: {
+                        [currentUser.uid]: currentUser.email
+                    }
+                }, { merge: true });
+
+                // Mostrar confirmación en el modal
+                document.getElementById('join-form-inner').style.display = 'none';
+                document.getElementById('join-success-box').classList.add('visible');
+                showToast(`Solicitud enviada para "${tripData.nombre}"`);
+
+            } catch (error) {
+                console.error(error);
+                showToast("Error al procesar la solicitud", "error");
+                btn.innerText = "ENVIAR SOLICITUD";
+                btn.disabled = false;
+            }
+        }
+
+        // ── ASEGURAR PERFIL DE USUARIO ──
         async function ensureUserProfile(user) {
             const userRef = doc(db, "usuarios", user.uid);
             const snap = await getDoc(userRef);
@@ -358,31 +613,26 @@
             container.innerHTML = '';
             container.appendChild(addBtn);
             
-            // Resetear el contador en cada carga
             adminTripsCount = 0;
 
             try {
                 const querySnapshot = await getDocs(collection(db, "viajes"));
                 let todosLosViajes = [];
-                let usuarioEsEditorEnAlgunaParte = false;
 
                 querySnapshot.forEach(d => {
                     const trip = { id: d.id, ...d.data() };
                     todosLosViajes.push(trip);
                     const rol = trip.miembros ? trip.miembros[currentUser.uid] : null;
-                    if (rol === 'admin-grupo' || rol === 'editor-grupo') usuarioEsEditorEnAlgunaParte = true;
-                    if (rol === 'admin-grupo') adminTripsCount++; // Sumamos viajes administrados
+                    if (rol === 'admin-grupo') adminTripsCount++;
                 });
 
                 todosLosViajes.forEach((trip, i) => {
                     let rolAqui = trip.miembros ? trip.miembros[currentUser.uid] : null;
                     const isGod = currentUser.email === SUPERADMIN_EMAIL;
 
-                    if (!rolAqui && !isGod && usuarioEsEditorEnAlgunaParte) {
-                        rolAqui = 'visor-global';
-                    }
-
+                    // Solo tiene acceso si es miembro explícito o superadmin
                     const tieneAcceso = rolAqui || isGod;
+
                     const card = document.createElement('div');
                     card.className = `trip-card ${tieneAcceso ? 'unlocked' : 'locked'}`;
                     
@@ -390,12 +640,10 @@
 
                     let badgeContent = '';
                     if (isGod) badgeContent = `<span class="role-badge" style="background:var(--accent); border-color:var(--accent);">NIVEL DIOS</span>`;
-                    else if (rolAqui === 'visor-global') badgeContent = `<span class="role-badge" style="color:var(--accent-blue); border-color:var(--accent-blue);">VISOR COMUNIDAD</span>`;
                     else if (rolAqui) badgeContent = `<span class="role-badge">${rolAqui.replace('-', ' ')}</span>`;
 
                     const solicitado = trip.solicitudes && trip.solicitudes[currentUser.uid];
 
-                    // Si es admin o Dios, inyectamos el botón de borrar
                     const deleteBtnHtml = (rolAqui === 'admin-grupo' || isGod) ? `
                         <button class="btn-delete-trip" onclick="confirmDeleteTrip(event, '${trip.id}', '${trip.nombre.replace(/'/g, "\\'")}')" title="Borrar viaje permanentemente">
                             <i data-lucide="trash-2"></i>
@@ -412,9 +660,10 @@
                         ${!tieneAcceso ? `
                             <div class="locked-overlay">
                                 <i data-lucide="lock" style="width: 30px; height: 30px; margin-bottom: 15px;"></i>
-                                <button class="btn-request" onclick="requestAccess(event, '${trip.id}', '${trip.nombre.replace(/'/g, "\\'")}')" ${solicitado ? 'disabled' : ''}>
-                                    ${solicitado ? '<i data-lucide="clock"></i> SOLICITUD ENVIADA' : 'PEDIR ACCESO'}
-                                </button>
+                                ${solicitado 
+                                    ? `<button class="btn-request" disabled><i data-lucide="clock"></i> SOLICITUD ENVIADA</button>`
+                                    : `<p style="color: var(--text-muted); font-size: 0.85rem; text-align: center;">Necesitas un código de invitación para acceder a este viaje.</p>`
+                                }
                             </div>
                         ` : ''}
                     `;
@@ -433,11 +682,11 @@
             }
         }
 
-        // ── LÓGICA DE BORRADO DE VIAJES ──
+        // ── BORRADO DE VIAJES ──
         let tripToDeleteId = null;
 
         window.confirmDeleteTrip = (event, tripId, tripName) => {
-            event.stopPropagation(); // Evita que se dispare el click de entrar al viaje
+            event.stopPropagation();
             tripToDeleteId = tripId;
             document.getElementById('delete-trip-name').innerText = tripName;
             document.getElementById('delete-confirm-input').value = '';
@@ -466,7 +715,7 @@
                     
                     showToast("Viaje borrado de la nube permanentemente", "success");
                     closeDeleteModal();
-                    loadTrips(); // Recargamos para que desaparezca
+                    loadTrips();
                 } catch (error) {
                     console.error("Error borrando el viaje:", error);
                     showToast("Error de permisos al intentar borrar", "error");
@@ -477,40 +726,23 @@
             }
         };
 
-        window.requestAccess = async (event, tripId, tripName) => {
-            event.stopPropagation();
-            try {
-                const tripRef = doc(db, "viajes", tripId);
-                await setDoc(tripRef, {
-                    solicitudes: {
-                        [currentUser.uid]: currentUser.email
-                    }
-                }, { merge: true });
-                showToast(`Petición enviada para ${tripName}`);
-                loadTrips();
-            } catch (error) {
-                console.error(error);
-                showToast("No se pudo enviar la solicitud", "error");
-            }
-        };
-
-        // ── LÓGICA DE CREACIÓN CON LÍMITE DE SUSCRIPCIÓN ──
+        // ── ABRIR MODAL PRINCIPAL ──
         const modal = document.getElementById('create-modal');
         
         document.getElementById('btn-open-modal').onclick = () => {
             const isGod = currentUser.email === SUPERADMIN_EMAIL;
             
-            // Verificamos si ya ha superado el límite de 1 viaje como admin
             if (adminTripsCount >= 1 && !isGod) {
                 showToast("Límite de viajes alcanzado. Suscríbete a Interra-hub PRO para crear viajes ilimitados (Próximamente).", "error");
-                return; // Bloqueamos la apertura del modal
+                return;
             }
             
+            // Siempre abre en el paso de elección
+            goToStep('choose');
             modal.classList.add('active');
         };
-        
-        document.getElementById('btn-close-modal').onclick = () => modal.classList.remove('active');
 
+        // ── CREACIÓN DE VIAJE ──
         document.getElementById('create-trip-form').onsubmit = async (e) => {
             e.preventDefault();
             const dates = rangePicker.selectedDates;
@@ -519,9 +751,17 @@
                 return;
             }
 
+            const btn = document.getElementById('btn-create-submit');
+            btn.innerText = "CREANDO...";
+            btn.disabled = true;
+
             const format = (d) => d.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
             
             try {
+                // Generar código único
+                const codigoInvitacion = await generateUniqueCode();
+                generatedTripCode = codigoInvitacion;
+
                 await addDoc(collection(db, "viajes"), {
                     nombre: document.getElementById('trip-name').value,
                     fechaInicio: format(dates[0]),
@@ -529,14 +769,20 @@
                     miembros: { [currentUser.uid]: "admin-grupo" },
                     eventos: [],
                     solicitudes: {},
+                    codigoInvitacion: codigoInvitacion,
                     creadoEn: new Date()
                 });
-                modal.classList.remove('active');
-                document.getElementById('create-trip-form').reset(); // Limpiamos formulario
-                showToast("Viaje creado correctamente");
-                loadTrips();
+
+                document.getElementById('create-trip-form').reset();
+                document.getElementById('generated-code-display').innerText = codigoInvitacion;
+                goToStep('code');
+                lucide.createIcons();
             } catch (error) {
+                console.error(error);
                 showToast("Error al crear el viaje", "error");
+            } finally {
+                btn.innerText = "CREAR RUTA";
+                btn.disabled = false;
             }
         };
 
