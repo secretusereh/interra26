@@ -937,7 +937,7 @@
             });
         });
         
-        /* ── LÓGICA DE COOKIES "ESTRICTA" ── */
+        /* ── LÓGICA DE COOKIES CON "FRICCIÓN" PARA RECHAZAR ── */
         document.addEventListener("DOMContentLoaded", function() {
             const cookieBanner = document.getElementById('cookie-banner');
             const acceptBtn = document.getElementById('cookie-accept-btn');
@@ -964,10 +964,28 @@
                 cookieBanner.classList.remove('show');
             });
 
-            // Al hacer clic en RECHAZAR -> NO CERRAMOS EL BANNER y avisamos obligando a aceptar
+            // Al hacer clic en RECHAZAR -> Añadimos la fricción solicitada
             rejectBtn.addEventListener('click', (e) => {
                 e.preventDefault();
-                alert('⚠️ Para utilizar Interra-hub y asegurar su correcto funcionamiento, es estrictamente obligatorio que aceptes las cookies. Por favor, haz clic en "Sí, acepto las cookies".');
+                
+                // Primera confirmación
+                const seguro = confirm("¿Estás seguro de que quieres rechazar las opciones?");
+                
+                if (seguro) {
+                    // Segunda confirmación (apelando a ayudar a la app)
+                    const apoyar = confirm("¿Quieres mantenerla para uso publicitario para que la app pueda mantenerse?");
+                    
+                    if (apoyar) {
+                        // Si le da a "Aceptar" en este último mensaje, significa que SÍ quiere apoyarla = Acepta las cookies
+                        localStorage.setItem('interrahub_cookies_consent', 'accepted');
+                        cookieBanner.classList.remove('show');
+                    } else {
+                        // Si le da a "Cancelar", significa que se mantiene en sus trece y las rechaza. Cumplimos la ley y le dejamos.
+                        localStorage.setItem('interrahub_cookies_consent', 'rejected');
+                        cookieBanner.classList.remove('show');
+                    }
+                }
+                // Si en el primer mensaje le da a "Cancelar", no pasa nada, el banner sigue ahí y no se guarda nada.
             });
         });
     </script>
