@@ -432,34 +432,42 @@
         }
         .modal-close:hover { background: rgba(255,255,255,0.12); }
 
-        /* ── AVISO DE COOKIES ── */
+        /* ── AVISO DE COOKIES (CUADRADO FLOTANTE) ── */
         #cookie-banner {
             position: fixed;
-            bottom: -150px; /* Oculto por defecto */
-            left: 0;
-            width: 100%;
+            bottom: 30px;
+            right: 30px;
+            width: 320px;
             background: rgba(20, 20, 20, 0.95);
             backdrop-filter: blur(12px);
-            border-top: 1px solid rgba(255,255,255,0.08);
-            padding: 1.2rem 2rem;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 18px;
+            padding: 1.5rem;
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            flex-direction: column;
+            gap: 1.2rem;
             z-index: 9999;
-            transition: bottom 0.6s var(--transition);
-            box-shadow: 0 -4px 30px rgba(0,0,0,0.6);
-            flex-wrap: wrap;
-            gap: 1rem;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(30px) scale(0.95);
+            transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
         #cookie-banner.show {
-            bottom: 0;
+            opacity: 1;
+            pointer-events: all;
+            transform: translateY(0) scale(1);
+        }
+        .cookie-title {
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--primary);
+            margin-bottom: -0.5rem;
         }
         .cookie-text {
-            flex: 1;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             color: rgba(255,255,255,0.7);
             line-height: 1.6;
-            min-width: 280px;
             font-weight: 300;
         }
         .cookie-text a {
@@ -475,16 +483,19 @@
         }
         .cookie-buttons {
             display: flex;
-            gap: 12px;
+            flex-direction: column;
+            gap: 10px;
         }
         .cookie-btn {
-            padding: 0.8rem 1.5rem;
+            width: 100%;
+            padding: 0.8rem;
             border-radius: 12px;
             font-size: 0.85rem;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
             font-family: 'Sora', sans-serif;
+            text-align: center;
         }
         .cookie-accept {
             background: var(--primary);
@@ -492,33 +503,26 @@
             border: none;
         }
         .cookie-accept:hover {
-            transform: scale(0.96);
+            transform: scale(0.97);
             opacity: 0.9;
         }
         .cookie-reject {
             background: transparent;
-            color: var(--primary);
-            border: 1px solid rgba(255,255,255,0.2);
+            color: rgba(255,255,255,0.5);
+            border: 1px solid rgba(255,255,255,0.15);
         }
         .cookie-reject:hover {
             background: rgba(255,255,255,0.05);
             border-color: rgba(255,255,255,0.4);
+            color: var(--primary);
         }
 
-        @media (max-width: 768px) {
+        /* Adaptación para móviles */
+        @media (max-width: 480px) {
             #cookie-banner {
-                flex-direction: column;
-                text-align: center;
-                padding: 1.5rem 1rem;
-                padding-bottom: 2rem; /* Extra padding para móviles */
-            }
-            .cookie-buttons {
-                width: 100%;
-                justify-content: center;
-                flex-direction: column;
-            }
-            .cookie-btn {
-                width: 100%;
+                bottom: 20px;
+                right: 5%;
+                width: 90%;
             }
         }
     </style>
@@ -669,14 +673,15 @@
         </div>
     </footer>
 
-    <!-- ── AVISO DE COOKIES ── -->
+    <!-- ── AVISO DE COOKIES FLOTANTE ── -->
     <div id="cookie-banner">
+        <div class="cookie-title">🍪 Privacidad en tu viaje</div>
         <div class="cookie-text">
-            Utilizamos cookies propias y de terceros para fines analíticos y para mostrarte publicidad personalizada en base a un perfil elaborado a partir de tus hábitos de navegación. Puedes aceptar todas las cookies o rechazarlas. Más info en nuestra <a id="cookie-privacy-link">Política de Privacidad</a>.
+            Utilizamos cookies propias y de terceros para fines analíticos y mostrarte publicidad adaptada a ti. Debes aceptarlas para garantizar el correcto funcionamiento de la plataforma. Más info en nuestra <a id="cookie-privacy-link">Política de Privacidad</a>.
         </div>
         <div class="cookie-buttons">
+            <button class="cookie-btn cookie-accept" id="cookie-accept-btn">Sí, acepto las cookies</button>
             <button class="cookie-btn cookie-reject" id="cookie-reject-btn">Rechazar opciones</button>
-            <button class="cookie-btn cookie-accept" id="cookie-accept-btn">Aceptar todas</button>
         </div>
     </div>
 
@@ -932,7 +937,7 @@
             });
         });
         
-        /* ── LÓGICA DE COOKIES ── */
+        /* ── LÓGICA DE COOKIES "ESTRICTA" ── */
         document.addEventListener("DOMContentLoaded", function() {
             const cookieBanner = document.getElementById('cookie-banner');
             const acceptBtn = document.getElementById('cookie-accept-btn');
@@ -947,22 +952,22 @@
 
             // Comprobar si ya existe una elección guardada en el navegador
             if (!localStorage.getItem('interrahub_cookies_consent')) {
-                // Damos un pequeño margen de 1 segundo para que entre con una animación suave
+                // Damos un margen de 1.5 segundos para que entre con una animación suave
                 setTimeout(() => {
                     cookieBanner.classList.add('show');
-                }, 1000);
+                }, 1500);
             }
 
-            // Al hacer clic en ACEPTAR
+            // Al hacer clic en ACEPTAR -> Todo correcto, guardamos y cerramos para siempre
             acceptBtn.addEventListener('click', () => {
                 localStorage.setItem('interrahub_cookies_consent', 'accepted');
                 cookieBanner.classList.remove('show');
             });
 
-            // Al hacer clic en RECHAZAR
-            rejectBtn.addEventListener('click', () => {
-                localStorage.setItem('interrahub_cookies_consent', 'rejected');
-                cookieBanner.classList.remove('show');
+            // Al hacer clic en RECHAZAR -> NO CERRAMOS EL BANNER y avisamos obligando a aceptar
+            rejectBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                alert('⚠️ Para utilizar Interra-hub y asegurar su correcto funcionamiento, es estrictamente obligatorio que aceptes las cookies. Por favor, haz clic en "Sí, acepto las cookies".');
             });
         });
     </script>
