@@ -432,7 +432,95 @@
         }
         .modal-close:hover { background: rgba(255,255,255,0.12); }
 
-        @keyframes spin { to { transform: rotate(360deg); } }
+        /* ── AVISO DE COOKIES ── */
+        #cookie-banner {
+            position: fixed;
+            bottom: -150px; /* Oculto por defecto */
+            left: 0;
+            width: 100%;
+            background: rgba(20, 20, 20, 0.95);
+            backdrop-filter: blur(12px);
+            border-top: 1px solid rgba(255,255,255,0.08);
+            padding: 1.2rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 9999;
+            transition: bottom 0.6s var(--transition);
+            box-shadow: 0 -4px 30px rgba(0,0,0,0.6);
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        #cookie-banner.show {
+            bottom: 0;
+        }
+        .cookie-text {
+            flex: 1;
+            font-size: 0.85rem;
+            color: rgba(255,255,255,0.7);
+            line-height: 1.6;
+            min-width: 280px;
+            font-weight: 300;
+        }
+        .cookie-text a {
+            color: var(--primary);
+            font-weight: 600;
+            text-decoration: underline;
+            text-decoration-color: rgba(255,255,255,0.2);
+            transition: 0.3s;
+            cursor: pointer;
+        }
+        .cookie-text a:hover {
+            opacity: 0.8;
+        }
+        .cookie-buttons {
+            display: flex;
+            gap: 12px;
+        }
+        .cookie-btn {
+            padding: 0.8rem 1.5rem;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Sora', sans-serif;
+        }
+        .cookie-accept {
+            background: var(--primary);
+            color: var(--bg-color);
+            border: none;
+        }
+        .cookie-accept:hover {
+            transform: scale(0.96);
+            opacity: 0.9;
+        }
+        .cookie-reject {
+            background: transparent;
+            color: var(--primary);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .cookie-reject:hover {
+            background: rgba(255,255,255,0.05);
+            border-color: rgba(255,255,255,0.4);
+        }
+
+        @media (max-width: 768px) {
+            #cookie-banner {
+                flex-direction: column;
+                text-align: center;
+                padding: 1.5rem 1rem;
+                padding-bottom: 2rem; /* Extra padding para móviles */
+            }
+            .cookie-buttons {
+                width: 100%;
+                justify-content: center;
+                flex-direction: column;
+            }
+            .cookie-btn {
+                width: 100%;
+            }
+        }
     </style>
 </head>
 <body>
@@ -580,6 +668,17 @@
             <div class="footer-copy">© 2025 Interra-hub · Todos los derechos reservados</div>
         </div>
     </footer>
+
+    <!-- ── AVISO DE COOKIES ── -->
+    <div id="cookie-banner">
+        <div class="cookie-text">
+            Utilizamos cookies propias y de terceros para fines analíticos y para mostrarte publicidad personalizada en base a un perfil elaborado a partir de tus hábitos de navegación. Puedes aceptar todas las cookies o rechazarlas. Más info en nuestra <a id="cookie-privacy-link">Política de Privacidad</a>.
+        </div>
+        <div class="cookie-buttons">
+            <button class="cookie-btn cookie-reject" id="cookie-reject-btn">Rechazar opciones</button>
+            <button class="cookie-btn cookie-accept" id="cookie-accept-btn">Aceptar todas</button>
+        </div>
+    </div>
 
     <div class="modal-overlay" id="modal-tos">
         <div class="modal-box">
@@ -830,6 +929,40 @@
         document.querySelectorAll('.modal-overlay').forEach(overlay => {
             overlay.addEventListener('click', (e) => {
                 if (e.target === overlay) closeModal(overlay.id);
+            });
+        });
+        
+        /* ── LÓGICA DE COOKIES ── */
+        document.addEventListener("DOMContentLoaded", function() {
+            const cookieBanner = document.getElementById('cookie-banner');
+            const acceptBtn = document.getElementById('cookie-accept-btn');
+            const rejectBtn = document.getElementById('cookie-reject-btn');
+            const privacyLink = document.getElementById('cookie-privacy-link');
+
+            // Abrir tu modal de privacidad desde el enlace del banner
+            privacyLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                openModal('modal-privacy');
+            });
+
+            // Comprobar si ya existe una elección guardada en el navegador
+            if (!localStorage.getItem('interrahub_cookies_consent')) {
+                // Damos un pequeño margen de 1 segundo para que entre con una animación suave
+                setTimeout(() => {
+                    cookieBanner.classList.add('show');
+                }, 1000);
+            }
+
+            // Al hacer clic en ACEPTAR
+            acceptBtn.addEventListener('click', () => {
+                localStorage.setItem('interrahub_cookies_consent', 'accepted');
+                cookieBanner.classList.remove('show');
+            });
+
+            // Al hacer clic en RECHAZAR
+            rejectBtn.addEventListener('click', () => {
+                localStorage.setItem('interrahub_cookies_consent', 'rejected');
+                cookieBanner.classList.remove('show');
             });
         });
     </script>
