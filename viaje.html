@@ -1,9 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta name="google-adsense-account" content="ca-pub-5192479241046494">
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5192479241046494"
-     crossorigin="anonymous"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Interra-hub.</title>
@@ -81,7 +78,7 @@
 
         /* Cabecera y Tabs */
         .trip-header { padding: 3rem 5% 1rem; max-width: 1000px; margin: 0 auto; text-align: center; }
-        .trip-header h1 { font-size: 3.5rem; font-weight: 800; letter-spacing: -2px; margin-bottom: 0.5rem; }
+        .trip-header h1 { font-size: 3.5rem; font-weight: 800; letter-spacing: -2px; margin-bottom: 0.5rem; word-break: break-word; }
         .trip-header p { color: var(--text-muted); font-size: 1.1rem; }
 
         .tabs-container {
@@ -121,7 +118,7 @@
             padding: 0.5rem 0 1rem; border-bottom: 1px solid var(--border-subtle); margin-bottom: 1.5rem;
             position: sticky; top: 65px; background: rgba(3, 3, 3, 0.7); backdrop-filter: blur(12px); z-index: 10;
         }
-        .day-title { font-size: 1.6rem; font-weight: 600; display: flex; align-items: baseline; gap: 10px; }
+        .day-title { font-size: 1.6rem; font-weight: 600; display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
         .day-date { font-size: 1rem; color: var(--text-muted); font-weight: 300; }
         
         .btn-add-day {
@@ -161,7 +158,7 @@
             width: 42px; height: 42px; min-width: 42px; border-radius: 12px; display: flex; justify-content: center; align-items: center; 
             background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.05);
         }
-        .event-content { flex: 1; padding-top: 2px; }
+        .event-content { flex: 1; padding-top: 2px; word-break: break-word; }
         .event-title { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.4rem; line-height: 1.3; }
         .event-desc { color: var(--text-muted); font-size: 0.9rem; line-height: 1.5; white-space: pre-wrap; margin-top: 5px;}
 
@@ -188,14 +185,14 @@
         .user-section { background: var(--surface); padding: 2rem; border-radius: 16px; border: 1px solid var(--border-subtle); }
         .user-section h3 { margin-bottom: 1.5rem; border-bottom: 1px solid var(--border-subtle); padding-bottom: 0.5rem; display: flex; align-items: center; gap: 10px; }
         
-        .user-row { display: flex; justify-content: space-between; align-items: center; padding: 1rem 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
-        .user-info { display: flex; align-items: center; gap: 10px; }
+        .user-row { display: flex; justify-content: space-between; align-items: center; padding: 1rem 0; border-bottom: 1px solid rgba(255,255,255,0.05); gap: 10px; flex-wrap: wrap; }
+        .user-info { display: flex; align-items: center; gap: 10px; min-width: 150px; }
         .user-avatar {
             width: 34px; height: 34px; border-radius: 50%; background: rgba(255,255,255,0.08);
             border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center;
             font-weight: 700; font-size: 0.85rem; color: white; flex-shrink: 0; text-transform: uppercase;
         }
-        .user-role-tag { font-size: 0.7rem; padding: 0.3rem 0.6rem; border-radius: 20px; background: rgba(255,255,255,0.1); text-transform: uppercase; letter-spacing: 1px; font-weight: 600;}
+        .user-role-tag { font-size: 0.7rem; padding: 0.3rem 0.6rem; border-radius: 20px; background: rgba(255,255,255,0.1); text-transform: uppercase; letter-spacing: 1px; font-weight: 600; white-space: nowrap; }
         
         .request-actions { display: flex; gap: 8px; width: 100%; margin-top: 10px;}
         .btn-accept, .btn-deny { border: none; padding: 0.6rem; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.3s; font-weight: 600;}
@@ -205,20 +202,27 @@
         .btn-deny:hover { background: var(--accent); color: white; }
 
         /* =========================================
-           OMNI-MODAL (AÑADIR/EDITAR)
+           OMNI-MODAL INTELIGENTE (SCROLLABLE & RESPONSIVE)
            ========================================= */
         .modal-overlay {
             position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px);
             z-index: 1000; display: flex; justify-content: center; align-items: center;
-            opacity: 0; pointer-events: none; transition: var(--transition);
+            opacity: 0; pointer-events: none; transition: var(--transition); padding: 1rem;
         }
         .modal-overlay.active { opacity: 1; pointer-events: all; }
         
         .modal-content {
             background: var(--surface-solid); border: 1px solid var(--border-subtle); border-radius: 24px;
-            width: 100%; max-width: 550px; padding: 2.5rem; transform: translateY(30px); transition: var(--transition); max-height: 90vh; overflow-y: visible;
+            width: 100%; max-width: 550px; padding: 2.5rem; transform: translateY(30px); transition: var(--transition); 
+            max-height: 85vh; overflow-y: auto;
         }
         .modal-overlay.active .modal-content { transform: translateY(0); }
+
+        /* Custom Scrollbar Premium para el Modal */
+        .modal-content::-webkit-scrollbar { width: 6px; }
+        .modal-content::-webkit-scrollbar-track { background: transparent; }
+        .modal-content::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 10px; }
+        .modal-content::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.2); }
 
         .modal-header { text-align: center; margin-bottom: 2rem; }
         .modal-header h2 { font-size: 1.8rem; font-weight: 600; }
@@ -256,7 +260,7 @@
 
         /* Flatpickr */
         .flatpickr-calendar { z-index: 99999 !important; background: #1a1a1a !important; border: 1px solid var(--border-subtle) !important; box-shadow: 0 20px 50px rgba(0,0,0,0.8) !important; font-family: 'Sora', sans-serif !important; border-radius: 16px !important;}
-        .flatpickr-day.selected, .flatpickr-day.startRange, .flatpickr-day.endRange, .flatpickr-day.selected.inRange, .flatpickr-day.startRange.inRange, .flatpickr-day.endRange.inRange, .flatpickr-day.selected:focus, .flatpickr-day.startRange:focus, .flatpickr-day.endRange:focus, .flatpickr-day.selected:hover, .flatpickr-day.startRange:hover, .flatpickr-day.endRange:hover, .flatpickr-day.selected.prevMonthDay, .flatpickr-day.startRange.prevMonthDay, .flatpickr-day.endRange.prevMonthDay, .flatpickr-day.selected.nextMonthDay, .flatpickr-day.startRange.nextMonthDay, .flatpickr-day.endRange.nextMonthDay { background: var(--primary) !important; color: var(--bg-color) !important; border-color: var(--primary) !important; font-weight: 600; }
+        .flatpickr-day.selected, .flatpickr-day.startRange, .flatpickr-day.endRange, .flatpickr-day.selected.inRange, .flatpickr-day.startRange.inRange, .flatpickr-day.endRange.inRange, .flatpickr-day.selected:focus, .flatpickr-day.startRange:focus, .flatpickr-day.endRange:focus, .flatpickr-day.selected.prevMonthDay, .flatpickr-day.startRange.prevMonthDay, .flatpickr-day.endRange.prevMonthDay, .flatpickr-day.selected.nextMonthDay, .flatpickr-day.startRange.nextMonthDay, .flatpickr-day.endRange.nextMonthDay { background: var(--primary) !important; color: var(--bg-color) !important; border-color: var(--primary) !important; font-weight: 600; }
         .flatpickr-day.inRange { background: rgba(255,255,255,0.05) !important; border-color: transparent !important; box-shadow: none !important; }
 
         /* Toasts */
@@ -373,9 +377,15 @@
 
             <form id="omni-form">
                 <div id="form-transport" class="form-section active">
-                    <div class="input-group">
-                        <label>Hora de salida</label>
-                        <input type="text" id="trans-time" class="time-picker" placeholder="Ej. 14:30" readonly>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div class="input-group">
+                            <label>Fecha del Trayecto</label>
+                            <input type="text" id="trans-date" class="date-picker-event" placeholder="Seleccionar..." readonly>
+                        </div>
+                        <div class="input-group">
+                            <label>Hora de salida</label>
+                            <input type="text" id="trans-time" class="time-picker" placeholder="Ej. 14:30" readonly>
+                        </div>
                     </div>
                     <div class="input-group">
                         <label>Trayecto o Medio</label>
@@ -396,7 +406,7 @@
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
                             <div class="input-group">
                                 <label>Fecha Entrada</label>
-                                <input type="text" id="hotel-checkin-date" class="date-picker" placeholder="Seleccionar..." readonly>
+                                <input type="text" id="hotel-checkin-date" class="date-picker-bound" placeholder="Seleccionar..." readonly>
                             </div>
                             <div class="input-group">
                                 <label>Hora Check-in</label>
@@ -406,7 +416,7 @@
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
                             <div class="input-group">
                                 <label>Fecha Salida</label>
-                                <input type="text" id="hotel-checkout-date" class="date-picker" placeholder="Seleccionar..." readonly>
+                                <input type="text" id="hotel-checkout-date" class="date-picker-bound" placeholder="Seleccionar..." readonly>
                             </div>
                             <div class="input-group">
                                 <label>Hora Check-out</label>
@@ -414,15 +424,35 @@
                             </div>
                         </div>
                     </div>
+
+                    <div id="hotel-date-single-wrapper" style="display: none;">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                            <div class="input-group">
+                                <label>Fecha del Evento</label>
+                                <input type="text" id="hotel-date-single" class="date-picker-event" placeholder="Seleccionar..." readonly>
+                            </div>
+                            <div class="input-group">
+                                <label>Hora Ajustada</label>
+                                <input type="text" id="hotel-time-single" class="time-picker" placeholder="Ej. 12:00" readonly>
+                            </div>
+                        </div>
+                    </div>
+                    
                     <p id="hotel-edit-warning" style="display:none; color: var(--accent-blue); font-size: 0.8rem; margin-bottom: 1rem; font-style: italic;">
-                        Al editar un alojamiento existente, solo modificas la información de este día en concreto.
+                        Al editar un alojamiento existente, modificas los datos específicos de este bloque de ruta.
                     </p>
                 </div>
 
                 <div id="form-plan" class="form-section">
-                    <div class="input-group">
-                        <label>Hora (Opcional)</label>
-                        <input type="text" id="plan-time" class="time-picker" placeholder="Ej. 10:00" readonly>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div class="input-group">
+                            <label>Fecha del Plan</label>
+                            <input type="text" id="plan-date" class="date-picker-event" placeholder="Seleccionar..." readonly>
+                        </div>
+                        <div class="input-group">
+                            <label>Hora (Opcional)</label>
+                            <input type="text" id="plan-time" class="time-picker" placeholder="Ej. 10:00" readonly>
+                        </div>
                     </div>
                     <div class="input-group">
                         <label>¿Qué hacemos?</label>
@@ -450,6 +480,9 @@
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
         import { getFirestore, doc, getDoc, updateDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
+        // Bloqueo total de click derecho para protección del código fuente
+        window.addEventListener('contextmenu', (e) => e.preventDefault());
+
         const firebaseConfig = {
             apiKey: "AIzaSyDRkUJnDLzknFz3KOnPEm4UFsgf6R4z1Uk",
             authDomain: "interra26-22ecd.firebaseapp.com",
@@ -471,20 +504,27 @@
         let userNamesCache = {};
         const SUPERADMIN_EMAIL = "tu_correo@gmail.com"; 
 
-        const timePickers = flatpickr(".time-picker", { enableTime: true, noCalendar: true, dateFormat: "H:i", time_24hr: true });
-        const datePickers = flatpickr(".date-picker", { dateFormat: "d/m/Y", locale: "es" });
+        // Referencias de Instancias Flatpickr
+        let timePickersInstances = [];
+        let boundDatePickersInstances = [];
+        let eventDatePickersInstances = [];
 
-        // Variables Globales
+        // Variables Globales de Mapas
         let map;
         let markersLayer;
         let routeLayer;
         let mapInitialized = false;
         const geocodeCache = {};
         
-        // Variables para Modal y Edición
+        // Variables de Control Interno de Modal
         let selectedDateKey = null;
         let currentModalType = 'transport';
         let editingEventId = null;
+
+        const parseDDMMYYYY = (str) => { 
+            const [d,m,y] = str.split('/'); 
+            return new Date(y, m-1, d); 
+        };
 
         // ── SISTEMA DE TOASTS ──
         function showToast(message, type = 'success') {
@@ -558,6 +598,14 @@
 
                 if (!currentTripData.eventos) currentTripData.eventos = [];
 
+                // Inicialización Profesional de Pickers con Restricciones del Rango de Viaje Real
+                const minTripDate = parseDDMMYYYY(currentTripData.fechaInicio);
+                const maxTripDate = parseDDMMYYYY(currentTripData.fechaFin);
+
+                timePickersInstances = flatpickr(".time-picker", { enableTime: true, noCalendar: true, dateFormat: "H:i", time_24hr: true });
+                boundDatePickersInstances = flatpickr(".date-picker-bound", { dateFormat: "d/m/Y", locale: "es", minDate: minTripDate, maxDate: maxTripDate });
+                eventDatePickersInstances = flatpickr(".date-picker-event", { dateFormat: "d/m/Y", locale: "es", minDate: minTripDate, maxDate: maxTripDate });
+
                 const uids = Object.keys(miembros);
                 await Promise.all(uids.map(uid => getUserName(uid)));
 
@@ -589,7 +637,7 @@
             document.getElementById('trip-dates').innerText = `Del ${currentTripData.fechaInicio} al ${currentTripData.fechaFin}`;
         }
 
-        // ── METEOROLOGÍA INTELIGENTE: PRÓXIMOS 10 DÍAS POR CIUDAD REAL ──
+        // ── METEOROLOGÍA INTELIGENTE CIUDADES ──
         async function renderWeather() {
             const wCont = document.getElementById('weather-container');
             if(!currentTripData || !currentTripData.eventos || currentTripData.eventos.length === 0) {
@@ -599,14 +647,15 @@
             
             wCont.innerHTML = '<p style="color:var(--text-muted); font-size: 0.9rem; width: 100%;">Consultando datos satelitales (Open-Meteo) para los próximos 10 días...</p>';
 
-            // 1. Extraer ciudades únicas (limpiando el query)
             const uniqueCities = [];
             for (const ev of currentTripData.eventos) {
                 let cleanQuery = ev.title.includes('->') ? ev.title.split('->').pop().trim() : ev.title;
-                let cityKey = cleanQuery.toLowerCase();
+                // Limpiar prefijos visuales del título
+                cleanQuery = cleanQuery.replace('📥 Check-in: ', '').replace('📤 Check-out: ', '').replace('🌙 Noche en: ', '');
+                let cityKey = cleanQuery.toLowerCase().trim();
                 
-                if(!uniqueCities.find(c => c.query === cityKey)) {
-                    uniqueCities.push({query: cityKey, original: ev.title});
+                if(cityKey && !uniqueCities.find(c => c.query === cityKey)) {
+                    uniqueCities.push({query: cityKey, original: cleanQuery});
                 }
             }
 
@@ -614,26 +663,23 @@
             let validCitiesCount = 0;
 
             for (const city of uniqueCities) {
-                if(validCitiesCount >= 5) break; // Límite de 5 ciudades principales para no saturar la API
+                if(validCitiesCount >= 5) break; 
 
                 let coords = null;
-                let cityName = city.original.split(',')[0]; // Fallback name
+                let cityName = city.original.split(',')[0]; 
                 
                 try {
-                    // Geocodificación para sacar el nombre de la ciudad real + coordenadas
                     const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(city.query)}&limit=1&addressdetails=1`);
                     const data = await res.json();
                     if(data.length > 0) {
                         coords = {lat: data[0].lat, lon: data[0].lon};
                         const adr = data[0].address;
-                        // Extraemos la ciudad o pueblo oficial descartando la calle/número
                         cityName = adr.city || adr.town || adr.municipality || adr.village || cityName;
                     }
                 } catch(e) {}
 
                 if(coords) {
                     try {
-                        // Pedimos los próximos 10 días desde hoy
                         const resClima = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${coords.lat}&longitude=${coords.lon}&daily=temperature_2m_max,temperature_2m_min,weathercode&timezone=auto&forecast_days=10`);
                         const dataClima = await resClima.json();
 
@@ -645,7 +691,6 @@
                                 <div style="display: flex; gap: 10px; overflow-x: auto; padding-bottom: 10px; scrollbar-width: thin; scrollbar-color: var(--border-subtle) transparent;">
                         `;
 
-                        // Generamos las 10 tarjetitas
                         for(let i=0; i<dataClima.daily.time.length; i++) {
                             const dateObj = new Date(dataClima.daily.time[i]);
                             const dateStr = dateObj.toLocaleDateString('es-ES', { weekday: 'short', day: 'numeric' });
@@ -660,7 +705,6 @@
                             if(code >= 71 && code <= 77) { iconName = 'snowflake'; iconColor='#ffffff'; }
                             if(code >= 95) { iconName = 'cloud-lightning'; iconColor='#8a2be2'; }
 
-                            // Check if it's today
                             const isToday = new Date().toISOString().split('T')[0] === dataClima.daily.time[i];
                             const bgStyle = isToday ? 'background: rgba(255,77,77,0.1); border-color: rgba(255,77,77,0.3);' : 'background: rgba(255,255,255,0.03); border-color: var(--border-subtle);';
 
@@ -691,9 +735,8 @@
             const container = document.getElementById('itinerary-container');
             container.innerHTML = '';
 
-            const parseDate = (str) => { const [d,m,y] = str.split('/'); return new Date(y, m-1, d); };
-            const start = parseDate(currentTripData.fechaInicio);
-            const end = parseDate(currentTripData.fechaFin);
+            const start = parseDDMMYYYY(currentTripData.fechaInicio);
+            const end = parseDDMMYYYY(currentTripData.fechaFin);
             
             const groupedEvents = {};
             currentTripData.eventos.forEach(ev => {
@@ -770,10 +813,9 @@
             if(mapInitialized) updateMapData();
         }
 
-        // ── INICIALIZACIÓN DE LEAFLET (PREFER CANVAS PARA HTML2CANVAS) ──
+        // ── MAPAS LEAFLET CANVAS ──
         function initMap() {
             if (mapInitialized) return;
-            // IMPORTANTE: preferCanvas soluciona que HTML2Canvas no dibuje las lineas
             map = L.map('map-container', { preferCanvas: true }).setView([48.8566, 2.3522], 4); 
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '© OpenStreetMap contributors',
@@ -781,7 +823,6 @@
             }).addTo(map);
 
             markersLayer = L.layerGroup().addTo(map);
-            // Usamos HEX directo para asegurar la foto en Canvas
             routeLayer = L.polyline([], {color: '#ff4d4d', weight: 3, dashArray: '5, 10'}).addTo(map);
             mapInitialized = true;
         }
@@ -789,6 +830,7 @@
         async function geocodeAddress(query) {
             if (!query) return null;
             let cleanQuery = query.includes('->') ? query.split('->').pop().trim() : query;
+            cleanQuery = cleanQuery.replace('📥 Check-in: ', '').replace('📤 Check-out: ', '').replace('🌙 Noche en: ', '');
             if (geocodeCache[cleanQuery]) return geocodeCache[cleanQuery];
 
             try {
@@ -802,7 +844,7 @@
             } catch(e) {
                 console.error("Geocode error", e);
             }
-            await new Promise(r => setTimeout(r, 1000));
+            await new Promise(r => setTimeout(r, 600));
             return null;
         }
 
@@ -845,7 +887,7 @@
             }
         }
 
-        // ── GENERAR PDF PREMIUM CON MAPA Y MIEMBROS ──
+        // ── EXPORTACIÓN PREMIUM PDF ──
         window.generarPDF = async function() {
             const now = new Date();
             const mesLlave = `interrahub_pdf_usage_${now.getFullYear()}_${now.getMonth()}`;
@@ -863,7 +905,6 @@
 
             showToast("Construyendo tu PDF premium. Por favor, espera unos segundos...", "info");
 
-            // Preparar HTML del equipo (Solo admins y editores)
             let editorsHTML = '';
             for (const [uid, rol] of Object.entries(currentTripData.miembros || {})) {
                 if (rol === 'admin-grupo' || rol === 'editor-grupo') {
@@ -879,7 +920,6 @@
                 </div>
             ` : '';
 
-            // Capturar el Mapa (Incluso si está oculto en otra tab)
             let mapSection = '';
             if (mapInitialized) {
                 try {
@@ -888,9 +928,9 @@
                     
                     if (wasHidden) {
                         tabMapa.style.display = 'block';
-                        tabMapa.style.opacity = '0'; // Lo ocultamos visualmente al usuario
+                        tabMapa.style.opacity = '0'; 
                         map.invalidateSize();
-                        await new Promise(r => setTimeout(r, 800)); // Damos tiempo a cargar los tiles (mapa)
+                        await new Promise(r => setTimeout(r, 800)); 
                     }
 
                     const mapEl = document.getElementById('map-container');
@@ -913,7 +953,6 @@
                 } catch(e) { console.error("Error al capturar mapa para el PDF", e); }
             }
 
-            // Crear el contenedor oculto general para renderizar
             const pdfContainer = document.createElement('div');
             pdfContainer.style.position = 'absolute';
             pdfContainer.style.left = '-9999px';
@@ -935,7 +974,6 @@
                 ${mapSection}
             `;
 
-            // Agrupar eventos
             const eventosAgrupados = {};
             currentTripData.eventos.forEach(ev => {
                 if (!eventosAgrupados[ev.dateKey]) eventosAgrupados[ev.dateKey] = [];
@@ -1028,25 +1066,49 @@
             }
         }
 
+        // ── GESTIÓN DE ROLES AVANZADA EN TIEMPO REAL ──
         async function renderUsers() {
             const miembrosList = document.getElementById('members-list');
             const reqList = document.getElementById('requests-list');
             miembrosList.innerHTML = '';
             reqList.innerHTML = '';
 
+            const user = auth.currentUser;
+            const isGod = user && user.email === SUPERADMIN_EMAIL;
+            const soyAdminOGod = currentUserRole === "admin-grupo" || isGod;
+
             for (const [uid, rol] of Object.entries(currentTripData.miembros || {})) {
                 const nombre = userNamesCache[uid] || await getUserName(uid);
                 const inicial = nombre.charAt(0).toUpperCase();
                 let colorRol = rol === 'admin-grupo' ? 'var(--accent-blue)' : (rol === 'editor-grupo' ? 'var(--success)' : 'var(--text-muted)');
                 let labelRol = rol === 'admin-grupo' ? 'Admin' : rol === 'editor-grupo' ? 'Editor' : 'Visor';
+                
+                const isTargetGod = userNamesCache[uid] === SUPERADMIN_EMAIL || uid === SUPERADMIN_EMAIL;
+
+                // Renderizado dinámico de controles Pro para Admins
+                let controlHTML = `<span class="user-role-tag" style="color: ${colorRol}; border: 1px solid ${colorRol};">${labelRol}</span>`;
+                if(soyAdminOGod && uid !== user.uid && !isTargetGod) {
+                    controlHTML = `
+                        <div style="display:flex; gap:8px; align-items:center;">
+                            <select onchange="cambiarRolMiembro('${uid}', this.value)" style="background:#1a1a1a; color:white; border:1px solid var(--border-subtle); padding:0.4rem; border-radius:8px; font-size:0.8rem; font-family:'Sora'; cursor:pointer; outline:none;">
+                                <option value="admin-grupo" ${rol === 'admin-grupo' ? 'selected' : ''}>Admin</option>
+                                <option value="editor-grupo" ${rol === 'editor-grupo' ? 'selected' : ''}>Editor</option>
+                                <option value="visor-grupo" ${rol === 'visor-grupo' ? 'selected' : ''}>Visor</option>
+                            </select>
+                            <button onclick="eliminarMiembro('${uid}')" style="background:rgba(255,77,77,0.1); color:var(--accent); border:none; width:30px; height:30px; border-radius:6px; cursor:pointer; display:flex; align-items:center; justify-content:center;" title="Eliminar miembro de la aventura">
+                                <i data-lucide="user-x" style="width:14px;"></i>
+                            </button>
+                        </div>
+                    `;
+                }
 
                 miembrosList.innerHTML += `
                     <div class="user-row">
                         <div class="user-info">
                             <div class="user-avatar">${inicial}</div>
-                            <div><div style="font-weight: 600; font-size: 0.95rem;">${nombre}</div></div>
+                            <div><div style="font-weight: 600; font-size: 0.95rem; word-break: break-all;">${nombre}</div></div>
                         </div>
-                        <span class="user-role-tag" style="color: ${colorRol}; border: 1px solid ${colorRol};">${labelRol}</span>
+                        ${controlHTML}
                     </div>
                 `;
             }
@@ -1054,8 +1116,7 @@
             const solicitudes = currentTripData.solicitudes || {};
             const numSolicitudes = Object.keys(solicitudes).length;
             
-            // Solo admins calculan el badge
-            if (isGodUser() || currentUserRole === "admin-grupo") {
+            if (soyAdminOGod) {
                 updateSolicitudesBadge(numSolicitudes);
             }
 
@@ -1094,9 +1155,35 @@
             lucide.createIcons();
         }
 
-        function isGodUser() {
-            const user = auth.currentUser;
-            return user && user.email === SUPERADMIN_EMAIL;
+        window.cambiarRolMiembro = async function(uid, nuevoRol) {
+            try {
+                const tripRef = doc(db, "viajes", tripId);
+                const nuevosMiembros = { ...currentTripData.miembros };
+                nuevosMiembros[uid] = nuevoRol;
+                
+                await updateDoc(tripRef, { miembros: nuevosMiembros });
+                currentTripData.miembros = nuevosMiembros;
+                showToast("Rol de usuario modificado con éxito");
+                renderUsers();
+            } catch(e) {
+                showToast("Error de privilegios al actualizar rol", "error");
+            }
+        }
+
+        window.eliminarMiembro = async function(uid) {
+            if(!confirm("¿Estás completamente seguro de expulsar a este miembro de la ruta?")) return;
+            try {
+                const tripRef = doc(db, "viajes", tripId);
+                const nuevosMiembros = { ...currentTripData.miembros };
+                delete nuevosMiembros[uid];
+                
+                await updateDoc(tripRef, { miembros: nuevosMiembros });
+                currentTripData.miembros = nuevosMiembros;
+                showToast("Miembro expulsado del viaje", "info");
+                renderUsers();
+            } catch(e) {
+                showToast("Error al expulsar al miembro", "error");
+            }
         }
 
         window.copiarCodigoViaje = function() {
@@ -1143,16 +1230,22 @@
             document.getElementById('modal-main-title').innerText = "Añadir a la ruta";
             document.getElementById('modal-date-subtitle').innerText = `Día seleccionado: ${dateStr}`;
             document.getElementById('omni-form').reset();
+            
+            // Reajuste de vistas dinámicas Pro para añadir
             document.getElementById('hotel-dates-wrapper').style.display = 'block';
+            document.getElementById('hotel-date-single-wrapper').style.display = 'none';
             document.getElementById('hotel-edit-warning').style.display = 'none';
             document.getElementById('modal-type-selector').style.display = 'flex';
             
-            document.getElementById('hotel-checkin-date').value = dateKey.split('-').reverse().join('/');
+            const formatView = dateKey.split('-').reverse().join('/');
+            document.getElementById('trans-date').value = formatView;
+            document.getElementById('plan-date').value = formatView;
+            document.getElementById('hotel-checkin-date').value = formatView;
             
             document.getElementById('omni-modal').classList.add('active');
         }
 
-        // ── EDICIÓN DE EVENTOS ──
+        // ── SISTEMA PRO DE EDICIÓN BIDIRECCIONAL DE EVENTOS ──
         window.editEvent = function(id) {
             const ev = currentTripData.eventos.find(e => e.id === id);
             if (!ev) return;
@@ -1161,7 +1254,7 @@
             selectedDateKey = ev.dateKey;
             
             document.getElementById('modal-main-title').innerText = "Editar Evento";
-            document.getElementById('modal-date-subtitle').innerText = `Día: ${ev.dateKey.split('-').reverse().join('/')}`;
+            document.getElementById('modal-date-subtitle').innerText = `Modificando bloque de ruta`;
             document.getElementById('omni-form').reset();
             
             document.getElementById('modal-type-selector').style.display = 'none';
@@ -1170,16 +1263,23 @@
             if(btn) switchModalTab(ev.type, btn);
 
             document.getElementById('common-notes').value = ev.notes || '';
+            const dateStrFormatted = ev.dateKey.split('-').reverse().join('/');
 
             if (ev.type === 'transport') {
+                document.getElementById('trans-date').value = dateStrFormatted;
                 document.getElementById('trans-time').value = ev.time || '';
                 document.getElementById('trans-title').value = ev.title || '';
             } else if (ev.type === 'plan') {
+                document.getElementById('plan-date').value = dateStrFormatted;
                 document.getElementById('plan-time').value = ev.time || '';
                 document.getElementById('plan-title').value = ev.title || '';
             } else if (ev.type === 'hotel') {
                 document.getElementById('hotel-search').value = ev.title || '';
+                // Transición del formulario rango a formulario único Pro
                 document.getElementById('hotel-dates-wrapper').style.display = 'none';
+                document.getElementById('hotel-date-single-wrapper').style.display = 'block';
+                document.getElementById('hotel-date-single').value = dateStrFormatted;
+                document.getElementById('hotel-time-single').value = ev.time || '';
                 document.getElementById('hotel-edit-warning').style.display = 'block';
             }
 
@@ -1216,7 +1316,7 @@
         }
         window.selectLocation = function(name) { document.getElementById('hotel-search').value = name; document.getElementById('hotel-results').style.display = 'none'; }
 
-        // LÓGICA DE GUARDADO Y ACTUALIZACIÓN
+        // ── LÓGICA DE PERSISTENCIA Y VALIDACIÓN DE FECHAS AVANZADA ──
         document.getElementById('omni-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('btn-submit-form');
@@ -1232,13 +1332,31 @@
                 if (index !== -1) {
                     const baseEv = updatedEventos[index];
                     if (baseEv.type === 'transport') {
+                        const pickedDate = document.getElementById('trans-date').value;
+                        baseEv.dateKey = pickedDate.split('/').reverse().join('-');
                         baseEv.time = document.getElementById('trans-time').value;
                         baseEv.title = document.getElementById('trans-title').value || 'Transporte';
                     } else if (baseEv.type === 'plan') {
+                        const pickedDate = document.getElementById('plan-date').value;
+                        baseEv.dateKey = pickedDate.split('/').reverse().join('-');
                         baseEv.time = document.getElementById('plan-time').value;
                         baseEv.title = document.getElementById('plan-title').value || 'Plan';
                     } else if (baseEv.type === 'hotel') {
+                        const pickedDate = document.getElementById('hotel-date-single').value;
+                        const targetKey = pickedDate.split('/').reverse().join('-');
+                        
+                        // Control anti-solapamiento de estancia en edición Pro
+                        if(baseEv.hotelType === 'hotel-night') {
+                            const conflicto = updatedEventos.some(ev => ev.id !== editingEventId && ev.type === 'hotel' && ev.hotelType === 'hotel-night' && ev.dateKey === targetKey);
+                            if(conflicto) {
+                                showToast(`Conflicto de estancia: Ya tienes una noche asignada en otro hotel para el día ${pickedDate}`, "error");
+                                btn.innerText = 'Guardar en la Nube'; btn.style.opacity = '1';
+                                return;
+                            }
+                        }
+                        baseEv.dateKey = targetKey;
                         baseEv.title = document.getElementById('hotel-search').value || 'Alojamiento';
+                        baseEv.time = document.getElementById('hotel-time-single').value;
                     }
                     baseEv.notes = notes;
                 }
@@ -1246,10 +1364,14 @@
             else {
                 let nuevosEventos = [];
                 if (currentModalType === 'transport') {
-                    nuevosEventos.push({ id: generateId(), dateKey: selectedDateKey, type: 'transport', time: document.getElementById('trans-time').value, title: document.getElementById('trans-title').value || 'Transporte', notes: notes });
+                    const pickedDate = document.getElementById('trans-date').value;
+                    const dKey = pickedDate.split('/').reverse().join('-');
+                    nuevosEventos.push({ id: generateId(), dateKey: dKey, type: 'transport', time: document.getElementById('trans-time').value, title: document.getElementById('trans-title').value || 'Transporte', notes: notes });
                 } 
                 else if (currentModalType === 'plan') {
-                    nuevosEventos.push({ id: generateId(), dateKey: selectedDateKey, type: 'plan', time: document.getElementById('plan-time').value, title: document.getElementById('plan-title').value || 'Plan sin título', notes: notes });
+                    const pickedDate = document.getElementById('plan-date').value;
+                    const dKey = pickedDate.split('/').reverse().join('-');
+                    nuevosEventos.push({ id: generateId(), dateKey: dKey, type: 'plan', time: document.getElementById('plan-time').value, title: document.getElementById('plan-title').value || 'Plan sin título', notes: notes });
                 }
                 else if (currentModalType === 'hotel') {
                     const title = document.getElementById('hotel-search').value || 'Alojamiento';
@@ -1260,13 +1382,32 @@
 
                     if (!cinDateStr || !coutDateStr) { alert("Selecciona las fechas de entrada y salida."); btn.innerText = 'Guardar en la Nube'; btn.style.opacity = '1'; return; }
                     
-                    const parseD = (s) => { const [d,m,y] = s.split('/'); return new Date(y, m-1, d); };
-                    let currDate = parseD(cinDateStr);
-                    let endDate = parseD(coutDateStr);
+                    let currDate = parseDDMMYYYY(cinDateStr);
+                    let endDate = parseDDMMYYYY(coutDateStr);
 
+                    // Validar anticipadamente conflicto de reservas múltiples en rango
+                    let tempDate = new Date(currDate);
+                    while (tempDate <= endDate) {
+                        const dKey = tempDate.toISOString().split('T')[0];
+                        let isCheckin = tempDate.getTime() === parseDDMMYYYY(cinDateStr).getTime();
+                        let isCheckout = tempDate.getTime() === endDate.getTime();
+                        let hTypeLabel = (!isCheckin && !isCheckout) || (isCheckin && !isCheckout) ? 'hotel-night' : (isCheckout ? 'hotel-checkout' : 'hotel-night');
+                        
+                        if(hTypeLabel === 'hotel-night') {
+                            const yaExisteNoche = updatedEventos.some(ev => ev.type === 'hotel' && ev.hotelType === 'hotel-night' && ev.dateKey === dKey);
+                            if(yaExisteNoche) {
+                                showToast(`Conflicto de estancia: Ya existe una noche registrada el día ${dKey.split('-').reverse().join('/')}`, "error");
+                                btn.innerText = 'Guardar en la Nube'; btn.style.opacity = '1';
+                                return;
+                            }
+                        }
+                        tempDate.setDate(tempDate.getDate() + 1);
+                    }
+
+                    // Inserción en lote si no hay conflictos
                     while (currDate <= endDate) {
                         const dKey = currDate.toISOString().split('T')[0];
-                        let isCheckin = currDate.getTime() === parseD(cinDateStr).getTime();
+                        let isCheckin = currDate.getTime() === parseDDMMYYYY(cinDateStr).getTime();
                         let isCheckout = currDate.getTime() === endDate.getTime();
 
                         let hTime = null;
