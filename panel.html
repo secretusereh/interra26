@@ -1,9 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta name="google-adsense-account" content="ca-pub-5192479241046494">
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5192479241046494"
-     crossorigin="anonymous"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Interra-hub | Panel Maestro</title>
@@ -63,8 +60,8 @@
         }
 
         .logo { font-weight: 800; font-size: 1.5rem; letter-spacing: -1px; display: flex; align-items: center; gap: 12px; }
-        .user-menu { display: flex; align-items: center; gap: 2.5rem; }
-        .user-name { font-weight: 300; color: var(--text-muted); font-size: 0.9rem; }
+        .user-menu { display: flex; align-items: center; gap: 2.5rem; flex-wrap: wrap; justify-content: flex-end; }
+        .user-name { font-weight: 300; color: var(--text-muted); font-size: 0.9rem; word-break: break-word; max-width: 250px; text-align: right; line-height: 1.3; }
         
         .btn-logout {
             background: transparent; color: var(--text-muted); border: none;
@@ -74,6 +71,33 @@
 
         main { padding: 5rem 5%; max-width: 1400px; margin: 0 auto; }
         
+        /* ── BANNER PUBLICIDAD PERSONALIZADO ── */
+        .ad-banner-placeholder {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            max-width: 728px;
+            height: 90px;
+            margin: 0 auto 3rem auto;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px dashed var(--border-subtle);
+            border-radius: 16px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 600;
+            transition: var(--transition);
+            text-align: center;
+            padding: 0 1rem;
+        }
+        .ad-banner-placeholder:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: rgba(255, 255, 255, 0.05);
+            transform: scale(0.99);
+        }
+
         .header-section { margin-bottom: 4rem; animation: fadeDown 1s ease; }
         .header-section h1 { font-size: 3.5rem; font-weight: 800; letter-spacing: -2px; }
         .header-section p { color: var(--text-muted); font-size: 1.2rem; margin-top: 0.5rem; font-weight: 300; }
@@ -283,15 +307,9 @@
     </nav>
 
     <main>
-        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5192479241046494"
-             crossorigin="anonymous"></script>
-        <ins class="adsbygoogle"
-             style="display:inline-block;width:728px;height:90px"
-             data-ad-client="ca-pub-5192479241046494"
-             data-ad-slot="3152796033"></ins>
-        <script>
-             (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
+        <a href="mailto:pipaonstudio@gmail.com?subject=Información sobre publicidad" class="ad-banner-placeholder">
+            <i data-lucide="megaphone" style="margin-right: 10px;"></i> ¿Quieres anunciarte aquí? Haz clic para solicitar información.
+        </a>
 
         <div class="header-section">
             <h1>Mis Viajes.</h1>
@@ -666,7 +684,7 @@
                         ${badgeContent}
                         ${deleteBtnHtml}
                         <div class="card-content">
-                            <h2 style="font-weight: 800; font-size: 1.8rem; margin-bottom: 0.5rem; padding-right: 30px;">${trip.nombre}</h2>
+                            <h2 style="font-weight: 800; font-size: 1.8rem; margin-bottom: 0.5rem; padding-right: 30px; word-break: break-word; overflow-wrap: anywhere; line-height: 1.2;">${trip.nombre}</h2>
                             <p style="color:var(--text-muted); font-size: 0.9rem;"><i data-lucide="calendar" style="width:14px; vertical-align:middle; margin-right:5px;"></i> ${trip.fechaInicio} - ${trip.fechaFin}</p>
                         </div>
                         ${!tieneAcceso ? `
