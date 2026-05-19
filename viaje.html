@@ -260,7 +260,7 @@
 
         /* Flatpickr */
         .flatpickr-calendar { z-index: 99999 !important; background: #1a1a1a !important; border: 1px solid var(--border-subtle) !important; box-shadow: 0 20px 50px rgba(0,0,0,0.8) !important; font-family: 'Sora', sans-serif !important; border-radius: 16px !important;}
-        .flatpickr-day.selected, .flatpickr-day.startRange, .flatpickr-day.endRange, .flatpickr-day.selected.inRange, .flatpickr-day.startRange.inRange, .flatpickr-day.endRange.inRange, .flatpickr-day.selected:focus, .flatpickr-day.startRange:focus, .flatpickr-day.endRange:focus, .flatpickr-day.selected.prevMonthDay, .flatpickr-day.startRange.prevMonthDay, .flatpickr-day.endRange.prevMonthDay, .flatpickr-day.selected.nextMonthDay, .flatpickr-day.startRange.nextMonthDay, .flatpickr-day.endRange.nextMonthDay { background: var(--primary) !important; color: var(--bg-color) !important; border-color: var(--primary) !important; font-weight: 600; }
+        .flatpickr-day.selected, .flatpickr-day.startRange, .flatpickr-day.endRange, .flatpickr-day.selected.inRange, .flatpickr-day.startRange.inRange, .flatpickr-day.endRange.inRange, .flatpickr-day.selected:focus, .flatpickr-day.startRange:focus, .flatpickr-day.endRange:focus, .flatpickr-day.selected:hover, .flatpickr-day.startRange:hover, .flatpickr-day.endRange:hover, .flatpickr-day.selected.prevMonthDay, .flatpickr-day.startRange.prevMonthDay, .flatpickr-day.endRange.prevMonthDay, .flatpickr-day.selected.nextMonthDay, .flatpickr-day.startRange.nextMonthDay, .flatpickr-day.endRange.nextMonthDay { background: var(--primary) !important; color: var(--bg-color) !important; border-color: var(--primary) !important; font-weight: 600; }
         .flatpickr-day.inRange { background: rgba(255,255,255,0.05) !important; border-color: transparent !important; box-shadow: none !important; }
 
         /* Toasts */
@@ -302,6 +302,7 @@
         <button class="tab-btn active" id="tab-btn-itinerario" onclick="switchTab('itinerario', this)">Itinerario</button>
         <button class="tab-btn" id="tab-btn-mapa" onclick="switchTab('mapa', this)">Mapa</button>
         <button class="tab-btn" id="tab-btn-extra" onclick="switchTab('extra', this)">Extra Info</button>
+        <button class="tab-btn" id="tab-btn-gastos" onclick="switchTab('gastos', this)">Cuentas</button>
         <button class="tab-btn" id="tab-btn-usuarios" onclick="switchTab('usuarios', this)">
             Equipo y Accesos
             <span class="tab-badge" id="solicitudes-badge">0</span>
@@ -330,6 +331,12 @@
         <div class="user-section" style="margin-top: 2rem;">
             <h3><i data-lucide="info"></i> Notas Globales del Viaje</h3>
             <textarea id="global-notes" placeholder="Escribe aquí anotaciones importantes, documentación necesaria o recordatorios..." style="width: 100%; height: 150px; background: rgba(255,255,255,0.02); border: 1px solid var(--border-subtle); border-radius: 12px; padding: 1rem; color: white; margin-top: 1rem; font-family: 'Sora', sans-serif; resize: vertical;"></textarea>
+        </div>
+    </main>
+
+    <main id="tab-gastos" class="tab-content">
+        <div id="balance-root">
+            <p style="text-align: center; color: var(--text-muted);">Cargando sistema de gastos...</p>
         </div>
     </main>
 
@@ -479,6 +486,9 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
         import { getFirestore, doc, getDoc, updateDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+        
+        // IMPORTACIÓN DEL NUEVO MÓDULO DE GASTOS
+        import { initInterraBalance } from './Interra-balance.js';
 
         // Bloqueo total de click derecho para protección del código fuente
         window.addEventListener('contextmenu', (e) => e.preventDefault());
@@ -609,10 +619,14 @@
                 const uids = Object.keys(miembros);
                 await Promise.all(uids.map(uid => getUserName(uid)));
 
+                // Inicialización de Pestañas
                 renderHeader();
                 renderItinerary();
                 renderUsers();
                 renderWeather();
+                
+                // INICIALIZACIÓN DEL MÓDULO EXTERNO DE GASTOS
+                initInterraBalance('balance-root', tripId, currentTripData, db, userNamesCache, user.uid);
 
                 document.getElementById('page-loader').style.opacity = '0';
                 setTimeout(() => document.getElementById('page-loader').style.display = 'none', 500);
