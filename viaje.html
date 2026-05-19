@@ -202,48 +202,61 @@
         .btn-deny:hover { background: var(--accent); color: white; }
 
         /* =========================================
-           TAB 5: BALANCE INTERRA
+           TAB 5: FINANCE (INTERRA BALANCE)
            ========================================= */
-        .balance-card {
-            background: var(--surface); border: 1px solid var(--border-subtle); border-radius: 16px;
-            padding: 1.2rem; margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center;
-        }
-        .balance-info { display: flex; align-items: center; gap: 15px; }
-        .balance-icon { width: 40px; height: 40px; border-radius: 12px; display: flex; justify-content: center; align-items: center; }
-        .balance-icon.gasto { background: rgba(255,77,77,0.1); color: var(--accent); }
-        .balance-icon.ingreso { background: rgba(77,255,77,0.1); color: var(--success); }
-        .balance-icon.transfer { background: rgba(77,166,255,0.1); color: var(--accent-blue); }
+        .finance-subtab { display: none; opacity: 0; }
+        .finance-subtab.active { display: block; animation: slideUpFade 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
         
-        .balance-details h4 { font-size: 1.1rem; font-weight: 600; margin-bottom: 3px; }
-        .balance-details p { font-size: 0.85rem; color: var(--text-muted); }
-        .balance-amount { font-size: 1.3rem; font-weight: 800; }
-        .balance-amount.negativo { color: var(--accent); }
-        .balance-amount.positivo { color: var(--success); }
+        @keyframes slideUpFade {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .finance-card {
+            background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px;
+            padding: 1.5rem; margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center;
+            transition: var(--transition);
+        }
+        .finance-card:hover { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.2); transform: translateX(5px); }
+        
+        .finance-info { display: flex; align-items: center; gap: 15px; }
+        .finance-icon { width: 45px; height: 45px; border-radius: 12px; display: flex; justify-content: center; align-items: center; flex-shrink: 0; }
+        .finance-icon.gasto { background: rgba(255,77,77,0.1); color: var(--accent); }
+        .finance-icon.ingreso { background: rgba(77,255,77,0.1); color: var(--success); }
+        .finance-icon.transfer { background: rgba(77,166,255,0.1); color: var(--accent-blue); }
+        
+        .finance-details h4 { font-size: 1.1rem; font-weight: 600; margin-bottom: 3px; }
+        .finance-details p { font-size: 0.85rem; color: var(--text-muted); }
+        .finance-amount { font-size: 1.3rem; font-weight: 800; }
+        .finance-amount.negativo { color: var(--accent); }
+        .finance-amount.positivo { color: var(--success); }
         
         .debt-card {
             background: rgba(255,255,255,0.03); border: 1px solid var(--border-subtle); border-radius: 12px;
             padding: 1rem 1.5rem; margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center;
+            transition: var(--transition);
         }
+        .debt-card:hover { background: rgba(255,255,255,0.05); }
         .debt-text { font-size: 1rem; }
         .debt-text strong { color: var(--primary); }
         .btn-settle {
-            background: var(--primary); color: var(--bg-color); border: none; padding: 0.5rem 1rem;
+            background: var(--primary); color: var(--bg-color); border: none; padding: 0.6rem 1.2rem;
             border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.3s;
         }
         .btn-settle:hover { transform: scale(0.95); }
 
         .checkbox-group { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
         .checkbox-label {
-            display: flex; align-items: center; gap: 5px; background: rgba(255,255,255,0.05);
-            padding: 0.5rem 1rem; border-radius: 8px; font-size: 0.85rem; cursor: pointer; border: 1px solid transparent; transition: 0.3s;
+            display: flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.05);
+            padding: 0.6rem 1rem; border-radius: 8px; font-size: 0.85rem; cursor: pointer; border: 1px solid transparent; transition: 0.3s;
         }
         .checkbox-label:has(input:checked) { border-color: var(--primary); background: rgba(255,255,255,0.1); }
         
-        select.balance-select {
+        select.finance-select {
             width: 100%; padding: 1rem; background: rgba(255,255,255,0.02); border: 1px solid var(--border-subtle);
             border-radius: 12px; color: white; outline: none; font-size: 1rem; font-family: 'Sora', sans-serif;
         }
-        select.balance-select option { background: #1a1a1a; color: white; }
+        select.finance-select option { background: #1a1a1a; color: white; }
 
         /* =========================================
            OMNI-MODAL INTELIGENTE (SCROLLABLE & RESPONSIVE)
@@ -262,7 +275,6 @@
         }
         .modal-overlay.active .modal-content { transform: translateY(0); }
 
-        /* Custom Scrollbar Premium para el Modal */
         .modal-content::-webkit-scrollbar { width: 6px; }
         .modal-content::-webkit-scrollbar-track { background: transparent; }
         .modal-content::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 10px; }
@@ -279,12 +291,12 @@
         .form-section.active { display: block; }
         
         .input-group { margin-bottom: 1.5rem; }
-        .input-group label { display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.5rem; }
-        .input-group input, .input-group textarea {
+        .input-group label { display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.5rem; text-align: left; }
+        .input-group input, .input-group textarea, .input-group select {
             width: 100%; padding: 1rem; background: rgba(255,255,255,0.02); border: 1px solid var(--border-subtle);
-            border-radius: 12px; color: white; outline: none; font-size: 1rem; transition: 0.3s;
+            border-radius: 12px; color: white; outline: none; font-size: 1rem; transition: 0.3s; text-align: left;
         }
-        .input-group input:focus, .input-group textarea:focus { border-color: var(--primary); background: rgba(255,255,255,0.05); }
+        .input-group input:focus, .input-group textarea:focus, .input-group select:focus { border-color: var(--primary); background: rgba(255,255,255,0.05); }
         .input-group textarea { resize: vertical; min-height: 80px; }
 
         .search-wrapper { position: relative; }
@@ -345,7 +357,7 @@
     <div class="tabs-container">
         <button class="tab-btn active" id="tab-btn-itinerario" onclick="switchTab('itinerario', this)">Itinerario</button>
         <button class="tab-btn" id="tab-btn-mapa" onclick="switchTab('mapa', this)">Mapa</button>
-        <button class="tab-btn" id="tab-btn-balance" onclick="switchTab('balance', this)">Interra Balance</button>
+        <button class="tab-btn" id="tab-btn-finance" onclick="switchTab('finance', this)">Finance</button>
         <button class="tab-btn" id="tab-btn-extra" onclick="switchTab('extra', this)">Extra Info</button>
         <button class="tab-btn" id="tab-btn-usuarios" onclick="switchTab('usuarios', this)">
             Equipo y Accesos
@@ -364,27 +376,27 @@
         </p>
     </main>
 
-    <main id="tab-balance" class="tab-content">
+    <main id="tab-finance" class="tab-content">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
             <div>
-                <h2 style="font-size: 1.8rem; font-weight: 800;">Interra Balance</h2>
+                <h2 style="font-size: 1.8rem; font-weight: 800;">Finance</h2>
                 <p style="color: var(--text-muted); font-size: 0.9rem;">Control financiero del grupo. Cuentas claras, amistades largas.</p>
             </div>
-            <button class="btn-submit" style="width: auto; padding: 0.8rem 1.5rem;" onclick="openBalanceModal()">
+            <button class="btn-submit" style="width: auto; padding: 0.8rem 1.5rem;" onclick="openFinanceModal()">
                 <i data-lucide="plus" style="width: 18px;"></i> Añadir Movimiento
             </button>
         </div>
         
         <div class="tabs-container" style="margin: 0 0 2rem 0; border-bottom: 1px solid var(--border-subtle); justify-content: flex-start; gap: 1rem; padding: 0;">
-            <button class="tab-btn active" id="subtab-btn-gastos" onclick="switchBalanceTab('gastos')">Historial</button>
-            <button class="tab-btn" id="subtab-btn-saldos" onclick="switchBalanceTab('saldos')">Saldos y Deudas</button>
+            <button class="tab-btn active" id="subtab-btn-gastos" onclick="switchFinanceTab('gastos')">Historial</button>
+            <button class="tab-btn" id="subtab-btn-saldos" onclick="switchFinanceTab('saldos')">Saldos y Deudas</button>
         </div>
 
-        <div id="balance-gastos" class="balance-subtab active">
+        <div id="finance-gastos" class="finance-subtab active">
             <div id="gastos-list"></div>
         </div>
         
-        <div id="balance-saldos" class="balance-subtab" style="display:none;">
+        <div id="finance-saldos" class="finance-subtab">
             <div id="saldos-list" class="users-grid" style="margin-bottom: 2rem;"></div>
             <h3 style="margin-bottom: 1rem; border-bottom: 1px solid var(--border-subtle); padding-bottom: 0.5rem;"><i data-lucide="arrow-right-left"></i> Deudas Pendientes</h3>
             <div id="deudas-list"></div>
@@ -478,7 +490,7 @@
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
                             <div class="input-group">
                                 <label>Fecha Entrada</label>
-                                <input type="text" id="hotel-checkin-date" class="date-picker-bound" placeholder="Seleccionar..." readonly>
+                                <input type="text" id="hotel-checkin-date" placeholder="Seleccionar..." readonly>
                             </div>
                             <div class="input-group">
                                 <label>Hora Check-in</label>
@@ -488,7 +500,7 @@
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
                             <div class="input-group">
                                 <label>Fecha Salida</label>
-                                <input type="text" id="hotel-checkout-date" class="date-picker-bound" placeholder="Seleccionar..." readonly>
+                                <input type="text" id="hotel-checkout-date" placeholder="Seleccionar..." readonly>
                             </div>
                             <div class="input-group">
                                 <label>Hora Check-out</label>
@@ -501,7 +513,7 @@
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
                             <div class="input-group">
                                 <label>Fecha del Evento</label>
-                                <input type="text" id="hotel-date-single" class="date-picker-event" placeholder="Seleccionar..." readonly>
+                                <input type="text" id="hotel-date-single" placeholder="Seleccionar..." readonly>
                             </div>
                             <div class="input-group">
                                 <label>Hora Ajustada</label>
@@ -545,19 +557,19 @@
         </div>
     </div>
 
-    <div class="modal-overlay" id="balance-modal">
+    <div class="modal-overlay" id="finance-modal">
         <div class="modal-content">
             <div class="modal-header">
                 <h2>Añadir Movimiento</h2>
             </div>
 
-            <div class="type-selector" id="balance-type-selector">
-                <button class="type-btn active" data-btype="gasto" onclick="switchBalanceFormType('gasto', this)"><i data-lucide="shopping-cart"></i> Gasto</button>
-                <button class="type-btn" data-btype="ingreso" onclick="switchBalanceFormType('ingreso', this)"><i data-lucide="plus-circle"></i> Ingreso</button>
-                <button class="type-btn" data-btype="transferencia" onclick="switchBalanceFormType('transferencia', this)"><i data-lucide="arrow-right-left"></i> Transfer.</button>
+            <div class="type-selector" id="finance-type-selector">
+                <button class="type-btn active" data-btype="gasto" onclick="switchFinanceFormType('gasto', this)"><i data-lucide="shopping-cart"></i> Gasto</button>
+                <button class="type-btn" data-btype="ingreso" onclick="switchFinanceFormType('ingreso', this)"><i data-lucide="plus-circle"></i> Ingreso</button>
+                <button class="type-btn" data-btype="transferencia" onclick="switchFinanceFormType('transferencia', this)"><i data-lucide="arrow-right-left"></i> Transfer.</button>
             </div>
 
-            <form id="balance-form">
+            <form id="finance-form">
                 <div class="input-group">
                     <label>Concepto</label>
                     <input type="text" id="bal-title" placeholder="Ej. Cena en Roma" required>
@@ -577,14 +589,14 @@
                 <div id="bal-role-section">
                     <div class="input-group">
                         <label id="label-payer">Pagado por</label>
-                        <select id="bal-payer" class="balance-select" required></select>
+                        <select id="bal-payer" class="finance-select" required></select>
                     </div>
                 </div>
 
                 <div id="bal-receiver-section" style="display: none;">
                     <div class="input-group">
                         <label>Transferido a</label>
-                        <select id="bal-receiver" class="balance-select"></select>
+                        <select id="bal-receiver" class="finance-select"></select>
                     </div>
                 </div>
 
@@ -595,8 +607,8 @@
                 </div>
 
                 <div class="modal-actions">
-                    <button type="button" class="btn-cancel" onclick="closeBalanceModal()">Cancelar</button>
-                    <button type="submit" class="btn-submit" id="btn-submit-balance">Guardar Movimiento</button>
+                    <button type="button" class="btn-cancel" onclick="closeFinanceModal()">Cancelar</button>
+                    <button type="submit" class="btn-submit" id="btn-submit-finance">Guardar Movimiento</button>
                 </div>
             </form>
         </div>
@@ -633,11 +645,6 @@
         let userNamesCache = {};
         const SUPERADMIN_EMAIL = "tu_correo@gmail.com"; 
 
-        // Referencias de Instancias Flatpickr
-        let timePickersInstances = [];
-        let boundDatePickersInstances = [];
-        let eventDatePickersInstances = [];
-
         // Variables Globales de Mapas
         let map;
         let markersLayer;
@@ -648,7 +655,7 @@
         // Variables de Control Interno de Modal
         let selectedDateKey = null;
         let currentModalType = 'transport';
-        let currentBalanceType = 'gasto';
+        let currentFinanceType = 'gasto';
         let editingEventId = null;
 
         const parseDDMMYYYY = (str) => { 
@@ -697,6 +704,44 @@
             }
         });
 
+        // ── CONTROL MAESTRO DE FECHAS EN CALENDARIOS ──
+        function updatePickersLimits(editingId = null) {
+            if (!currentTripData) return;
+            const minTripDate = parseDDMMYYYY(currentTripData.fechaInicio);
+            const maxTripDate = parseDDMMYYYY(currentTripData.fechaFin);
+
+            let sleepDates = [];
+            let nightDates = [];
+
+            // Buscamos días que ya están ocupados en el viaje excluyendo el evento que estemos editando
+            currentTripData.eventos.forEach(ev => {
+                if (ev.type === 'hotel' && ev.id !== editingId) {
+                    const [y,m,d] = ev.dateKey.split('-');
+                    const dateObj = new Date(y, m-1, d);
+                    
+                    // Noches en las que ya dormimos y el día de entrada no pueden solaparse con otra reserva
+                    if (ev.hotelType === 'hotel-night' || ev.hotelType === 'hotel-checkin') {
+                        sleepDates.push(dateObj);
+                    }
+                    // Sin embargo, sí podemos hacer el check-out de otro hotel en el mismo día del check-in
+                    if (ev.hotelType === 'hotel-night') {
+                        nightDates.push(dateObj);
+                    }
+                }
+            });
+
+            // Asignación de reglas de bloqueo con máxima precisión
+            flatpickr("#hotel-checkin-date", { dateFormat: "d/m/Y", locale: "es", minDate: minTripDate, maxDate: maxTripDate, disable: sleepDates });
+            flatpickr("#hotel-checkout-date", { dateFormat: "d/m/Y", locale: "es", minDate: minTripDate, maxDate: maxTripDate, disable: nightDates });
+            flatpickr("#hotel-date-single", { dateFormat: "d/m/Y", locale: "es", minDate: minTripDate, maxDate: maxTripDate, disable: sleepDates });
+            
+            flatpickr("#trans-date", { dateFormat: "d/m/Y", locale: "es", minDate: minTripDate, maxDate: maxTripDate });
+            flatpickr("#plan-date", { dateFormat: "d/m/Y", locale: "es", minDate: minTripDate, maxDate: maxTripDate });
+            flatpickr("#bal-date", { dateFormat: "d/m/Y", locale: "es", minDate: minTripDate, maxDate: maxTripDate });
+            
+            flatpickr(".time-picker", { enableTime: true, noCalendar: true, dateFormat: "H:i", time_24hr: true });
+        }
+
         async function loadTripFromCloud(user) {
             const tripRef = doc(db, "viajes", tripId);
             const tripSnap = await getDoc(tripRef);
@@ -729,13 +774,7 @@
                 if (!currentTripData.eventos) currentTripData.eventos = [];
                 if (!currentTripData.gastos) currentTripData.gastos = [];
 
-                // Inicialización Profesional de Pickers con Restricciones del Rango de Viaje Real
-                const minTripDate = parseDDMMYYYY(currentTripData.fechaInicio);
-                const maxTripDate = parseDDMMYYYY(currentTripData.fechaFin);
-
-                timePickersInstances = flatpickr(".time-picker", { enableTime: true, noCalendar: true, dateFormat: "H:i", time_24hr: true });
-                boundDatePickersInstances = flatpickr(".date-picker-bound", { dateFormat: "d/m/Y", locale: "es", minDate: minTripDate, maxDate: maxTripDate });
-                eventDatePickersInstances = flatpickr(".date-picker-event", { dateFormat: "d/m/Y", locale: "es", minDate: minTripDate, maxDate: maxTripDate });
+                updatePickersLimits();
 
                 const uids = Object.keys(miembros);
                 await Promise.all(uids.map(uid => getUserName(uid)));
@@ -744,7 +783,7 @@
                 renderItinerary();
                 renderUsers();
                 renderWeather();
-                renderBalance();
+                renderFinance();
 
                 document.getElementById('page-loader').style.opacity = '0';
                 setTimeout(() => document.getElementById('page-loader').style.display = 'none', 500);
@@ -941,6 +980,7 @@
                 dayCount++;
             }
             lucide.createIcons();
+            updatePickersLimits(); 
             if(mapInitialized) updateMapData();
         }
 
@@ -1044,15 +1084,16 @@
             }
         }
 
-        window.switchBalanceTab = function(tabName) {
-            document.querySelectorAll('.balance-subtab').forEach(el => el.style.display = 'none');
-            document.querySelectorAll('#tab-balance .tabs-container .tab-btn').forEach(el => el.classList.remove('active'));
-            document.getElementById(`balance-${tabName}`).style.display = 'block';
+        window.switchFinanceTab = function(tabName) {
+            document.querySelectorAll('.finance-subtab').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('#tab-finance .tabs-container .tab-btn').forEach(el => el.classList.remove('active'));
+            
+            document.getElementById(`finance-${tabName}`).classList.add('active');
             document.getElementById(`subtab-btn-${tabName}`).classList.add('active');
         }
 
-        // ── INTERRA BALANCE LÓGICA CORE ──
-        function renderBalance() {
+        // ── FINANCE LÓGICA CORE ──
+        function renderFinance() {
             const gastosList = document.getElementById('gastos-list');
             const saldosList = document.getElementById('saldos-list');
             const deudasList = document.getElementById('deudas-list');
@@ -1085,15 +1126,15 @@
                     }
 
                     gastosList.innerHTML += `
-                        <div class="balance-card">
-                            <div class="balance-info">
-                                <div class="balance-icon ${iconClass}"><i data-lucide="${icon}"></i></div>
-                                <div class="balance-details">
+                        <div class="finance-card">
+                            <div class="finance-info">
+                                <div class="finance-icon ${iconClass}"><i data-lucide="${icon}"></i></div>
+                                <div class="finance-details">
                                     <h4>${g.title}</h4>
                                     <p>${desc} · ${g.date}</p>
                                 </div>
                             </div>
-                            <div class="balance-amount ${iconClass === 'gasto' ? 'negativo' : (iconClass === 'ingreso' ? 'positivo' : '')}">
+                            <div class="finance-amount ${iconClass === 'gasto' ? 'negativo' : (iconClass === 'ingreso' ? 'positivo' : '')}">
                                 ${iconClass === 'gasto' ? '-' : (iconClass === 'ingreso' ? '+' : '')}${amount}€
                             </div>
                         </div>
@@ -1137,7 +1178,7 @@
                             <div class="user-avatar">${inicial}</div>
                             <div style="font-weight: 600; font-size: 1rem;">${name}</div>
                         </div>
-                        <div class="balance-amount ${balClass}">${balText}</div>
+                        <div class="finance-amount ${balClass}">${balText}</div>
                     </div>
                 `;
             });
@@ -1201,10 +1242,10 @@
             lucide.createIcons();
         }
 
-        window.openBalanceModal = function() {
-            document.getElementById('balance-form').reset();
+        window.openFinanceModal = function() {
+            document.getElementById('finance-form').reset();
             document.getElementById('bal-date').value = new Date().toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
-            switchBalanceFormType('gasto', document.querySelector('.type-btn[data-btype="gasto"]'));
+            switchFinanceFormType('gasto', document.querySelector('.type-btn[data-btype="gasto"]'));
             
             // Poblar Selects
             const payerSelect = document.getElementById('bal-payer');
@@ -1229,14 +1270,14 @@
                 `;
             }
             
-            document.getElementById('balance-modal').classList.add('active');
+            document.getElementById('finance-modal').classList.add('active');
         }
 
-        window.closeBalanceModal = () => document.getElementById('balance-modal').classList.remove('active');
+        window.closeFinanceModal = () => document.getElementById('finance-modal').classList.remove('active');
 
-        window.switchBalanceFormType = function(type, btn) {
-            currentBalanceType = type;
-            document.querySelectorAll('#balance-type-selector .type-btn').forEach(el => el.classList.remove('active'));
+        window.switchFinanceFormType = function(type, btn) {
+            currentFinanceType = type;
+            document.querySelectorAll('#finance-type-selector .type-btn').forEach(el => el.classList.remove('active'));
             if(btn) btn.classList.add('active');
 
             const lblPayer = document.getElementById('label-payer');
@@ -1258,9 +1299,9 @@
             }
         }
 
-        document.getElementById('balance-form').addEventListener('submit', async (e) => {
+        document.getElementById('finance-form').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const btn = document.getElementById('btn-submit-balance');
+            const btn = document.getElementById('btn-submit-finance');
             btn.innerText = 'Guardando...'; btn.style.opacity = '0.5';
 
             const title = document.getElementById('bal-title').value;
@@ -1271,7 +1312,7 @@
             let receiver = null;
             let splitAmong = [];
 
-            if (currentBalanceType === 'transferencia') {
+            if (currentFinanceType === 'transferencia') {
                 receiver = document.getElementById('bal-receiver').value;
                 if(payer === receiver) {
                     showToast("No puedes hacer una transferencia a ti mismo", "error");
@@ -1289,7 +1330,7 @@
 
             const newMov = {
                 id: Date.now().toString(36) + Math.random().toString(36).substr(2),
-                type: currentBalanceType,
+                type: currentFinanceType,
                 title: title,
                 amount: amount,
                 payer: payer,
@@ -1305,8 +1346,8 @@
                 const tripRef = doc(db, "viajes", tripId);
                 await updateDoc(tripRef, { gastos: updatedGastos });
                 currentTripData.gastos = updatedGastos;
-                closeBalanceModal();
-                renderBalance();
+                closeFinanceModal();
+                renderFinance();
                 showToast("Movimiento guardado con éxito.");
             } catch (error) {
                 console.error(error);
@@ -1337,7 +1378,7 @@
                 const tripRef = doc(db, "viajes", tripId);
                 await updateDoc(tripRef, { gastos: updatedGastos });
                 currentTripData.gastos = updatedGastos;
-                renderBalance();
+                renderFinance();
                 showToast("Deuda saldada con éxito. ¡Cuentas claras!", "success");
             } catch (error) {
                 console.error(error);
@@ -1700,6 +1741,8 @@
             document.getElementById('plan-date').value = formatView;
             document.getElementById('hotel-checkin-date').value = formatView;
             
+            updatePickersLimits(null); // Refresca limitaciones de calendario para nuevos eventos
+            
             document.getElementById('omni-modal').classList.add('active');
         }
 
@@ -1722,6 +1765,8 @@
 
             document.getElementById('common-notes').value = ev.notes || '';
             const dateStrFormatted = ev.dateKey.split('-').reverse().join('/');
+            
+            updatePickersLimits(editingEventId); // Libera el calendario para el evento actual
 
             if (ev.type === 'transport') {
                 document.getElementById('trans-date').value = dateStrFormatted;
@@ -1904,7 +1949,7 @@
                 
                 currentTripData.eventos = updatedEventos;
                 closeModal();
-                renderItinerary();
+                renderItinerary(); // renderItinerary llama a updatePickersLimits internamente
                 showToast(editingEventId ? "Evento actualizado con éxito." : "Guardado en la nube correctamente.");
             } catch (error) {
                 console.error(error);
@@ -1922,7 +1967,7 @@
                 await updateDoc(tripRef, { eventos: updatedEventos });
                 
                 currentTripData.eventos = updatedEventos;
-                renderItinerary();
+                renderItinerary(); // Se encarga también de recalcular los limites del calendario
                 showToast("Plan eliminado.", "info");
             } catch (e) {
                 console.error(e);
