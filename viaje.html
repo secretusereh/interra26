@@ -20,8 +20,7 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
     <style>
         /* =========================================
@@ -133,9 +132,10 @@
             content: ''; position: absolute; left: 9px; top: 20px; bottom: 20px; width: 2px; 
             background: linear-gradient(to bottom, transparent, var(--border-subtle) 5%, var(--border-subtle) 95%, transparent);
         }
+        /* CUADRO NEGRO ELIMINADO AQUI */
         .timeline-empty {
-            color: var(--text-muted); font-size: 0.9rem; font-style: italic; padding: 1.5rem;
-            border: 1px dashed var(--border-subtle); border-radius: 12px; text-align: center;
+            color: var(--text-muted); font-size: 0.95rem; font-style: italic; padding: 1rem 0;
+            border: none; background: transparent; display: flex; align-items: center; gap: 8px;
         }
 
         .event-card {
@@ -186,12 +186,14 @@
         .user-section h3 { margin-bottom: 1.5rem; border-bottom: 1px solid var(--border-subtle); padding-bottom: 0.5rem; display: flex; align-items: center; gap: 10px; }
         
         .user-row { display: flex; justify-content: space-between; align-items: center; padding: 1rem 0; border-bottom: 1px solid rgba(255,255,255,0.05); gap: 10px; flex-wrap: wrap; }
-        .user-info { display: flex; align-items: center; gap: 10px; min-width: 150px; }
+        .user-info { display: flex; align-items: center; gap: 12px; min-width: 150px; }
+        
         .user-avatar {
-            width: 34px; height: 34px; border-radius: 50%; background: rgba(255,255,255,0.08);
-            border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center;
-            font-weight: 700; font-size: 0.85rem; color: white; flex-shrink: 0; text-transform: uppercase;
+            width: 40px; height: 40px; border-radius: 50%; background: var(--accent-blue);
+            border: 2px solid rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center;
+            color: white; flex-shrink: 0;
         }
+
         .user-role-tag { font-size: 0.7rem; padding: 0.3rem 0.6rem; border-radius: 20px; background: rgba(255,255,255,0.1); text-transform: uppercase; letter-spacing: 1px; font-weight: 600; white-space: nowrap; }
         
         .request-actions { display: flex; gap: 8px; width: 100%; margin-top: 10px;}
@@ -200,6 +202,14 @@
         .btn-accept:hover { background: var(--success); color: var(--bg-color); }
         .btn-deny { background: rgba(255, 77, 77, 0.15); color: var(--accent); padding: 0.6rem 1rem;}
         .btn-deny:hover { background: var(--accent); color: white; }
+
+        /* Color Picker en Modal de Perfil */
+        .color-circle {
+            width: 40px; height: 40px; border-radius: 50%; cursor: pointer; border: 2px solid transparent;
+            display: flex; align-items: center; justify-content: center; color: white; transition: 0.2s;
+        }
+        .color-circle:hover { transform: scale(1.1); }
+        .color-circle.selected { border-color: white; box-shadow: 0 0 10px rgba(255,255,255,0.5); transform: scale(1.1); }
 
         /* =========================================
            TAB 5: FINANCE (INTERRA BALANCE)
@@ -210,6 +220,18 @@
         @keyframes slideUpFade {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* NUEVO BOTÓN PREMIUM FINANCE */
+        .btn-finance-premium {
+            background: linear-gradient(135deg, #ff4d4d, #ff8080);
+            color: #ffffff; border: none; padding: 0.8rem 1.8rem; border-radius: 30px;
+            font-weight: 800; font-size: 1rem; cursor: pointer; display: flex; align-items: center; gap: 8px;
+            box-shadow: 0 6px 15px rgba(255, 77, 77, 0.3); transition: var(--transition);
+        }
+        .btn-finance-premium:hover {
+            transform: translateY(-3px); box-shadow: 0 10px 25px rgba(255, 77, 77, 0.6);
+            background: linear-gradient(135deg, #ff1a1a, #ff4d4d);
         }
 
         .finance-card {
@@ -332,7 +354,7 @@
 
     <div id="page-loader">
         <i data-lucide="compass" style="width: 48px; height: 48px; color: var(--primary); animation: spin 2s linear infinite;"></i>
-        <p style="margin-top: 15px; color: var(--text-muted);">AJUSTANDO LA BRUJULA</p>
+        <p style="margin-top: 15px; color: var(--text-muted);">AJUSTANDO LA BRÚJULA</p>
     </div>
 
     <nav>
@@ -382,8 +404,8 @@
                 <h2 style="font-size: 1.8rem; font-weight: 800;">Finance</h2>
                 <p style="color: var(--text-muted); font-size: 0.9rem;">Control financiero del grupo. Cuentas claras, amistades largas.</p>
             </div>
-            <button class="btn-submit" style="width: auto; padding: 0.8rem 1.5rem;" onclick="openFinanceModal()">
-                <i data-lucide="plus" style="width: 18px;"></i> Añadir Movimiento
+            <button class="btn-finance-premium" onclick="openFinanceModal()">
+                <i data-lucide="plus" style="width: 20px;"></i> Añadir Movimiento
             </button>
         </div>
         
@@ -614,12 +636,52 @@
         </div>
     </div>
 
+    <div class="modal-overlay" id="profile-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Tu Perfil en el Viaje</h2>
+                <p style="color: var(--text-muted); font-size: 0.9rem;">Elige cómo te verán los demás.</p>
+            </div>
+            <form id="profile-form">
+                <div class="input-group">
+                    <label>Tu Apodo / Nombre</label>
+                    <input type="text" id="profile-name" required placeholder="Ej. Alex">
+                </div>
+                <div class="input-group" style="margin-top: 1.5rem;">
+                    <label>Color de Avatar</label>
+                    <div style="display:flex; gap:12px; justify-content: center; flex-wrap: wrap; margin-top: 10px;" id="avatar-color-picker">
+                        </div>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-cancel" onclick="closeProfileModal()">Cancelar</button>
+                    <button type="submit" class="btn-submit">Guardar Cambios</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="finance-tour-modal">
+        <div class="modal-content" style="text-align: center;">
+            <div style="background: rgba(255,77,77,0.1); width: 80px; height: 80px; border-radius: 50%; display: flex; justify-content: center; align-items: center; margin: 0 auto 1.5rem; color: var(--accent);">
+                <i data-lucide="pie-chart" style="width: 40px; height: 40px;"></i>
+            </div>
+            <h2 style="font-size: 2rem; margin-bottom: 0.5rem;">Bienvenido a Finance</h2>
+            <p style="color: var(--text-muted); margin: 1rem 0 2.5rem; line-height: 1.8; font-size: 1rem; text-align: left;">
+                El motor financiero inteligente de tu viaje. Olvídate de los cálculos manuales:<br><br>
+                <i data-lucide="check" style="width: 16px; color: var(--success); display: inline-block; vertical-align: middle;"></i> <strong>1. Registra Gastos:</strong> Añade quién pagó y entre quiénes se divide automáticamente.<br><br>
+                <i data-lucide="check" style="width: 16px; color: var(--success); display: inline-block; vertical-align: middle;"></i> <strong>2. Saldos en Vivo:</strong> Calculamos al instante el balance neto de cada uno (quién debe y a quién le deben).<br><br>
+                <i data-lucide="check" style="width: 16px; color: var(--success); display: inline-block; vertical-align: middle;"></i> <strong>3. Cuentas Claras:</strong> Cruza las deudas y liquídalas con un solo botón de "Saldar".
+            </p>
+            <button class="btn-finance-premium" style="width: 100%; justify-content: center;" onclick="closeFinanceTour()">¡Entendido, a cuadrar cuentas!</button>
+        </div>
+    </div>
+
     <div id="toast-container"></div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc, updateDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+        import { getFirestore, doc, getDoc, updateDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
         // Bloqueo total de click derecho para protección del código fuente
         window.addEventListener('contextmenu', (e) => e.preventDefault());
@@ -642,7 +704,11 @@
         let currentTripData = null;
         let currentUserRole = null;
         let canEdit = false;
-        let userNamesCache = {};
+        
+        let userProfilesCache = {}; // Cache avanzado: { nombre: '...', avatarColor: '...' }
+        const AVATAR_COLORS = ['#ff4d4d', '#4da6ff', '#4dff88', '#ffd700', '#ff66b2', '#9966ff', '#ff9933', '#00cccc'];
+        let activeProfileColor = '#ff4d4d'; // Color seleccionado en el modal
+
         const SUPERADMIN_EMAIL = "tu_correo@gmail.com"; 
 
         // Variables Globales de Mapas
@@ -676,19 +742,21 @@
             setTimeout(() => { toast.style.animation = 'slideOutToast 0.4s forwards'; setTimeout(() => toast.remove(), 400); }, 3500);
         }
 
-        async function getUserName(uid) {
-            if (userNamesCache[uid]) return userNamesCache[uid];
+        // ── PERFILES AVANZADOS (NOMBRES Y AVATARES) ──
+        async function getUserProfile(uid) {
+            if (userProfilesCache[uid]) return userProfilesCache[uid];
             try {
                 const snap = await getDoc(doc(db, "usuarios", uid));
                 if (snap.exists()) {
                     const data = snap.data();
                     const nombre = data.nombre && data.nombre.trim() !== '' ? data.nombre : data.email || `Usuario ${uid.substring(0, 6)}`;
-                    userNamesCache[uid] = nombre;
-                    return nombre;
+                    const avatarColor = data.avatarColor || '#4da6ff'; // Color por defecto si no ha elegido
+                    userProfilesCache[uid] = { nombre, avatarColor };
+                    return userProfilesCache[uid];
                 }
             } catch(e) {}
-            const fallback = `Usuario ${uid.substring(0, 6)}`;
-            userNamesCache[uid] = fallback;
+            const fallback = { nombre: `Usuario ${uid.substring(0, 6)}`, avatarColor: '#4da6ff' };
+            userProfilesCache[uid] = fallback;
             return fallback;
         }
 
@@ -698,6 +766,7 @@
 
             try {
                 await loadTripFromCloud(user);
+                initProfilePicker();
             } catch (error) {
                 console.error(error);
                 alert("Error al conectar con la base de datos.");
@@ -713,24 +782,20 @@
             let sleepDates = [];
             let nightDates = [];
 
-            // Buscamos días que ya están ocupados en el viaje excluyendo el evento que estemos editando
             currentTripData.eventos.forEach(ev => {
                 if (ev.type === 'hotel' && ev.id !== editingId) {
                     const [y,m,d] = ev.dateKey.split('-');
                     const dateObj = new Date(y, m-1, d);
                     
-                    // Noches en las que ya dormimos y el día de entrada no pueden solaparse con otra reserva
                     if (ev.hotelType === 'hotel-night' || ev.hotelType === 'hotel-checkin') {
                         sleepDates.push(dateObj);
                     }
-                    // Sin embargo, sí podemos hacer el check-out de otro hotel en el mismo día del check-in
                     if (ev.hotelType === 'hotel-night') {
                         nightDates.push(dateObj);
                     }
                 }
             });
 
-            // Asignación de reglas de bloqueo con máxima precisión
             flatpickr("#hotel-checkin-date", { dateFormat: "d/m/Y", locale: "es", minDate: minTripDate, maxDate: maxTripDate, disable: sleepDates });
             flatpickr("#hotel-checkout-date", { dateFormat: "d/m/Y", locale: "es", minDate: minTripDate, maxDate: maxTripDate, disable: nightDates });
             flatpickr("#hotel-date-single", { dateFormat: "d/m/Y", locale: "es", minDate: minTripDate, maxDate: maxTripDate, disable: sleepDates });
@@ -777,7 +842,7 @@
                 updatePickersLimits();
 
                 const uids = Object.keys(miembros);
-                await Promise.all(uids.map(uid => getUserName(uid)));
+                await Promise.all(uids.map(uid => getUserProfile(uid))); // Carga caché de perfiles
 
                 renderHeader();
                 renderItinerary();
@@ -926,7 +991,7 @@
 
                 let eventsHTML = '';
                 if (eventsToday.length === 0) {
-                    eventsHTML = `<div class="timeline-empty">Día libre. Explora a tu ritmo.</div>`;
+                    eventsHTML = `<div class="timeline-empty"><i data-lucide="coffee" style="width: 18px;"></i> Día libre. Explora a tu ritmo.</div>`;
                 } else {
                     eventsToday.forEach(ev => {
                         let icon = ev.type === 'transport' ? 'train' : (ev.type === 'hotel' ? 'bed' : 'map-pin');
@@ -946,7 +1011,7 @@
                         }
 
                         eventsHTML += `
-                            <div class="event-card type-${ev.type}">
+                            <div class="event-card type-${ev.type} pdf-no-break">
                                 <div class="event-time">${displayTime}</div>
                                 <div class="event-icon"><i data-lucide="${icon}"></i></div>
                                 <div class="event-content">
@@ -1032,13 +1097,11 @@
             });
 
             for (const ev of sortedEvents) {
-                // Si ya tenemos lat/lon en Firestore, renderizamos instantáneamente sin consumir API
                 if (ev.lat && ev.lon) {
                     const coords = [ev.lat, ev.lon];
                     L.marker(coords).addTo(markersLayer).bindPopup(`<b>${ev.title}</b><br>${ev.dateKey}`);
                     latlngs.push(coords);
                 } else {
-                    // Si no existen, geocodificamos, guardamos en el evento y marcamos para update
                     const coords = await geocodeAddress(ev.title);
                     if (coords) {
                         const targetEv = updatedEventos.find(e => e.id === ev.id);
@@ -1050,7 +1113,6 @@
                         L.marker(coords).addTo(markersLayer).bindPopup(`<b>${ev.title}</b><br>${ev.dateKey}`);
                         latlngs.push(coords);
                     }
-                    // Pequeño delay de seguridad de Nominatim para evitar 429 Too Many Requests si hay varios nuevos
                     await new Promise(r => setTimeout(r, 600));
                 }
             }
@@ -1058,7 +1120,6 @@
             routeLayer.setLatLngs(latlngs);
             if (latlngs.length > 0) map.fitBounds(routeLayer.getBounds(), {padding: [50, 50]});
 
-            // Persistencia silenciosa en background para que la próxima vez sea instantáneo
             if (needsDbUpdate && canEdit) {
                 try {
                     const tripRef = doc(db, "viajes", tripId);
@@ -1082,6 +1143,18 @@
                     setTimeout(() => map.invalidateSize(), 100);
                 }
             }
+
+            if(tabName === 'finance') {
+                // Tour automático primera vez
+                if (localStorage.getItem(`financeTourDone_${tripId}`) !== 'true') {
+                    document.getElementById('finance-tour-modal').classList.add('active');
+                }
+            }
+        }
+
+        window.closeFinanceTour = function() {
+            localStorage.setItem(`financeTourDone_${tripId}`, 'true');
+            document.getElementById('finance-tour-modal').classList.remove('active');
         }
 
         window.switchFinanceTab = function(tabName) {
@@ -1106,23 +1179,23 @@
             gastos.sort((a,b) => new Date(b.date.split('/').reverse().join('-')) - new Date(a.date.split('/').reverse().join('-')) || b.timestamp - a.timestamp);
 
             if (gastos.length === 0) {
-                gastosList.innerHTML = `<div class="timeline-empty">Aún no hay movimientos registrados en este viaje.</div>`;
+                gastosList.innerHTML = `<div class="timeline-empty" style="justify-content:center;"><i data-lucide="piggy-bank" style="width: 18px;"></i> Aún no hay movimientos registrados en este viaje.</div>`;
             } else {
                 gastos.forEach(g => {
                     let icon, iconClass, desc;
                     const amount = parseFloat(g.amount).toFixed(2);
-                    const payerName = userNamesCache[g.payer] || 'Alguien';
+                    const payerProfile = userProfilesCache[g.payer] || {nombre: 'Alguien'};
 
                     if (g.type === 'gasto') {
                         icon = 'shopping-cart'; iconClass = 'gasto';
-                        desc = `Pagado por ${payerName} (dividido entre ${g.splitAmong.length})`;
+                        desc = `Pagado por ${payerProfile.nombre} (dividido entre ${g.splitAmong.length})`;
                     } else if (g.type === 'ingreso') {
                         icon = 'plus-circle'; iconClass = 'ingreso';
-                        desc = `Recibido por ${payerName} (a repartir entre ${g.splitAmong.length})`;
+                        desc = `Recibido por ${payerProfile.nombre} (a repartir entre ${g.splitAmong.length})`;
                     } else {
                         icon = 'arrow-right-left'; iconClass = 'transfer';
-                        const receiverName = userNamesCache[g.receiver] || 'Alguien';
-                        desc = `De ${payerName} a ${receiverName}`;
+                        const receiverProfile = userProfilesCache[g.receiver] || {nombre: 'Alguien'};
+                        desc = `De ${payerProfile.nombre} a ${receiverProfile.nombre}`;
                     }
 
                     gastosList.innerHTML += `
@@ -1154,29 +1227,29 @@
                     let splitAmount = amount / g.splitAmong.length;
                     g.splitAmong.forEach(uid => { if(balances[uid] !== undefined) balances[uid] -= splitAmount; });
                 } else if (g.type === 'ingreso') {
-                    // El que recibe el ingreso físico tiene el dinero, por lo tanto se lo debe al grupo
                     if (balances[g.payer] !== undefined) balances[g.payer] -= amount;
                     let splitAmount = amount / g.splitAmong.length;
                     g.splitAmong.forEach(uid => { if(balances[uid] !== undefined) balances[uid] += splitAmount; });
                 } else if (g.type === 'transferencia') {
-                    if (balances[g.payer] !== undefined) balances[g.payer] += amount; // El que envía gana saldo positivo (como si pagara)
-                    if (balances[g.receiver] !== undefined) balances[g.receiver] -= amount; // El que recibe contrae deuda
+                    if (balances[g.payer] !== undefined) balances[g.payer] += amount; 
+                    if (balances[g.receiver] !== undefined) balances[g.receiver] -= amount; 
                 }
             });
 
             // Renderizar Netos
             miembrosIds.forEach(uid => {
                 const bal = balances[uid] || 0;
-                const name = userNamesCache[uid] || 'Usuario';
-                const inicial = name.charAt(0).toUpperCase();
+                const profile = userProfilesCache[uid] || {nombre: 'Usuario', avatarColor: '#4da6ff'};
                 const balText = bal > 0.01 ? `+${bal.toFixed(2)}€` : (bal < -0.01 ? `${bal.toFixed(2)}€` : '0.00€');
                 const balClass = bal > 0.01 ? 'positivo' : (bal < -0.01 ? 'negativo' : '');
 
                 saldosList.innerHTML += `
                     <div class="user-section" style="padding: 1.5rem; display: flex; justify-content: space-between; align-items: center;">
                         <div class="user-info">
-                            <div class="user-avatar">${inicial}</div>
-                            <div style="font-weight: 600; font-size: 1rem;">${name}</div>
+                            <div class="user-avatar" style="background-color: ${profile.avatarColor}; border:none;">
+                                <i data-lucide="user" style="width: 22px; color: white;"></i>
+                            </div>
+                            <div style="font-weight: 600; font-size: 1rem;">${profile.nombre}</div>
                         </div>
                         <div class="finance-amount ${balClass}">${balText}</div>
                     </div>
@@ -1216,18 +1289,17 @@
                 deudasList.innerHTML = `<p style="color: var(--success); font-weight:600;"><i data-lucide="check-circle" style="width:16px; margin-bottom:-2px;"></i> Todas las cuentas están saldadas.</p>`;
             } else {
                 deudasCalculadas.forEach(deuda => {
-                    const fromName = userNamesCache[deuda.from] || 'Alguien';
-                    const toName = userNamesCache[deuda.to] || 'Alguien';
+                    const fromProfile = userProfilesCache[deuda.from] || {nombre: 'Alguien'};
+                    const toProfile = userProfilesCache[deuda.to] || {nombre: 'Alguien'};
                     const amountStr = deuda.amount.toFixed(2);
                     
                     const userIsLoggedIn = auth.currentUser && auth.currentUser.uid === deuda.from;
-                    // El admin puede saldar cualquier cuenta, el implicado puede saldar su deuda
                     const showSettleBtn = canEdit || userIsLoggedIn;
 
                     deudasList.innerHTML += `
                         <div class="debt-card">
                             <div class="debt-text">
-                                <strong>${fromName}</strong> debe pagar a <strong>${toName}</strong>: <span style="font-weight:800; font-size:1.1rem;">${amountStr}€</span>
+                                <strong>${fromProfile.nombre}</strong> debe pagar a <strong>${toProfile.nombre}</strong>: <span style="font-weight:800; font-size:1.1rem;">${amountStr}€</span>
                             </div>
                             ${showSettleBtn ? `
                             <button class="btn-settle" onclick="settleDebt('${deuda.from}', '${deuda.to}', ${deuda.amount})">
@@ -1257,15 +1329,15 @@
             checkboxesDiv.innerHTML = '';
             
             for (const uid in currentTripData.miembros) {
-                const name = userNamesCache[uid] || 'Usuario';
+                const profile = userProfilesCache[uid] || {nombre: 'Usuario'};
                 const isMe = auth.currentUser && auth.currentUser.uid === uid;
                 
-                payerSelect.innerHTML += `<option value="${uid}" ${isMe ? 'selected' : ''}>${name}</option>`;
-                receiverSelect.innerHTML += `<option value="${uid}">${name}</option>`;
+                payerSelect.innerHTML += `<option value="${uid}" ${isMe ? 'selected' : ''}>${profile.nombre}</option>`;
+                receiverSelect.innerHTML += `<option value="${uid}">${profile.nombre}</option>`;
                 
                 checkboxesDiv.innerHTML += `
                     <label class="checkbox-label">
-                        <input type="checkbox" value="${uid}" checked style="accent-color: var(--primary);"> ${name}
+                        <input type="checkbox" value="${uid}" checked style="accent-color: var(--primary);"> ${profile.nombre}
                     </label>
                 `;
             }
@@ -1358,7 +1430,10 @@
         });
 
         window.settleDebt = async function(fromUid, toUid, amount) {
-            if(!confirm(`¿Confirmas que ${userNamesCache[fromUid]} ha pagado ${amount.toFixed(2)}€ a ${userNamesCache[toUid]}? Esto saldará la deuda actual.`)) return;
+            const profileFrom = userProfilesCache[fromUid] || {nombre: 'Alguien'};
+            const profileTo = userProfilesCache[toUid] || {nombre: 'Alguien'};
+
+            if(!confirm(`¿Confirmas que ${profileFrom.nombre} ha pagado ${amount.toFixed(2)}€ a ${profileTo.nombre}? Esto saldará la deuda actual.`)) return;
             
             const newMov = {
                 id: Date.now().toString(36) + Math.random().toString(36).substr(2),
@@ -1386,17 +1461,8 @@
             }
         }
 
-        // ── EXPORTACIÓN PREMIUM PDF ──
+        // ── EXPORTACIÓN PREMIUM PDF (ILIMITADA Y CON SALTOS PERFECTOS) ──
         window.generarPDF = async function() {
-            const now = new Date();
-            const mesLlave = `interrahub_pdf_usage_${now.getFullYear()}_${now.getMonth()}`;
-            let usoActual = parseInt(localStorage.getItem(mesLlave) || '0');
-            
-            if (usoActual >= 3) {
-                showToast("Has llegado al máximo de PDFs permitidos mensualmente. Suscríbete a Interra-hub PRO.", "error");
-                return;
-            }
-
             if (!currentTripData || !currentTripData.eventos || currentTripData.eventos.length === 0) {
                 showToast("El itinerario está vacío. Añade planes antes de exportar.", "info");
                 return;
@@ -1407,13 +1473,13 @@
             let editorsHTML = '';
             for (const [uid, rol] of Object.entries(currentTripData.miembros || {})) {
                 if (rol === 'admin-grupo' || rol === 'editor-grupo') {
-                    const nombre = userNamesCache[uid] || 'Usuario';
+                    const profile = userProfilesCache[uid] || {nombre: 'Usuario'};
                     const labelRol = rol === 'admin-grupo' ? 'Admin' : 'Editor';
-                    editorsHTML += `<span style="display:inline-block; margin-right: 10px; margin-bottom: 10px; background: #f1f5f9; border: 1px solid #cbd5e1; color: #334155; padding: 6px 14px; border-radius: 20px; font-size: 13px;"><strong style="color: #0f172a;">${nombre}</strong> · ${labelRol}</span>`;
+                    editorsHTML += `<span style="display:inline-block; margin-right: 10px; margin-bottom: 10px; background: #f1f5f9; border: 1px solid #cbd5e1; color: #334155; padding: 6px 14px; border-radius: 20px; font-size: 13px;"><strong style="color: #0f172a;">${profile.nombre}</strong> · ${labelRol}</span>`;
                 }
             }
             const membersSection = editorsHTML ? `
-                <div style="margin-bottom: 35px; text-align: left; padding: 20px; background: #ffffff; border: 1px solid #eaeaea; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.02);">
+                <div style="margin-bottom: 35px; text-align: left; padding: 20px; background: #ffffff; border: 1px solid #eaeaea; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.02); page-break-inside: avoid;">
                     <h3 style="font-size: 16px; color: #111; margin-top: 0; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1px;">Equipo de Organización</h3>
                     <div>${editorsHTML}</div>
                 </div>
@@ -1432,6 +1498,7 @@
                         await new Promise(r => setTimeout(r, 800)); 
                     }
 
+                    // Forzamos un renderizado para evitar que el canvas esté corrupto
                     const mapEl = document.getElementById('map-container');
                     const canvasMap = await html2canvas(mapEl, { useCORS: true, allowTaint: true });
                     const mapImgBase64 = canvasMap.toDataURL('image/jpeg', 0.9);
@@ -1442,7 +1509,7 @@
                     }
 
                     mapSection = `
-                        <div style="margin-bottom: 40px; text-align: left;">
+                        <div style="margin-bottom: 40px; text-align: left; page-break-inside: avoid;">
                             <h3 style="font-size: 16px; color: #111; margin-top: 0; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1px;">Mapa de la Ruta</h3>
                             <div style="border-radius: 12px; overflow: hidden; border: 1px solid #eaeaea; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
                                 <img src="${mapImgBase64}" style="width: 100%; display: block;" />
@@ -1453,18 +1520,14 @@
             }
 
             const pdfContainer = document.createElement('div');
-            pdfContainer.style.position = 'absolute';
-            pdfContainer.style.left = '-9999px';
-            pdfContainer.style.top = '0';
             pdfContainer.style.width = '800px';
             pdfContainer.style.backgroundColor = '#ffffff'; 
             pdfContainer.style.color = '#000000';
-            pdfContainer.style.padding = '50px';
+            pdfContainer.style.padding = '40px';
             pdfContainer.style.fontFamily = "'Sora', sans-serif";
-            pdfContainer.style.zIndex = '-1';
             
             let htmlFormato = `
-                <div style="text-align:center; margin-bottom: 40px; border-bottom: 2px solid #eaeaea; padding-bottom: 25px;">
+                <div style="text-align:center; margin-bottom: 40px; border-bottom: 2px solid #eaeaea; padding-bottom: 25px; page-break-inside: avoid;">
                     <div style="font-size: 16px; font-weight: 800; color: #ff4d4d; margin-bottom: 15px; letter-spacing: 2px; text-transform: uppercase;">INTERRA-HUB</div>
                     <h1 style="font-size: 38px; font-weight: 800; margin: 0; letter-spacing: -1px; color: #111;">${currentTripData.nombre}</h1>
                     <p style="color: #666; font-size: 18px; margin-top: 10px; font-weight: 400;">${currentTripData.fechaInicio} — ${currentTripData.fechaFin}</p>
@@ -1489,10 +1552,11 @@
                 const stringFecha = fechaObj.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' });
 
                 htmlFormato += `
-                    <div style="margin-bottom: 35px; page-break-inside: avoid;">
-                        <h2 style="font-size: 22px; font-weight: 800; color: #4da6ff; border-bottom: 2px solid #f0f0f0; padding-bottom: 10px; margin-bottom: 20px;">
+                    <div style="margin-bottom: 20px; page-break-inside: avoid;">
+                        <h2 style="font-size: 22px; font-weight: 800; color: #4da6ff; border-bottom: 2px solid #f0f0f0; padding-bottom: 10px; margin-bottom: 15px;">
                             Día ${cuentaDia} <span style="color:#999; font-size: 16px; font-weight: 400; margin-left: 8px;">— ${stringFecha}</span>
                         </h2>
+                    </div>
                 `;
 
                 evs.forEach(ev => {
@@ -1507,8 +1571,9 @@
                         else { tituloVisual = `Noche en: ${ev.title}`; tiempoVisual = '--:--'; }
                     }
 
+                    // APLICAMOS page-break-inside: avoid a cada evento para que nunca se corte por la mitad en PDF
                     htmlFormato += `
-                        <div style="display: flex; align-items: flex-start; margin-bottom: 16px; background: #fafafa; padding: 20px; border-radius: 12px; border-left: 5px solid ${colorBorde}; box-shadow: 0 4px 10px rgba(0,0,0,0.03);">
+                        <div style="display: flex; align-items: flex-start; margin-bottom: 16px; background: #fafafa; padding: 20px; border-radius: 12px; border-left: 5px solid ${colorBorde}; box-shadow: 0 4px 10px rgba(0,0,0,0.03); page-break-inside: avoid;">
                             <div style="font-weight: 800; font-size: 16px; min-width: 70px; color: #333; padding-top:2px;">${tiempoVisual}</div>
                             <div style="font-size: 22px; margin: 0 20px;">${iconoVisual}</div>
                             <div style="flex: 1;">
@@ -1518,54 +1583,36 @@
                         </div>
                     `;
                 });
-                htmlFormato += `</div>`;
                 cuentaDia++;
             });
 
             htmlFormato += `
-                <div style="margin-top: 60px; text-align: center; color: #888; font-size: 14px; border-top: 1px solid #eaeaea; padding-top: 25px;">
+                <div style="margin-top: 60px; text-align: center; color: #888; font-size: 14px; border-top: 1px solid #eaeaea; padding-top: 25px; page-break-inside: avoid;">
                     Generado de forma segura por <strong style="color: #ff4d4d;">interra-hub.vercel.app</strong>
                 </div>
             `;
 
             pdfContainer.innerHTML = htmlFormato;
-            document.body.appendChild(pdfContainer);
 
-            try {
-                const canvas = await html2canvas(pdfContainer, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
-                const imgData = canvas.toDataURL('image/jpeg', 1.0);
-                
-                const { jsPDF } = window.jspdf;
-                const pdf = new jsPDF('p', 'mm', 'a4');
-                const anchoPdf = pdf.internal.pageSize.getWidth();
-                const altoPdf = (canvas.height * anchoPdf) / canvas.width;
-                
-                let alturaRestante = altoPdf;
-                let posicionY = 0;
+            // Uso de la librería avanzada html2pdf.js con salto de página inteligente
+            const opt = {
+                margin:       [10, 10, 10, 10], // top, left, bottom, right
+                filename:     `Itinerario_${currentTripData.nombre.replace(/\s+/g, '_')}.pdf`,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2, useCORS: true },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
+                pagebreak:    { mode: ['avoid-all', 'css', 'legacy'] }
+            };
 
-                pdf.addImage(imgData, 'JPEG', 0, posicionY, anchoPdf, altoPdf);
-                alturaRestante -= pdf.internal.pageSize.getHeight();
-
-                while (alturaRestante > 0) {
-                    posicionY = alturaRestante - altoPdf;
-                    pdf.addPage();
-                    pdf.addImage(imgData, 'JPEG', 0, posicionY, anchoPdf, altoPdf);
-                    alturaRestante -= pdf.internal.pageSize.getHeight();
-                }
-
-                pdf.save(`Itinerario_${currentTripData.nombre.replace(/\s+/g, '_')}.pdf`);
-                
-                localStorage.setItem(mesLlave, usoActual + 1);
-                showToast(`PDF Exportado correctamente (${usoActual + 1}/3 usos este mes)`, "success");
-            } catch (e) {
-                console.error(e);
+            html2pdf().set(opt).from(pdfContainer).save().then(() => {
+                showToast(`PDF Exportado correctamente sin cortes`, "success");
+            }).catch((err) => {
+                console.error(err);
                 showToast("Hubo un error al generar el PDF", "error");
-            } finally {
-                document.body.removeChild(pdfContainer);
-            }
+            });
         }
 
-        // ── GESTIÓN DE ROLES AVANZADA EN TIEMPO REAL ──
+        // ── GESTIÓN DE ROLES Y PERFILES AVANZADA ──
         async function renderUsers() {
             const miembrosList = document.getElementById('members-list');
             const reqList = document.getElementById('requests-list');
@@ -1577,16 +1624,15 @@
             const soyAdminOGod = currentUserRole === "admin-grupo" || isGod;
 
             for (const [uid, rol] of Object.entries(currentTripData.miembros || {})) {
-                const nombre = userNamesCache[uid] || await getUserName(uid);
-                const inicial = nombre.charAt(0).toUpperCase();
+                const profile = userProfilesCache[uid] || await getUserProfile(uid);
                 let colorRol = rol === 'admin-grupo' ? 'var(--accent-blue)' : (rol === 'editor-grupo' ? 'var(--success)' : 'var(--text-muted)');
                 let labelRol = rol === 'admin-grupo' ? 'Admin' : rol === 'editor-grupo' ? 'Editor' : 'Visor';
                 
-                const isTargetGod = userNamesCache[uid] === SUPERADMIN_EMAIL || uid === SUPERADMIN_EMAIL;
+                const isTargetGod = profile.nombre === SUPERADMIN_EMAIL || uid === SUPERADMIN_EMAIL;
+                const isMe = user && user.uid === uid;
 
-                // Renderizado dinámico de controles Pro para Admins
                 let controlHTML = `<span class="user-role-tag" style="color: ${colorRol}; border: 1px solid ${colorRol};">${labelRol}</span>`;
-                if(soyAdminOGod && uid !== user.uid && !isTargetGod) {
+                if(soyAdminOGod && !isMe && !isTargetGod) {
                     controlHTML = `
                         <div style="display:flex; gap:8px; align-items:center;">
                             <select onchange="cambiarRolMiembro('${uid}', this.value)" style="background:#1a1a1a; color:white; border:1px solid var(--border-subtle); padding:0.4rem; border-radius:8px; font-size:0.8rem; font-family:'Sora'; cursor:pointer; outline:none;">
@@ -1601,13 +1647,25 @@
                     `;
                 }
 
+                // Botón para editar perfil personal (solo aparece en ti mismo)
+                let editProfileBtn = isMe ? `<button onclick="openProfileModal()" style="background:rgba(255,255,255,0.05); color:var(--primary); border:1px solid var(--border-subtle); border-radius:6px; padding:0.3rem 0.6rem; font-size:0.75rem; cursor:pointer; display:flex; align-items:center; gap:5px;"><i data-lucide="edit-3" style="width:12px;"></i> Editar Mi Perfil</button>` : '';
+
                 miembrosList.innerHTML += `
                     <div class="user-row">
                         <div class="user-info">
-                            <div class="user-avatar">${inicial}</div>
-                            <div><div style="font-weight: 600; font-size: 0.95rem; word-break: break-all;">${nombre}</div></div>
+                            <div class="user-avatar" style="background-color: ${profile.avatarColor};">
+                                <i data-lucide="user" style="width: 20px; color: white;"></i>
+                            </div>
+                            <div>
+                                <div style="font-weight: 600; font-size: 0.95rem; word-break: break-all; display: flex; align-items: center; gap: 8px;">
+                                    ${profile.nombre}
+                                </div>
+                            </div>
                         </div>
-                        ${controlHTML}
+                        <div style="display:flex; align-items:center; gap: 10px;">
+                            ${editProfileBtn}
+                            ${controlHTML}
+                        </div>
                     </div>
                 `;
             }
@@ -1621,17 +1679,16 @@
 
             if (numSolicitudes > 0) {
                 for (const [uid, email] of Object.entries(solicitudes)) {
-                    const nombreSolicitante = userNamesCache[uid] ? userNamesCache[uid] : null;
-                    const displaySolicitante = nombreSolicitante || email;
-                    const inicial = displaySolicitante.charAt(0).toUpperCase();
+                    const profileSolicitante = userProfilesCache[uid] ? userProfilesCache[uid] : null;
+                    const displaySolicitante = profileSolicitante ? profileSolicitante.nombre : email;
 
                     reqList.innerHTML += `
                         <div class="user-row" style="flex-direction: column; align-items: flex-start; gap: 10px; padding: 1.5rem 0;">
                             <div class="user-info">
-                                <div class="user-avatar">${inicial}</div>
+                                <div class="user-avatar" style="background-color: var(--text-muted);"><i data-lucide="user" style="width: 20px;"></i></div>
                                 <div>
                                     <div style="font-weight: 600; font-size: 0.9rem;">${displaySolicitante}</div>
-                                    ${nombreSolicitante ? `<div style="font-size: 0.75rem; color: var(--text-muted);">${email}</div>` : ''}
+                                    ${profileSolicitante ? `<div style="font-size: 0.75rem; color: var(--text-muted);">${email}</div>` : ''}
                                 </div>
                             </div>
                             <div class="request-actions">
@@ -1653,6 +1710,64 @@
             }
             lucide.createIcons();
         }
+
+        // ── INICIALIZACIÓN DE SELECTOR DE PERFILES ──
+        function initProfilePicker() {
+            const picker = document.getElementById('avatar-color-picker');
+            picker.innerHTML = '';
+            AVATAR_COLORS.forEach(color => {
+                picker.innerHTML += `<div class="color-circle" style="background-color: ${color};" onclick="selectProfileColor('${color}')" data-color="${color}"><i data-lucide="user" style="width: 20px;"></i></div>`;
+            });
+        }
+
+        window.selectProfileColor = function(color) {
+            activeProfileColor = color;
+            document.querySelectorAll('.color-circle').forEach(el => el.classList.remove('selected'));
+            document.querySelector(`.color-circle[data-color="${color}"]`).classList.add('selected');
+        }
+
+        window.openProfileModal = async function() {
+            const uid = auth.currentUser.uid;
+            const profile = userProfilesCache[uid] || await getUserProfile(uid);
+            
+            document.getElementById('profile-name').value = profile.nombre;
+            selectProfileColor(profile.avatarColor);
+            
+            document.getElementById('profile-modal').classList.add('active');
+        }
+
+        window.closeProfileModal = () => document.getElementById('profile-modal').classList.remove('active');
+
+        document.getElementById('profile-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = e.target.querySelector('.btn-submit');
+            btn.innerText = 'Guardando...'; btn.style.opacity = '0.5';
+
+            const newName = document.getElementById('profile-name').value.trim();
+            const uid = auth.currentUser.uid;
+
+            try {
+                // Actualiza en la colección global de usuarios
+                await setDoc(doc(db, "usuarios", uid), {
+                    nombre: newName,
+                    avatarColor: activeProfileColor
+                }, { merge: true });
+
+                // Actualiza caché instantáneo
+                userProfilesCache[uid] = { nombre: newName, avatarColor: activeProfileColor };
+                
+                closeProfileModal();
+                renderUsers();
+                if(document.getElementById('tab-finance').classList.contains('active')) renderFinance();
+                
+                showToast("Perfil actualizado correctamente.");
+            } catch(error) {
+                console.error(error);
+                showToast("Error al guardar el perfil", "error");
+            } finally {
+                btn.innerText = 'Guardar Cambios'; btn.style.opacity = '1';
+            }
+        });
 
         window.cambiarRolMiembro = async function(uid, nuevoRol) {
             try {
@@ -1705,7 +1820,7 @@
 
                 if (rolElegido !== 'deny') {
                     nuevosMiembros[uid] = rolElegido;
-                    await getUserName(uid);
+                    await getUserProfile(uid);
                     showToast(`Usuario añadido como ${rolElegido.replace('-', ' ')}`);
                 } else {
                     showToast("Solicitud rechazada", "info");
@@ -1730,7 +1845,6 @@
             document.getElementById('modal-date-subtitle').innerText = `Día seleccionado: ${dateStr}`;
             document.getElementById('omni-form').reset();
             
-            // Reajuste de vistas dinámicas Pro para añadir
             document.getElementById('hotel-dates-wrapper').style.display = 'block';
             document.getElementById('hotel-date-single-wrapper').style.display = 'none';
             document.getElementById('hotel-edit-warning').style.display = 'none';
@@ -1741,7 +1855,7 @@
             document.getElementById('plan-date').value = formatView;
             document.getElementById('hotel-checkin-date').value = formatView;
             
-            updatePickersLimits(null); // Refresca limitaciones de calendario para nuevos eventos
+            updatePickersLimits(null); 
             
             document.getElementById('omni-modal').classList.add('active');
         }
@@ -1766,7 +1880,7 @@
             document.getElementById('common-notes').value = ev.notes || '';
             const dateStrFormatted = ev.dateKey.split('-').reverse().join('/');
             
-            updatePickersLimits(editingEventId); // Libera el calendario para el evento actual
+            updatePickersLimits(editingEventId); 
 
             if (ev.type === 'transport') {
                 document.getElementById('trans-date').value = dateStrFormatted;
@@ -1778,7 +1892,6 @@
                 document.getElementById('plan-title').value = ev.title || '';
             } else if (ev.type === 'hotel') {
                 document.getElementById('hotel-search').value = ev.title || '';
-                // Transición del formulario rango a formulario único Pro
                 document.getElementById('hotel-dates-wrapper').style.display = 'none';
                 document.getElementById('hotel-date-single-wrapper').style.display = 'block';
                 document.getElementById('hotel-date-single').value = dateStrFormatted;
@@ -1854,7 +1967,6 @@
                         const pickedDate = document.getElementById('hotel-date-single').value;
                         const targetKey = pickedDate.split('/').reverse().join('-');
                         
-                        // Control anti-solapamiento de estancia en edición Pro
                         if(baseEv.hotelType === 'hotel-night') {
                             const conflicto = updatedEventos.some(ev => ev.id !== editingEventId && ev.type === 'hotel' && ev.hotelType === 'hotel-night' && ev.dateKey === targetKey);
                             if(conflicto) {
@@ -1897,7 +2009,6 @@
                     let currDate = parseDDMMYYYY(cinDateStr);
                     let endDate = parseDDMMYYYY(coutDateStr);
 
-                    // Validar anticipadamente conflicto de reservas múltiples en rango
                     let tempDate = new Date(currDate);
                     while (tempDate <= endDate) {
                         const dKey = tempDate.toISOString().split('T')[0];
@@ -1916,7 +2027,6 @@
                         tempDate.setDate(tempDate.getDate() + 1);
                     }
 
-                    // Inserción en lote si no hay conflictos
                     while (currDate <= endDate) {
                         const dKey = currDate.toISOString().split('T')[0];
                         let isCheckin = currDate.getTime() === parseDDMMYYYY(cinDateStr).getTime();
@@ -1949,7 +2059,7 @@
                 
                 currentTripData.eventos = updatedEventos;
                 closeModal();
-                renderItinerary(); // renderItinerary llama a updatePickersLimits internamente
+                renderItinerary(); 
                 showToast(editingEventId ? "Evento actualizado con éxito." : "Guardado en la nube correctamente.");
             } catch (error) {
                 console.error(error);
@@ -1967,7 +2077,7 @@
                 await updateDoc(tripRef, { eventos: updatedEventos });
                 
                 currentTripData.eventos = updatedEventos;
-                renderItinerary(); // Se encarga también de recalcular los limites del calendario
+                renderItinerary(); 
                 showToast("Plan eliminado.", "info");
             } catch (e) {
                 console.error(e);
