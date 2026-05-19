@@ -83,7 +83,7 @@
 
         .tabs-container {
             display: flex; justify-content: center; gap: 2rem; border-bottom: 1px solid var(--border-subtle);
-            max-width: 900px; margin: 2rem auto 0; padding: 0 5%; flex-wrap: wrap;
+            max-width: 1000px; margin: 2rem auto 0; padding: 0 5%; flex-wrap: wrap;
         }
         .tab-btn {
             background: transparent; color: var(--text-muted); border: none; font-size: 1.1rem; font-weight: 600;
@@ -202,6 +202,50 @@
         .btn-deny:hover { background: var(--accent); color: white; }
 
         /* =========================================
+           TAB 5: BALANCE INTERRA
+           ========================================= */
+        .balance-card {
+            background: var(--surface); border: 1px solid var(--border-subtle); border-radius: 16px;
+            padding: 1.2rem; margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center;
+        }
+        .balance-info { display: flex; align-items: center; gap: 15px; }
+        .balance-icon { width: 40px; height: 40px; border-radius: 12px; display: flex; justify-content: center; align-items: center; }
+        .balance-icon.gasto { background: rgba(255,77,77,0.1); color: var(--accent); }
+        .balance-icon.ingreso { background: rgba(77,255,77,0.1); color: var(--success); }
+        .balance-icon.transfer { background: rgba(77,166,255,0.1); color: var(--accent-blue); }
+        
+        .balance-details h4 { font-size: 1.1rem; font-weight: 600; margin-bottom: 3px; }
+        .balance-details p { font-size: 0.85rem; color: var(--text-muted); }
+        .balance-amount { font-size: 1.3rem; font-weight: 800; }
+        .balance-amount.negativo { color: var(--accent); }
+        .balance-amount.positivo { color: var(--success); }
+        
+        .debt-card {
+            background: rgba(255,255,255,0.03); border: 1px solid var(--border-subtle); border-radius: 12px;
+            padding: 1rem 1.5rem; margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center;
+        }
+        .debt-text { font-size: 1rem; }
+        .debt-text strong { color: var(--primary); }
+        .btn-settle {
+            background: var(--primary); color: var(--bg-color); border: none; padding: 0.5rem 1rem;
+            border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.3s;
+        }
+        .btn-settle:hover { transform: scale(0.95); }
+
+        .checkbox-group { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
+        .checkbox-label {
+            display: flex; align-items: center; gap: 5px; background: rgba(255,255,255,0.05);
+            padding: 0.5rem 1rem; border-radius: 8px; font-size: 0.85rem; cursor: pointer; border: 1px solid transparent; transition: 0.3s;
+        }
+        .checkbox-label:has(input:checked) { border-color: var(--primary); background: rgba(255,255,255,0.1); }
+        
+        select.balance-select {
+            width: 100%; padding: 1rem; background: rgba(255,255,255,0.02); border: 1px solid var(--border-subtle);
+            border-radius: 12px; color: white; outline: none; font-size: 1rem; font-family: 'Sora', sans-serif;
+        }
+        select.balance-select option { background: #1a1a1a; color: white; }
+
+        /* =========================================
            OMNI-MODAL INTELIGENTE (SCROLLABLE & RESPONSIVE)
            ========================================= */
         .modal-overlay {
@@ -301,6 +345,7 @@
     <div class="tabs-container">
         <button class="tab-btn active" id="tab-btn-itinerario" onclick="switchTab('itinerario', this)">Itinerario</button>
         <button class="tab-btn" id="tab-btn-mapa" onclick="switchTab('mapa', this)">Mapa</button>
+        <button class="tab-btn" id="tab-btn-balance" onclick="switchTab('balance', this)">Interra Balance</button>
         <button class="tab-btn" id="tab-btn-extra" onclick="switchTab('extra', this)">Extra Info</button>
         <button class="tab-btn" id="tab-btn-usuarios" onclick="switchTab('usuarios', this)">
             Equipo y Accesos
@@ -315,8 +360,35 @@
     <main id="tab-mapa" class="tab-content">
         <div id="map-container"></div>
         <p style="text-align: center; color: var(--text-muted); font-size: 0.85rem; margin-top: 1rem;">
-            Generado automáticamente basándose en los eventos de tu itinerario.
+            Generado automáticamente. Las coordenadas se optimizan y guardan inteligentemente en la base de datos.
         </p>
+    </main>
+
+    <main id="tab-balance" class="tab-content">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+            <div>
+                <h2 style="font-size: 1.8rem; font-weight: 800;">Interra Balance</h2>
+                <p style="color: var(--text-muted); font-size: 0.9rem;">Control financiero del grupo. Cuentas claras, amistades largas.</p>
+            </div>
+            <button class="btn-submit" style="width: auto; padding: 0.8rem 1.5rem;" onclick="openBalanceModal()">
+                <i data-lucide="plus" style="width: 18px;"></i> Añadir Movimiento
+            </button>
+        </div>
+        
+        <div class="tabs-container" style="margin: 0 0 2rem 0; border-bottom: 1px solid var(--border-subtle); justify-content: flex-start; gap: 1rem; padding: 0;">
+            <button class="tab-btn active" id="subtab-btn-gastos" onclick="switchBalanceTab('gastos')">Historial</button>
+            <button class="tab-btn" id="subtab-btn-saldos" onclick="switchBalanceTab('saldos')">Saldos y Deudas</button>
+        </div>
+
+        <div id="balance-gastos" class="balance-subtab active">
+            <div id="gastos-list"></div>
+        </div>
+        
+        <div id="balance-saldos" class="balance-subtab" style="display:none;">
+            <div id="saldos-list" class="users-grid" style="margin-bottom: 2rem;"></div>
+            <h3 style="margin-bottom: 1rem; border-bottom: 1px solid var(--border-subtle); padding-bottom: 0.5rem;"><i data-lucide="arrow-right-left"></i> Deudas Pendientes</h3>
+            <div id="deudas-list"></div>
+        </div>
     </main>
 
     <main id="tab-extra" class="tab-content">
@@ -473,6 +545,63 @@
         </div>
     </div>
 
+    <div class="modal-overlay" id="balance-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Añadir Movimiento</h2>
+            </div>
+
+            <div class="type-selector" id="balance-type-selector">
+                <button class="type-btn active" data-btype="gasto" onclick="switchBalanceFormType('gasto', this)"><i data-lucide="shopping-cart"></i> Gasto</button>
+                <button class="type-btn" data-btype="ingreso" onclick="switchBalanceFormType('ingreso', this)"><i data-lucide="plus-circle"></i> Ingreso</button>
+                <button class="type-btn" data-btype="transferencia" onclick="switchBalanceFormType('transferencia', this)"><i data-lucide="arrow-right-left"></i> Transfer.</button>
+            </div>
+
+            <form id="balance-form">
+                <div class="input-group">
+                    <label>Concepto</label>
+                    <input type="text" id="bal-title" placeholder="Ej. Cena en Roma" required>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="input-group">
+                        <label>Cantidad (€)</label>
+                        <input type="number" id="bal-amount" step="0.01" min="0.01" placeholder="0.00" required>
+                    </div>
+                    <div class="input-group">
+                        <label>Fecha</label>
+                        <input type="text" id="bal-date" class="date-picker-event" placeholder="Seleccionar..." required readonly>
+                    </div>
+                </div>
+
+                <div id="bal-role-section">
+                    <div class="input-group">
+                        <label id="label-payer">Pagado por</label>
+                        <select id="bal-payer" class="balance-select" required></select>
+                    </div>
+                </div>
+
+                <div id="bal-receiver-section" style="display: none;">
+                    <div class="input-group">
+                        <label>Transferido a</label>
+                        <select id="bal-receiver" class="balance-select"></select>
+                    </div>
+                </div>
+
+                <div class="input-group" id="bal-split-section">
+                    <label id="label-split">A dividir entre</label>
+                    <div class="checkbox-group" id="bal-split-checkboxes">
+                        </div>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="btn-cancel" onclick="closeBalanceModal()">Cancelar</button>
+                    <button type="submit" class="btn-submit" id="btn-submit-balance">Guardar Movimiento</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <div id="toast-container"></div>
 
     <script type="module">
@@ -514,11 +643,12 @@
         let markersLayer;
         let routeLayer;
         let mapInitialized = false;
-        const geocodeCache = {};
+        const geocodeCache = {}; 
         
         // Variables de Control Interno de Modal
         let selectedDateKey = null;
         let currentModalType = 'transport';
+        let currentBalanceType = 'gasto';
         let editingEventId = null;
 
         const parseDDMMYYYY = (str) => { 
@@ -597,6 +727,7 @@
                 }
 
                 if (!currentTripData.eventos) currentTripData.eventos = [];
+                if (!currentTripData.gastos) currentTripData.gastos = [];
 
                 // Inicialización Profesional de Pickers con Restricciones del Rango de Viaje Real
                 const minTripDate = parseDDMMYYYY(currentTripData.fechaInicio);
@@ -613,6 +744,7 @@
                 renderItinerary();
                 renderUsers();
                 renderWeather();
+                renderBalance();
 
                 document.getElementById('page-loader').style.opacity = '0';
                 setTimeout(() => document.getElementById('page-loader').style.display = 'none', 500);
@@ -650,7 +782,6 @@
             const uniqueCities = [];
             for (const ev of currentTripData.eventos) {
                 let cleanQuery = ev.title.includes('->') ? ev.title.split('->').pop().trim() : ev.title;
-                // Limpiar prefijos visuales del título
                 cleanQuery = cleanQuery.replace('📥 Check-in: ', '').replace('📤 Check-out: ', '').replace('🌙 Noche en: ', '');
                 let cityKey = cleanQuery.toLowerCase().trim();
                 
@@ -813,7 +944,7 @@
             if(mapInitialized) updateMapData();
         }
 
-        // ── MAPAS LEAFLET CANVAS ──
+        // ── MAPAS LEAFLET CANVAS CON CACHÉ AVANZADA ──
         function initMap() {
             if (mapInitialized) return;
             map = L.map('map-container', { preferCanvas: true }).setView([48.8566, 2.3522], 4); 
@@ -841,39 +972,65 @@
                     geocodeCache[cleanQuery] = coords;
                     return coords;
                 }
-            } catch(e) {
-                console.error("Geocode error", e);
-            }
-            await new Promise(r => setTimeout(r, 600));
+            } catch(e) { console.error("Geocode error", e); }
             return null;
         }
 
         async function updateMapData() {
             if (!currentTripData || !currentTripData.eventos) return;
-            showToast("Calculando posiciones en el mapa...", "info");
+            showToast("Procesando mapa con caché inteligente...", "info");
             markersLayer.clearLayers();
             const latlngs = [];
+            
+            let needsDbUpdate = false;
+            let updatedEventos = [...currentTripData.eventos];
 
-            const sortedEvents = [...currentTripData.eventos].sort((a,b) => {
+            const sortedEvents = [...updatedEventos].sort((a,b) => {
                 const dA = new Date(a.dateKey); const dB = new Date(b.dateKey);
                 if(dA < dB) return -1; if(dA > dB) return 1;
                 return (a.time || '24:00').localeCompare(b.time || '24:00');
             });
 
             for (const ev of sortedEvents) {
-                const coords = await geocodeAddress(ev.title);
-                if (coords) {
+                // Si ya tenemos lat/lon en Firestore, renderizamos instantáneamente sin consumir API
+                if (ev.lat && ev.lon) {
+                    const coords = [ev.lat, ev.lon];
                     L.marker(coords).addTo(markersLayer).bindPopup(`<b>${ev.title}</b><br>${ev.dateKey}`);
                     latlngs.push(coords);
+                } else {
+                    // Si no existen, geocodificamos, guardamos en el evento y marcamos para update
+                    const coords = await geocodeAddress(ev.title);
+                    if (coords) {
+                        const targetEv = updatedEventos.find(e => e.id === ev.id);
+                        if (targetEv) {
+                            targetEv.lat = coords[0];
+                            targetEv.lon = coords[1];
+                            needsDbUpdate = true;
+                        }
+                        L.marker(coords).addTo(markersLayer).bindPopup(`<b>${ev.title}</b><br>${ev.dateKey}`);
+                        latlngs.push(coords);
+                    }
+                    // Pequeño delay de seguridad de Nominatim para evitar 429 Too Many Requests si hay varios nuevos
+                    await new Promise(r => setTimeout(r, 600));
                 }
             }
+            
             routeLayer.setLatLngs(latlngs);
             if (latlngs.length > 0) map.fitBounds(routeLayer.getBounds(), {padding: [50, 50]});
+
+            // Persistencia silenciosa en background para que la próxima vez sea instantáneo
+            if (needsDbUpdate && canEdit) {
+                try {
+                    const tripRef = doc(db, "viajes", tripId);
+                    await updateDoc(tripRef, { eventos: updatedEventos });
+                    currentTripData.eventos = updatedEventos;
+                } catch(e) { console.error("Error al guardar caché de coordenadas", e); }
+            }
         }
 
         window.switchTab = function(tabName, btn) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tabs-container > .tab-btn').forEach(el => el.classList.remove('active'));
             document.getElementById(`tab-${tabName}`).classList.add('active');
             btn.classList.add('active');
 
@@ -884,6 +1041,307 @@
                 } else {
                     setTimeout(() => map.invalidateSize(), 100);
                 }
+            }
+        }
+
+        window.switchBalanceTab = function(tabName) {
+            document.querySelectorAll('.balance-subtab').forEach(el => el.style.display = 'none');
+            document.querySelectorAll('#tab-balance .tabs-container .tab-btn').forEach(el => el.classList.remove('active'));
+            document.getElementById(`balance-${tabName}`).style.display = 'block';
+            document.getElementById(`subtab-btn-${tabName}`).classList.add('active');
+        }
+
+        // ── INTERRA BALANCE LÓGICA CORE ──
+        function renderBalance() {
+            const gastosList = document.getElementById('gastos-list');
+            const saldosList = document.getElementById('saldos-list');
+            const deudasList = document.getElementById('deudas-list');
+            
+            gastosList.innerHTML = '';
+            saldosList.innerHTML = '';
+            deudasList.innerHTML = '';
+
+            const gastos = currentTripData.gastos || [];
+            gastos.sort((a,b) => new Date(b.date.split('/').reverse().join('-')) - new Date(a.date.split('/').reverse().join('-')) || b.timestamp - a.timestamp);
+
+            if (gastos.length === 0) {
+                gastosList.innerHTML = `<div class="timeline-empty">Aún no hay movimientos registrados en este viaje.</div>`;
+            } else {
+                gastos.forEach(g => {
+                    let icon, iconClass, desc;
+                    const amount = parseFloat(g.amount).toFixed(2);
+                    const payerName = userNamesCache[g.payer] || 'Alguien';
+
+                    if (g.type === 'gasto') {
+                        icon = 'shopping-cart'; iconClass = 'gasto';
+                        desc = `Pagado por ${payerName} (dividido entre ${g.splitAmong.length})`;
+                    } else if (g.type === 'ingreso') {
+                        icon = 'plus-circle'; iconClass = 'ingreso';
+                        desc = `Recibido por ${payerName} (a repartir entre ${g.splitAmong.length})`;
+                    } else {
+                        icon = 'arrow-right-left'; iconClass = 'transfer';
+                        const receiverName = userNamesCache[g.receiver] || 'Alguien';
+                        desc = `De ${payerName} a ${receiverName}`;
+                    }
+
+                    gastosList.innerHTML += `
+                        <div class="balance-card">
+                            <div class="balance-info">
+                                <div class="balance-icon ${iconClass}"><i data-lucide="${icon}"></i></div>
+                                <div class="balance-details">
+                                    <h4>${g.title}</h4>
+                                    <p>${desc} · ${g.date}</p>
+                                </div>
+                            </div>
+                            <div class="balance-amount ${iconClass === 'gasto' ? 'negativo' : (iconClass === 'ingreso' ? 'positivo' : '')}">
+                                ${iconClass === 'gasto' ? '-' : (iconClass === 'ingreso' ? '+' : '')}${amount}€
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+
+            // Algoritmo de Liquidación y Saldos
+            let balances = {};
+            const miembrosIds = Object.keys(currentTripData.miembros);
+            miembrosIds.forEach(uid => balances[uid] = 0);
+
+            gastos.forEach(g => {
+                let amount = parseFloat(g.amount);
+                if (g.type === 'gasto') {
+                    if (balances[g.payer] !== undefined) balances[g.payer] += amount;
+                    let splitAmount = amount / g.splitAmong.length;
+                    g.splitAmong.forEach(uid => { if(balances[uid] !== undefined) balances[uid] -= splitAmount; });
+                } else if (g.type === 'ingreso') {
+                    // El que recibe el ingreso físico tiene el dinero, por lo tanto se lo debe al grupo
+                    if (balances[g.payer] !== undefined) balances[g.payer] -= amount;
+                    let splitAmount = amount / g.splitAmong.length;
+                    g.splitAmong.forEach(uid => { if(balances[uid] !== undefined) balances[uid] += splitAmount; });
+                } else if (g.type === 'transferencia') {
+                    if (balances[g.payer] !== undefined) balances[g.payer] += amount; // El que envía gana saldo positivo (como si pagara)
+                    if (balances[g.receiver] !== undefined) balances[g.receiver] -= amount; // El que recibe contrae deuda
+                }
+            });
+
+            // Renderizar Netos
+            miembrosIds.forEach(uid => {
+                const bal = balances[uid] || 0;
+                const name = userNamesCache[uid] || 'Usuario';
+                const inicial = name.charAt(0).toUpperCase();
+                const balText = bal > 0.01 ? `+${bal.toFixed(2)}€` : (bal < -0.01 ? `${bal.toFixed(2)}€` : '0.00€');
+                const balClass = bal > 0.01 ? 'positivo' : (bal < -0.01 ? 'negativo' : '');
+
+                saldosList.innerHTML += `
+                    <div class="user-section" style="padding: 1.5rem; display: flex; justify-content: space-between; align-items: center;">
+                        <div class="user-info">
+                            <div class="user-avatar">${inicial}</div>
+                            <div style="font-weight: 600; font-size: 1rem;">${name}</div>
+                        </div>
+                        <div class="balance-amount ${balClass}">${balText}</div>
+                    </div>
+                `;
+            });
+
+            // Algoritmo Greedy de Deudas Simplificadas
+            let deudores = [];
+            let acreedores = [];
+            
+            for (let uid in balances) {
+                if (balances[uid] < -0.01) deudores.push({uid: uid, amount: -balances[uid]});
+                else if (balances[uid] > 0.01) acreedores.push({uid: uid, amount: balances[uid]});
+            }
+
+            deudores.sort((a,b) => b.amount - a.amount);
+            acreedores.sort((a,b) => b.amount - a.amount);
+
+            let i = 0, j = 0;
+            let deudasCalculadas = [];
+
+            while (i < deudores.length && j < acreedores.length) {
+                let d = deudores[i];
+                let a = acreedores[j];
+                let settle = Math.min(d.amount, a.amount);
+                
+                deudasCalculadas.push({ from: d.uid, to: a.uid, amount: settle });
+                
+                d.amount -= settle;
+                a.amount -= settle;
+                
+                if (d.amount < 0.01) i++;
+                if (a.amount < 0.01) j++;
+            }
+
+            if (deudasCalculadas.length === 0) {
+                deudasList.innerHTML = `<p style="color: var(--success); font-weight:600;"><i data-lucide="check-circle" style="width:16px; margin-bottom:-2px;"></i> Todas las cuentas están saldadas.</p>`;
+            } else {
+                deudasCalculadas.forEach(deuda => {
+                    const fromName = userNamesCache[deuda.from] || 'Alguien';
+                    const toName = userNamesCache[deuda.to] || 'Alguien';
+                    const amountStr = deuda.amount.toFixed(2);
+                    
+                    const userIsLoggedIn = auth.currentUser && auth.currentUser.uid === deuda.from;
+                    // El admin puede saldar cualquier cuenta, el implicado puede saldar su deuda
+                    const showSettleBtn = canEdit || userIsLoggedIn;
+
+                    deudasList.innerHTML += `
+                        <div class="debt-card">
+                            <div class="debt-text">
+                                <strong>${fromName}</strong> debe pagar a <strong>${toName}</strong>: <span style="font-weight:800; font-size:1.1rem;">${amountStr}€</span>
+                            </div>
+                            ${showSettleBtn ? `
+                            <button class="btn-settle" onclick="settleDebt('${deuda.from}', '${deuda.to}', ${deuda.amount})">
+                                Saldar
+                            </button>
+                            ` : ''}
+                        </div>
+                    `;
+                });
+            }
+
+            lucide.createIcons();
+        }
+
+        window.openBalanceModal = function() {
+            document.getElementById('balance-form').reset();
+            document.getElementById('bal-date').value = new Date().toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
+            switchBalanceFormType('gasto', document.querySelector('.type-btn[data-btype="gasto"]'));
+            
+            // Poblar Selects
+            const payerSelect = document.getElementById('bal-payer');
+            const receiverSelect = document.getElementById('bal-receiver');
+            const checkboxesDiv = document.getElementById('bal-split-checkboxes');
+            
+            payerSelect.innerHTML = '';
+            receiverSelect.innerHTML = '';
+            checkboxesDiv.innerHTML = '';
+            
+            for (const uid in currentTripData.miembros) {
+                const name = userNamesCache[uid] || 'Usuario';
+                const isMe = auth.currentUser && auth.currentUser.uid === uid;
+                
+                payerSelect.innerHTML += `<option value="${uid}" ${isMe ? 'selected' : ''}>${name}</option>`;
+                receiverSelect.innerHTML += `<option value="${uid}">${name}</option>`;
+                
+                checkboxesDiv.innerHTML += `
+                    <label class="checkbox-label">
+                        <input type="checkbox" value="${uid}" checked style="accent-color: var(--primary);"> ${name}
+                    </label>
+                `;
+            }
+            
+            document.getElementById('balance-modal').classList.add('active');
+        }
+
+        window.closeBalanceModal = () => document.getElementById('balance-modal').classList.remove('active');
+
+        window.switchBalanceFormType = function(type, btn) {
+            currentBalanceType = type;
+            document.querySelectorAll('#balance-type-selector .type-btn').forEach(el => el.classList.remove('active'));
+            if(btn) btn.classList.add('active');
+
+            const lblPayer = document.getElementById('label-payer');
+            const receiverSec = document.getElementById('bal-receiver-section');
+            const splitSec = document.getElementById('bal-split-section');
+
+            if (type === 'gasto') {
+                lblPayer.innerText = "Pagado por";
+                receiverSec.style.display = 'none';
+                splitSec.style.display = 'block';
+            } else if (type === 'ingreso') {
+                lblPayer.innerText = "Recibido por (Quién se queda el dinero)";
+                receiverSec.style.display = 'none';
+                splitSec.style.display = 'block';
+            } else if (type === 'transferencia') {
+                lblPayer.innerText = "Transferido desde (Origen)";
+                receiverSec.style.display = 'block';
+                splitSec.style.display = 'none';
+            }
+        }
+
+        document.getElementById('balance-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('btn-submit-balance');
+            btn.innerText = 'Guardando...'; btn.style.opacity = '0.5';
+
+            const title = document.getElementById('bal-title').value;
+            const amount = parseFloat(document.getElementById('bal-amount').value);
+            const date = document.getElementById('bal-date').value;
+            const payer = document.getElementById('bal-payer').value;
+            
+            let receiver = null;
+            let splitAmong = [];
+
+            if (currentBalanceType === 'transferencia') {
+                receiver = document.getElementById('bal-receiver').value;
+                if(payer === receiver) {
+                    showToast("No puedes hacer una transferencia a ti mismo", "error");
+                    btn.innerText = 'Guardar Movimiento'; btn.style.opacity = '1';
+                    return;
+                }
+            } else {
+                document.querySelectorAll('#bal-split-checkboxes input:checked').forEach(chk => splitAmong.push(chk.value));
+                if (splitAmong.length === 0) {
+                    showToast("Debes seleccionar al menos una persona para dividir", "error");
+                    btn.innerText = 'Guardar Movimiento'; btn.style.opacity = '1';
+                    return;
+                }
+            }
+
+            const newMov = {
+                id: Date.now().toString(36) + Math.random().toString(36).substr(2),
+                type: currentBalanceType,
+                title: title,
+                amount: amount,
+                payer: payer,
+                receiver: receiver,
+                splitAmong: splitAmong,
+                date: date,
+                timestamp: Date.now()
+            };
+
+            const updatedGastos = [...currentTripData.gastos, newMov];
+
+            try {
+                const tripRef = doc(db, "viajes", tripId);
+                await updateDoc(tripRef, { gastos: updatedGastos });
+                currentTripData.gastos = updatedGastos;
+                closeBalanceModal();
+                renderBalance();
+                showToast("Movimiento guardado con éxito.");
+            } catch (error) {
+                console.error(error);
+                showToast("Error al guardar el movimiento en la nube.", "error");
+            } finally {
+                btn.innerText = 'Guardar Movimiento'; btn.style.opacity = '1';
+            }
+        });
+
+        window.settleDebt = async function(fromUid, toUid, amount) {
+            if(!confirm(`¿Confirmas que ${userNamesCache[fromUid]} ha pagado ${amount.toFixed(2)}€ a ${userNamesCache[toUid]}? Esto saldará la deuda actual.`)) return;
+            
+            const newMov = {
+                id: Date.now().toString(36) + Math.random().toString(36).substr(2),
+                type: 'transferencia',
+                title: 'Liquidación de deuda',
+                amount: amount,
+                payer: fromUid,
+                receiver: toUid,
+                splitAmong: [],
+                date: new Date().toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' }),
+                timestamp: Date.now()
+            };
+
+            const updatedGastos = [...currentTripData.gastos, newMov];
+
+            try {
+                const tripRef = doc(db, "viajes", tripId);
+                await updateDoc(tripRef, { gastos: updatedGastos });
+                currentTripData.gastos = updatedGastos;
+                renderBalance();
+                showToast("Deuda saldada con éxito. ¡Cuentas claras!", "success");
+            } catch (error) {
+                console.error(error);
+                showToast("Error al liquidar la deuda.", "error");
             }
         }
 
@@ -1290,8 +1748,8 @@
         
         window.switchModalTab = function(type, btn) {
             currentModalType = type;
-            document.querySelectorAll('.type-btn').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.form-section').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('#modal-type-selector .type-btn').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('#omni-modal .form-section').forEach(el => el.classList.remove('active'));
             if(btn) btn.classList.add('active');
             document.getElementById(`form-${type}`).classList.add('active');
         }
@@ -1335,12 +1793,18 @@
                         const pickedDate = document.getElementById('trans-date').value;
                         baseEv.dateKey = pickedDate.split('/').reverse().join('-');
                         baseEv.time = document.getElementById('trans-time').value;
-                        baseEv.title = document.getElementById('trans-title').value || 'Transporte';
+                        if(baseEv.title !== document.getElementById('trans-title').value) {
+                            baseEv.title = document.getElementById('trans-title').value || 'Transporte';
+                            baseEv.lat = null; baseEv.lon = null; // Reiniciar caché si el título cambia
+                        }
                     } else if (baseEv.type === 'plan') {
                         const pickedDate = document.getElementById('plan-date').value;
                         baseEv.dateKey = pickedDate.split('/').reverse().join('-');
                         baseEv.time = document.getElementById('plan-time').value;
-                        baseEv.title = document.getElementById('plan-title').value || 'Plan';
+                        if(baseEv.title !== document.getElementById('plan-title').value) {
+                            baseEv.title = document.getElementById('plan-title').value || 'Plan';
+                            baseEv.lat = null; baseEv.lon = null; // Reiniciar caché
+                        }
                     } else if (baseEv.type === 'hotel') {
                         const pickedDate = document.getElementById('hotel-date-single').value;
                         const targetKey = pickedDate.split('/').reverse().join('-');
@@ -1355,7 +1819,10 @@
                             }
                         }
                         baseEv.dateKey = targetKey;
-                        baseEv.title = document.getElementById('hotel-search').value || 'Alojamiento';
+                        if(baseEv.title !== document.getElementById('hotel-search').value) {
+                            baseEv.title = document.getElementById('hotel-search').value || 'Alojamiento';
+                            baseEv.lat = null; baseEv.lon = null; // Reiniciar caché
+                        }
                         baseEv.time = document.getElementById('hotel-time-single').value;
                     }
                     baseEv.notes = notes;
