@@ -45,7 +45,7 @@
         body {
             background-color: var(--bg-color); color: var(--primary); min-height: 100vh;
             background-image: radial-gradient(circle at 50% -10%, rgba(255, 255, 255, 0.05), transparent 60%);
-            background-attachment: fixed; /* Mejora visual para evitar el cuadrado negro al hacer scroll */
+            background-attachment: fixed;
         }
 
         /* Nav */
@@ -115,12 +115,9 @@
         .day-container { margin-bottom: 3rem; position: relative; animation: fadeIn 0.6s ease forwards; }
         .day-header {
             display: flex; justify-content: space-between; align-items: center;
-            padding: 0.5rem 0 1rem; margin-bottom: 1.5rem;
+            padding: 0.5rem 0 1rem; border-bottom: 1px solid var(--border-subtle); margin-bottom: 1.5rem;
             position: sticky; top: 65px; z-index: 10;
-            background: rgba(20, 20, 20, 0.65); /* Fusionado sin crear caja negra dura */
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            background: transparent; /* Fondo completamente transparente para evitar cajas de color */
         }
         .day-title { font-size: 1.6rem; font-weight: 600; display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
         .day-date { font-size: 1rem; color: var(--text-muted); font-weight: 300; }
@@ -234,6 +231,7 @@
             display: flex; justify-content: center; align-items: center;
             box-shadow: 0 4px 15px rgba(255, 77, 77, 0.3); transition: var(--transition);
             flex-shrink: 0;
+            margin-top: 15px; /* Movido un poco más hacia abajo */
         }
         .btn-finance-add-circle:hover {
             transform: scale(1.1); box-shadow: 0 8px 25px rgba(255, 77, 77, 0.5);
