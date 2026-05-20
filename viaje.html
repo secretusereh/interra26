@@ -213,7 +213,7 @@
         .color-circle.selected { border-color: white; box-shadow: 0 0 10px rgba(255,255,255,0.5); transform: scale(1.1); }
 
         /* =========================================
-           TAB: FINANCE (INTERRA BALANCE)
+           TAB 5: FINANCE (INTERRA BALANCE)
            ========================================= */
         .finance-subtab { display: none; opacity: 0; }
         .finance-subtab.active { display: block; animation: slideUpFade 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
@@ -498,55 +498,14 @@
     </main>
 
     <main id="tab-entretenimiento" class="tab-content">
-        <div style="margin-bottom: 2rem;">
-            <h2 style="font-size: 1.8rem; font-weight: 800;">Entretenimiento</h2>
-            <p style="color: var(--text-muted); font-size: 0.9rem;">Minijuegos interactivos y diversión para amenizar las esperas en aeropuertos o trayectos de tren.</p>
-        </div>
-        
-        <div class="games-grid">
-            <div class="game-card">
-                <span class="game-tag tag-solo">En solitario</span>
-                <div class="game-info">
-                    <h3><i data-lucide="zap" style="color: var(--accent-blue);"></i> ¡Pierdes el Tren!</h3>
-                    <p>Corre a toda velocidad por el andén antes de que arranque el vagón. Esquiva maletas y revisores en este frenético reto infinito de puros reflejos.</p>
-                </div>
-                <button class="btn-play" onclick="launchGame(1)">
-                    <i data-lucide="play" style="width:16px;"></i> Jugar Ahora
-                </button>
+        <div style="text-align: center; padding: 4rem 2rem; animation: fadeIn 0.8s ease;">
+            <div style="background: rgba(77, 166, 255, 0.1); width: 80px; height: 80px; border-radius: 50%; display: flex; justify-content: center; align-items: center; margin: 0 auto 1.5rem; color: var(--accent-blue); box-shadow: 0 0 20px rgba(77, 166, 255, 0.2);">
+                <i data-lucide="gamepad-2" style="width: 40px; height: 40px;"></i>
             </div>
-
-            <div class="game-card">
-                <span class="game-tag tag-solo">En solitario</span>
-                <div class="game-info">
-                    <h3><i data-lucide="globe" style="color: var(--accent-green);"></i> Cultura Viajera</h3>
-                    <p>Pon a prueba tu instinto geográfico a nivel mundial. Un reto diario exclusivo donde tendrás que adivinar capitales, monumentos icónicos y curiosidades de rutas.</p>
-                </div>
-                <button class="btn-play" onclick="launchGame(2)">
-                    <i data-lucide="calendar" style="width:16px;"></i> Reto Diario
-                </button>
-            </div>
-
-            <div class="game-card" style="opacity: 0.75;">
-                <span class="game-tag tag-grupo">En Grupo (Multi)</span>
-                <div class="game-info">
-                    <h3><i data-lucide="users" style="color: var(--accent);"></i> Desafío de Escuadra</h3>
-                    <p>Compite directamente en tiempo real contra los miembros de tu propio viaje. Cada uno desde su dispositivo móvil. Sincronización en la nube en proceso.</p>
-                </div>
-                <button class="btn-play" disabled>
-                    <i data-lucide="lock" style="width:16px;"></i> Próximamente
-                </button>
-            </div>
-
-            <div class="game-card" style="opacity: 0.75;">
-                <span class="game-tag tag-grupo">En Grupo (Multi)</span>
-                <div class="game-info">
-                    <h3><i data-lucide="gamepad-2" style="color: var(--accent);"></i> Trivia de Ruta</h3>
-                    <p>¿Quién es el que más atención presta al itinerario de la aventura? Ligas y test competitivos asíncronos grupales. Próximamente disponible.</p>
-                </div>
-                <button class="btn-play" disabled>
-                    <i data-lucide="lock" style="width:16px;"></i> Próximamente
-                </button>
-            </div>
+            <h2 style="font-size: 2.2rem; font-weight: 800; margin-bottom: 1rem; letter-spacing: -1px;">Próximamente...</h2>
+            <p style="color: var(--text-muted); font-size: 1.1rem; max-width: 500px; margin: 0 auto; line-height: 1.6;">
+                Juegos, diversión y entretenimiento a bordo de <strong>Interra-hub</strong>. Estamos preparando algo muy especial para amenizar tus esperas en aeropuertos y trayectos de tren.
+            </p>
         </div>
     </main>
 
@@ -1280,12 +1239,6 @@
                     currentTripData.eventos = updatedEventos;
                 } catch(e) { console.error("Error al guardar caché de coordenadas", e); }
             }
-        }
-
-        // ── ENRUTADOR PREMIUM SEGURO PARA MINIJUEGOS ──
-        window.launchGame = function(gameNum) {
-            if (!tripId) return;
-            window.location.href = `juego${gameNum}.html?id=${tripId}`;
         }
 
         window.switchTab = function(tabName, btn) {
