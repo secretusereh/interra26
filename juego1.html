@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>¡Pierdes el Tren! - Interra-hub</title>
+    
+    <link rel="icon" type="image/png" href="interrahublogo.PNG">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;800&display=swap" rel="stylesheet">
+    
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        /* =========================================
+           VARIABLES Y DISEÑO BASE (ESTILO INTERRA-HUB)
+           ========================================= */
+        :root {
+            --bg-color: #030303;
+            --surface: rgba(20, 20, 20, 0.6);
+            --primary: #ffffff;
+            --text-muted: #888888;
+            --accent: #ff4d4d;
+            --accent-blue: #4da6ff;
+            --accent-green: #4dff88;
+            --border-subtle: rgba(255, 255, 255, 0.08);
+            --transition: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Sora', sans-serif; user-select: none; }
+
+        body, html {
+            width: 100%; height: 100%; background-color: var(--bg-color); color: var(--primary);
+            overflow: hidden; touch-action: none; /* Previene scroll en móviles al tocar */
+        }
+
+        /* ── INTERFAZ DE USUARIO ── */
+        .ui-layer {
+            position: absolute; inset: 0; pointer-events: none; z-index: 10; display: flex; flex-direction: column; justify-content: space-between; padding: 1.5rem 5%;
+        }
+
+        /* Header (Nav y Puntuaciones) */
+        .game-header {
+            display: flex; justify-content: space-between; align-items: flex-start; pointer-events: auto;
+        }
+
+        .btn-back {
+            background: rgba(255,255,255,0.05); color: var(--primary); border: 1px solid var(--border-subtle);
+            padding: 0.6rem 1.2rem; border-radius: 30px; font-weight: 600; font-size: 0.9rem;
+            cursor: pointer; display: flex; align-items: center; gap: 8px; backdrop-filter: blur(10px);
+            transition: var(--transition);
+        }
+        .btn-back:hover { background: var(--primary); color: var(--bg-color); transform: scale(0.95); }
+
+        .score-board {
+            background: rgba(3, 3, 3, 0.7); backdrop-filter: blur(15px); border: 1px solid var(--border-subtle);
+            padding: 0.8rem 1.5rem; border-radius: 20px; text-align: right; display: flex; flex-direction: column; gap: 5px;
+        }
+        .score-current { font-size: 1.5rem; font-weight: 800; color: var(--accent-blue); letter-spacing: 1px; font-variant-numeric: tabular-nums; }
+        .score-high { font-size: 0.8rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; }
+
+        /* Pantallas de Estado (Inicio y Game Over) */
+        .overlay {
+            position: absolute; inset: 0; background: rgba(3, 3, 3, 0.85); backdrop-filter: blur(8px);
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            z-index: 20; opacity: 0; pointer-events: none; transition: opacity 0.4s ease;
+        }
+        .overlay.active { opacity: 1; pointer-events: auto; }
+
+        .overlay-content {
+            background: var(--surface); border: 1px solid var(--border-subtle); border-radius: 24px;
+            padding: 3rem 2rem; text-align: center; max-width: 400px; width: 90%;
+            transform: translateY(20px); transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+        }
+        .overlay.active .overlay-content { transform: translateY(0); }
+
+        .overlay-icon {
+            width: 60px; height: 60px; background: rgba(77, 166, 255, 0.1); color: var(--accent-blue);
+            border-radius: 50%; display: flex; justify-content: center; align-items: center;
+            margin: 0 auto 1.5rem; border: 1px solid rgba(77, 166, 255, 0.2);
+        }
+        .overlay-icon.danger { background: rgba(255, 77, 77, 0.1); color: var(--accent); border-color: rgba(255, 77, 77, 0.2); }
+
+        .overlay h2 { font-size: 2rem; font-weight: 800; margin-bottom: 0.5rem; letter-spacing: -1px; }
+        .overlay p { color: var(--text-muted); font-size: 0.95rem; line-height: 1.5; margin-bottom: 2rem; }
+        
+        .btn-play {
+            background: var(--primary); color: var(--bg-color); border: none; width: 100%;
+            padding: 1.2rem; border-radius: 16px; font-weight: 800; font-size: 1.1rem;
+            cursor: pointer; transition: var(--transition); display: flex; justify-content: center; align-items: center; gap: 10px;
+        }
+        .btn-play:hover { transform: scale(0.97); box-shadow: 0 10px 25px rgba(255,255,255,0.2); }
+
+        /* Canvas del Juego */
+        #gameCanvas {
+            display: block; width: 100%; height: 100%; z-index: 1;
+        }
+
+        /* Instrucciones Móvil */
+        .controls-hint {
+            position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
+            color: rgba(255,255,255,0.3); font-size: 0.85rem; font-weight: 600; letter-spacing: 2px;
+            text-transform: uppercase; text-align: center; pointer-events: none;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 0.8; } }
+
+    </style>
+</head>
+<body>
+
+    <div class="ui-layer">
+        <div class="game-header">
+            <button class="btn-back" onclick="goBack()">
+                <i data-lucide="arrow-left" style="width: 18px;"></i> Volver
+            </button>
+            <div class="score-board">
+                <div class="score-current" id="score">0m</div>
+                <div class="score-high">Récord: <span id="high-score">0</span>m</div>
+            </div>
+        </div>
+        <div class="controls-hint" id="hint">Toca para saltar · Doble toque para doble salto</div>
+    </div>
+
+    <div class="overlay active" id="start-screen">
+        <div class="overlay-content">
+            <div class="overlay-icon">
+                <i data-lucide="zap" style="width: 32px; height: 32px;"></i>
+            </div>
+            <h2>¡Pierdes el Tren!</h2>
+            <p>Corre a toda velocidad por el andén. Esquiva el equipaje y no te choques. <br><br><strong>Toca la pantalla para saltar (puedes hacer doble salto).</strong></p>
+            <button class="btn-play" onclick="initGame()">
+                <i data-lucide="play"></i> Empezar a correr
+            </button>
+        </div>
+    </div>
+
+    <div class="overlay" id="game-over-screen">
+        <div class="overlay-content">
+            <div class="overlay-icon danger">
+                <i data-lucide="alert-triangle" style="width: 32px; height: 32px;"></i>
+            </div>
+            <h2>¡Te caíste!</h2>
+            <p>El tren se ha ido sin ti.<br>Distancia recorrida: <strong id="final-score" style="color: var(--primary); font-size: 1.2rem;">0m</strong></p>
+            <button class="btn-play" onclick="resetGame()">
+                <i data-lucide="rotate-ccw"></i> Intentarlo de nuevo
+            </button>
+        </div>
+    </div>
+
+    <canvas id="gameCanvas"></canvas>
+
+    <script>
+        // Inicializar iconos
+        lucide.createIcons();
+
+        // Lógica de Retorno Dinámica
+        const urlParams = new URLSearchParams(window.location.search);
+        const tripId = urlParams.get('id');
+        function goBack() {
+            if (tripId) window.location.href = `viaje.html?id=${tripId}`;
+            else window.location.href = 'panel.html';
+        }
+
+        // ==========================================
+        // MOTOR DEL JUEGO (CANVAS API)
+        // ==========================================
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        // Variables globales del estado
+        let gameLoopId;
+        let isGameOver = false;
+        let isPlaying = false;
+        let score = 0;
+        let highScore = localStorage.getItem('interrahub_runner_highscore') || 0;
+        let gameSpeed = 0;
+        const baseSpeed = 8;
+        
+        document.getElementById('high-score').innerText = highScore;
+
+        // Entidades
+        let player;
+        let obstacles = [];
+        let particles = [];
+        let parallaxLines = [];
+
+        // Ajuste de pantalla High-DPI
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            if(player) player.y = canvas.height - player.height - 100; // Ajustar suelo
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        // ── CLASES DEL JUEGO ──
+
+        class Player {
+            constructor() {
+                this.width = 40;
+                this.height = 40;
+                this.x = 80;
+                this.groundY = canvas.height - this.height - 100;
+                this.y = this.groundY;
+                this.vy = 0;
+                this.gravity = 1.2;
+                this.jumpPower = -18;
+                this.jumps = 0;
+                this.maxJumps = 2;
+                this.color = '#4da6ff';
+                this.trail = [];
+            }
+
+            jump() {
+                if (this.jumps < this.maxJumps) {
+                    this.vy = this.jumpPower;
+                    this.jumps++;
+                    createParticles(this.x + this.width/2, this.y + this.height, 5, '#ffffff'); // Efecto de polvo al saltar
+                }
+            }
+
+            update() {
+                // Físicas
+                this.y += this.vy;
+                if (this.y < this.groundY) {
+                    this.vy += this.gravity;
+                } else {
+                    this.vy = 0;
+                    this.y = this.groundY;
+                    this.jumps = 0;
+                }
+
+                // Efecto de estela (Trail)
+                this.trail.push({x: this.x, y: this.y});
+                if (this.trail.length > 10) this.trail.shift();
+            }
+
+            draw() {
+                // Dibujar Estela
+                this.trail.forEach((t, i) => {
+                    ctx.globalAlpha = i / 20;
+                    ctx.fillStyle = this.color;
+                    ctx.fillRect(t.x, t.y, this.width, this.height);
+                });
+                ctx.globalAlpha = 1.0;
+
+                // Dibujar Jugador (Cubo de Neón)
+                ctx.shadowBlur = 20;
+                ctx.shadowColor = this.color;
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(this.x, this.y, this.width, this.height);
+                
+                // Detalles (Ojos)
+                ctx.shadowBlur = 0;
+                ctx.fillStyle = '#030303';
+                ctx.fillRect(this.x + 25, this.y + 10, 6, 6);
+                ctx.fillRect(this.x + 35, this.y + 10, 6, 6);
+            }
+        }
+
+        class Obstacle {
+            constructor() {
+                this.x = canvas.width;
+                // Tipos: 0 = Maleta (Baja), 1 = Carrito (Ancho), 2 = Revisor (Alto)
+                this.type = Math.floor(Math.random() * 3);
+                
+                if (this.type === 0) {
+                    this.width = 40; this.height = 40; this.color = '#ff4d4d';
+                } else if (this.type === 1) {
+                    this.width = 80; this.height = 40; this.color = '#ffd700';
+                } else {
+                    this.width = 30; this.height = 80; this.color = '#ff66b2';
+                }
+                
+                this.y = canvas.height - this.height - 100;
+            }
+
+            update() {
+                this.x -= gameSpeed;
+            }
+
+            draw() {
+                ctx.shadowBlur = 15;
+                ctx.shadowColor = this.color;
+                ctx.fillStyle = this.color;
+                ctx.fillRect(this.x, this.y, this.width, this.height);
+                ctx.shadowBlur = 0;
+            }
+        }
+
+        class Particle {
+            constructor(x, y, color) {
+                this.x = x;
+                this.y = y;
+                this.size = Math.random() * 5 + 2;
+                this.vx = (Math.random() - 0.5) * 10;
+                this.vy = (Math.random() - 0.5) * 10;
+                this.color = color;
+                this.life = 1.0;
+            }
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                this.life -= 0.03;
+            }
+            draw() {
+                ctx.globalAlpha = Math.max(0, this.life);
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.globalAlpha = 1.0;
+            }
+        }
+
+        // ── SISTEMAS SECUNDARIOS ──
+
+        function createParticles(x, y, amount, color) {
+            for (let i = 0; i < amount; i++) {
+                particles.push(new Particle(x, y, color));
+            }
+        }
+
+        function handleParticles() {
+            for (let i = particles.length - 1; i >= 0; i--) {
+                particles[i].update();
+                particles[i].draw();
+                if (particles[i].life <= 0) particles.splice(i, 1);
+            }
+        }
+
+        function drawBackground() {
+            // Suelo (Andén)
+            const groundY = canvas.height - 100;
+            ctx.fillStyle = '#141414';
+            ctx.fillRect(0, groundY, canvas.width, 100);
+            
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(0, groundY);
+            ctx.lineTo(canvas.width, groundY);
+            ctx.stroke();
+
+            // Líneas de velocidad (Parallax)
+            if (Math.random() < 0.1) {
+                parallaxLines.push({ x: canvas.width, y: Math.random() * groundY, length: Math.random() * 100 + 50, speed: gameSpeed * 0.5 });
+            }
+
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
+            for (let i = parallaxLines.length - 1; i >= 0; i--) {
+                let line = parallaxLines[i];
+                line.x -= line.speed;
+                ctx.beginPath();
+                ctx.moveTo(line.x, line.y);
+                ctx.lineTo(line.x + line.length, line.y);
+                ctx.stroke();
+                if (line.x + line.length < 0) parallaxLines.splice(i, 1);
+            }
+        }
+
+        // ── CONTROL DE FLUJO DEL JUEGO ──
+
+        let frameCount = 0;
+        let obstacleSpawnRate = 100;
+
+        function update() {
+            if (!isPlaying || isGameOver) return;
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Fondo y Entorno
+            drawBackground();
+
+            // Jugador
+            player.update();
+            player.draw();
+
+            // Obstáculos y Colisiones
+            frameCount++;
+            if (frameCount % obstacleSpawnRate === 0) {
+                obstacles.push(new Obstacle());
+                // Hacer el juego progresivamente más rápido y difícil
+                obstacleSpawnRate = Math.max(40, Math.floor(Math.random() * 60 + 50)); 
+            }
+
+            for (let i = obstacles.length - 1; i >= 0; i--) {
+                let obs = obstacles[i];
+                obs.update();
+                obs.draw();
+
+                // Detección de Colisión (AABB con leve margen de gracia)
+                const grace = 5;
+                if (
+                    player.x < obs.x + obs.width - grace &&
+                    player.x + player.width > obs.x + grace &&
+                    player.y < obs.y + obs.height - grace &&
+                    player.y + player.height > obs.y + grace
+                ) {
+                    triggerGameOver();
+                }
+
+                // Eliminar obstáculos pasados
+                if (obs.x + obs.width < 0) obstacles.splice(i, 1);
+            }
+
+            // Partículas
+            handleParticles();
+
+            // Puntuación y Dificultad
+            score += 0.1;
+            document.getElementById('score').innerText = Math.floor(score) + 'm';
+            
+            // Acelerar progresivamente
+            if (score % 100 < 0.1) gameSpeed += 0.5;
+
+            gameLoopId = requestAnimationFrame(update);
+        }
+
+        function initGame() {
+            document.getElementById('start-screen').classList.remove('active');
+            document.getElementById('hint').style.display = 'none';
+            resetGame();
+        }
+
+        function resetGame() {
+            document.getElementById('game-over-screen').classList.remove('active');
+            resize(); // Asegurar suelo correcto
+            player = new Player();
+            obstacles = [];
+            particles = [];
+            score = 0;
+            gameSpeed = baseSpeed;
+            frameCount = 0;
+            obstacleSpawnRate = 100;
+            isGameOver = false;
+            isPlaying = true;
+            cancelAnimationFrame(gameLoopId);
+            update();
+        }
+
+        function triggerGameOver() {
+            isGameOver = true;
+            isPlaying = false;
+            createParticles(player.x + player.width/2, player.y + player.height/2, 50, '#ff4d4d');
+            
+            // Animación final
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawBackground();
+            obstacles.forEach(o => o.draw());
+            handleParticles(); // Dibujar explosión
+
+            // Guardar Récord
+            const finalScore = Math.floor(score);
+            if (finalScore > highScore) {
+                highScore = finalScore;
+                localStorage.setItem('interrahub_runner_highscore', highScore);
+                document.getElementById('high-score').innerText = highScore;
+            }
+
+            document.getElementById('final-score').innerText = finalScore + 'm';
+            
+            setTimeout(() => {
+                document.getElementById('game-over-screen').classList.add('active');
+            }, 500);
+        }
+
+        // ── CONTROLES (MULTI-DISPOSITIVO) ──
+        
+        function handleInput(e) {
+            // Evitar comportamiento por defecto en móviles (zoom, scroll)
+            if(e.type === 'touchstart') e.preventDefault(); 
+            
+            if (isPlaying && !isGameOver) {
+                player.jump();
+            } else if (isGameOver && document.getElementById('game-over-screen').classList.contains('active')) {
+                // Atajo para reiniciar rápido tocando la pantalla
+                resetGame();
+            }
+        }
+
+        window.addEventListener('keydown', (e) => {
+            if (e.code === 'Space' || e.code === 'ArrowUp') handleInput(e);
+        });
+        window.addEventListener('mousedown', handleInput);
+        window.addEventListener('touchstart', handleInput, {passive: false});
+
+        // Dibujar el primer frame estático para que no se vea negro al cargar
+        resize();
+        drawBackground();
+
+    </script>
+</body>
+</html>
