@@ -45,13 +45,17 @@
             padding: 1.5rem 5%; display: flex; justify-content: space-between; align-items: flex-start; pointer-events: auto;
         }
 
-        .btn-back {
+        .left-controls {
+            display: flex; flex-direction: column; gap: 10px;
+        }
+
+        .btn-action {
             background: var(--ui-bg); color: var(--primary); border: 1px solid var(--ui-border);
             padding: 0.7rem 1.4rem; border-radius: 30px; font-weight: 600; font-size: 0.9rem;
-            cursor: pointer; display: flex; align-items: center; gap: 8px; backdrop-filter: blur(12px);
-            transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; backdrop-filter: blur(12px);
+            transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); width: fit-content;
         }
-        .btn-back:hover { background: var(--primary); color: var(--bg-base); transform: scale(0.95); }
+        .btn-action:hover { background: var(--primary); color: var(--bg-base); transform: scale(0.95); }
 
         .score-container {
             background: var(--ui-bg); backdrop-filter: blur(12px); border: 1px solid var(--ui-border);
@@ -64,7 +68,7 @@
         /* Tutorial Overlays */
         .tutorial {
             position: absolute; bottom: 15%; left: 50%; transform: translateX(-50%);
-            display: flex; gap: 2rem; opacity: 0.5; pointer-events: none;
+            display: flex; gap: 2rem; opacity: 0.5; pointer-events: none; transition: opacity 0.5s ease;
         }
         .tut-box {
             text-align: center; color: white; background: rgba(0,0,0,0.5); padding: 1rem; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);
@@ -95,6 +99,7 @@
             box-shadow: 0 0 30px rgba(0, 210, 255, 0.2);
         }
         .hero-icon.dead { background: rgba(255, 77, 77, 0.1); border-color: rgba(255, 77, 77, 0.3); box-shadow: 0 0 30px rgba(255, 77, 77, 0.2); }
+        .hero-icon.paused { background: rgba(255, 215, 0, 0.1); border-color: rgba(255, 215, 0, 0.3); box-shadow: 0 0 30px rgba(255, 215, 0, 0.2); color: var(--accent-gold);}
 
         h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 0.5rem; letter-spacing: -1px; line-height: 1.1; }
         p.desc { color: #aaa; font-size: 1rem; line-height: 1.6; margin-bottom: 2.5rem; }
@@ -117,6 +122,8 @@
         .btn-mega:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(0, 210, 255, 0.5); }
         .btn-mega.restart { background: linear-gradient(135deg, var(--accent), #cc0000); box-shadow: 0 10px 20px rgba(255, 77, 77, 0.3); }
         .btn-mega.restart:hover { box-shadow: 0 15px 30px rgba(255, 77, 77, 0.5); }
+        .btn-mega.resume { background: linear-gradient(135deg, var(--accent-gold), #ccaa00); box-shadow: 0 10px 20px rgba(255, 215, 0, 0.3); color: black;}
+        .btn-mega.resume:hover { box-shadow: 0 15px 30px rgba(255, 215, 0, 0.5); }
 
     </style>
 </head>
@@ -126,9 +133,14 @@
 
     <div class="ui-layer">
         <div class="hud">
-            <button class="btn-back" onclick="returnToHub()">
-                <i data-lucide="arrow-left" style="width: 18px;"></i> Viaje
-            </button>
+            <div class="left-controls">
+                <button class="btn-action" onclick="returnToHub()">
+                    <i data-lucide="arrow-left" style="width: 18px;"></i> Viaje
+                </button>
+                <button class="btn-action" onclick="Engine.togglePause()" id="btn-pause" style="display: none;">
+                    <i data-lucide="pause-circle" style="width: 18px;"></i> Pausa
+                </button>
+            </div>
             <div class="score-container">
                 <div class="score-main" id="hud-score">0m</div>
                 <div class="score-sub">Récord: <span id="hud-highscore">0</span>m</div>
@@ -154,9 +166,22 @@
                 <i data-lucide="train" style="width: 40px; height: 40px; color: var(--accent-blue);"></i>
             </div>
             <h1>¡Pierdes el Tren!</h1>
-            <p class="desc">Aventura arcade de reflejos puros.<br><strong>Salta</strong> sobre las maletas y <strong>agáchate</strong> para esquivar los carteles. La velocidad es implacable.</p>
+            <p class="desc">Aventura arcade de reflejos puros.<br><strong>Salta</strong> sobre las maletas y <strong>agáchate</strong> para esquivar los carteles. Coge monedas para sumar puntos extra.</p>
             <button class="btn-mega" onclick="Engine.start()">
                 <i data-lucide="play-circle"></i> Iniciar Carrera
+            </button>
+        </div>
+    </div>
+
+    <div class="screen-overlay" id="screen-pause">
+        <div class="modal-card">
+            <div class="hero-icon paused">
+                <i data-lucide="pause" style="width: 40px; height: 40px;"></i>
+            </div>
+            <h1>Juego Pausado</h1>
+            <p class="desc">Tómate un respiro, pero no pierdas el tren.</p>
+            <button class="btn-mega resume" onclick="Engine.togglePause()">
+                <i data-lucide="play"></i> Reanudar Carrera
             </button>
         </div>
     </div>
@@ -198,8 +223,8 @@
 
         /**
          * ============================================================================
-         * 🚂 INTERRA-HUB PRO RUNNER ENGINE
-         * Motor AAA en HTML5 Canvas (OOP, State Machines, Procedural Gen, WebAudio)
+         * 🚂 INTERRA-HUB PRO RUNNER ENGINE (V3)
+         * Motor AAA en HTML5 Canvas (OOP, State Machines, Procedural Gen, WebAudio, Smart Logic)
          * ============================================================================
          */
 
@@ -215,7 +240,7 @@
                 }
             },
             playTone(freq, type, duration, vol=0.1) {
-                if(!this.ctx) return;
+                if(!this.ctx || Engine.state !== 'PLAYING') return;
                 const osc = this.ctx.createOscillator();
                 const gain = this.ctx.createGain();
                 osc.type = type;
@@ -247,7 +272,7 @@
         };
 
         // ==========================================
-        // 2. GESTOR DE INPUT (Teclado y Táctil con Gestos)
+        // 2. GESTOR DE INPUT (Teclado, Táctil y Pausa)
         // ==========================================
         const Input = {
             keys: {},
@@ -255,7 +280,13 @@
             touchX: 0,
             swipeThreshold: 30,
             init() {
-                window.addEventListener('keydown', e => { this.keys[e.code] = true; });
+                window.addEventListener('keydown', e => { 
+                    this.keys[e.code] = true; 
+                    // Shortcut para pausa
+                    if (e.code === 'Escape' || e.code === 'KeyP') {
+                        Engine.togglePause();
+                    }
+                });
                 window.addEventListener('keyup', e => { this.keys[e.code] = false; });
                 
                 window.addEventListener('touchstart', e => {
@@ -265,6 +296,9 @@
 
                 window.addEventListener('touchend', e => {
                     if(Engine.state !== 'PLAYING') return;
+                    // Evitar salto si tocan botones de la UI
+                    if(e.target.closest('button')) return;
+
                     const endY = e.changedTouches[0].clientY;
                     const endX = e.changedTouches[0].clientX;
                     const diffY = this.touchY - endY;
@@ -285,7 +319,7 @@
         };
 
         // ==========================================
-        // 3. GENERADOR PROCEDURAL DE ASSETS (Canvas Ocultos)
+        // 3. GENERADOR PROCEDURAL DE ASSETS
         // ==========================================
         const Assets = {
             sprites: {},
@@ -294,11 +328,11 @@
                 const c1 = document.createElement('canvas'); c1.width = 400; c1.height = 150; const x1 = c1.getContext('2d');
                 x1.fillStyle = '#111'; x1.fillRect(0, 0, 400, 150);
                 x1.fillStyle = '#222'; x1.fillRect(10, 10, 380, 130);
-                x1.fillStyle = '#4da6ff'; x1.fillRect(0, 70, 400, 10); // Raya neón
+                x1.fillStyle = '#4da6ff'; x1.fillRect(0, 70, 400, 10); 
                 for(let i=0; i<4; i++) { x1.fillStyle = 'rgba(255,255,255,0.1)'; x1.fillRect(30 + i*90, 30, 70, 40); }
                 this.sprites.train = c1;
 
-                // Generar Moneda
+                // Generar Moneda Perfecta
                 const c2 = document.createElement('canvas'); c2.width = 30; c2.height = 30; const x2 = c2.getContext('2d');
                 x2.beginPath(); x2.arc(15, 15, 12, 0, Math.PI*2); x2.fillStyle = '#ffd700'; x2.fill();
                 x2.beginPath(); x2.arc(15, 15, 8, 0, Math.PI*2); x2.fillStyle = '#ffaa00'; x2.fill();
@@ -381,11 +415,10 @@
                 this.x = 100; this.y = this.groundY - this.h;
                 this.vy = 0;
                 
-                // Constantes Físicas (Ajustadas para "Game Feel" crujiente)
                 this.gravity = 2500;
                 this.jumpForce = -950;
                 
-                this.state = 'RUN'; // RUN, JUMP, DOUBLE_JUMP, DUCK
+                this.state = 'RUN'; 
                 this.color = '#00d2ff';
                 this.trail = [];
                 this.animTimer = 0;
@@ -401,7 +434,7 @@
                         AudioSys.playDuck();
                         FX.spawnDust(this.x + this.w/2, this.groundY);
                     } else if (this.state === 'JUMP' || this.state === 'DOUBLE_JUMP') {
-                        this.vy += this.gravity * 2 * dt; // Caída rápida
+                        this.vy += this.gravity * 2 * dt; // Caída forzada rápida
                     }
                 } else if (this.state === 'DUCK') {
                     this.state = 'RUN';
@@ -415,8 +448,8 @@
                         this.vy = this.jumpForce;
                         AudioSys.playJump();
                         FX.spawnDust(this.x + this.w/2, this.groundY);
-                        Input.keys['Space'] = false; Input.keys['ArrowUp'] = false; Input.keys['SwipeUp'] = false; // Consumir input
-                    } else if (this.state === 'JUMP' && this.vy > -200) { // Permitir doble salto cerca del ápice
+                        Input.keys['Space'] = false; Input.keys['ArrowUp'] = false; Input.keys['SwipeUp'] = false; 
+                    } else if (this.state === 'JUMP' && this.vy > -200) {
                         this.state = 'DOUBLE_JUMP';
                         this.vy = this.jumpForce * 0.9;
                         AudioSys.playJump();
@@ -425,7 +458,7 @@
                     }
                 }
 
-                // Aplicar físicas
+                // Físicas
                 if (this.state === 'JUMP' || this.state === 'DOUBLE_JUMP') {
                     this.vy += this.gravity * dt;
                     this.y += this.vy * dt;
@@ -453,7 +486,6 @@
                 });
                 ctx.globalAlpha = 1.0;
 
-                // Animación de Correr (Inclinación y rebote procedural)
                 ctx.save();
                 ctx.translate(this.x + this.w/2, this.y + this.h);
                 
@@ -462,42 +494,40 @@
                     ctx.rotate(Math.sin(this.animTimer) * 0.1);
                     ctx.scale(1, 1 + Math.abs(Math.cos(this.animTimer))*0.05);
                 } else if (this.state === 'DUCK') {
-                    ctx.rotate(0.3); // Inclinado hacia adelante al rodar
+                    ctx.rotate(0.3); // Inclinado
                 } else {
-                    // Saltar
-                    ctx.scale(0.9, 1.1);
+                    ctx.scale(0.9, 1.1); // Estirado al saltar
                 }
 
                 ctx.translate(-(this.w/2), -this.h);
 
-                // Cuerpo Principal Neón
+                // Cuerpo
                 ctx.shadowBlur = 20;
                 ctx.shadowColor = this.color;
                 ctx.fillStyle = '#fff';
                 ctx.fillRect(0, 0, this.w, this.h);
                 
-                // Detalle Tecnológico (Raya interior)
+                // Raya interior
                 ctx.shadowBlur = 0;
                 ctx.fillStyle = this.color;
                 ctx.fillRect(5, 5, 10, this.h - 10);
 
-                // Ojo / Visor
+                // Ojo
                 ctx.fillStyle = '#000';
-                if(this.state === 'DUCK') ctx.fillRect(25, 10, 15, 5); // Ojo achinado
+                if(this.state === 'DUCK') ctx.fillRect(25, 10, 15, 5);
                 else ctx.fillRect(25, 10, 10, 10);
 
                 ctx.restore();
             }
 
             getHitbox() {
-                // Hitbox un poco más indulgente que el sprite (Fair play)
                 return { x: this.x + 5, y: this.y + 5, w: this.w - 10, h: this.h - 10 };
             }
         }
 
         class Obstacle {
             constructor(type, x, groundY) {
-                this.type = type; // 'LOW' (Maleta), 'HIGH' (Cartel de estación)
+                this.type = type; // 'LOW' (Maleta), 'HIGH' (Cartel)
                 this.x = x;
                 this.groundY = groundY;
                 
@@ -506,11 +536,10 @@
                     this.y = this.groundY - this.h;
                     this.color = '#ff4d4d';
                 } else {
-                    this.w = 40; this.h = 150;
-                    this.y = this.groundY - this.h - 60; // Flota en el aire
+                    this.w = 40; this.h = 160;
+                    this.y = this.groundY - this.h - 60; // Flota dejando 60px para agacharse (h_duck es 35)
                     this.color = '#ff4d4d';
                 }
-                this.passed = false;
             }
             update(dt, speed) { this.x -= speed * dt; }
             draw(ctx) {
@@ -519,29 +548,25 @@
                 
                 if(this.type === 'LOW') {
                     ctx.fillRect(this.x, this.y, this.w, this.h);
-                    // Detalles de maleta
                     ctx.fillStyle = '#000'; ctx.shadowBlur = 0;
                     ctx.fillRect(this.x + 10, this.y + 10, this.w - 20, 5);
                 } else {
                     ctx.fillRect(this.x, this.y, this.w, this.h);
-                    // Poste colgante
                     ctx.fillStyle = '#333'; ctx.shadowBlur = 0;
                     ctx.fillRect(this.x + 15, 0, 10, this.y);
                 }
                 ctx.shadowBlur = 0;
             }
             getHitbox() {
-                // Ajuste de Hitbox para pixel-perfect feel
                 if(this.type === 'LOW') return { x: this.x + 8, y: this.y + 8, w: this.w - 16, h: this.h - 16 };
                 return { x: this.x + 5, y: this.y + 5, w: this.w - 10, h: this.h - 10 };
             }
         }
 
         class Item {
-            constructor(x, groundY) {
+            constructor(x, y) {
                 this.x = x;
-                // Posicionar aleatoriamente para requerir salto o agacharse
-                this.y = groundY - 40 - (Math.random() * 100); 
+                this.y = y; 
                 this.w = 30; this.h = 30;
                 this.collected = false;
                 this.floatOffset = 0;
@@ -553,10 +578,10 @@
             draw(ctx) {
                 if(this.collected) return;
                 ctx.shadowBlur = 10; ctx.shadowColor = '#ffd700';
-                ctx.drawImage(Assets.sprites.coin, this.x, this.y + Math.sin(this.floatOffset)*10);
+                ctx.drawImage(Assets.sprites.coin, this.x, this.y + Math.sin(this.floatOffset)*8);
                 ctx.shadowBlur = 0;
             }
-            getHitbox() { return { x: this.x, y: this.y + Math.sin(this.floatOffset)*10, w: this.w, h: this.h }; }
+            getHitbox() { return { x: this.x, y: this.y + Math.sin(this.floatOffset)*8, w: this.w, h: this.h }; }
         }
 
         // ==========================================
@@ -567,8 +592,8 @@
             ctx: null,
             width: 0, height: 0, groundY: 0,
             
-            state: 'MENU', // MENU, PLAYING, GAMEOVER
-            lastTime: 0,
+            state: 'MENU', // MENU, PLAYING, PAUSED, GAMEOVER
+            lastTime: performance.now(),
             frameCount: 0,
             
             // Lógica de Juego
@@ -577,7 +602,7 @@
             items: [],
             
             // Dificultad Dinámica
-            baseSpeed: 500, // Pixeles por segundo
+            baseSpeed: 500,
             currentSpeed: 500,
             distance: 0,
             coins: 0,
@@ -619,18 +644,34 @@
             start() {
                 AudioSys.init();
                 document.getElementById('screen-start').classList.remove('active');
+                document.getElementById('btn-pause').style.display = 'flex';
                 
-                // Ocultar tutorial tras 4 segundos
                 setTimeout(() => { document.getElementById('hud-tutorial').style.opacity = '0'; }, 4000);
 
                 this.resetCore();
                 this.state = 'PLAYING';
+                this.lastTime = performance.now();
             },
 
             restart() {
                 document.getElementById('screen-gameover').classList.remove('active');
+                document.getElementById('btn-pause').style.display = 'flex';
                 this.resetCore();
                 this.state = 'PLAYING';
+                this.lastTime = performance.now();
+            },
+
+            togglePause() {
+                if (this.state === 'PLAYING') {
+                    this.state = 'PAUSED';
+                    document.getElementById('screen-pause').classList.add('active');
+                    document.getElementById('btn-pause').style.display = 'none';
+                } else if (this.state === 'PAUSED') {
+                    this.state = 'PLAYING';
+                    document.getElementById('screen-pause').classList.remove('active');
+                    document.getElementById('btn-pause').style.display = 'flex';
+                    this.lastTime = performance.now(); // Prevenir salto masivo de delta time
+                }
             },
 
             resetCore() {
@@ -644,26 +685,37 @@
                 this.distance = 0;
                 this.coins = 0;
                 this.currentSpeed = this.baseSpeed;
-                this.spawnTimer = 0;
+                this.spawnTimer = 0.5; // Primer obstáculo rápido
                 this.updateHUD();
             },
 
             spawnLogic(dt) {
                 this.spawnTimer -= dt;
                 if (this.spawnTimer <= 0) {
-                    // Lógica de Dificultad: Cuanto más lejos, más rápido aparecen
-                    this.spawnInterval = Math.max(0.6, 1.5 - (this.distance * 0.0002));
-                    this.spawnTimer = this.spawnInterval + (Math.random() * 0.5);
+                    // Dificultad Dinámica: Se reduce el tiempo entre spawn pero con un límite mínimo justo
+                    this.spawnInterval = Math.max(0.75, 1.6 - (this.distance * 0.0003));
+                    this.spawnTimer = this.spawnInterval + (Math.random() * 0.4);
 
-                    // Patrones de obstáculos
                     const type = Math.random() > 0.5 ? 'LOW' : 'HIGH';
-                    this.obstacles.push(new Obstacle(type, this.width + 50, this.groundY));
+                    let obsX = this.width + 50;
+                    
+                    this.obstacles.push(new Obstacle(type, obsX, this.groundY));
 
-                    // Posibilidad de spawn de moneda acompañando obstáculo
-                    if(Math.random() > 0.4) {
-                        // Poner moneda en un sitio estratégico según el obstáculo
-                        let coinX = this.width + 50 + (type==='LOW' ? 0 : 200); 
-                        this.items.push(new Item(coinX, this.groundY));
+                    // LÓGICA INTELIGENTE DE MONEDAS (Smart Randomness)
+                    const spawnCoins = Math.random();
+                    if (spawnCoins > 0.4) {
+                        if (type === 'LOW') {
+                            // Moneda colocada en el aire, forzando a saltar bien la maleta
+                            this.items.push(new Item(obsX + 15, this.groundY - 140)); 
+                        } else {
+                            // Moneda en el suelo bajo el cartel alto, forzando a agacharse y premiando
+                            this.items.push(new Item(obsX + 10, this.groundY - 35));
+                        }
+                    } else if (spawnCoins < 0.15) {
+                        // Racha de monedas en un espacio vacío (recompensa rítmica)
+                        this.items.push(new Item(obsX + 250, this.groundY - 40));
+                        this.items.push(new Item(obsX + 300, this.groundY - 40));
+                        this.items.push(new Item(obsX + 350, this.groundY - 40));
                     }
                 }
             },
@@ -671,7 +723,7 @@
             checkCollisions() {
                 const pHit = this.player.getHitbox();
 
-                // Colisión con obstáculos (Muerte)
+                // Colisión letal
                 for (let obs of this.obstacles) {
                     const oHit = obs.getHitbox();
                     if (pHit.x < oHit.x + oHit.w && pHit.x + pHit.w > oHit.x &&
@@ -681,7 +733,7 @@
                     }
                 }
 
-                // Colisión con items (Monedas)
+                // Recolección
                 for (let i = this.items.length - 1; i >= 0; i--) {
                     let item = this.items[i];
                     if(item.collected) continue;
@@ -691,10 +743,10 @@
                         
                         item.collected = true;
                         this.coins++;
-                        this.distance += 20; // Bonus de distancia/puntuación
+                        this.distance += 15; // Bonus
                         AudioSys.playCoin();
-                        FX.spawnExplosion(item.x, item.y, '#ffd700');
-                        FX.spawnText(item.x, item.y - 20, '+20', '#ffd700');
+                        FX.spawnExplosion(item.x + 15, item.y + 15, '#ffd700');
+                        FX.spawnText(item.x, item.y - 20, '+15', '#ffd700');
                         this.updateHUD();
                     }
                 }
@@ -702,6 +754,7 @@
 
             triggerGameOver() {
                 this.state = 'GAMEOVER';
+                document.getElementById('btn-pause').style.display = 'none';
                 AudioSys.playCrash();
                 FX.spawnExplosion(this.player.x + this.player.w/2, this.player.y + this.player.h/2, '#ff4d4d');
                 
@@ -717,7 +770,7 @@
 
                 setTimeout(() => {
                     document.getElementById('screen-gameover').classList.add('active');
-                }, 800); // Pausa dramática antes de mostrar el menú
+                }, 800); 
             },
 
             updateHUD() {
@@ -726,11 +779,11 @@
             },
 
             drawEnvironment(dt) {
-                // Fondo base oscuro
+                // Fondo
                 this.ctx.fillStyle = '#050505';
                 this.ctx.fillRect(0, 0, this.width, this.height);
 
-                // Trenes de fondo (Parallax Lento)
+                // Trenes (Parallax)
                 const bgSpeed = this.currentSpeed * 0.2;
                 for (let i = 0; i < this.bgTrains.length; i++) {
                     let t = this.bgTrains[i];
@@ -739,7 +792,7 @@
                     this.ctx.drawImage(Assets.sprites.train, t.x, this.groundY - 120);
                 }
 
-                // Pilares (Parallax Medio)
+                // Pilares (Parallax)
                 const pillarSpeed = this.currentSpeed * 0.7;
                 this.ctx.fillStyle = '#111';
                 for (let i = 0; i < this.pillars.length; i++) {
@@ -747,21 +800,18 @@
                     p.x -= pillarSpeed * dt;
                     if (p.x + 80 < 0) p.x = this.width + Math.random() * 300;
                     this.ctx.fillRect(p.x, 0, 80, this.groundY);
-                    // Brillo en pilar
                     this.ctx.fillStyle = 'rgba(255,255,255,0.02)';
                     this.ctx.fillRect(p.x, 0, 10, this.groundY);
                     this.ctx.fillStyle = '#111';
                 }
 
-                // Andén (Suelo)
+                // Andén
                 this.ctx.fillStyle = '#0a0a0d';
                 this.ctx.fillRect(0, this.groundY, this.width, this.height - this.groundY);
-                
-                // Raya límite andén
                 this.ctx.fillStyle = 'rgba(255, 215, 0, 0.3)';
                 this.ctx.fillRect(0, this.groundY, this.width, 4);
 
-                // Líneas de velocidad en el suelo
+                // Líneas de velocidad en suelo
                 this.ctx.fillStyle = 'rgba(255,255,255,0.05)';
                 if (this.state === 'PLAYING') {
                     for(let i=0; i<5; i++) {
@@ -772,17 +822,20 @@
             },
 
             loop(timestamp) {
-                // Cálculo de Delta Time seguro (evita saltos al cambiar de pestaña)
                 let dt = (timestamp - this.lastTime) / 1000;
-                if (dt > 0.1) dt = 0.1; 
+                if (dt > 0.1) dt = 0.1; // Limitador de seguridad para lag/cambio de pestaña
                 this.lastTime = timestamp;
-                this.frameCount++;
+                
+                if (this.state !== 'PAUSED') {
+                    this.frameCount++;
+                }
 
+                // Dibujar fondo animado si juega, congelado si está en pausa o muerto
                 this.drawEnvironment(this.state === 'PLAYING' ? dt : 0);
 
                 if (this.state === 'PLAYING') {
-                    // Aumento progresivo implacable de la velocidad
-                    this.currentSpeed = this.baseSpeed + (this.distance * 0.15);
+                    // Dificultad Dinámica: Velocidad implacable pero controlada
+                    this.currentSpeed = this.baseSpeed + (this.distance * 0.12);
                     this.distance += (this.currentSpeed * 0.1) * dt;
                     
                     if(this.frameCount % 10 === 0) this.updateHUD();
@@ -790,7 +843,7 @@
                     this.player.update(dt);
                     this.spawnLogic(dt);
 
-                    // Actualizar obstáculos
+                    // Obstáculos
                     for (let i = this.obstacles.length - 1; i >= 0; i--) {
                         let obs = this.obstacles[i];
                         obs.update(dt, this.currentSpeed);
@@ -798,7 +851,7 @@
                         if (obs.x + obs.w < 0) this.obstacles.splice(i, 1);
                     }
 
-                    // Actualizar Items
+                    // Monedas
                     for (let i = this.items.length - 1; i >= 0; i--) {
                         let item = this.items[i];
                         item.update(dt, this.currentSpeed);
@@ -809,18 +862,22 @@
                     this.checkCollisions();
                     this.player.draw(this.ctx);
 
-                } else if (this.state === 'GAMEOVER') {
-                    // Dibujar mundo estático tras morir
+                } else if (this.state === 'GAMEOVER' || this.state === 'PAUSED') {
+                    // Dibujo estático para que el juego se quede congelado de fondo
                     this.obstacles.forEach(o => o.draw(this.ctx));
                     this.items.forEach(i => { if(!i.collected) i.draw(this.ctx); });
+                    if (this.player) this.player.draw(this.ctx);
                 }
 
-                FX.updateAndDraw(this.ctx, dt);
+                if (this.state !== 'PAUSED') {
+                    FX.updateAndDraw(this.ctx, dt);
+                }
+
                 requestAnimationFrame(t => this.loop(t));
             }
         };
 
-        // Arrancar el motor en cuanto carga la ventana
+        // Arrancar el motor
         window.onload = () => Engine.init();
 
     </script>
