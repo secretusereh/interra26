@@ -393,7 +393,10 @@
             Interra-hub<span style="color: var(--accent);">.</span>
         </div>
         <div>
-            </div>
+            <button class="btn-nav btn-export" title="Descarga todo tu itinerario en un pdf para compartir" onclick="generarPDF()">
+                <i data-lucide="file-down"></i> Exportar PDF
+            </button>
+        </div>
     </nav>
 
     <div class="trip-header">
@@ -480,15 +483,6 @@
                 </button>
             </div>
         </div>
-
-        <div class="user-section" style="margin-bottom: 2rem; text-align: center; border-color: var(--border-subtle);">
-            <h3 style="justify-content: center;"><i data-lucide="file-down"></i> Exportar Itinerario en PDF</h3>
-            <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem;">Descarga todo el plan detallado. Ideal por si quieres compartirlo con gente del exterior o simplemente tenerlo guardado y a mano en formato PDF.</p>
-            <button class="btn-nav btn-export" style="margin: 0 auto; background: rgba(255,255,255,0.05); padding: 0.8rem 1.5rem; font-size: 1rem;" onclick="generarPDF()">
-                <i data-lucide="file-down" style="width: 20px;"></i> Descargar PDF
-            </button>
-        </div>
-
         <div class="users-grid">
             <div class="user-section">
                 <h3><i data-lucide="users"></i> Miembros del Viaje</h3>
