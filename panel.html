@@ -622,6 +622,7 @@
             return finalSnap.data().nombre || user.email;
         }
 
+        // ── PROTECCIÓN DE ACCESO: ACTUALIZADO A registro.html ──
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 currentUser = user;
@@ -631,7 +632,8 @@
                 setTimeout(() => document.getElementById('page-loader').style.display = 'none', 800);
                 loadTrips();
             } else {
-                window.location.href = 'index.html';
+                // REDIRECCIÓN ACTUALIZADA
+                window.location.href = 'registro.html';
             }
         });
 
