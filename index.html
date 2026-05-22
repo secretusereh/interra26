@@ -7,7 +7,7 @@
     <title>Interra-hub | Planifica tu Interrail en grupo sin caos</title>
     <meta name="description" content="La plataforma colaborativa definitiva para planificar tu Interrail. Organiza itinerarios, gestiona alojamientos y cuadra gastos en tiempo real.">
     <meta name="keywords" content="interrail, viajes en grupo, planificador de rutas, dividir gastos viaje, interrahub">
-    <meta name="author" content="Pipaon Studio">
+    <meta name="author" content="Pipa Studio">
     <meta name="robots" content="index, follow">
     
     <meta property="og:type" content="website">
@@ -96,12 +96,29 @@
         .btn-primary:hover { transform: scale(0.97); box-shadow: 0 0 20px rgba(255,255,255,0.2); }
 
         /* =========================================
-           HERO SECTION
+           HERO SECTION (CON VIDEO DE FONDO)
            ========================================= */
         .hero {
             min-height: 100vh;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
             text-align: center; padding: 8rem 5% 4rem; position: relative;
+        }
+
+        .hero-video-container {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            overflow: hidden;
+            z-index: -2;
+        }
+        .hero-video-container video {
+            width: 100%; height: 100%; object-fit: cover;
+        }
+        .hero-overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(to bottom, rgba(3,3,3,0.6) 0%, rgba(3,3,3,0.95) 100%);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            z-index: -1;
         }
         
         .badge-beta {
@@ -115,13 +132,15 @@
             font-size: clamp(2.5rem, 6vw, 4.5rem); font-weight: 800;
             letter-spacing: -2px; line-height: 1.1; margin-bottom: 1.5rem;
             max-width: 900px; animation: fadeInUp 0.8s ease 0.2s backwards;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.5);
         }
         .hero h1 .highlight { color: var(--accent); }
 
         .hero p {
-            color: var(--text-muted); font-size: clamp(1rem, 2vw, 1.25rem);
+            color: rgba(255, 255, 255, 0.85); font-size: clamp(1rem, 2vw, 1.25rem);
             line-height: 1.6; max-width: 700px; margin-bottom: 3rem; font-weight: 300;
             animation: fadeInUp 0.8s ease 0.4s backwards;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.8);
         }
 
         .hero-ctas {
@@ -137,7 +156,7 @@
            SECCIÓN: LO QUE HACEMOS HOY (FEATURES)
            ========================================= */
         .section-features {
-            padding: 6rem 5%; max-width: 1200px; margin: 0 auto;
+            padding: 6rem 5%; max-width: 1200px; margin: 0 auto; position: relative; z-index: 10;
         }
 
         .section-header { text-align: center; margin-bottom: 4rem; }
@@ -172,7 +191,7 @@
         .bento-card p { color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; font-weight: 300; }
 
         /* =========================================
-           SECCIÓN: EL FUTURO (VISIÓN)
+           SECCIÓN: EL FUTURO (VISIÓN) & PLUS
            ========================================= */
         .section-vision {
             padding: 8rem 5%; background: rgba(255,255,255,0.01);
@@ -199,12 +218,46 @@
         .vision-item-content h4 { font-size: 1.1rem; font-weight: 800; margin-bottom: 0.5rem; }
         .vision-item-content p { color: var(--text-muted); font-size: 0.9rem; line-height: 1.6; }
 
+        /* Badge Interrahub PLUS */
+        .plus-badge-container {
+            margin-top: 2rem; padding: 1.5rem; border-radius: 16px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.01));
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            display: flex; align-items: center; gap: 1rem;
+        }
+        .plus-icon { color: #ffd700; width: 32px; height: 32px; }
+        .plus-badge-container p { margin: 0; font-size: 0.95rem; color: rgba(255,255,255,0.9); line-height: 1.5;}
+        .plus-badge-container strong { color: #ffd700; }
+
         /* =========================================
-           CTA FINAL
+           CTA FINAL & FORMULARIO
            ========================================= */
-        .section-cta { padding: 8rem 5%; text-align: center; }
+        .section-cta { padding: 8rem 5%; text-align: center; max-width: 800px; margin: 0 auto; }
         .section-cta h2 { font-size: clamp(2rem, 4vw, 3rem); font-weight: 800; margin-bottom: 1.5rem; letter-spacing: -1px; }
-        .section-cta p { color: var(--text-muted); font-size: 1.1rem; margin-bottom: 3rem; max-width: 600px; margin-inline: auto; }
+        .section-cta p { color: var(--text-muted); font-size: 1.1rem; margin-bottom: 3rem; margin-inline: auto; line-height: 1.6;}
+
+        .feedback-form {
+            background: var(--surface); padding: 2.5rem; border-radius: 24px;
+            border: 1px solid var(--border-subtle); text-align: left;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+        }
+        .feedback-form h3 { font-size: 1.4rem; font-weight: 800; margin-bottom: 0.5rem; }
+        .feedback-form p { font-size: 0.9rem; margin-bottom: 1.5rem; color: var(--text-muted); }
+        .input-group { margin-bottom: 1.2rem; }
+        .input-group input, .input-group textarea {
+            width: 100%; padding: 1rem; background: rgba(255,255,255,0.03);
+            border: 1px solid var(--border-subtle); border-radius: 12px;
+            color: var(--primary); font-size: 0.95rem; outline: none; transition: 0.3s;
+            font-family: 'Sora', sans-serif;
+        }
+        .input-group input:focus, .input-group textarea:focus { border-color: var(--primary); background: rgba(255,255,255,0.06); }
+        .input-group textarea { resize: vertical; min-height: 100px; }
+        .btn-submit-form {
+            width: 100%; padding: 1rem; background: var(--primary); color: var(--bg-color);
+            border: none; border-radius: 12px; font-weight: 700; font-size: 1rem; cursor: pointer; transition: var(--transition);
+        }
+        .btn-submit-form:hover { transform: scale(0.98); }
 
         /* =========================================
            FOOTER
@@ -228,7 +281,7 @@
         .footer-copy strong { color: rgba(255,255,255,0.6); }
 
         /* =========================================
-           MODALES Y COOKIES (Desde tu index original)
+           MODALES Y COOKIES
            ========================================= */
         .modal-overlay {
             display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85);
@@ -238,19 +291,24 @@
         
         .modal-box {
             background: #141414; border: 1px solid var(--border-subtle); border-radius: 24px;
-            width: 100%; max-width: 600px; max-height: 85vh; overflow-y: auto; padding: 3rem 2.5rem;
+            width: 100%; max-width: 650px; max-height: 85vh; overflow-y: auto; padding: 3rem 2.5rem;
             animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1); text-align: left;
         }
         
+        .modal-box::-webkit-scrollbar { width: 6px; }
+        .modal-box::-webkit-scrollbar-track { background: transparent; }
+        .modal-box::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 10px; }
+        
         .modal-box h2 { font-size: 1.5rem; font-weight: 800; margin-bottom: 1.5rem; letter-spacing: -0.5px; }
-        .modal-box h3 { font-size: 1rem; font-weight: 600; margin: 1.5rem 0 0.5rem; color: var(--primary); }
-        .modal-box p, .modal-box li { font-size: 0.9rem; font-weight: 300; color: var(--text-muted); line-height: 1.6; margin-bottom: 0.8rem; }
+        .modal-box h3 { font-size: 1.05rem; font-weight: 700; margin: 1.8rem 0 0.6rem; color: var(--primary); }
+        .modal-box p, .modal-box li { font-size: 0.9rem; font-weight: 300; color: var(--text-muted); line-height: 1.7; margin-bottom: 0.8rem; }
         .modal-box ul { padding-left: 1.2rem; margin-bottom: 1rem; }
+        .modal-box strong { color: rgba(255,255,255,0.85); font-weight: 600; }
         
         .modal-close {
             width: 100%; margin-top: 2rem; padding: 1rem; background: rgba(255,255,255,0.05);
             border: 1px solid var(--border-subtle); border-radius: 12px; color: var(--primary);
-            font-weight: 600; cursor: pointer; transition: 0.3s;
+            font-weight: 600; cursor: pointer; transition: 0.3s; font-family: 'Sora', sans-serif;
         }
         .modal-close:hover { background: rgba(255,255,255,0.1); }
 
@@ -276,7 +334,6 @@
 
         @media (max-width: 768px) {
             #cookie-banner { bottom: 20px; right: 5%; width: 90%; }
-            .nav-actions .btn-ghost { display: none; }
         }
 
         /* Animaciones */
@@ -292,16 +349,20 @@
         <a href="#" class="logo">Interra-hub<span class="dot">.</span></a>
         <div class="nav-actions">
             <a href="registro.html" class="btn-ghost">Ya tengo cuenta</a>
-            <a href="registro.html" class="btn-primary">
-                Acceder al Hub <i data-lucide="arrow-right" style="width: 16px;"></i>
-            </a>
-        </div>
+            </div>
     </nav>
 
     <main class="hero">
+        <div class="hero-video-container">
+            <video autoplay loop muted playsinline id="hero-video">
+                <source src="HomeInterrahub.mp4" type="video/mp4">
+            </video>
+            <div class="hero-overlay"></div>
+        </div>
+
         <div class="badge-beta">
             <i data-lucide="zap" style="width: 12px; display: inline-block; vertical-align: middle;"></i> 
-            Fase Beta 2026 Abierta
+            Fase Beta 2026
         </div>
         <h1>Planifica tu Interrail en grupo. <span class="highlight">Sin caos.</span></h1>
         <p>Sincroniza vuestro itinerario en tiempo real, gestiona los alojamientos y cuadra los gastos del equipo automáticamente. Olvídate de los grupos de WhatsApp saturados y únete al hub definitivo.</p>
@@ -349,6 +410,11 @@
                 <h2>Diseñando el futuro del Interrail</h2>
                 <p>Este año te ofrecemos la herramienta para que tengas el control. El año que viene, Interra-hub evolucionará a un ecosistema integral diseñado para garantizarte la mejor experiencia (y al mejor precio) en Europa.</p>
                 <a href="registro.html" class="btn-ghost" style="padding-left: 0; color: var(--primary); text-decoration: underline; text-underline-offset: 4px;">Únete a la lista para 2027 <i data-lucide="arrow-right" style="width: 16px; vertical-align: middle;"></i></a>
+                
+                <div class="plus-badge-container">
+                    <i data-lucide="star" class="plus-icon"></i>
+                    <p>Con <strong>Interrahub PLUS</strong> disfruta de nuestra promesa: una plataforma <strong>para tener todo de manera gratuita siempre e ilimitada</strong>. Sin restricciones, sin sorpresas.</p>
+                </div>
             </div>
             <div class="vision-list">
                 <div class="vision-item">
@@ -378,8 +444,26 @@
 
     <section class="section-cta">
         <h2>¿Listo para subir a bordo?</h2>
-        <p>Regístrate ahora, empieza a usar la plataforma gratis y asegura tu acceso prioritario para todas las novedades que lanzaremos el próximo año.</p>
-        <a href="registro.html" class="btn-primary btn-massive" style="margin-top: 1rem;">Crear mi cuenta gratis</a>
+        <p>Regístrate ahora y empieza a usar la plataforma gratis. Al estar en Fase Beta, tu opinión es vital para nosotros.</p>
+        
+        <div class="feedback-form">
+            <h3>Ayúdanos a mejorar</h3>
+            <p>Por favor, envíanos sugerencias o reporta problemas que hayas encontrado a través de este formulario para que podamos construir el hub perfecto.</p>
+            <form onsubmit="submitFeedback(event)">
+                <div class="input-group">
+                    <input type="text" id="feedback-name" placeholder="Tu nombre" required>
+                </div>
+                <div class="input-group">
+                    <input type="email" id="feedback-email" placeholder="Tu correo electrónico" required>
+                </div>
+                <div class="input-group">
+                    <textarea id="feedback-message" placeholder="Describe el problema o tu sugerencia detalladamente..." required></textarea>
+                </div>
+                <button type="submit" class="btn-submit-form" id="feedback-btn">Enviar Comentarios</button>
+            </form>
+        </div>
+
+        <a href="registro.html" class="btn-primary btn-massive" style="margin-top: 3rem;">Crear mi cuenta gratis</a>
     </section>
 
     <footer>
@@ -390,44 +474,79 @@
             <button onclick="openModal('modal-copyright')">Copyright</button>
         </div>
         <div class="footer-copy">
-            Hecho por <strong>Pipaon Studio</strong> <br><br>
+            Hecho por <strong>Pipa</strong> <br><br>
             © 2026 Interra-hub · Todos los derechos reservados
         </div>
     </footer>
 
     <div class="modal-overlay" id="modal-tos">
         <div class="modal-box">
-            <h2>Términos de Servicio</h2>
-            <h3>1. Uso aceptable</h3>
-            <p>El uso de esta plataforma está destinado exclusivamente a fines lícitos y personales para la organización de viajes. Queda estrictamente prohibido el uso para actividades ilegales o fraudulentas.</p>
-            <h3>2. Versión Beta</h3>
-            <p>La aplicación se encuentra en fase <strong>Beta (2026)</strong>. El acceso actual es gratuito con el fin de testear la tecnología. Pueden existir interrupciones. Pipaon Studio no se hace responsable de pérdidas de datos derivadas de esta fase de pruebas.</p>
-            <h3>3. Responsabilidad</h3>
-            <p>El usuario es el único responsable de los datos, gastos y rutas que introduce en la plataforma. Interra-hub provee la herramienta tecnológica, pero no interviene en las disputas financieras entre miembros de un grupo.</p>
-            <button class="modal-close" onclick="closeModal('modal-tos')">Entendido</button>
+            <h2>Términos y Condiciones de Uso</h2>
+            <p style="font-size: 0.8rem; margin-top: -10px;">Última actualización: Mayo 2026</p>
+            
+            <h3>1. Aceptación de los términos</h3>
+            <p>Al acceder, registrarse o utilizar la plataforma <strong>Interra-hub</strong>, el usuario acepta de manera íntegra, plena y sin reservas los presentes Términos y Condiciones de Uso. Si el usuario no está de acuerdo con cualquiera de estas condiciones, deberá abstenerse de utilizar la aplicación.</p>
+            
+            <h3>2. Naturaleza del Servicio y Fase Beta</h3>
+            <p>Interra-hub es una plataforma tecnológica concebida para facilitar la organización colaborativa de viajes. Actualmente, la plataforma se encuentra en fase <strong>Beta (2026)</strong>. Esto implica que el servicio se proporciona "tal cual" y "según disponibilidad". <strong>Pipa Studio</strong> no garantiza que el servicio sea ininterrumpido, oportuno, seguro o libre de errores. El usuario asume que, durante esta fase de pruebas, pueden ocurrir pérdidas de datos o desincronizaciones, declinando Pipa Studio cualquier responsabilidad legal o compensatoria por estos hechos.</p>
+            
+            <h3>3. Obligaciones y Conducta del Usuario</h3>
+            <p>El usuario se compromete a hacer un uso lícito, diligente y adecuado de la plataforma. Queda terminantemente prohibido:</p>
+            <ul>
+                <li>Utilizar la app con fines fraudulentos, ilícitos o para coordinar actividades ilegales.</li>
+                <li>Introducir datos maliciosos, virus, troyanos o cualquier código que pueda dañar la infraestructura tecnológica de la plataforma o de <strong>Firebase (Google LLC)</strong>.</li>
+                <li>Suplantar la identidad de otros usuarios o vulnerar su privacidad.</li>
+            </ul>
+
+            <h3>4. Motor Financiero y Responsabilidad de Deudas</h3>
+            <p>El módulo "Finance" es una herramienta de cálculo matemático para facilitar la división de gastos entre los miembros de un viaje. <strong>Interra-hub y Pipa Studio no intervienen, ni actúan como intermediarios financieros, ni garantizan el cobro de deudas entre los usuarios.</strong> La liquidación del dinero debe realizarse de forma externa a la plataforma. No nos hacemos responsables de disputas monetarias, impagos o errores en la introducción de gastos por parte de los usuarios.</p>
+
+            <h3>5. Propiedad Intelectual e Industrial</h3>
+            <p>Todos los derechos de propiedad intelectual del software, código fuente, diseño de interfaces, logotipos, algoritmo de reparto de gastos y minijuegos integrados son titularidad exclusiva de <strong>Pipa Studio</strong>. Queda expresamente prohibida la reproducción, distribución, comunicación pública, ingeniería inversa o transformación total o parcial sin autorización expresa por escrito.</p>
+
+            <h3>6. Modificaciones y Terminación</h3>
+            <p>Nos reservamos el derecho a modificar, suspender o cancelar el acceso a la plataforma o a los presentes términos en cualquier momento. El uso continuado del servicio tras dichas modificaciones implicará su aceptación automática.</p>
+            
+            <button class="modal-close" onclick="closeModal('modal-tos')">He leído y acepto los términos</button>
         </div>
     </div>
 
     <div class="modal-overlay" id="modal-privacy">
         <div class="modal-box">
-            <h2>Política de Privacidad</h2>
+            <h2>Política de Privacidad y Tratamiento de Datos</h2>
             <p style="font-size: 0.8rem; margin-top: -10px;">Última actualización: Mayo 2026</p>
-            <h3>1. Datos que recopilamos</h3>
-            <p>Recopilamos tu correo electrónico, nombre y los datos de planificación (rutas, gastos) que introduces voluntariamente para habilitar el trabajo en grupo en tiempo real.</p>
-            <h3>2. Finalidad y Seguridad</h3>
-            <p>Tus datos están asegurados mediante infraestructura de <strong>Google Firebase</strong>. Se usan exclusivamente para darte el servicio de la app y para comunicarte novedades importantes. No vendemos tus datos a terceros.</p>
-            <h3>3. Cookies</h3>
-            <p>Usamos cookies técnicas estrictamente necesarias para mantener tu sesión activa y guardar tus preferencias de uso dentro de la plataforma.</p>
-            <button class="modal-close" onclick="closeModal('modal-privacy')">Cerrar</button>
+            
+            <h3>1. Identidad del Responsable</h3>
+            <p>El tratamiento de los datos personales recogidos en esta plataforma es responsabilidad exclusiva de <strong>Pipa Studio</strong>. Nuestro compromiso es garantizar la máxima seguridad y transparencia en la gestión de tu información personal.</p>
+
+            <h3>2. Datos que recopilamos y Finalidad</h3>
+            <p>Para proporcionar el servicio de planificación colaborativa, recopilamos y procesamos los siguientes datos:</p>
+            <ul>
+                <li><strong>Datos de registro:</strong> Nombre, dirección de correo electrónico y contraseña (cifrada irreversiblemente por Google Firebase).</li>
+                <li><strong>Datos del viaje (Contenido generado por el usuario):</strong> Destinos, fechas, presupuestos, gastos compartidos, notas y ubicaciones geográficas de hoteles/actividades.</li>
+                <li><strong>Datos técnicos y de uso:</strong> Direcciones IP, tipo de dispositivo, navegador y registros de interacción con la plataforma.</li>
+            </ul>
+            <p><strong>Uso explícito de los datos:</strong> Es importante que entiendas que <strong>tus datos pueden llegar a ser usados</strong> por nuestro equipo de forma anonimizada y agregada con fines estadísticos, de mejora del algoritmo de la plataforma, y para la personalización de futuros servicios (como la Asesoría Interrail o recomendaciones de rutas). Al usar la Beta, consientes este análisis para ayudarnos a evolucionar el producto.</p>
+
+            <h3>3. Analítica Web y Vercel Analytics</h3>
+            <p>Para comprender cómo los usuarios interactúan con Interra-hub y medir el rendimiento del tráfico, utilizamos <strong>Vercel Analytics</strong>. Esta herramienta de analítica orientada a la privacidad recopila métricas de visitantes (páginas vistas, tiempos de carga, sistema operativo) de manera respetuosa, ayudándonos a optimizar la velocidad y la experiencia de usuario sin rastrear individualmente a las personas a través de la web con fines publicitarios invasivos.</p>
+
+            <h3>4. Proveedores de Infraestructura (Terceros)</h3>
+            <p>Tus datos están alojados en servidores de alta seguridad provistos por <strong>Google Firebase</strong> (bases de datos de Firestore y sistema de Autenticación). Google actúa como encargado del tratamiento, cumpliendo con los estándares internacionales de seguridad y el RGPD europeo. No vendemos bases de datos de usuarios a agencias de terceros bajo ninguna circunstancia.</p>
+
+            <h3>5. Retención de Datos y Derechos ARCO</h3>
+            <p>Tus datos se conservarán mientras tu cuenta permanezca activa. Como usuario, estás amparado por el Reglamento General de Protección de Datos (RGPD) y tienes derecho a solicitar el <strong>A</strong>cceso, <strong>R</strong>ectificación, <strong>C</strong>ancelación (derecho al olvido) y <strong>O</strong>posición al tratamiento de tus datos personales. Para ejercer estos derechos o eliminar permanentemente tu cuenta y todos los viajes asociados, puedes ponerte en contacto con nosotros.</p>
+
+            <button class="modal-close" onclick="closeModal('modal-privacy')">Entendido</button>
         </div>
     </div>
 
     <div class="modal-overlay" id="modal-copyright">
         <div class="modal-box">
-            <h2>Copyright</h2>
+            <h2>Copyright y Propiedad Intelectual</h2>
             <p>© 2026 <strong>Interra-hub</strong> · Todos los derechos reservados.</p>
-            <p>Esta plataforma, su código fuente, diseño, algoritmos (incluyendo el motor de liquidación de gastos y el minijuego interno) han sido diseñados y desarrollados por <strong>Pipaon Studio</strong>.</p>
-            <p>La copia, reproducción, ingeniería inversa o uso no autorizado de cualquier parte de este software queda estrictamente prohibida y será perseguida legalmente.</p>
+            <p>Esta plataforma, su código fuente original, diseño de experiencia de usuario (UX/UI), algoritmos internos y marcas asociadas han sido concebidas, diseñadas y desarrolladas por <strong>Pipa Studio</strong>.</p>
+            <p>La copia, plagio, ingeniería inversa, distribución no autorizada o explotación comercial de cualquier componente de este software (incluyendo pero no limitándose al diseño visual y el sistema "Finance") constituye una violación grave de las leyes de propiedad intelectual y será perseguida legalmente.</p>
             <button class="modal-close" onclick="closeModal('modal-copyright')">Cerrar</button>
         </div>
     </div>
@@ -435,7 +554,7 @@
     <div id="cookie-banner">
         <div class="cookie-title"><i data-lucide="cookie" style="color: var(--warning);"></i> Privacidad y Cookies</div>
         <div class="cookie-text">
-            Utilizamos cookies técnicas y analíticas para asegurar que el Hub funcione perfectamente y para entender cómo interactúas con la plataforma. Más info en <a onclick="openModal('modal-privacy')">Privacidad</a>.
+            Utilizamos cookies técnicas y herramientas como Vercel Analytics para asegurar que el Hub funcione perfectamente y analizar el tráfico de forma privada. Más info en <a onclick="openModal('modal-privacy')">Privacidad</a>.
         </div>
         <button class="cookie-btn cookie-accept" id="cookie-accept-btn">Aceptar y continuar</button>
         <button class="cookie-btn cookie-reject" id="cookie-reject-btn">Rechazar no esenciales</button>
@@ -461,6 +580,31 @@
             });
         });
 
+        // Simulación de envío del formulario de sugerencias
+        function submitFeedback(e) {
+            e.preventDefault();
+            const btn = document.getElementById('feedback-btn');
+            btn.innerText = 'Enviando...';
+            btn.style.opacity = '0.7';
+            
+            // Simular petición asíncrona
+            setTimeout(() => {
+                btn.style.backgroundColor = 'var(--success)';
+                btn.style.color = '#000';
+                btn.innerText = '¡Gracias por tu ayuda!';
+                document.getElementById('feedback-name').value = '';
+                document.getElementById('feedback-email').value = '';
+                document.getElementById('feedback-message').value = '';
+                
+                setTimeout(() => {
+                    btn.style.backgroundColor = 'var(--primary)';
+                    btn.style.color = 'var(--bg-color)';
+                    btn.innerText = 'Enviar Comentarios';
+                    btn.style.opacity = '1';
+                }, 3000);
+            }, 1200);
+        }
+
         // Control de Cookies
         document.addEventListener("DOMContentLoaded", () => {
             const banner = document.getElementById('cookie-banner');
@@ -477,7 +621,7 @@
             });
 
             rejectBtn.addEventListener('click', () => {
-                const apoyar = confirm("¿Estás seguro? Las cookies nos ayudan a mejorar la plataforma de cara al año que viene. ¿Deseas mantenerlas activas para apoyarnos?");
+                const apoyar = confirm("¿Estás seguro? Las métricas anónimas de Vercel Analytics nos ayudan a mejorar la plataforma de cara al año que viene. ¿Deseas mantenerlas activas para apoyarnos?");
                 if (apoyar) {
                     localStorage.setItem('interrahub_cookies', 'accepted');
                 } else {
