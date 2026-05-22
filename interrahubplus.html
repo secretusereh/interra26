@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     <title>Interra-hub PLUS | Próximamente</title>
-    <meta name="description" content="Únete a la lista de espera de Interra-hub PLUS. Sin anuncios, sorteos exclusivos y acceso a precios VIP.">
+    <meta name="description" content="Descubre Interra-hub PLUS. Sin anuncios, sorteos exclusivos y acceso a precios VIP.">
     <meta name="author" content="Pipa Studio">
 
     <link rel="icon" type="image/png" href="interrahublogo.PNG">
@@ -160,57 +160,55 @@
             background: var(--surface);
             border: 1px solid var(--border-gold);
             border-radius: 24px;
-            padding: 2.5rem;
+            padding: 3.5rem 2.5rem;
             position: relative;
             overflow: hidden;
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             box-shadow: 0 20px 50px rgba(0,0,0,0.5);
             max-width: 450px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 2rem;
         }
 
         /* El precio difuminado imposible de seleccionar */
         .blurred-price-container {
             position: relative;
-            height: 80px;
             display: flex;
             justify-content: center;
             align-items: center;
-            margin-bottom: 1.5rem;
         }
 
         .blurred-text {
-            font-size: 4rem;
+            font-size: 5rem;
             font-weight: 800;
             color: rgba(255,255,255,0.3);
-            /* Seguridad visual agresiva */
-            filter: blur(14px);
+            /* Seguridad visual agresiva: altamente difuminado */
+            filter: blur(18px);
             user-select: none;
             pointer-events: none;
-            position: absolute;
-            z-index: 1;
+            line-height: 1;
         }
 
-        /* La capa superior que tapa el precio */
-        .lock-overlay {
-            position: absolute;
-            inset: 0;
-            z-index: 2;
+        /* La capa de Próximamente debajo del texto */
+        .lock-container {
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
-            background: rgba(5,5,5,0.4);
+            width: 100%;
         }
 
         .lock-badge {
             background: #111;
             border: 1px solid var(--gold);
-            padding: 0.8rem 1.5rem;
-            border-radius: 30px;
+            padding: 1.2rem 2.5rem;
+            border-radius: 40px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.8);
         }
 
@@ -218,29 +216,8 @@
             color: var(--gold);
             font-weight: 800;
             letter-spacing: 2px;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
         }
-
-        /* Formulario lista de espera */
-        .waitlist-form {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-
-        .waitlist-form input {
-            width: 100%; padding: 1.2rem; border-radius: 12px; border: 1px solid var(--border-subtle);
-            background: rgba(255,255,255,0.03); color: white; font-size: 0.95rem; outline: none;
-            transition: var(--transition); font-family: 'Sora', sans-serif;
-        }
-        .waitlist-form input:focus { border-color: var(--gold); background: rgba(255,255,255,0.08); }
-
-        .btn-gold {
-            background: var(--gold-gradient); color: #000; border: none;
-            padding: 1.2rem; border-radius: 12px; font-weight: 800; font-size: 1rem;
-            cursor: pointer; transition: var(--transition); display: flex; justify-content: center; align-items: center; gap: 8px;
-        }
-        .btn-gold:hover { transform: scale(0.98); box-shadow: 0 0 20px rgba(255, 215, 0, 0.3); }
 
         /* =========================================
            FOOTER
@@ -268,7 +245,7 @@
             .right-col { order: 2; align-items: center; }
             .benefits-list { align-items: flex-start; text-align: left; margin: 0 auto 3rem; }
             .main-logo { max-width: 350px; }
-            .pricing-block { width: 100%; }
+            .pricing-block { width: 100%; padding: 3rem 1.5rem; }
         }
 
         /* ANIMACIONES */
@@ -309,25 +286,15 @@
 
             <div class="pricing-block">
                 <div class="blurred-price-container">
-                    <div class="blurred-text">€14.99/m</div>
-                    <div class="lock-overlay">
-                        <div class="lock-badge">
-                            <i data-lucide="lock" style="color: var(--gold);"></i>
-                            <span>PRÓXIMAMENTE</span>
-                        </div>
-                    </div>
+                    <div class="blurred-text">€14.99</div>
                 </div>
                 
-                <p style="color: var(--text-muted); font-size: 0.85rem; line-height: 1.5; text-align: center; margin-bottom: 1.5rem;">
-                    El precio se encuentra bloqueado mientras cerramos acuerdos internacionales. Únete a la lista prioritaria para acceder antes que nadie.
-                </p>
-
-                <form class="waitlist-form" onsubmit="joinWaitlist(event)">
-                    <input type="email" id="email-input" placeholder="Tu correo electrónico" required>
-                    <button type="submit" class="btn-gold" id="btn-submit">
-                        Apuntarme a la lista <i data-lucide="arrow-right" style="width: 16px;"></i>
-                    </button>
-                </form>
+                <div class="lock-container">
+                    <div class="lock-badge">
+                        <i data-lucide="lock" style="color: var(--gold); width: 24px; height: 24px;"></i>
+                        <span>PRÓXIMAMENTE</span>
+                    </div>
+                </div>
             </div>
         </div>
     </main>
@@ -339,37 +306,6 @@
     <script>
         // Inicializar iconos de Lucide
         lucide.createIcons();
-
-        // Lógica del formulario de la lista de espera
-        function joinWaitlist(e) {
-            e.preventDefault();
-            const btn = document.getElementById('btn-submit');
-            const input = document.getElementById('email-input');
-            
-            if(!input.value) return;
-
-            // Estado de carga
-            btn.innerText = 'Procesando...';
-            btn.style.opacity = '0.7';
-            
-            // Simulación de envío a base de datos
-            setTimeout(() => {
-                btn.style.background = '#4dff4d'; // success color
-                btn.style.color = '#000';
-                btn.innerHTML = '<i data-lucide="check-circle" style="width: 18px;"></i> ¡Estás en la lista!';
-                lucide.createIcons();
-                input.value = '';
-                
-                // Restaurar botón después de unos segundos
-                setTimeout(() => {
-                    btn.style.background = 'var(--gold-gradient)';
-                    btn.style.color = '#000';
-                    btn.innerHTML = 'Apuntarme a la lista <i data-lucide="arrow-right" style="width: 16px;"></i>';
-                    lucide.createIcons();
-                    btn.style.opacity = '1';
-                }, 4000);
-            }, 1200);
-        }
     </script>
 </body>
 </html>
