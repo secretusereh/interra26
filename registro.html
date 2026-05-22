@@ -10,16 +10,19 @@
     <meta name="keywords" content="viajes, planificador de viajes, interrail, itinerario, organización de viajes, viajes en grupo, app de viajes">
     <meta name="author" content="Pipa Studio">
     <meta name="robots" content="index, follow">
-    <link rel="canonical" href="https://tudominio.com/"> <meta property="og:type" content="website">
+    <link rel="canonical" href="https://tudominio.com/">
+    <meta property="og:type" content="website">
     <meta property="og:title" content="Interra-hub | El hub para tus viajes">
     <meta property="og:description" content="Organiza tu próxima aventura en grupo. Mapas, itinerarios y control total en una sola app.">
-    <meta property="og:image" content="https://tudominio.com/interrahublogo.PNG"> <meta property="og:url" content="https://tudominio.com/">
+    <meta property="og:image" content="https://tudominio.com/interrahublogo.PNG">
+    <meta property="og:url" content="https://tudominio.com/">
     <meta property="og:site_name" content="Interra-hub">
 
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Interra-hub | Planifica tus viajes en grupo">
     <meta name="twitter:description" content="Organiza tu próxima aventura en grupo. Mapas, itinerarios y control total en una sola app.">
-    <meta name="twitter:image" content="https://tudominio.com/interrahublogo.PNG"> <link rel="icon" type="image/png" href="interrahublogo.PNG">
+    <meta name="twitter:image" content="https://tudominio.com/interrahublogo.PNG">
+    <link rel="icon" type="image/png" href="interrahublogo.PNG">
     <link rel="apple-touch-icon" href="interrahublogo.PNG">
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -42,15 +45,20 @@
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Sora', sans-serif; }
 
+        /* ── SIN SCROLL GLOBAL ── */
+        html, body {
+            height: 100%;
+            overflow: hidden;
+        }
+
         body {
             background-color: var(--bg-color);
             color: var(--primary);
-            min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: flex-start;
-            overflow-x: hidden;
+            overflow: hidden;
             background-image: radial-gradient(circle at 50% -20%, #2a2a2a 0%, var(--bg-color) 50%);
         }
 
@@ -59,15 +67,13 @@
             width: 100%;
             background: linear-gradient(90deg, #1a1200, #2a1f00, #1a1200);
             border-bottom: 1px solid rgba(255, 184, 77, 0.3);
-            padding: 0.6rem 1rem;
+            padding: 0.45rem 1rem;
             text-align: center;
-            font-size: 0.78rem;
+            font-size: 0.75rem;
             font-weight: 400;
             color: var(--warning);
             letter-spacing: 0.02em;
-            position: sticky;
-            top: 0;
-            z-index: 900;
+            flex-shrink: 0;
             display: none;
         }
         @media (max-width: 768px) {
@@ -102,7 +108,9 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 2rem 1rem;
+            padding: 0.8rem 1rem 0;
+            overflow: hidden;
+            min-height: 0;
         }
 
         /* Botón de volver atrás premium */
@@ -112,12 +120,12 @@
             gap: 8px;
             color: var(--text-muted);
             text-decoration: none;
-            font-size: 0.85rem;
+            font-size: 0.82rem;
             font-weight: 600;
-            margin-bottom: 2rem;
+            margin-bottom: 0.8rem;
             transition: var(--transition);
             background: rgba(255, 255, 255, 0.02);
-            padding: 0.6rem 1.2rem;
+            padding: 0.45rem 1rem;
             border-radius: 20px;
             border: 1px solid var(--border-subtle);
         }
@@ -131,7 +139,7 @@
             position: relative;
             width: 100%;
             max-width: 400px;
-            padding: 2rem;
+            padding: 1.2rem 2rem 1rem;
             opacity: 0;
             transform: translateY(20px);
             transition: var(--transition);
@@ -142,12 +150,12 @@
             transform: translateY(0);
         }
 
-        .header-text { text-align: center; margin-bottom: 2rem; }
-        .header-text h1 { font-weight: 800; font-size: 2.5rem; letter-spacing: -2px; }
+        .header-text { text-align: center; margin-bottom: 1.2rem; }
+        .header-text h1 { font-weight: 800; font-size: 2.1rem; letter-spacing: -2px; }
         .header-text h1 .dot { color: var(--accent); }
-        .header-text p { color: var(--text-muted); font-weight: 300; margin-top: 0.5rem; }
+        .header-text p { color: var(--text-muted); font-weight: 300; margin-top: 0.3rem; font-size: 0.88rem; }
 
-        .forms-wrapper { position: relative; min-height: 420px; }
+        .forms-wrapper { position: relative; min-height: 320px; }
         .form-box {
             position: absolute; width: 100%; top: 0; left: 0;
             transition: var(--transition); opacity: 0; pointer-events: none;
@@ -156,33 +164,33 @@
         .form-box.active { opacity: 1; pointer-events: all; transform: translateX(0); }
         .form-box.slide-left { transform: translateX(-30px); }
 
-        .input-group { margin-bottom: 1.5rem; position: relative; }
+        .input-group { margin-bottom: 1.1rem; position: relative; }
         .input-group input {
             width: 100%; background: transparent; border: none;
             border-bottom: 1px solid rgba(255,255,255,0.2); color: var(--primary);
-            font-size: 1rem; padding: 0.8rem 0; outline: none; transition: border-color 0.3s;
+            font-size: 0.95rem; padding: 0.65rem 0; outline: none; transition: border-color 0.3s;
         }
         .input-group label {
-            position: absolute; top: 0.8rem; left: 0;
+            position: absolute; top: 0.65rem; left: 0;
             color: var(--text-muted); font-weight: 300; pointer-events: none;
-            transition: 0.3s var(--transition);
+            transition: 0.3s var(--transition); font-size: 0.95rem;
         }
         .input-group input:focus { border-bottom-color: var(--primary); }
         .input-group input:focus ~ label, .input-group input:valid ~ label {
-            top: -12px; font-size: 0.75rem; color: var(--primary);
+            top: -12px; font-size: 0.72rem; color: var(--primary);
         }
 
         button.submit-btn {
-            width: 100%; padding: 1rem; background: var(--primary);
+            width: 100%; padding: 0.8rem; background: var(--primary);
             color: var(--bg-color); border: none; border-radius: 12px;
-            font-weight: 600; cursor: pointer; margin-top: 0.5rem;
-            transition: all 0.3s ease; font-size: 1rem;
+            font-weight: 600; cursor: pointer; margin-top: 0.3rem;
+            transition: all 0.3s ease; font-size: 0.95rem;
         }
         button.submit-btn:hover { transform: scale(0.98); opacity: 0.9; }
 
         .divider {
-            display: flex; align-items: center; text-align: center; margin: 1.5rem 0;
-            color: var(--text-muted); font-size: 0.85rem; font-weight: 300;
+            display: flex; align-items: center; text-align: center; margin: 1rem 0;
+            color: var(--text-muted); font-size: 0.82rem; font-weight: 300;
         }
         .divider::before, .divider::after {
             content: ''; flex: 1; border-bottom: 1px solid rgba(255,255,255,0.1);
@@ -190,22 +198,208 @@
         .divider span { padding: 0 10px; }
 
         .google-btn {
-            width: 100%; padding: 1rem; background: transparent;
+            width: 100%; padding: 0.8rem; background: transparent;
             color: var(--primary); border: 1px solid rgba(255,255,255,0.2);
             border-radius: 12px; font-weight: 600; cursor: pointer;
             display: flex; align-items: center; justify-content: center; gap: 10px;
-            transition: all 0.3s ease; font-size: 1rem;
+            transition: all 0.3s ease; font-size: 0.95rem;
         }
         .google-btn:hover {
             background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.4); transform: scale(0.98);
         }
-        .google-btn svg { width: 20px; height: 20px; }
+        .google-btn svg { width: 18px; height: 18px; }
 
-        .toggle-text { text-align: center; margin-top: 1.5rem; color: var(--text-muted); font-size: 0.9rem; }
+        .toggle-text { text-align: center; margin-top: 1rem; color: var(--text-muted); font-size: 0.85rem; }
         .toggle-text span { color: var(--primary); cursor: pointer; font-weight: 600; transition: opacity 0.3s; }
         .toggle-text span:hover { opacity: 0.7; }
 
-        .message-box { margin-top: 1rem; text-align: center; font-size: 0.85rem; min-height: 20px; opacity: 0; transition: 0.3s; }
+        /* ── OLVIDÉ CONTRASEÑA ── */
+        .forgot-link {
+            display: block;
+            text-align: right;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            margin-top: -0.5rem;
+            margin-bottom: 0.8rem;
+            transition: color 0.2s;
+            font-weight: 400;
+            text-decoration: underline;
+            text-decoration-color: rgba(255,255,255,0.15);
+            text-underline-offset: 3px;
+        }
+        .forgot-link:hover { color: var(--primary); }
+
+        .message-box { margin-top: 0.7rem; text-align: center; font-size: 0.82rem; min-height: 18px; opacity: 0; transition: 0.3s; }
+
+        /* ── PANTALLA VERIFICACIÓN EMAIL ── */
+        #verify-screen {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: var(--bg-color);
+            background-image: radial-gradient(circle at 50% -20%, #2a2a2a 0%, var(--bg-color) 50%);
+            z-index: 500;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            text-align: center;
+        }
+        #verify-screen.show { display: flex; }
+
+        .verify-icon {
+            font-size: 3.5rem;
+            margin-bottom: 1.2rem;
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+        .verify-title {
+            font-size: 1.6rem;
+            font-weight: 800;
+            letter-spacing: -1.5px;
+            margin-bottom: 0.6rem;
+        }
+        .verify-email-display {
+            font-size: 0.9rem;
+            color: var(--primary);
+            font-weight: 600;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 8px;
+            padding: 0.4rem 1rem;
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+        .verify-desc {
+            color: var(--text-muted);
+            font-size: 0.83rem;
+            font-weight: 300;
+            line-height: 1.65;
+            max-width: 300px;
+            margin: 0 auto 1.5rem;
+        }
+        .verify-check-btn {
+            width: 100%;
+            max-width: 320px;
+            padding: 0.9rem;
+            background: var(--primary);
+            color: var(--bg-color);
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            font-family: 'Sora', sans-serif;
+            transition: 0.3s;
+            margin-bottom: 0.75rem;
+        }
+        .verify-check-btn:hover { opacity: 0.9; transform: scale(0.98); }
+
+        .verify-resend-btn {
+            width: 100%;
+            max-width: 320px;
+            padding: 0.75rem;
+            background: transparent;
+            color: var(--text-muted);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            font-family: 'Sora', sans-serif;
+            transition: 0.3s;
+            margin-bottom: 0.75rem;
+        }
+        .verify-resend-btn:hover {
+            color: var(--primary);
+            border-color: rgba(255,255,255,0.3);
+            background: rgba(255,255,255,0.04);
+        }
+        .verify-resend-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .verify-back-btn {
+            background: none;
+            border: none;
+            color: rgba(255,255,255,0.3);
+            font-size: 0.78rem;
+            font-family: 'Sora', sans-serif;
+            cursor: pointer;
+            transition: color 0.2s;
+            text-decoration: underline;
+            text-decoration-color: rgba(255,255,255,0.1);
+            text-underline-offset: 3px;
+            padding: 0.3rem 0;
+        }
+        .verify-back-btn:hover { color: rgba(255,255,255,0.6); }
+
+        .verify-msg {
+            font-size: 0.8rem;
+            min-height: 20px;
+            margin-bottom: 0.8rem;
+            opacity: 0;
+            transition: 0.3s;
+        }
+
+        /* ── MODAL RESET CONTRASEÑA ── */
+        .reset-modal-overlay {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.9);
+            backdrop-filter: blur(10px); z-index: 3000;
+            display: flex; justify-content: center; align-items: center;
+            padding: 1rem;
+            opacity: 0; pointer-events: none; transition: 0.4s ease;
+        }
+        .reset-modal-overlay.active { opacity: 1; pointer-events: all; }
+
+        .reset-modal-box {
+            background: #141414; border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 24px; padding: 2.2rem 2rem; width: 100%; max-width: 380px;
+            transform: translateY(30px); transition: 0.4s ease;
+            text-align: center;
+        }
+        .reset-modal-overlay.active .reset-modal-box { transform: translateY(0); }
+
+        .reset-modal-box h2 {
+            font-size: 1.35rem; font-weight: 800; margin-bottom: 0.4rem; letter-spacing: -1px;
+        }
+        .reset-modal-box p {
+            color: var(--text-muted); font-size: 0.82rem; margin-bottom: 1.6rem;
+            font-weight: 300; line-height: 1.6;
+        }
+        .reset-modal-box input {
+            width: 100%; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.15);
+            color: white; border-radius: 12px; padding: 0.9rem 1rem; font-size: 0.95rem;
+            outline: none; font-family: 'Sora', sans-serif; transition: border-color 0.3s;
+            margin-bottom: 1rem;
+        }
+        .reset-modal-box input:focus { border-color: white; }
+        .reset-modal-box .reset-send-btn {
+            width: 100%; padding: 0.9rem; background: white;
+            color: #0a0a0a; border: none; border-radius: 12px; font-weight: 700;
+            font-size: 0.95rem; cursor: pointer; font-family: 'Sora', sans-serif;
+            transition: 0.3s; margin-bottom: 0.7rem;
+        }
+        .reset-modal-box .reset-send-btn:hover { opacity: 0.9; transform: scale(0.98); }
+        .reset-modal-box .reset-cancel-btn {
+            width: 100%; padding: 0.75rem; background: transparent;
+            color: var(--text-muted); border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 12px; font-weight: 600; font-size: 0.85rem;
+            cursor: pointer; font-family: 'Sora', sans-serif; transition: 0.3s;
+        }
+        .reset-modal-box .reset-cancel-btn:hover {
+            color: var(--primary); border-color: rgba(255,255,255,0.3);
+            background: rgba(255,255,255,0.04);
+        }
+        .reset-msg {
+            font-size: 0.8rem; min-height: 18px; margin-bottom: 0.8rem;
+            opacity: 0; transition: 0.3s; text-align: center;
+        }
 
         /* ── MODAL NOMBRE ── */
         .name-modal-overlay {
@@ -243,7 +437,7 @@
         #install-section {
             width: 100%;
             max-width: 400px;
-            margin: 0 auto 1.5rem auto;
+            margin: 0 auto 0.6rem auto;
             padding: 0 2rem;
             opacity: 0;
             transform: translateY(10px);
@@ -258,7 +452,7 @@
             background: rgba(255,255,255,0.04);
             border: 1px solid rgba(255,255,255,0.08);
             border-radius: 14px;
-            padding: 1rem 1.2rem;
+            padding: 0.8rem 1rem;
             display: flex;
             align-items: center;
             gap: 0.9rem;
@@ -271,31 +465,31 @@
             border-color: rgba(255,255,255,0.15);
         }
         .install-icon {
-            font-size: 1.6rem;
+            font-size: 1.4rem;
             line-height: 1;
             flex-shrink: 0;
         }
         .install-card-text { flex: 1; }
         .install-card-text strong {
             display: block;
-            font-size: 0.85rem;
+            font-size: 0.82rem;
             font-weight: 600;
             color: var(--primary);
             margin-bottom: 2px;
         }
         .install-card-text span {
-            font-size: 0.72rem;
+            font-size: 0.7rem;
             font-weight: 300;
             color: var(--text-muted);
             line-height: 1.4;
         }
         .install-badge {
-            font-size: 0.65rem;
+            font-size: 0.62rem;
             background: rgba(255,184,77,0.15);
             color: var(--warning);
             border: 1px solid rgba(255,184,77,0.25);
             border-radius: 6px;
-            padding: 2px 6px;
+            padding: 2px 5px;
             font-weight: 600;
             white-space: nowrap;
         }
@@ -308,7 +502,7 @@
             border: 1px solid rgba(255,255,255,0.1);
             border-radius: 14px;
             padding: 1rem 1.2rem;
-            font-size: 0.8rem;
+            font-size: 0.78rem;
             color: rgba(255,255,255,0.75);
             line-height: 1.7;
         }
@@ -329,10 +523,10 @@
         /* ── FOOTER ── */
         footer {
             width: 100%;
-            padding: 2.5rem 2rem 2rem;
+            padding: 1rem 2rem 0.8rem;
             border-top: 1px solid rgba(255,255,255,0.06);
             background: rgba(0,0,0,0.4);
-            margin-top: auto;
+            flex-shrink: 0;
         }
 
         .footer-inner {
@@ -342,25 +536,25 @@
         }
 
         .footer-logo {
-            font-size: 1.4rem;
+            font-size: 1.1rem;
             font-weight: 800;
             letter-spacing: -1px;
-            margin-bottom: 1.5rem;
+            margin-bottom: 0.7rem;
         }
         .footer-logo .dot { color: var(--accent); }
 
         .footer-links {
             display: flex;
             justify-content: center;
-            gap: 1.5rem;
-            margin-bottom: 1.8rem;
+            gap: 1.2rem;
+            margin-bottom: 0.8rem;
             flex-wrap: wrap;
         }
         .footer-links button {
             background: none;
             border: none;
             color: var(--text-muted);
-            font-size: 0.78rem;
+            font-size: 0.75rem;
             font-family: 'Sora', sans-serif;
             cursor: pointer;
             padding: 0;
@@ -372,9 +566,9 @@
         .footer-links button:hover { color: var(--primary); }
 
         .footer-studio {
-            font-size: 0.72rem;
+            font-size: 0.7rem;
             color: rgba(255,255,255,0.2);
-            margin-bottom: 0.8rem;
+            margin-bottom: 0.4rem;
         }
         .footer-studio a {
             color: rgba(255,255,255,0.35);
@@ -384,7 +578,7 @@
         .footer-studio a:hover { color: rgba(255,255,255,0.7); }
 
         .footer-copy {
-            font-size: 0.7rem;
+            font-size: 0.67rem;
             color: rgba(255,255,255,0.18);
             font-weight: 300;
         }
@@ -504,9 +698,7 @@
             transition: 0.3s;
             cursor: pointer;
         }
-        .cookie-text a:hover {
-            opacity: 0.8;
-        }
+        .cookie-text a:hover { opacity: 0.8; }
         .cookie-buttons {
             display: flex;
             flex-direction: column;
@@ -528,10 +720,7 @@
             color: var(--bg-color);
             border: none;
         }
-        .cookie-accept:hover {
-            transform: scale(0.97);
-            opacity: 0.9;
-        }
+        .cookie-accept:hover { transform: scale(0.97); opacity: 0.9; }
         .cookie-reject {
             background: transparent;
             color: rgba(255,255,255,0.5);
@@ -543,7 +732,6 @@
             color: var(--primary);
         }
 
-        /* Adaptación para móviles */
         @media (max-width: 480px) {
             #cookie-banner {
                 bottom: 20px;
@@ -551,6 +739,8 @@
                 width: 90%;
             }
         }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
@@ -561,6 +751,32 @@
 
     <div id="initial-loader">
         <div style="width: 20px; height: 20px; border: 2px solid #333; border-top-color: #fff; border-radius: 50%; animation: spin 1s linear infinite;"></div>
+    </div>
+
+    <!-- ── PANTALLA VERIFICACIÓN DE EMAIL ── -->
+    <div id="verify-screen">
+        <div class="verify-icon">✉️</div>
+        <div class="verify-title">Verifica tu correo</div>
+        <div class="verify-email-display" id="verify-email-display">—</div>
+        <p class="verify-desc">
+            Te hemos enviado un enlace de verificación. Revisa tu bandeja de entrada (y el spam) y pulsa el enlace.
+        </p>
+        <button class="verify-check-btn" id="verify-check-btn">Ya lo verifiqué ✓</button>
+        <button class="verify-resend-btn" id="verify-resend-btn">Reenviar correo</button>
+        <div class="verify-msg" id="verify-msg"></div>
+        <button class="verify-back-btn" id="verify-back-btn">Volver al inicio de sesión</button>
+    </div>
+
+    <!-- ── MODAL RESET CONTRASEÑA ── -->
+    <div class="reset-modal-overlay" id="reset-modal">
+        <div class="reset-modal-box">
+            <h2>Recuperar contraseña 🔑</h2>
+            <p>Introduce tu email y te enviaremos un enlace para restablecer tu contraseña.</p>
+            <input type="email" id="reset-email-input" placeholder="tu@email.com">
+            <div class="reset-msg" id="reset-msg"></div>
+            <button class="reset-send-btn" id="reset-send-btn">Enviar enlace</button>
+            <button class="reset-cancel-btn" id="reset-cancel-btn">Cancelar</button>
+        </div>
     </div>
 
     <div class="name-modal-overlay" id="name-modal">
@@ -633,6 +849,9 @@
                             <input type="password" id="login-password" required>
                             <label>Contraseña</label>
                         </div>
+                        <!-- ── OLVIDÉ CONTRASEÑA ── -->
+                        <span class="forgot-link" id="forgot-password-btn">¿Olvidaste tu contraseña?</span>
+
                         <button type="submit" class="submit-btn" id="login-btn">Entrar</button>
                         <div class="message-box" id="login-msg"></div>
 
@@ -792,7 +1011,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-        import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+        import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, GoogleAuthProvider, signInWithPopup, sendEmailVerification, sendPasswordResetEmail, reload } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
         import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
         const firebaseConfig = {
@@ -813,8 +1032,9 @@
         const container = document.getElementById('main-container');
         const installSection = document.getElementById('install-section');
         const nameModal = document.getElementById('name-modal');
+        const verifyScreen = document.getElementById('verify-screen');
 
-        // Inicializar Iconos Lucide para el botón de regresar
+        // Inicializar Iconos Lucide
         lucide.createIcons();
 
         // ── GUARDAR PERFIL EN FIRESTORE ──
@@ -864,6 +1084,16 @@
         /* 🛡️ GUARDIÁN DE SESIÓN */
         onAuthStateChanged(auth, async (user) => {
             if (user) {
+                // Si el usuario tiene email pero NO está verificado, mostrar pantalla de verificación
+                if (!user.emailVerified && user.providerData[0]?.providerId === 'password') {
+                    loader.style.opacity = '0';
+                    setTimeout(() => {
+                        loader.style.display = 'none';
+                        document.getElementById('verify-email-display').textContent = user.email;
+                        verifyScreen.classList.add('show');
+                    }, 500);
+                    return;
+                }
                 await saveUserProfile(user);
                 const snap = await getDoc(doc(db, "usuarios", user.uid));
                 const nombre = snap.exists() ? snap.data().nombre : '';
@@ -878,6 +1108,72 @@
                     installSection.classList.add('visible');
                 }, 500);
             }
+        });
+
+        /* ── LÓGICA PANTALLA VERIFICACIÓN ── */
+        const verifyCheckBtn = document.getElementById('verify-check-btn');
+        const verifyResendBtn = document.getElementById('verify-resend-btn');
+        const verifyBackBtn = document.getElementById('verify-back-btn');
+        const verifyMsg = document.getElementById('verify-msg');
+
+        function showVerifyMsg(text, color) {
+            verifyMsg.textContent = text;
+            verifyMsg.style.color = color;
+            verifyMsg.style.opacity = 1;
+            setTimeout(() => { verifyMsg.style.opacity = 0; }, 4000);
+        }
+
+        verifyCheckBtn.addEventListener('click', async () => {
+            verifyCheckBtn.textContent = 'Comprobando...';
+            try {
+                await reload(auth.currentUser);
+                if (auth.currentUser.emailVerified) {
+                    verifyScreen.classList.remove('show');
+                    await saveUserProfile(auth.currentUser);
+                    const snap = await getDoc(doc(db, "usuarios", auth.currentUser.uid));
+                    const nombre = snap.exists() ? snap.data().nombre : '';
+                    if (nombre && nombre.trim() !== '') {
+                        window.location.href = 'panel.html';
+                    }
+                } else {
+                    showVerifyMsg('Aún no hemos detectado la verificación. Revisa tu correo.', 'var(--accent)');
+                }
+            } catch(e) {
+                showVerifyMsg('Error al comprobar. Inténtalo de nuevo.', 'var(--accent)');
+            }
+            verifyCheckBtn.textContent = 'Ya lo verifiqué ✓';
+        });
+
+        let resendCooldown = false;
+        verifyResendBtn.addEventListener('click', async () => {
+            if (resendCooldown) return;
+            try {
+                await sendEmailVerification(auth.currentUser);
+                showVerifyMsg('✓ Correo reenviado. Revisa tu bandeja.', 'var(--success)');
+                resendCooldown = true;
+                verifyResendBtn.disabled = true;
+                verifyResendBtn.textContent = 'Reenviar (60s)';
+                let secs = 60;
+                const interval = setInterval(() => {
+                    secs--;
+                    verifyResendBtn.textContent = `Reenviar (${secs}s)`;
+                    if (secs <= 0) {
+                        clearInterval(interval);
+                        resendCooldown = false;
+                        verifyResendBtn.disabled = false;
+                        verifyResendBtn.textContent = 'Reenviar correo';
+                    }
+                }, 1000);
+            } catch(e) {
+                showVerifyMsg('No se pudo reenviar. Espera un momento.', 'var(--accent)');
+            }
+        });
+
+        verifyBackBtn.addEventListener('click', async () => {
+            await auth.signOut();
+            verifyScreen.classList.remove('show');
+            container.classList.add('visible');
+            installSection.classList.add('visible');
         });
 
         /* TOGGLE FORMS */
@@ -912,7 +1208,7 @@
             }
         };
 
-        /* REGISTRO */
+        /* REGISTRO — con envío de email de verificación */
         regForm.onsubmit = async (e) => {
             e.preventDefault();
             const btn = document.getElementById('reg-btn');
@@ -929,6 +1225,11 @@
                     createdAt: new Date(),
                     lastSeen: new Date()
                 });
+                // Enviar email de verificación
+                await sendEmailVerification(cred.user);
+                // Mostrar pantalla de verificación
+                document.getElementById('verify-email-display').textContent = cred.user.email;
+                verifyScreen.classList.add('show');
             } catch (err) {
                 btn.innerText = 'Crear cuenta';
                 msg.innerText = err.message;
@@ -951,6 +1252,61 @@
         };
         document.getElementById('google-login-btn').addEventListener('click', handleGoogleAuth);
         document.getElementById('google-reg-btn').addEventListener('click', handleGoogleAuth);
+
+        /* ── MODAL RESET CONTRASEÑA ── */
+        const resetModal = document.getElementById('reset-modal');
+        const resetMsg = document.getElementById('reset-msg');
+
+        document.getElementById('forgot-password-btn').addEventListener('click', () => {
+            // Pre-rellenar con el email que tenga escrito si hay alguno
+            const emailVal = document.getElementById('login-email').value;
+            if (emailVal) document.getElementById('reset-email-input').value = emailVal;
+            resetModal.classList.add('active');
+        });
+
+        document.getElementById('reset-cancel-btn').addEventListener('click', () => {
+            resetModal.classList.remove('active');
+            resetMsg.style.opacity = 0;
+            document.getElementById('reset-email-input').value = '';
+        });
+
+        document.getElementById('reset-send-btn').addEventListener('click', async () => {
+            const email = document.getElementById('reset-email-input').value.trim();
+            const btn = document.getElementById('reset-send-btn');
+            if (!email) {
+                resetMsg.textContent = 'Introduce tu email.';
+                resetMsg.style.color = 'var(--accent)';
+                resetMsg.style.opacity = 1;
+                return;
+            }
+            btn.textContent = 'Enviando...';
+            try {
+                await sendPasswordResetEmail(auth, email);
+                resetMsg.textContent = '✓ Enlace enviado. Revisa tu bandeja de entrada.';
+                resetMsg.style.color = 'var(--success)';
+                resetMsg.style.opacity = 1;
+                btn.textContent = '¡Enviado!';
+                setTimeout(() => {
+                    resetModal.classList.remove('active');
+                    resetMsg.style.opacity = 0;
+                    document.getElementById('reset-email-input').value = '';
+                    btn.textContent = 'Enviar enlace';
+                }, 2500);
+            } catch(err) {
+                btn.textContent = 'Enviar enlace';
+                resetMsg.textContent = 'No se encontró esa cuenta o hubo un error.';
+                resetMsg.style.color = 'var(--accent)';
+                resetMsg.style.opacity = 1;
+            }
+        });
+
+        // Cerrar reset modal al clicar fuera
+        resetModal.addEventListener('click', (e) => {
+            if (e.target === resetModal) {
+                resetModal.classList.remove('active');
+                resetMsg.style.opacity = 0;
+            }
+        });
     </script>
 
     <script>
@@ -993,59 +1349,45 @@
             });
         });
         
-        /* ── LÓGICA DE COOKIES CON "FRICCIÓN" PARA RECHAZAR ── */
+        /* ── LÓGICA DE COOKIES ── */
         document.addEventListener("DOMContentLoaded", function() {
             const cookieBanner = document.getElementById('cookie-banner');
             const acceptBtn = document.getElementById('cookie-accept-btn');
             const rejectBtn = document.getElementById('cookie-reject-btn');
             const privacyLink = document.getElementById('cookie-privacy-link');
 
-            // Abrir tu modal de privacidad desde el enlace del banner
             privacyLink.addEventListener('click', (e) => {
                 e.preventDefault();
                 openModal('modal-privacy');
             });
 
-            // Comprobar si ya existe una elección guardada en el navegador
             if (!localStorage.getItem('interrahub_cookies_consent')) {
-                // Damos un margen de 1.5 segundos para que entre con una animación suave
                 setTimeout(() => {
                     cookieBanner.classList.add('show');
                 }, 1500);
             }
 
-            // Al hacer clic en ACEPTAR -> Todo correcto, guardamos y cerramos para siempre
             acceptBtn.addEventListener('click', () => {
                 localStorage.setItem('interrahub_cookies_consent', 'accepted');
                 cookieBanner.classList.remove('show');
             });
 
-            // Al hacer clic en RECHAZAR -> Añadimos la fricción solicitada
             rejectBtn.addEventListener('click', (e) => {
                 e.preventDefault();
-                
-                // Primera confirmación
                 const seguro = confirm("¿Estás seguro de que quieres rechazar las opciones?");
-                
                 if (seguro) {
-                    // Segunda confirmación (apelando a ayudar a la app)
                     const apoyar = confirm("¿Quieres mantenerla para uso publicitario para que la app pueda mantenerse?");
-                    
                     if (apoyar) {
-                        // Si le da a "Aceptar" en este último mensaje, significa que SÍ quiere apoyarla = Acepta las cookies
                         localStorage.setItem('interrahub_cookies_consent', 'accepted');
                         cookieBanner.classList.remove('show');
                     } else {
-                        // Si le da a "Cancelar", significa que se mantiene en sus trece y las rechaza. Cumplimos la ley y le dejamos.
                         localStorage.setItem('interrahub_cookies_consent', 'rejected');
                         cookieBanner.classList.remove('show');
                     }
                 }
-                // Si en el primer mensaje le da a "Cancelar", no pasa nada, el banner sigue ahí y no se guarda nada.
             });
         });
     </script>
 
-    <style>@keyframes spin { to { transform: rotate(360deg); } }</style>
 </body>
 </html>
