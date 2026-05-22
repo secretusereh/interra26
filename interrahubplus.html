@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <title>Interra-hub PLUS | Próximamente</title>
-    <meta name="description" content="Descubre Interra-hub PLUS. Sin anuncios, sorteos exclusivos y acceso a precios VIP.">
+    <title>Interra-hub PLUS | Suscripción Premium</title>
+    <meta name="description" content="Desbloquea el plan Interra-hub PLUS. Viajes ilimitados, navegación sin anuncios, sorteos exclusivos y pases VIP para el ocio nocturno y cultural de Europa.">
     <meta name="author" content="Pipa Studio">
 
     <link rel="icon" type="image/png" href="interrahublogo.PNG">
@@ -17,18 +17,19 @@
 
     <style>
         /* =========================================
-           VARIABLES Y CONFIGURACIÓN PREMIUM
+           VARIABLES Y CONFIGURACIÓN PREMIUM BASE
            ========================================= */
         :root {
-            --bg-color: #050505;
-            --surface: rgba(20, 20, 20, 0.6);
+            --bg-color: #030303;
+            --surface: rgba(18, 18, 18, 0.6);
+            --surface-card: #0d0d0d;
             --primary: #ffffff;
-            --text-muted: #888888;
+            --text-muted: #777777;
             --gold: #ffd700;
             --gold-gradient: linear-gradient(135deg, #ffd700 0%, #ffb84d 100%);
-            --border-subtle: rgba(255, 255, 255, 0.08);
-            --border-gold: rgba(255, 215, 0, 0.3);
-            --transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            --border-subtle: rgba(255, 255, 255, 0.06);
+            --border-gold: rgba(255, 215, 0, 0.25);
+            --transition: cubic-bezier(0.16, 1, 0.3, 1) 0.5s;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Sora', sans-serif; }
@@ -37,17 +38,18 @@
             background-color: var(--bg-color);
             color: var(--primary);
             min-height: 100vh;
-            overflow-x: hidden;
-            background-image: radial-gradient(circle at 10% 50%, rgba(255, 215, 0, 0.05), transparent 50%),
-                              radial-gradient(circle at 90% 90%, rgba(255, 255, 255, 0.02), transparent 40%);
             display: flex;
             flex-direction: column;
+            overflow-x: hidden;
+            background-image: radial-gradient(circle at 50% -20%, rgba(255, 215, 0, 0.04), transparent 50%),
+                              radial-gradient(circle at 50% 120%, rgba(255, 255, 255, 0.01), transparent 50%);
+            background-attachment: fixed;
         }
 
         ::selection { background: var(--gold); color: #000; }
 
         /* =========================================
-           NAVEGACIÓN MINIMALISTA
+           NAVEGACIÓN DE CABECERA
            ========================================= */
         nav {
             width: 100%;
@@ -59,164 +61,179 @@
         }
         
         .btn-back {
-            background: rgba(255,255,255,0.05); color: var(--primary); border: 1px solid var(--border-subtle);
+            background: rgba(255,255,255,0.03); color: var(--primary); border: 1px solid var(--border-subtle);
             padding: 0.6rem 1.2rem; border-radius: 30px; font-weight: 600; font-size: 0.85rem;
             cursor: pointer; transition: var(--transition); display: flex; align-items: center; gap: 8px;
-            text-decoration: none;
+            text-decoration: none; backdrop-filter: blur(10px);
         }
-        .btn-back:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2); transform: translateX(-5px); }
+        .btn-back:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.15); transform: translateX(-3px); }
 
         /* =========================================
-           MAIN LAYOUT (SPLIT SCREEN)
+           PLATAFORMA DE COMPRA / CHECKOUT INTERFACES
            ========================================= */
-        main {
+        .checkout-container {
             flex: 1;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
+            display: flex;
+            flex-direction: column;
             align-items: center;
-            max-width: 1400px;
+            justify-content: center;
+            padding: 8rem 2rem 4rem;
+            max-width: 1200px;
             margin: 0 auto;
-            padding: 6rem 5% 4rem;
-            gap: 4rem;
-            min-height: 100vh;
-        }
-
-        /* Columna Izquierda: LOGO */
-        .left-col {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            animation: fadeIn 1s ease backwards;
-        }
-        
-        .main-logo {
             width: 100%;
-            max-width: 500px;
-            object-fit: contain;
-            filter: drop-shadow(0 0 40px rgba(255, 215, 0, 0.15));
-            animation: float 6s ease-in-out infinite;
         }
 
-        /* Columna Derecha: CONTENIDO */
-        .right-col {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            animation: slideLeft 0.8s ease backwards 0.2s;
+        .checkout-header {
+            text-align: center;
+            margin-bottom: 3.5rem;
+            animation: fadeInDown 0.8s var(--transition);
         }
 
-        .pre-title {
-            color: var(--gold);
+        .checkout-header h1 {
+            font-size: clamp(2rem, 4vw, 2.8rem);
             font-weight: 800;
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            margin-bottom: 1rem;
-        }
-
-        .title {
-            font-size: clamp(2.5rem, 4vw, 3.5rem);
-            font-weight: 800;
-            line-height: 1.1;
-            margin-bottom: 2rem;
             letter-spacing: -1px;
+            margin-bottom: 0.8rem;
         }
-
-        /* Lista de beneficios breve y directa */
-        .benefits-list {
-            list-style: none;
-            display: flex;
-            flex-direction: column;
-            gap: 1.2rem;
-            margin-bottom: 3rem;
+        .checkout-header h1 span {
+            background: var(--gold-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
-
-        .benefit-item {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            font-size: 1.1rem;
-            color: rgba(255,255,255,0.9);
+        .checkout-header p {
+            color: var(--text-muted);
+            font-size: 1.05rem;
             font-weight: 300;
         }
 
-        .benefit-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 12px;
-            background: rgba(255, 215, 0, 0.1);
-            color: var(--gold);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-shrink: 0;
-            border: 1px solid rgba(255, 215, 0, 0.2);
-        }
-
-        /* =========================================
-           BLOQUE DE PRECIO BLOQUEADO
-           ========================================= */
-        .pricing-block {
-            background: var(--surface);
+        /* TARJETA DE COMPRA / SUBSCRIPTION CARD */
+        .subscription-card {
+            background: var(--surface-card);
             border: 1px solid var(--border-gold);
-            border-radius: 24px;
-            padding: 3.5rem 2.5rem;
+            width: 100%;
+            max-width: 480px;
+            border-radius: 32px;
+            padding: 3.5rem 3rem;
+            box-shadow: 0 30px 70px rgba(0, 0, 0, 0.7), 0 0 40px rgba(255, 215, 0, 0.02);
             position: relative;
-            overflow: hidden;
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-            max-width: 450px;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 2rem;
+            animation: scaleUp 0.8s var(--transition) backwards 0.1s;
         }
 
-        /* El precio difuminado imposible de seleccionar */
-        .blurred-price-container {
-            position: relative;
+        .subscription-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 50%; transform: translateX(-50%);
+            width: 40%; height: 1px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+        }
+
+        /* Branding de la suscripción */
+        .plan-badge-wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        .plus-logo-img {
+            height: 38px;
+            object-fit: contain;
+        }
+        .badge-vip {
+            background: rgba(255, 215, 0, 0.08);
+            border: 1px solid var(--border-gold);
+            color: var(--gold);
+            font-size: 0.7rem;
+            font-weight: 800;
+            padding: 0.4rem 0.9rem;
+            border-radius: 20px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        /* BLOQUE DE PRECIO DIFUMINADO */
+        .price-wrapper {
             display: flex;
             justify-content: center;
             align-items: center;
+            margin-bottom: 2.5rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--border-subtle);
+            position: relative;
         }
 
-        .blurred-text {
-            font-size: 5rem;
+        .blurred-price {
+            font-size: 4.5rem;
             font-weight: 800;
-            color: rgba(255,255,255,0.3);
-            /* Seguridad visual agresiva: altamente difuminado */
-            filter: blur(18px);
+            color: rgba(255, 255, 255, 0.25);
+            line-height: 1;
+            letter-spacing: -2px;
+            /* Criptografía visual avanzada: Imposible de desdifuminar por código */
+            filter: blur(16px);
+            -webkit-filter: blur(16px);
             user-select: none;
             pointer-events: none;
-            line-height: 1;
+        }
+        .blurred-price span.period {
+            font-size: 1.2rem;
+            letter-spacing: 0;
+            font-weight: 400;
+            color: var(--text-muted);
         }
 
-        /* La capa de Próximamente debajo del texto */
-        .lock-container {
+        /* DESGLOSE DE CARACTERÍSTICAS INCLUIDAS */
+        .plan-features-block {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+            margin-bottom: 3.5rem;
+        }
+        .feature-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+        }
+        .feature-icon-wrapper {
+            color: var(--gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 2px;
+            flex-shrink: 0;
+        }
+        .feature-text {
+            font-size: 0.95rem;
+            line-height: 1.5;
+            color: rgba(255, 255, 255, 0.85);
+            font-weight: 300;
+        }
+        .feature-text strong {
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        /* BOTÓN COMPRAR EN MODO PROXIMAMENTE */
+        .btn-checkout-blocked {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-gold);
+            color: var(--gold);
+            padding: 1.2rem;
+            border-radius: 16px;
+            font-size: 1rem;
+            font-weight: 800;
+            letter-spacing: 1px;
             display: flex;
             justify-content: center;
             align-items: center;
-            width: 100%;
-        }
-
-        .lock-badge {
-            background: #111;
-            border: 1px solid var(--gold);
-            padding: 1.2rem 2.5rem;
-            border-radius: 40px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
-        }
-
-        .lock-badge span {
-            color: var(--gold);
-            font-weight: 800;
-            letter-spacing: 2px;
-            font-size: 1.2rem;
+            gap: 10px;
+            text-transform: uppercase;
+            cursor: not-allowed;
+            pointer-events: none; /* Bloqueo de clics absoluto */
+            box-shadow: inset 0 0 12px rgba(255, 215, 0, 0.02);
+            position: relative;
         }
 
         /* =========================================
@@ -224,87 +241,85 @@
            ========================================= */
         footer {
             text-align: center;
-            padding: 2rem;
+            padding: 2.5rem;
             border-top: 1px solid var(--border-subtle);
             font-size: 0.8rem;
-            color: rgba(255,255,255,0.3);
-            margin-top: auto;
+            color: rgba(255,255,255,0.25);
+            background: #070707;
+            width: 100%;
         }
 
-        /* =========================================
-           RESPONSIVE
-           ========================================= */
-        @media (max-width: 968px) {
-            main {
-                grid-template-columns: 1fr;
-                text-align: center;
-                padding-top: 8rem;
-                gap: 2rem;
-            }
-            .left-col { order: 1; }
-            .right-col { order: 2; align-items: center; }
-            .benefits-list { align-items: flex-start; text-align: left; margin: 0 auto 3rem; }
-            .main-logo { max-width: 350px; }
-            .pricing-block { width: 100%; padding: 3rem 1.5rem; }
-        }
+        /* ANIMACIONES DE ALTO RENDIMIENTO */
+        @keyframes fadeInDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes scaleUp { from { opacity: 0; transform: scale(0.96); } to { opacity: 1; transform: scale(1); } }
 
-        /* ANIMACIONES */
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes slideLeft { from { opacity: 0; transform: translateX(30px); } to { opacity: 1; transform: translateX(0); } }
-        @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-15px); } 100% { transform: translateY(0px); } }
+        /* RESPONSIVE */
+        @media (max-width: 480px) {
+            .subscription-card { padding: 2.5rem 1.8rem; }
+            .blurred-price { font-size: 3.8rem; }
+        }
     </style>
 </head>
 <body>
 
     <nav>
-        <a href="index.html" class="btn-back"><i data-lucide="arrow-left" style="width: 16px;"></i> Volver</a>
+        <a href="index.html" class="btn-back">
+            <i data-lucide="arrow-left" style="width: 16px;"></i> Volver
+        </a>
     </nav>
 
-    <main>
-        <div class="left-col">
-            <img src="interrahubplus.png" alt="Interra-hub PLUS" class="main-logo" onerror="this.outerHTML='<h1 style=\'font-size:4rem;text-align:center;\'>Interra-hub <span style=\'color:var(--gold);\'>PLUS</span></h1>'">
-        </div>
+    <div class="checkout-container">
+        
+        <header class="checkout-header">
+            <h1>Elige tu pase a <span>Interra-hub PLUS</span></h1>
+            <p>Accede de forma gratuita y para siempre a los privilegios de la élite viajera.</p>
+        </header>
 
-        <div class="right-col">
-            <div class="pre-title">Pase Exclusivo</div>
-            <h1 class="title">El viaje, <br>sin límites.</h1>
+        <section class="subscription-card">
             
-            <ul class="benefits-list">
-                <li class="benefit-item">
-                    <div class="benefit-icon"><i data-lucide="zap-off"></i></div>
-                    <span><strong>Cero anuncios.</strong> Navegación fluida y sin interrupciones.</span>
-                </li>
-                <li class="benefit-item">
-                    <div class="benefit-icon"><i data-lucide="ticket"></i></div>
-                    <span><strong>Precios VIP.</strong> Descuentos exclusivos en discotecas y museos.</span>
-                </li>
-                <li class="benefit-item">
-                    <div class="benefit-icon"><i data-lucide="gift"></i></div>
-                    <span><strong>Sorteos exclusivos.</strong> Gana pases de Interrail y estancias premium.</span>
-                </li>
-            </ul>
+            <div class="plan-badge-wrapper">
+                <img src="interrahubplus.png" alt="Interra-hub PLUS" class="plus-logo-img" onerror="this.outerHTML='<span style=\'font-weight:800; font-size:1.3rem;\'>Interra-hub <span style=\'color:var(--gold);\'>PLUS</span></span>'">
+                <span class="badge-vip">Pase VIP</span>
+            </div>
 
-            <div class="pricing-block">
-                <div class="blurred-price-container">
-                    <div class="blurred-text">€14.99</div>
+            <div class="price-wrapper">
+                <div class="blurred-price">€14.99<span class="period">/mes</span></div>
+            </div>
+
+            <div class="plan-features-block">
+                <div class="feature-row">
+                    <div class="feature-icon-wrapper"><i data-lucide="infinity" style="width: 18px; height: 18px;"></i></div>
+                    <div class="feature-text"><strong>Aventuras ilimitadas.</strong> Diseña e indexa todas las rutas en grupo que necesites.</div>
                 </div>
-                
-                <div class="lock-container">
-                    <div class="lock-badge">
-                        <i data-lucide="lock" style="color: var(--gold); width: 24px; height: 24px;"></i>
-                        <span>PRÓXIMAMENTE</span>
-                    </div>
+                <div class="feature-row">
+                    <div class="feature-icon-wrapper"><i data-lucide="zap-off" style="width: 18px; height: 18px;"></i></div>
+                    <div class="feature-text"><strong>Experiencia sin anuncios.</strong> Navegación fluida y pura a lo largo de todo tu itinerario.</div>
+                </div>
+                <div class="feature-row">
+                    <div class="feature-icon-wrapper"><i data-lucide="ticket" style="width: 18px; height: 18px;"></i></div>
+                    <div class="feature-text"><strong>Tarifas preferentes.</strong> Acceso exclusivo a pases reducidos para museos y ocio nocturno europeo.</div>
+                </div>
+                <div class="feature-row">
+                    <div class="feature-icon-wrapper"><i data-lucide="gift" style="width: 18px; height: 18px;"></i></div>
+                    <div class="feature-text"><strong>Sorteos automáticos.</strong> Participación directa en pases globales de tren y estancias de hostales.</div>
                 </div>
             </div>
-        </div>
-    </main>
+
+            <button type="button" class="btn-checkout-blocked" aria-disabled="true" disabled>
+                <i data-lucide="lock" style="width: 18px; height: 18px;"></i>
+                Próximamente...
+            </button>
+
+        </section>
+
+    </div>
 
     <footer>
         © 2026 Interra-hub · Desarrollado por <strong>Pipa Studio</strong>
     </footer>
 
     <script>
-        // Inicializar iconos de Lucide
+        // Inyección dinámica de gráficos vectoriales Lucide
         lucide.createIcons();
     </script>
 </body>
