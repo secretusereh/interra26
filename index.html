@@ -4,17 +4,42 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <title>Interra-hub | Planifica tu Interrail en grupo sin caos</title>
-    <meta name="description" content="La plataforma colaborativa definitiva para planificar tu Interrail. Organiza itinerarios, gestiona alojamientos y cuadra gastos en tiempo real.">
-    <meta name="keywords" content="interrail, viajes en grupo, planificador de rutas, dividir gastos viaje, interrahub">
+    <title>Interra-hub | Planifica viajes y rutas en grupo sin caos</title>
+    <meta name="description" content="Interra-hub es el planificador definitivo para viajes en grupo. Diseña tu ruta minuto a minuto de forma colaborativa, liquida gastos automáticamente y lleva tu itinerario en el bolsillo.">
+    <meta name="keywords" content="interrail, viajes en grupo, planificador de rutas, app para viajar, dividir gastos viaje, itinerario colaborativo, organizar viaje amigos, interrahub">
     <meta name="author" content="Pipa Studio">
-    <meta name="robots" content="index, follow">
-    
-    <meta property="og:type" content="website">
-    <meta property="og:title" content="Interra-hub | El hub para tus viajes">
-    <meta property="og:description" content="Organiza tu próxima aventura en grupo. Mapas, itinerarios y finanzas en una sola app.">
-    <meta property="og:image" content="interrahublogo.PNG">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+    <link rel="canonical" href="https://tudominio.com/"> <meta property="og:type" content="website">
+    <meta property="og:title" content="Interra-hub | El hub definitivo para tus viajes">
+    <meta property="og:description" content="El fin de los excels infinitos. Organiza tu próxima aventura en grupo: mapas, itinerarios y finanzas en una sola app.">
+    <meta property="og:image" content="https://tudominio.com/interrahublogo.PNG">
+    <meta property="og:url" content="https://tudominio.com/">
     <meta property="og:site_name" content="Interra-hub">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Interra-hub | Planifica viajes y rutas en grupo">
+    <meta name="twitter:description" content="Diseña tu ruta colaborativa y cuadra gastos al instante. La evolución de los viajes.">
+    <meta name="twitter:image" content="https://tudominio.com/interrahublogo.PNG">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Interra-hub",
+      "operatingSystem": "Web",
+      "applicationCategory": "TravelApplication",
+      "description": "Plataforma colaborativa para planificar viajes en grupo e Interrail. Organiza itinerarios, gestiona alojamientos y cuadra gastos en tiempo real.",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "EUR"
+      },
+      "author": {
+        "@type": "Organization",
+        "name": "Pipa Studio"
+      }
+    }
+    </script>
 
     <link rel="icon" type="image/png" href="interrahublogo.PNG">
     <link rel="apple-touch-icon" href="interrahublogo.PNG">
@@ -38,6 +63,8 @@
             --accent-blue: #4da6ff;
             --success: #4dff4d;
             --warning: #ffb84d;
+            --gold: #ffd700;
+            --gold-gradient: linear-gradient(135deg, #ffd700, #ffb84d);
             --border-subtle: rgba(255, 255, 255, 0.08);
             --transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
@@ -96,29 +123,15 @@
         .btn-primary:hover { transform: scale(0.97); box-shadow: 0 0 20px rgba(255,255,255,0.2); }
 
         /* =========================================
-           HERO SECTION (CON VIDEO DE FONDO)
+           HERO SECTION (CON FONDO DE IMAGEN Y BLUR)
            ========================================= */
         .hero {
             min-height: 100vh;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
             text-align: center; padding: 8rem 5% 4rem; position: relative;
-        }
-
-        .hero-video-container {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            overflow: hidden;
-            z-index: -2;
-        }
-        .hero-video-container video {
-            width: 100%; height: 100%; object-fit: cover;
-        }
-        .hero-overlay {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(to bottom, rgba(3,3,3,0.6) 0%, rgba(3,3,3,0.95) 100%);
-            backdrop-filter: blur(6px);
-            -webkit-backdrop-filter: blur(6px);
-            z-index: -1;
+            background: linear-gradient(to bottom, rgba(3,3,3,0.5) 0%, rgba(3,3,3,0.95) 100%), url('HomeInterrahub.png') no-repeat center center;
+            background-size: cover;
+            background-attachment: fixed;
         }
         
         .badge-beta {
@@ -126,6 +139,7 @@
             border: 1px solid rgba(255, 184, 77, 0.2); border-radius: 30px;
             padding: 0.5rem 1rem; font-size: 0.75rem; font-weight: 600; letter-spacing: 1px;
             text-transform: uppercase; margin-bottom: 2rem; animation: fadeInDown 0.8s ease;
+            backdrop-filter: blur(4px);
         }
 
         .hero h1 {
@@ -137,8 +151,8 @@
         .hero h1 .highlight { color: var(--accent); }
 
         .hero p {
-            color: rgba(255, 255, 255, 0.85); font-size: clamp(1rem, 2vw, 1.25rem);
-            line-height: 1.6; max-width: 700px; margin-bottom: 3rem; font-weight: 300;
+            color: rgba(255, 255, 255, 0.9); font-size: clamp(1rem, 2vw, 1.25rem);
+            line-height: 1.6; max-width: 800px; margin-bottom: 3rem; font-weight: 300;
             animation: fadeInUp 0.8s ease 0.4s backwards;
             text-shadow: 0 2px 10px rgba(0,0,0,0.8);
         }
@@ -149,11 +163,11 @@
         }
         
         .btn-massive {
-            padding: 1rem 2.5rem; font-size: 1.1rem; border-radius: 40px;
+            padding: 1.1rem 2.8rem; font-size: 1.1rem; border-radius: 40px;
         }
 
         /* =========================================
-           SECCIÓN: LO QUE HACEMOS HOY (FEATURES)
+           SECCIÓN: CÓMO FUNCIONA (FEATURES)
            ========================================= */
         .section-features {
             padding: 6rem 5%; max-width: 1200px; margin: 0 auto; position: relative; z-index: 10;
@@ -161,7 +175,7 @@
 
         .section-header { text-align: center; margin-bottom: 4rem; }
         .section-header h2 { font-size: 2.5rem; font-weight: 800; letter-spacing: -1px; margin-bottom: 1rem; }
-        .section-header p { color: var(--text-muted); font-size: 1.1rem; max-width: 600px; margin: 0 auto; }
+        .section-header p { color: var(--text-muted); font-size: 1.1rem; max-width: 600px; margin: 0 auto; line-height: 1.6; }
 
         .bento-grid {
             display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;
@@ -191,7 +205,46 @@
         .bento-card p { color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; font-weight: 300; }
 
         /* =========================================
-           SECCIÓN: EL FUTURO (VISIÓN) & PLUS
+           SECCIÓN: INTERRA-HUB PLUS (NUEVA)
+           ========================================= */
+        .section-plus {
+            padding: 6rem 5%;
+            background: linear-gradient(180deg, transparent 0%, rgba(255, 215, 0, 0.03) 50%, transparent 100%);
+            text-align: center;
+        }
+        .plus-container {
+            max-width: 900px; margin: 0 auto;
+            background: rgba(20, 20, 20, 0.6);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            border-radius: 32px; padding: 4rem 2rem;
+            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            box-shadow: 0 20px 50px rgba(255, 215, 0, 0.05);
+            transition: var(--transition);
+        }
+        .plus-container:hover {
+            border-color: rgba(255, 215, 0, 0.6);
+            transform: translateY(-5px);
+            box-shadow: 0 30px 60px rgba(255, 215, 0, 0.08);
+        }
+        .plus-container h2 {
+            font-size: 2.5rem; font-weight: 800; margin-bottom: 1.5rem; color: var(--primary);
+            display: flex; justify-content: center; align-items: center; gap: 12px; flex-wrap: wrap;
+        }
+        .plus-container h2 strong { color: var(--gold); }
+        .plus-container p {
+            color: rgba(255,255,255,0.85); font-size: 1.15rem; line-height: 1.7; 
+            max-width: 700px; margin: 0 auto 3rem; font-weight: 300;
+        }
+        .btn-plus {
+            background: var(--gold-gradient);
+            color: #000; font-weight: 800; padding: 1.2rem 2.5rem; border-radius: 40px;
+            text-decoration: none; display: inline-flex; align-items: center; gap: 10px;
+            font-size: 1.05rem; transition: var(--transition);
+        }
+        .btn-plus:hover { transform: scale(1.05); box-shadow: 0 0 30px rgba(255, 215, 0, 0.4); }
+
+        /* =========================================
+           SECCIÓN: EL FUTURO (VISIÓN)
            ========================================= */
         .section-vision {
             padding: 8rem 5%; background: rgba(255,255,255,0.01);
@@ -217,17 +270,6 @@
         }
         .vision-item-content h4 { font-size: 1.1rem; font-weight: 800; margin-bottom: 0.5rem; }
         .vision-item-content p { color: var(--text-muted); font-size: 0.9rem; line-height: 1.6; }
-
-        /* Badge Interrahub PLUS */
-        .plus-badge-container {
-            margin-top: 2rem; padding: 1.5rem; border-radius: 16px;
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.01));
-            border: 1px solid rgba(255, 215, 0, 0.3);
-            display: flex; align-items: center; gap: 1rem;
-        }
-        .plus-icon { color: #ffd700; width: 32px; height: 32px; }
-        .plus-badge-container p { margin: 0; font-size: 0.95rem; color: rgba(255,255,255,0.9); line-height: 1.5;}
-        .plus-badge-container strong { color: #ffd700; }
 
         /* =========================================
            CTA FINAL & FORMULARIO
@@ -349,32 +391,27 @@
         <a href="#" class="logo">Interra-hub<span class="dot">.</span></a>
         <div class="nav-actions">
             <a href="registro.html" class="btn-ghost">Ya tengo cuenta</a>
-            </div>
+        </div>
     </nav>
 
-    <main class="hero">
-        <div class="hero-video-container">
-            <video autoplay loop muted playsinline id="hero-video">
-                <source src="HomeInterrahub.mp4" type="video/mp4">
-            </video>
-            <div class="hero-overlay"></div>
-        </div>
-
+    <header class="hero">
         <div class="badge-beta">
             <i data-lucide="zap" style="width: 12px; display: inline-block; vertical-align: middle;"></i> 
             Fase Beta 2026
         </div>
         <h1>Planifica tu Interrail en grupo. <span class="highlight">Sin caos.</span></h1>
-        <p>Sincroniza vuestro itinerario en tiempo real, gestiona los alojamientos y cuadra los gastos del equipo automáticamente. Olvídate de los grupos de WhatsApp saturados y únete al hub definitivo.</p>
+        
+        <p>El fin de los excels infinitos y los grupos de WhatsApp saturados. Diseña tu ruta colaborativa minuto a minuto, liquida gastos compartidos al instante y lleva todo tu itinerario en el bolsillo. Tu próxima gran aventura empieza aquí.</p>
+        
         <div class="hero-ctas">
             <a href="registro.html" class="btn-primary btn-massive">Empezar a planificar gratis</a>
         </div>
-    </main>
+    </header>
 
     <section class="section-features">
         <div class="section-header">
-            <h2>Nuestra herramienta hoy</h2>
-            <p>Accede de forma gratuita a nuestra Web App y descubre por qué planificar tu ruta nunca había sido tan fácil e intuitivo.</p>
+            <h2>¿Cómo funciona?</h2>
+            <p>Accede de forma gratuita a nuestra plataforma y descubre por qué coordinar a tu grupo nunca había sido tan intuitivo y eficiente.</p>
         </div>
         
         <div class="bento-grid">
@@ -404,17 +441,20 @@
         </div>
     </section>
 
+    <section class="section-plus">
+        <div class="plus-container">
+            <h2><i data-lucide="star" class="plus-icon"></i> Interra-hub <strong>PLUS</strong></h2>
+            <p>La experiencia definitiva, sin restricciones. Disfruta de nuestra promesa: una plataforma para tener todo de manera <strong>gratuita siempre e ilimitada</strong>. Sin sorpresas, diseñada por y para verdaderos viajeros.</p>
+            <a href="interrahubplus.html" class="btn-plus">¿Quieres descubrir más sobre Interra-hub PLUS? <i data-lucide="arrow-right"></i></a>
+        </div>
+    </section>
+
     <section class="section-vision">
         <div class="vision-container">
             <div class="vision-text">
-                <h2>Diseñando el futuro del Interrail</h2>
-                <p>Este año te ofrecemos la herramienta para que tengas el control. El año que viene, Interra-hub evolucionará a un ecosistema integral diseñado para garantizarte la mejor experiencia (y al mejor precio) en Europa.</p>
+                <h2>Diseñando el futuro del viaje</h2>
+                <p>Este año te ofrecemos la herramienta para que tengas el control total. El año que viene, Interra-hub evolucionará a un ecosistema integral diseñado para garantizarte la mejor experiencia (y al mejor precio) en Europa.</p>
                 <a href="registro.html" class="btn-ghost" style="padding-left: 0; color: var(--primary); text-decoration: underline; text-underline-offset: 4px;">Únete a la lista para 2027 <i data-lucide="arrow-right" style="width: 16px; vertical-align: middle;"></i></a>
-                
-                <div class="plus-badge-container">
-                    <i data-lucide="star" class="plus-icon"></i>
-                    <p>Con <strong>Interrahub PLUS</strong> disfruta de nuestra promesa: una plataforma <strong>para tener todo de manera gratuita siempre e ilimitada</strong>. Sin restricciones, sin sorpresas.</p>
-                </div>
             </div>
             <div class="vision-list">
                 <div class="vision-item">
@@ -444,7 +484,7 @@
 
     <section class="section-cta">
         <h2>¿Listo para subir a bordo?</h2>
-        <p>Regístrate ahora y empieza a usar la plataforma gratis. Al estar en Fase Beta, tu opinión es vital para nosotros.</p>
+        <p>Regístrate ahora y empieza a usar la plataforma gratis. Al estar en Fase Beta, tu opinión es vital para ayudarnos a pulir el sistema.</p>
         
         <div class="feedback-form">
             <h3>Ayúdanos a mejorar</h3>
@@ -474,7 +514,7 @@
             <button onclick="openModal('modal-copyright')">Copyright</button>
         </div>
         <div class="footer-copy">
-            Hecho por <strong>Pipa</strong> <br><br>
+            Hecho por <strong>Pipa Studio</strong> <br><br>
             © 2026 Interra-hub · Todos los derechos reservados
         </div>
     </footer>
@@ -488,7 +528,7 @@
             <p>Al acceder, registrarse o utilizar la plataforma <strong>Interra-hub</strong>, el usuario acepta de manera íntegra, plena y sin reservas los presentes Términos y Condiciones de Uso. Si el usuario no está de acuerdo con cualquiera de estas condiciones, deberá abstenerse de utilizar la aplicación.</p>
             
             <h3>2. Naturaleza del Servicio y Fase Beta</h3>
-            <p>Interra-hub es una plataforma tecnológica concebida para facilitar la organización colaborativa de viajes. Actualmente, la plataforma se encuentra en fase <strong>Beta (2026)</strong>. Esto implica que el servicio se proporciona "tal cual" y "según disponibilidad". <strong>Pipa Studio</strong> no garantiza que el servicio sea ininterrumpido, oportuno, seguro o libre de errores. El usuario asume que, durante esta fase de pruebas, pueden ocurrir pérdidas de datos o desincronizaciones, declinando Pipa Studio cualquier responsabilidad legal o compensatoria por estos hechos.</p>
+            <p>Interra-hub es una plataforma tecnológica concebida para facilitar la organización colaborativa de viajes. Actualmente, la plataforma se encuentra en fase <strong>Beta 2026</strong>. Esto implica que el servicio se proporciona "tal cual" y "según disponibilidad". <strong>Pipa Studio</strong> no garantiza que el servicio sea ininterrumpido, oportuno, seguro o libre de errores. El usuario asume que, durante esta fase de pruebas, pueden ocurrir pérdidas de datos o desincronizaciones, declinando Pipa Studio cualquier responsabilidad legal o compensatoria por estos hechos.</p>
             
             <h3>3. Obligaciones y Conducta del Usuario</h3>
             <p>El usuario se compromete a hacer un uso lícito, diligente y adecuado de la plataforma. Queda terminantemente prohibido:</p>
