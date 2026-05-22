@@ -9,7 +9,9 @@
     <meta name="keywords" content="interrail, viajes en grupo, planificador de rutas, app para viajar, dividir gastos viaje, itinerario colaborativo, organizar viaje amigos, interrahub">
     <meta name="author" content="Pipa Studio">
     <meta name="robots" content="index, follow, max-image-preview:large">
-    <link rel="canonical" href="https://tudominio.com/"> <meta property="og:type" content="website">
+    <link rel="canonical" href="https://tudominio.com/">
+    
+    <meta property="og:type" content="website">
     <meta property="og:title" content="Interra-hub | El hub definitivo para tus viajes">
     <meta property="og:description" content="El fin de los excels infinitos. Organiza tu próxima aventura en grupo: mapas, itinerarios y finanzas en una sola app.">
     <meta property="og:image" content="https://tudominio.com/interrahublogo.PNG">
@@ -64,7 +66,7 @@
             --success: #4dff4d;
             --warning: #ffb84d;
             --gold: #ffd700;
-            --gold-gradient: linear-gradient(135deg, #ffd700, #ffb84d);
+            --gold-gradient: linear-gradient(135deg, #ffd700 0%, #ffb84d 100%);
             --border-subtle: rgba(255, 255, 255, 0.08);
             --transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
@@ -167,7 +169,7 @@
         }
 
         /* =========================================
-           SECCIÓN: CÓMO FUNCIONA (FEATURES)
+           SECCIÓN: CÓMO FUNCIONA
            ========================================= */
         .section-features {
             padding: 6rem 5%; max-width: 1200px; margin: 0 auto; position: relative; z-index: 10;
@@ -205,7 +207,7 @@
         .bento-card p { color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; font-weight: 300; }
 
         /* =========================================
-           SECCIÓN: INTERRA-HUB PLUS (NUEVA)
+           SECCIÓN: INTERRA-HUB PLUS
            ========================================= */
         .section-plus {
             padding: 6rem 5%;
@@ -230,7 +232,7 @@
             font-size: 2.5rem; font-weight: 800; margin-bottom: 1.5rem; color: var(--primary);
             display: flex; justify-content: center; align-items: center; gap: 12px; flex-wrap: wrap;
         }
-        .plus-container h2 strong { color: var(--gold); }
+        .plus-container h2自动 { color: var(--gold); }
         .plus-container p {
             color: rgba(255,255,255,0.85); font-size: 1.15rem; line-height: 1.7; 
             max-width: 700px; margin: 0 auto 3rem; font-weight: 300;
@@ -272,34 +274,29 @@
         .vision-item-content p { color: var(--text-muted); font-size: 0.9rem; line-height: 1.6; }
 
         /* =========================================
-           CTA FINAL & FORMULARIO
+           CTA FINAL & FORMULARIO DE GOOGLE FORMS
            ========================================= */
         .section-cta { padding: 8rem 5%; text-align: center; max-width: 800px; margin: 0 auto; }
         .section-cta h2 { font-size: clamp(2rem, 4vw, 3rem); font-weight: 800; margin-bottom: 1.5rem; letter-spacing: -1px; }
         .section-cta p { color: var(--text-muted); font-size: 1.1rem; margin-bottom: 3rem; margin-inline: auto; line-height: 1.6;}
 
         .feedback-form {
-            background: var(--surface); padding: 2.5rem; border-radius: 24px;
-            border: 1px solid var(--border-subtle); text-align: left;
+            background: var(--surface); padding: 3rem 2.5rem; border-radius: 24px;
+            border: 1px solid var(--border-subtle); text-align: center;
             box-shadow: 0 10px 40px rgba(0,0,0,0.5);
             backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
         }
-        .feedback-form h3 { font-size: 1.4rem; font-weight: 800; margin-bottom: 0.5rem; }
-        .feedback-form p { font-size: 0.9rem; margin-bottom: 1.5rem; color: var(--text-muted); }
-        .input-group { margin-bottom: 1.2rem; }
-        .input-group input, .input-group textarea {
-            width: 100%; padding: 1rem; background: rgba(255,255,255,0.03);
-            border: 1px solid var(--border-subtle); border-radius: 12px;
-            color: var(--primary); font-size: 0.95rem; outline: none; transition: 0.3s;
-            font-family: 'Sora', sans-serif;
-        }
-        .input-group input:focus, .input-group textarea:focus { border-color: var(--primary); background: rgba(255,255,255,0.06); }
-        .input-group textarea { resize: vertical; min-height: 100px; }
+        .feedback-form h3 { font-size: 1.5rem; font-weight: 800; margin-bottom: 0.8rem; }
+        .feedback-form p { font-size: 0.95rem; margin-bottom: 2rem; color: var(--text-muted); line-height: 1.6; }
+        
+        /* Botón de Enlace a Google Forms */
         .btn-submit-form {
-            width: 100%; padding: 1rem; background: var(--primary); color: var(--bg-color);
+            width: 100%; max-width: 380px; padding: 1.1rem 2rem; background: var(--primary); color: var(--bg-color);
             border: none; border-radius: 12px; font-weight: 700; font-size: 1rem; cursor: pointer; transition: var(--transition);
+            text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+            margin: 0 auto;
         }
-        .btn-submit-form:hover { transform: scale(0.98); }
+        .btn-submit-form:hover { transform: scale(0.98); box-shadow: 0 0 20px rgba(255,255,255,0.15); }
 
         /* =========================================
            FOOTER
@@ -443,7 +440,7 @@
 
     <section class="section-plus">
         <div class="plus-container">
-            <h2><i data-lucide="star" class="plus-icon"></i> Interra-hub <strong>PLUS</strong></h2>
+            <h2>Interra-hub <strong>PLUS</strong></h2>
             <p>La experiencia definitiva, sin restricciones. Disfruta de nuestra promesa: una plataforma para tener todo de manera <strong>gratuita siempre e ilimitada</strong>. Sin sorpresas, diseñada por y para verdaderos viajeros.</p>
             <a href="interrahubplus.html" class="btn-plus">¿Quieres descubrir más sobre Interra-hub PLUS? <i data-lucide="arrow-right"></i></a>
         </div>
@@ -452,7 +449,7 @@
     <section class="section-vision">
         <div class="vision-container">
             <div class="vision-text">
-                <h2>Diseñando el futuro de Interra-hub</h2>
+                <h2>Diseñando el futuro del viaje</h2>
                 <p>Este año te ofrecemos la herramienta para que tengas el control total. El año que viene, Interra-hub evolucionará a un ecosistema integral diseñado para garantizarte la mejor experiencia (y al mejor precio) en Europa.</p>
                 <a href="registro.html" class="btn-ghost" style="padding-left: 0; color: var(--primary); text-decoration: underline; text-underline-offset: 4px;">Únete a la lista para 2027 <i data-lucide="arrow-right" style="width: 16px; vertical-align: middle;"></i></a>
             </div>
@@ -488,19 +485,11 @@
         
         <div class="feedback-form">
             <h3>Ayúdanos a mejorar</h3>
-            <p>Por favor, envíanos sugerencias o reporta problemas que hayas encontrado a través de este formulario para que podamos construir el hub perfecto.</p>
-            <form onsubmit="submitFeedback(event)">
-                <div class="input-group">
-                    <input type="text" id="feedback-name" placeholder="Tu nombre" required>
-                </div>
-                <div class="input-group">
-                    <input type="email" id="feedback-email" placeholder="Tu correo electrónico" required>
-                </div>
-                <div class="input-group">
-                    <textarea id="feedback-message" placeholder="Describe el problema o tu sugerencia detalladamente..." required></textarea>
-                </div>
-                <button type="submit" class="btn-submit-form" id="feedback-btn">Enviar Comentarios</button>
-            </form>
+            <p>Por favor, envíanos sugerencias o reporta cualquier tipo de problema que hayas detectado rellenando nuestro formulario externo oficial.</p>
+            
+            <a href="https://forms.google.com/tu-formulario-de-google-forms" target="_blank" class="btn-submit-form">
+                Abrir Formulario de Google Forms <i data-lucide="external-link" style="width: 16px;"></i>
+            </a>
         </div>
 
         <a href="registro.html" class="btn-primary btn-massive" style="margin-top: 3rem;">Crear mi cuenta gratis</a>
@@ -619,31 +608,6 @@
                 if (e.target === overlay) closeModal(overlay.id);
             });
         });
-
-        // Simulación de envío del formulario de sugerencias
-        function submitFeedback(e) {
-            e.preventDefault();
-            const btn = document.getElementById('feedback-btn');
-            btn.innerText = 'Enviando...';
-            btn.style.opacity = '0.7';
-            
-            // Simular petición asíncrona
-            setTimeout(() => {
-                btn.style.backgroundColor = 'var(--success)';
-                btn.style.color = '#000';
-                btn.innerText = '¡Gracias por tu ayuda!';
-                document.getElementById('feedback-name').value = '';
-                document.getElementById('feedback-email').value = '';
-                document.getElementById('feedback-message').value = '';
-                
-                setTimeout(() => {
-                    btn.style.backgroundColor = 'var(--primary)';
-                    btn.style.color = 'var(--bg-color)';
-                    btn.innerText = 'Enviar Comentarios';
-                    btn.style.opacity = '1';
-                }, 3000);
-            }, 1200);
-        }
 
         // Control de Cookies
         document.addEventListener("DOMContentLoaded", () => {
