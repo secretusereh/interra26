@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <title>Interra-hub | Planifica tus viajes en grupo</title>
+    <title>Interra-hub | Acceso al Hub</title>
     <meta name="description" content="Interra-hub es la plataforma colaborativa definitiva para planificar y organizar tus viajes y rutas. Gestiona itinerarios, alojamientos y transportes en tiempo real.">
     <meta name="keywords" content="viajes, planificador de viajes, interrail, itinerario, organización de viajes, viajes en grupo, app de viajes">
     <meta name="author" content="Pipaon Studio">
@@ -25,6 +25,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
 
     <style>
         :root {
@@ -35,6 +36,7 @@
             --accent: #ff4d4d;
             --success: #4dff4d;
             --warning: #ffb84d;
+            --border-subtle: rgba(255, 255, 255, 0.08);
             --transition: 0.8s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
@@ -97,9 +99,32 @@
             flex: 1;
             width: 100%;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
             padding: 2rem 1rem;
+        }
+
+        /* Botón de volver atrás premium */
+        .back-to-home {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            transition: var(--transition);
+            background: rgba(255, 255, 255, 0.02);
+            padding: 0.6rem 1.2rem;
+            border-radius: 20px;
+            border: 1px solid var(--border-subtle);
+        }
+        .back-to-home:hover {
+            color: var(--primary);
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.2);
         }
 
         .auth-container {
@@ -307,6 +332,7 @@
             padding: 2.5rem 2rem 2rem;
             border-top: 1px solid rgba(255,255,255,0.06);
             background: rgba(0,0,0,0.4);
+            margin-top: auto;
         }
 
         .footer-inner {
@@ -547,19 +573,23 @@
     </div>
 
     <main class="page-wrapper">
-        <div style="width:100%;max-width:400px;">
+        <div style="width:100%;max-width:400px; text-align: center;">
+            
+            <a href="index.html" class="back-to-home">
+                <i data-lucide="arrow-left" style="width: 14px; vertical-align: middle;"></i> Volver a Inicio
+            </a>
 
             <div id="install-section">
                 <div id="ios-card" style="display:none;">
                     <div class="install-card" id="ios-toggle-btn">
                         <div class="install-icon">📲</div>
-                        <div class="install-card-text">
+                        <div class="install-card-text" style="text-align: left;">
                             <strong>Añadir a pantalla de inicio</strong>
                             <span>Úsala como una app nativa desde tu iPhone</span>
                         </div>
                         <div class="install-badge">Beta · puede tener errores</div>
                     </div>
-                    <div id="ios-instructions">
+                    <div id="ios-instructions" style="text-align: left;">
                         <strong style="color:rgba(255,255,255,0.85);font-size:0.82rem;">Cómo instalar en iOS:</strong>
                         <ol>
                             <li>Pulsa el botón de compartir <span class="ios-icon">⬆</span> en la barra de Safari</li>
@@ -575,7 +605,7 @@
                 <div id="android-card" style="display:none;">
                     <a class="install-card" href="#" id="android-apk-link">
                         <div class="install-icon">🤖</div>
-                        <div class="install-card-text">
+                        <div class="install-card-text" style="text-align: left;">
                             <strong>Descargar para Android (.apk)</strong>
                             <span>Instala la app directamente en tu dispositivo</span>
                         </div>
@@ -594,7 +624,7 @@
                 </header>
 
                 <div class="forms-wrapper">
-                    <form id="login-form" class="form-box active">
+                    <form id="login-form" class="form-box active" style="text-align: left;">
                         <div class="input-group">
                             <input type="email" id="login-email" required>
                             <label>Email</label>
@@ -618,10 +648,10 @@
                             Continuar con Google
                         </button>
 
-                        <p class="toggle-text">¿Nuevo aquí? <span id="to-reg">Regístrate</span></p>
+                        <p class="toggle-text" style="text-align: center;">¿Nuevo aquí? <span id="to-reg">Regístrate</span></p>
                     </form>
 
-                    <form id="register-form" class="form-box">
+                    <form id="register-form" class="form-box" style="text-align: left;">
                         <div class="input-group">
                             <input type="text" id="reg-name" required>
                             <label>Nombre</label>
@@ -649,7 +679,7 @@
                             Continuar con Google
                         </button>
 
-                        <p class="toggle-text">¿Ya eres socio? <span id="to-log">Inicia sesión</span></p>
+                        <p class="toggle-text" style="text-align: center;">¿Ya eres socio? <span id="to-log">Inicia sesión</span></p>
                     </form>
                 </div>
             </div>
@@ -673,7 +703,6 @@
         </div>
     </footer>
 
-    <!-- ── AVISO DE COOKIES FLOTANTE ── -->
     <div id="cookie-banner">
         <div class="cookie-title">🍪 Privacidad en tu viaje</div>
         <div class="cookie-text">
@@ -784,6 +813,9 @@
         const container = document.getElementById('main-container');
         const installSection = document.getElementById('install-section');
         const nameModal = document.getElementById('name-modal');
+
+        // Inicializar Iconos Lucide para el botón de regresar
+        lucide.createIcons();
 
         // ── GUARDAR PERFIL EN FIRESTORE ──
         async function saveUserProfile(user) {
@@ -1017,4 +1049,3 @@
     <style>@keyframes spin { to { transform: rotate(360deg); } }</style>
 </body>
 </html>
-
