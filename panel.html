@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Interra-hub | Panel Maestro</title>
     
-    <link rel="icon" type="image/png" href="interrahublogo.PNG">
+    <link rel="icon" type="image/png" id="dynamic-favicon" href="interrahublogo.PNG">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -61,8 +61,28 @@
 
         .logo { font-weight: 800; font-size: 1.5rem; letter-spacing: -1px; display: flex; align-items: center; gap: 12px; }
         .user-menu { display: flex; align-items: center; gap: 2.5rem; flex-wrap: wrap; justify-content: flex-end; }
+        
+        .user-name-container { display: flex; align-items: center; gap: 10px; }
         .user-name { font-weight: 300; color: var(--text-muted); font-size: 0.9rem; word-break: break-word; max-width: 250px; text-align: right; line-height: 1.3; }
         
+        /* ── ETIQUETAS DE MEMBRESÍA ── */
+        .plan-badge {
+            font-size: 0.65rem; padding: 0.3rem 0.6rem; border-radius: 20px;
+            font-weight: 800; letter-spacing: 1px; transition: var(--transition);
+            display: inline-flex; align-items: center; justify-content: center;
+        }
+        .badge-estandar {
+            background: rgba(255,255,255,0.05); color: var(--text-muted); border: 1px solid var(--border-subtle);
+        }
+        .badge-estandar:hover {
+            background: var(--primary); color: var(--bg-color); border-color: var(--primary); transform: scale(1.05);
+        }
+        .badge-plus {
+            background: linear-gradient(135deg, #ffd700, #ffaa00); color: #000;
+            border: 1px solid #ffe600; box-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
+            cursor: default; pointer-events: none;
+        }
+
         .btn-logout {
             background: transparent; color: var(--text-muted); border: none;
             display: flex; align-items: center; gap: 8px; cursor: pointer; transition: var(--transition);
@@ -299,7 +319,12 @@
     <nav>
         <div class="logo"><i data-lucide="map-pinned"></i> Interra-hub<span style="color: var(--accent);">.</span></div>
         <div class="user-menu">
-            <span class="user-name" id="display-user-name">Cargando...</span>
+            <div class="user-name-container">
+                <span class="user-name" id="display-user-name">Cargando...</span>
+                <a href="interrahubplus.html" id="plan-badge-link" style="text-decoration: none;" title="Convierte tu cuenta en PLUS para obtener ventajas ilimitadas">
+                    <span id="plan-badge" class="plan-badge badge-estandar" style="display: none;">ESTÁNDAR</span>
+                </a>
+            </div>
             <button class="btn-logout" id="btn-logout">
                 <i data-lucide="power"></i> SALIR
             </button>
@@ -442,6 +467,7 @@
         let currentUser = null;
         let adminTripsCount = 0;
         let generatedTripCode = null;
+        let currentUserPlan = 'ESTANDAR'; // Variable segura global 
         const SUPERADMIN_EMAIL = "tu_correo@gmail.com"; 
 
         // ── TOASTS ──
@@ -449,8 +475,8 @@
             const container = document.getElementById('toast-container');
             const toast = document.createElement('div');
             toast.className = 'toast';
-            const icon = type === 'success' ? 'check-circle' : 'alert-circle';
-            const color = type === 'success' ? 'var(--success)' : 'var(--accent)';
+            const icon = type === 'success' ? 'check-circle' : (type === 'premium' ? 'crown' : 'alert-circle');
+            const color = type === 'success' ? 'var(--success)' : (type === 'premium' ? '#ffd700' : 'var(--accent)');
             toast.innerHTML = `<i data-lucide="${icon}" style="color: ${color}"></i> <span>${message}</span>`;
             container.appendChild(toast);
             lucide.createIcons();
@@ -497,8 +523,10 @@
         window.goToStep = function(step) {
             if (step === 'create') {
                 const isGod = currentUser.email === SUPERADMIN_EMAIL;
-                if (adminTripsCount >= 1 && !isGod) {
-                    showToast("Límite de viajes alcanzado. Suscribete a Interra-hub PRO para poder crear viajes ilimitados.", "error");
+                const isPlus = currentUserPlan === 'PLUS';
+                // BUG FIX LÓGICA DE SUSCRIPCIÓN SEGURA: Un usuario PLUS no tiene límite de viajes
+                if (adminTripsCount >= 1 && !isGod && !isPlus) {
+                    showToast("Límite de viajes alcanzado. Conviértete en PLUS para crear viajes ilimitados.", "error");
                     return;
                 }
             }
@@ -603,36 +631,83 @@
             }
         }
 
-        // ── ASEGURAR PERFIL DE USUARIO ──
+        // ── ASEGURAR PERFIL Y COMPROBAR SUSCRIPCIÓN PLUS ──
         async function ensureUserProfile(user) {
             const userRef = doc(db, "usuarios", user.uid);
             const snap = await getDoc(userRef);
+            
             if (!snap.exists()) {
                 await setDoc(userRef, {
                     uid: user.uid,
                     email: user.email,
                     nombre: user.displayName || '',
+                    plan: 'ESTANDAR', // Plan por defecto en el registro
                     createdAt: new Date(),
                     lastSeen: new Date()
                 });
+                const initSnap = await getDoc(userRef);
+                return initSnap.data();
             } else {
                 await setDoc(userRef, { lastSeen: new Date(), email: user.email }, { merge: true });
+                return snap.data();
             }
-            const finalSnap = await getDoc(userRef);
-            return finalSnap.data().nombre || user.email;
         }
 
-        // ── PROTECCIÓN DE ACCESO: ACTUALIZADO A registro.html ──
+        // ── CONTROL UI SUSCRIPCIÓN (ETIQUETAS Y FAVICON DINÁMICO) ──
+        async function checkMembershipUI(userData, userRefPath) {
+            const badge = document.getElementById('plan-badge');
+            const badgeLink = document.getElementById('plan-badge-link');
+            const favicon = document.getElementById('dynamic-favicon');
+            
+            currentUserPlan = userData.plan === 'PLUS' ? 'PLUS' : 'ESTANDAR';
+
+            if (currentUserPlan === 'PLUS') {
+                // UI PLUS
+                badge.textContent = 'VIP / PLUS';
+                badge.className = 'plan-badge badge-plus';
+                badge.style.display = 'inline-flex';
+                badgeLink.href = '#'; 
+                badgeLink.title = 'Tu cuenta posee ventajas exclusivas de Interra-hub PLUS';
+                badgeLink.style.cursor = 'default';
+                
+                // Modificación del Favicon
+                favicon.href = 'interrahubplus.png';
+
+                // Onboarding VIP Exclusivo (Solo la primera vez)
+                if (!userData.hasSeenPlusWelcome) {
+                    setTimeout(() => {
+                        showToast("¡Bienvenido a Interra-hub PLUS! Tu cuenta ha sido elevada a VIP.", "premium");
+                    }, 1500);
+                    const userRef = doc(db, "usuarios", userRefPath);
+                    await setDoc(userRef, { hasSeenPlusWelcome: true }, { merge: true });
+                }
+
+            } else {
+                // UI ESTÁNDAR
+                badge.textContent = 'ESTÁNDAR';
+                badge.className = 'plan-badge badge-estandar';
+                badge.style.display = 'inline-flex';
+                badgeLink.href = 'interrahubplus.html';
+                badgeLink.title = 'Convierte tu cuenta en PLUS para obtener ventajas ilimitadas';
+                favicon.href = 'interrahublogo.PNG';
+            }
+        }
+
+        // ── PROTECCIÓN DE ACCESO ──
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 currentUser = user;
-                const nombreMostrar = await ensureUserProfile(user);
-                document.getElementById('display-user-name').innerText = nombreMostrar || user.email;
+                const userData = await ensureUserProfile(user);
+                
+                document.getElementById('display-user-name').innerText = userData.nombre || user.email;
+                
+                // Inyectamos validación de UI
+                await checkMembershipUI(userData, user.uid);
+                
                 document.getElementById('page-loader').style.opacity = '0';
                 setTimeout(() => document.getElementById('page-loader').style.display = 'none', 800);
                 loadTrips();
             } else {
-                // REDIRECCIÓN ACTUALIZADA
                 window.location.href = 'registro.html';
             }
         });
@@ -664,7 +739,6 @@
                     const tieneAcceso = rolAqui || isGod;
                     const solicitado = trip.solicitudes && trip.solicitudes[currentUser.uid];
 
-                    // 👇 ESTA LÍNEA OCULTA LOS VIAJES A LOS QUE NO PERTENECES
                     if (!tieneAcceso && !solicitado) return;
 
                     const card = document.createElement('div');
@@ -762,7 +836,6 @@
         const modal = document.getElementById('create-modal');
         
         document.getElementById('btn-open-modal').onclick = () => {
-            // Siempre abre en el paso de elección, el límite se verifica al elegir 'create'
             goToStep('choose');
             modal.classList.add('active');
         };
