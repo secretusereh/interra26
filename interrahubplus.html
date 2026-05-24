@@ -55,7 +55,8 @@
             width: 100%;
             padding: 1.5rem 5%;
             display: flex;
-            justify-content: flex-end;
+            justify-content: space-between;
+            align-items: center;
             position: absolute;
             top: 0; left: 0; z-index: 100;
         }
@@ -67,6 +68,8 @@
             text-decoration: none; backdrop-filter: blur(10px);
         }
         .btn-back:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.15); transform: translateX(-3px); }
+
+        .user-status { font-size: 0.8rem; color: var(--text-muted); display: flex; align-items: center; gap: 8px;}
 
         /* =========================================
            PLATAFORMA DE COMPRA / CHECKOUT INTERFACES
@@ -107,14 +110,14 @@
             font-weight: 300;
         }
 
-        /* TARJETA DE COMPRA / SUBSCRIPTION CARD (Rediseñada a más ancha y menos alta) */
+        /* TARJETA DE COMPRA / SUBSCRIPTION CARD */
         .subscription-card {
             background: var(--surface-card);
             border: 1px solid var(--border-gold);
             width: 100%;
-            max-width: 750px; /* Incrementado para hacerla más ancha */
+            max-width: 750px;
             border-radius: 32px;
-            padding: 2.5rem 3.5rem; /* Padding vertical reducido */
+            padding: 2.5rem 3.5rem;
             box-shadow: 0 30px 70px rgba(0, 0, 0, 0.7), 0 0 40px rgba(255, 215, 0, 0.02);
             position: relative;
             display: flex;
@@ -153,7 +156,7 @@
             text-transform: uppercase;
         }
 
-        /* BLOQUE DE PRECIO (Sin desenfoque) */
+        /* BLOQUE DE PRECIO */
         .price-wrapper {
             display: flex;
             justify-content: center;
@@ -179,7 +182,7 @@
             margin-left: 5px;
         }
 
-        /* DESGLOSE DE CARACTERÍSTICAS INCLUIDAS (Grid de 2 columnas para reducir altura) */
+        /* DESGLOSE DE CARACTERÍSTICAS */
         .plan-features-block {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -212,7 +215,6 @@
             margin-bottom: 2px;
         }
 
-        /* BOTÓN COMPRAR EN MODO PROXIMAMENTE */
         .btn-checkout-blocked {
             width: 100%;
             background: rgba(255, 255, 255, 0.03);
@@ -229,8 +231,89 @@
             gap: 10px;
             text-transform: uppercase;
             cursor: not-allowed;
-            pointer-events: none; /* Bloqueo de clics absoluto */
+            pointer-events: none;
             box-shadow: inset 0 0 12px rgba(255, 215, 0, 0.02);
+            margin-bottom: 2rem;
+        }
+
+        /* =========================================
+           SISTEMA DE CANJEO DE CÓDIGOS
+           ========================================= */
+        .redeem-divider {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 1.5rem;
+        }
+        .redeem-divider::before, .redeem-divider::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+        .redeem-divider:not(:empty)::before { margin-right: 1em; }
+        .redeem-divider:not(:empty)::after { margin-left: 1em; }
+
+        .redeem-box {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .redeem-input {
+            flex: 1;
+            min-width: 200px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-subtle);
+            color: white;
+            padding: 1.2rem;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-family: monospace;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            outline: none;
+            transition: var(--transition);
+        }
+        .redeem-input:focus {
+            border-color: var(--gold);
+            background: rgba(255, 215, 0, 0.05);
+        }
+
+        .btn-redeem {
+            background: var(--gold-gradient);
+            color: #000;
+            border: none;
+            padding: 0 2rem;
+            border-radius: 12px;
+            font-weight: 800;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .btn-redeem:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(255, 215, 0, 0.2);
+        }
+        .btn-redeem:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Toasts */
+        #toast-container { position: fixed; bottom: 40px; right: 40px; z-index: 20000; display: flex; flex-direction: column; gap: 15px; }
+        .toast {
+            background: rgba(15, 15, 15, 0.95); backdrop-filter: blur(10px); border: 1px solid var(--border-subtle);
+            color: white; padding: 1.2rem 2rem; border-radius: 18px; display: flex; align-items: center; gap: 15px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5); animation: slideIn 0.5s var(--transition) forwards; font-size: 0.95rem;
         }
 
         /* =========================================
@@ -246,19 +329,18 @@
             width: 100%;
         }
 
-        /* ANIMACIONES DE ALTO RENDIMIENTO */
         @keyframes fadeInDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes scaleUp { from { opacity: 0; transform: scale(0.96); } to { opacity: 1; transform: scale(1); } }
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
 
         /* RESPONSIVE */
         @media (max-width: 768px) {
-            .subscription-card { 
-                padding: 2.5rem 2rem; 
-            }
-            .plan-features-block {
-                grid-template-columns: 1fr; /* Volvemos a 1 columna en móviles */
-                gap: 1.2rem;
-            }
+            .subscription-card { padding: 2.5rem 2rem; }
+            .plan-features-block { grid-template-columns: 1fr; gap: 1.2rem; }
+            .redeem-box { flex-direction: column; }
+            .btn-redeem { padding: 1.2rem; }
+            #toast-container { bottom: 20px; right: 20px; left: 20px; }
         }
         @media (max-width: 480px) {
             .subscription-card { padding: 2.5rem 1.5rem; }
@@ -269,16 +351,17 @@
 <body>
 
     <nav>
-        <a href="index.html" class="btn-back">
-            <i data-lucide="arrow-left" style="width: 16px;"></i> Volver
+        <a href="panel.html" class="btn-back">
+            <i data-lucide="arrow-left" style="width: 16px;"></i> Panel
         </a>
+        <div class="user-status" id="user-status">Validando sesión...</div>
     </nav>
 
     <div class="checkout-container">
         
         <header class="checkout-header">
-            <h1>Eleva tu pase</h1>
-            <p>Accede de forma gratuita y para siempre a los privilegios de la élite viajera.</p>
+            <h1>Eleva tu <span>pase</span></h1>
+            <p>Accede de forma exclusiva a los privilegios de la élite viajera.</p>
         </header>
 
         <section class="subscription-card">
@@ -295,7 +378,7 @@
             <div class="plan-features-block">
                 <div class="feature-row">
                     <div class="feature-icon-wrapper"><i data-lucide="infinity" style="width: 20px; height: 20px;"></i></div>
-                    <div class="feature-text"><strong>Aventuras ilimitadas</strong> Diseña e indexa todas las rutas en grupo que necesites.</div>
+                    <div class="feature-text"><strong>Aventuras ilimitadas</strong> Diseña e indexa todas las rutas en grupo que necesites sin bloqueos.</div>
                 </div>
                 <div class="feature-row">
                     <div class="feature-icon-wrapper"><i data-lucide="zap-off" style="width: 20px; height: 20px;"></i></div>
@@ -303,30 +386,162 @@
                 </div>
                 <div class="feature-row">
                     <div class="feature-icon-wrapper"><i data-lucide="ticket" style="width: 20px; height: 20px;"></i></div>
-                    <div class="feature-text"><strong>Tarifas preferentes</strong> Acceso exclusivo a pases reducidos para museos y ocio.</div>
+                    <div class="feature-text"><strong>Tarifas preferentes</strong> Acceso exclusivo a pases reducidos para museos y ocio nocturno.</div>
                 </div>
                 <div class="feature-row">
                     <div class="feature-icon-wrapper"><i data-lucide="gift" style="width: 20px; height: 20px;"></i></div>
-                    <div class="feature-text"><strong>Sorteos automáticos</strong> Participación en pases de tren y estancias de hostales.</div>
+                    <div class="feature-text"><strong>Sorteos automáticos</strong> Participación en pases de tren y estancias de hostales de Europa.</div>
                 </div>
             </div>
 
             <button type="button" class="btn-checkout-blocked" aria-disabled="true" disabled>
                 <i data-lucide="lock" style="width: 18px; height: 18px;"></i>
-                Próximamente...
+                Pasarela de pago Próximamente
             </button>
+
+            <div id="redeem-container">
+                <div class="redeem-divider">O canjea tu código de acceso PLUS</div>
+                <form id="redeem-form" class="redeem-box">
+                    <input type="text" id="promo-code" class="redeem-input" placeholder="Ej: INTERRA-VIP-2026" required autocomplete="off" spellcheck="false">
+                    <button type="submit" id="btn-redeem" class="btn-redeem">
+                        <i data-lucide="key" style="width: 18px;"></i> Canjear
+                    </button>
+                </form>
+            </div>
+
+            <div id="active-premium-msg" style="display: none; text-align: center; padding: 2rem 0; color: var(--gold);">
+                <i data-lucide="crown" style="width: 48px; height: 48px; margin-bottom: 1rem;"></i>
+                <h3 style="font-size: 1.5rem; font-weight: 800; margin-bottom: 0.5rem;">¡Ya eres PLUS!</h3>
+                <p style="color: var(--text-muted); font-size: 0.95rem;">Estás disfrutando de todos los beneficios premium.</p>
+            </div>
 
         </section>
 
     </div>
 
+    <div id="toast-container"></div>
+
     <footer>
         © 2026 Interra-hub · Desarrollado por <strong>Pipa Studio</strong>
     </footer>
 
-    <script>
-        // Inyección dinámica de gráficos vectoriales Lucide
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+        import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-functions.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDRkUJnDLzknFz3KOnPEm4UFsgf6R4z1Uk",
+            authDomain: "interra26-22ecd.firebaseapp.com",
+            projectId: "interra26-22ecd",
+            storageBucket: "interra26-22ecd.firebasestorage.app",
+            messagingSenderId: "960505222050",
+            appId: "1:960505222050:web:a9943c6fec9532141f98fb"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        
+        // Es vital especificar la región si tus functions no están en us-central1 (por defecto es us-central1)
+        const functions = getFunctions(app); 
+
+        let currentUser = null;
+
         lucide.createIcons();
+
+        // ── TOASTS ──
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            const icon = type === 'success' ? 'check-circle' : 'alert-triangle';
+            const color = type === 'success' ? 'var(--success)' : 'var(--accent)';
+            toast.innerHTML = `<i data-lucide="${icon}" style="color: ${color}"></i> <span>${message}</span>`;
+            container.appendChild(toast);
+            lucide.createIcons();
+            setTimeout(() => {
+                toast.style.animation = 'slideIn 0.5s reverse forwards';
+                setTimeout(() => toast.remove(), 500);
+            }, 5000);
+        }
+
+        // ── PROTECCIÓN Y ESTADO DE SESIÓN ──
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                currentUser = user;
+                document.getElementById('user-status').innerHTML = `<i data-lucide="user" style="width: 14px;"></i> ${user.email}`;
+                
+                // Comprobar si ya es PLUS para ocultar el cajón de códigos
+                try {
+                    const userSnap = await getDoc(doc(db, "usuarios", user.uid));
+                    if (userSnap.exists() && userSnap.data().plan === 'PLUS') {
+                        document.getElementById('redeem-container').style.display = 'none';
+                        document.getElementById('active-premium-msg').style.display = 'block';
+                    }
+                } catch(e) {
+                    console.error("Error leyendo datos del usuario", e);
+                }
+                lucide.createIcons();
+            } else {
+                window.location.href = 'registro.html';
+            }
+        });
+
+        // ── LLAMADA A LA CLOUD FUNCTION (SEGURIDAD ABSOLUTA) ──
+        document.getElementById('redeem-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const btn = document.getElementById('btn-redeem');
+            const input = document.getElementById('promo-code');
+            const codeValue = input.value.trim().toUpperCase();
+
+            if (!codeValue) return;
+
+            btn.disabled = true;
+            btn.innerHTML = `<i data-lucide="loader-2" style="width: 18px; animation: spin 2s linear infinite;"></i> Procesando...`;
+            lucide.createIcons();
+
+            try {
+                // Llamamos a la Cloud Function llamada 'redeemPlusCode'
+                const redeemFunction = httpsCallable(functions, 'redeemPlusCode');
+                const result = await redeemFunction({ code: codeValue });
+
+                // Si la función devuelve success
+                if (result.data.success) {
+                    showToast("¡Código canjeado con éxito! Bienvenido a Interra-hub PLUS.", "success");
+                    
+                    // Transición UI
+                    document.getElementById('redeem-container').style.display = 'none';
+                    document.getElementById('active-premium-msg').style.display = 'block';
+                    
+                    // Pequeña espera y redirigimos al panel para que vea su nueva insignia
+                    setTimeout(() => {
+                        window.location.href = 'panel.html';
+                    }, 2500);
+                } else {
+                    // El servidor nos dirá por qué falló
+                    showToast(result.data.message || "Código inválido o ya utilizado.", "error");
+                    btn.disabled = false;
+                    btn.innerHTML = `<i data-lucide="key" style="width: 18px;"></i> Canjear`;
+                    lucide.createIcons();
+                }
+
+            } catch (error) {
+                console.error("Function error:", error);
+                
+                // Errores lanzados intencionadamente desde el backend (ej: no autenticado)
+                let errorMsg = "Ocurrió un error al contactar con el servidor.";
+                if (error.code === 'functions/not-found') errorMsg = "La conexión con el servidor premium no está lista.";
+                if (error.message) errorMsg = error.message;
+
+                showToast(errorMsg, "error");
+                btn.disabled = false;
+                btn.innerHTML = `<i data-lucide="key" style="width: 18px;"></i> Canjear`;
+                lucide.createIcons();
+            }
+        });
     </script>
 </body>
 </html>
