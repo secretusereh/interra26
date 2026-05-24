@@ -315,6 +315,7 @@
             color: white; padding: 1.2rem 2rem; border-radius: 18px; display: flex; align-items: center; gap: 15px;
             box-shadow: 0 20px 50px rgba(0,0,0,0.5); animation: slideIn 0.5s var(--transition) forwards; font-size: 0.95rem;
         }
+        .toast.info { border-color: var(--gold); }
 
         /* =========================================
            FOOTER
@@ -412,7 +413,7 @@
             <div id="active-premium-msg" style="display: none; text-align: center; padding: 2rem 0; color: var(--gold);">
                 <i data-lucide="crown" style="width: 48px; height: 48px; margin-bottom: 1rem;"></i>
                 <h3 style="font-size: 1.5rem; font-weight: 800; margin-bottom: 0.5rem;">¡Ya eres PLUS!</h3>
-                <p style="color: var(--text-muted); font-size: 0.95rem;">Estás disfrutando de todos los beneficios premium.</p>
+                <p id="expiration-text" style="color: var(--text-muted); font-size: 0.95rem;">Estás disfrutando de todos los beneficios premium.</p>
             </div>
 
         </section>
@@ -451,9 +452,9 @@
         function showToast(message, type = 'success') {
             const container = document.getElementById('toast-container');
             const toast = document.createElement('div');
-            toast.className = 'toast';
-            const icon = type === 'success' ? 'check-circle' : 'alert-triangle';
-            const color = type === 'success' ? 'var(--success)' : 'var(--accent)';
+            toast.className = `toast ${type}`;
+            const icon = type === 'success' ? 'check-circle' : (type === 'error' ? 'alert-triangle' : 'info');
+            const color = type === 'success' ? 'var(--success)' : (type === 'error' ? 'var(--accent)' : 'var(--gold)');
             toast.innerHTML = `<i data-lucide="${icon}" style="color: ${color}"></i> <span>${message}</span>`;
             container.appendChild(toast);
             lucide.createIcons();
@@ -463,18 +464,50 @@
             }, 5000);
         }
 
-        // ── PROTECCIÓN Y ESTADO DE SESIÓN ──
+        // ── PROTECCIÓN, ESTADO DE SESIÓN Y CADUCIDAD ──
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 currentUser = user;
                 document.getElementById('user-status').innerHTML = `<i data-lucide="user" style="width: 14px;"></i> ${user.email}`;
                 
-                // Comprobar si ya es PLUS para ocultar el cajón de códigos
                 try {
-                    const userSnap = await getDoc(doc(db, "usuarios", user.uid));
-                    if (userSnap.exists() && userSnap.data().plan === 'PLUS') {
-                        document.getElementById('redeem-container').style.display = 'none';
-                        document.getElementById('active-premium-msg').style.display = 'block';
+                    const userRef = doc(db, "usuarios", user.uid);
+                    const userSnap = await getDoc(userRef);
+                    
+                    if (userSnap.exists()) {
+                        const userData = userSnap.data();
+                        
+                        // Si el usuario tiene plan PLUS, comprobamos si ha caducado
+                        if (userData.plan === 'PLUS') {
+                            if (userData.plusExpiration) {
+                                const expDate = new Date(userData.plusExpiration);
+                                const now = new Date();
+                                
+                                // Si la fecha actual supera a la fecha de caducidad
+                                if (now > expDate) {
+                                    // REBAJAMOS LA CUENTA AUTOMÁTICAMENTE
+                                    await updateDoc(userRef, {
+                                        plan: 'FREE',
+                                        plusExpiration: null
+                                    });
+                                    showToast("Tu suscripción PLUS ha expirado. Vuelve a renovarla.", "info");
+                                    // La UI se queda como está por defecto (cajón de canjeo visible)
+                                } else {
+                                    // Si no ha caducado, mostramos que es PLUS y calculamos los días que le quedan
+                                    const diffTime = Math.abs(expDate - now);
+                                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+                                    
+                                    document.getElementById('redeem-container').style.display = 'none';
+                                    document.getElementById('active-premium-msg').style.display = 'block';
+                                    document.getElementById('expiration-text').innerText = `Estás disfrutando de todos los beneficios premium. Te quedan ${diffDays} días.`;
+                                }
+                            } else {
+                                // Caso especial: Es PLUS pero no tiene fecha de caducidad (Plan de por vida)
+                                document.getElementById('redeem-container').style.display = 'none';
+                                document.getElementById('active-premium-msg').style.display = 'block';
+                                document.getElementById('expiration-text').innerText = `Estás disfrutando de un plan PLUS vitalicio.`;
+                            }
+                        }
                     }
                 } catch(e) {
                     console.error("Error leyendo datos del usuario", e);
@@ -543,10 +576,11 @@
                 });
 
                 // Éxito en todo el proceso
-                showToast("¡Código canjeado con éxito! Bienvenido a Interra-hub PLUS.", "success");
+                showToast(`¡Código canjeado con éxito! Tienes PLUS durante ${durationDays} días.`, "success");
                 
                 // Transición UI
                 document.getElementById('redeem-container').style.display = 'none';
+                document.getElementById('expiration-text').innerText = `Estás disfrutando de todos los beneficios premium. Te quedan ${durationDays} días.`;
                 document.getElementById('active-premium-msg').style.display = 'block';
                 
                 // Pequeña espera y redirigimos al panel para que vea su nueva insignia
