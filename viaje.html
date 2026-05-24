@@ -510,6 +510,22 @@
     </main>
 
     <main id="tab-extra" class="tab-content">
+        <div class="user-section" style="margin-bottom: 2rem; display: none;" id="trip-settings-section">
+            <h3><i data-lucide="settings"></i> Configuración del Viaje</h3>
+            <p style="color: var(--text-muted); font-size: 0.9rem;">Cambia el nombre de la aventura o edita las fechas base del viaje.</p>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1.5rem;">
+                <div class="input-group" style="margin-bottom: 0;">
+                    <label>Nombre del Viaje</label>
+                    <input type="text" id="edit-trip-name" style="width: 100%; padding: 1rem; background: rgba(255,255,255,0.02); border: 1px solid var(--border-subtle); border-radius: 12px; color: white; outline: none; font-size: 1rem;">
+                </div>
+                <div class="input-group" style="margin-bottom: 0;">
+                    <label>Fechas del Viaje</label>
+                    <input type="text" id="edit-trip-dates" placeholder="Seleccionar nuevo rango..." readonly style="width: 100%; padding: 1rem; background: rgba(255,255,255,0.02); border: 1px solid var(--border-subtle); border-radius: 12px; color: white; outline: none; font-size: 1rem;">
+                </div>
+            </div>
+            <button class="btn-submit" onclick="saveTripSettings()" id="btn-save-trip-settings" style="margin-top: 1.5rem; width: auto; padding: 0.8rem 1.5rem;">Guardar Cambios</button>
+        </div>
+
         <div class="user-section">
             <h3><i data-lucide="cloud-sun"></i> Meteorología Esperada</h3>
             <p style="color: var(--text-muted); font-size: 0.9rem;">Pronóstico real para los próximos 10 días de las ciudades en las que estarás durante el viaje.</p>
@@ -816,6 +832,7 @@
         let currentTripData = null;
         let currentUserRole = null;
         let canEdit = false;
+        let settingsDatePicker;
         
         let userProfilesCache = {}; // Cache avanzado: { nombre: '...', avatarColor: '...' }
         const AVATAR_COLORS = ['#ff4d4d', '#4da6ff', '#4dff88', '#ffd700', '#ff66b2', '#9966ff', '#ff9933', '#00cccc'];
@@ -951,6 +968,31 @@
                 if (!currentTripData.eventos) currentTripData.eventos = [];
                 if (!currentTripData.gastos) currentTripData.gastos = [];
 
+                // Cargar panel de ajustes y notas globales
+                document.getElementById('trip-settings-section').style.display = canEdit ? 'block' : 'none';
+                document.getElementById('edit-trip-name').value = currentTripData.nombre || '';
+                settingsDatePicker = flatpickr("#edit-trip-dates", { 
+                    mode: "range", 
+                    dateFormat: "d/m/Y", 
+                    locale: "es",
+                    defaultDate: [currentTripData.fechaInicio, currentTripData.fechaFin]
+                });
+
+                const globalNotesInput = document.getElementById('global-notes');
+                if (globalNotesInput) {
+                    globalNotesInput.value = currentTripData.globalNotes || '';
+                    globalNotesInput.onblur = async () => {
+                        if (!canEdit) return;
+                        try {
+                            await updateDoc(tripRef, { globalNotes: globalNotesInput.value });
+                            currentTripData.globalNotes = globalNotesInput.value;
+                            showToast("Notas globales guardadas", "success");
+                        } catch (e) {
+                            console.error(e);
+                        }
+                    };
+                }
+
                 updatePickersLimits();
 
                 const uids = Object.keys(miembros);
@@ -967,6 +1009,49 @@
             } else {
                 alert("El viaje no existe.");
                 window.location.href = 'panel.html';
+            }
+        }
+
+        // ── LOGICA PARA EDITAR AJUSTES (NOMBRE Y FECHAS DEL VIAJE) ──
+        window.saveTripSettings = async function() {
+            const btn = document.getElementById('btn-save-trip-settings');
+            btn.innerText = 'Guardando...'; btn.disabled = true;
+
+            const newName = document.getElementById('edit-trip-name').value.trim();
+            const dates = settingsDatePicker.selectedDates;
+
+            if(!newName || dates.length < 2) {
+                showToast("El nombre y un rango de fechas son obligatorios", "error");
+                btn.innerText = 'Guardar Cambios'; btn.disabled = false;
+                return;
+            }
+
+            const format = (d) => d.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
+            const newStart = format(dates[0]);
+            const newEnd = format(dates[1]);
+
+            try {
+                const tripRef = doc(db, "viajes", tripId);
+                await updateDoc(tripRef, { 
+                    nombre: newName,
+                    fechaInicio: newStart,
+                    fechaFin: newEnd
+                });
+                
+                currentTripData.nombre = newName;
+                currentTripData.fechaInicio = newStart;
+                currentTripData.fechaFin = newEnd;
+                
+                renderHeader();
+                renderItinerary();
+                updatePickersLimits();
+                
+                showToast("Configuración del viaje actualizada correctamente", "success");
+            } catch(e) {
+                console.error(e);
+                showToast("Error al guardar la configuración en la base de datos", "error");
+            } finally {
+                btn.innerText = 'Guardar Cambios'; btn.disabled = false;
             }
         }
 
@@ -1095,7 +1180,9 @@
             let dayCount = 1;
 
             while (current <= end) {
-                const dateKey = current.toISOString().split('T')[0]; 
+                // BUG FIX: Creación de dateKey sólida para evitar el fallo de la Zona Horaria UTC que retrasaba un día las fechas.
+                const dateKey = `${current.getFullYear()}-${String(current.getMonth() + 1).padStart(2, '0')}-${String(current.getDate()).padStart(2, '0')}`;
+                
                 const dateStr = current.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' });
                 const eventsToday = groupedEvents[dateKey] || [];
                 
@@ -1209,6 +1296,9 @@
             });
 
             for (const ev of sortedEvents) {
+                // BUG FIX: Los planes no se renderizan en el mapa para evitar saturación y mantener coherencia geográfica
+                if (ev.type === 'plan') continue;
+
                 if (ev.lat && ev.lon) {
                     const coords = [ev.lat, ev.lon];
                     L.marker(coords).addTo(markersLayer).bindPopup(`<b>${ev.title}</b><br>${ev.dateKey}`);
@@ -1992,6 +2082,9 @@
             document.getElementById('modal-main-title').innerText = "Añadir a la ruta";
             document.getElementById('modal-date-subtitle').innerText = `Día seleccionado: ${dateStr}`;
             document.getElementById('omni-form').reset();
+
+            // BUG FIX: Limpiamos explícitamente el textarea para evitar sangrado de datos de notas pasadas
+            document.getElementById('common-notes').value = '';
             
             document.getElementById('hotel-dates-wrapper').style.display = 'block';
             document.getElementById('hotel-date-single-wrapper').style.display = 'none';
@@ -2157,9 +2250,10 @@
                     let currDate = parseDDMMYYYY(cinDateStr);
                     let endDate = parseDDMMYYYY(coutDateStr);
 
+                    // BUG FIX: Evitar offset de TimeZone usando generadores estrictos
                     let tempDate = new Date(currDate);
                     while (tempDate <= endDate) {
-                        const dKey = tempDate.toISOString().split('T')[0];
+                        const dKey = `${tempDate.getFullYear()}-${String(tempDate.getMonth() + 1).padStart(2, '0')}-${String(tempDate.getDate()).padStart(2, '0')}`;
                         let isCheckin = tempDate.getTime() === parseDDMMYYYY(cinDateStr).getTime();
                         let isCheckout = tempDate.getTime() === endDate.getTime();
                         let hTypeLabel = (!isCheckin && !isCheckout) || (isCheckin && !isCheckout) ? 'hotel-night' : (isCheckout ? 'hotel-checkout' : 'hotel-night');
@@ -2176,7 +2270,7 @@
                     }
 
                     while (currDate <= endDate) {
-                        const dKey = currDate.toISOString().split('T')[0];
+                        const dKey = `${currDate.getFullYear()}-${String(currDate.getMonth() + 1).padStart(2, '0')}-${String(currDate.getDate()).padStart(2, '0')}`;
                         let isCheckin = currDate.getTime() === parseDDMMYYYY(cinDateStr).getTime();
                         let isCheckout = currDate.getTime() === endDate.getTime();
 
