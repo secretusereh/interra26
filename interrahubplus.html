@@ -428,8 +428,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
-        import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-functions.js";
+        import { getFirestore, doc, getDoc, collection, query, where, getDocs, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDRkUJnDLzknFz3KOnPEm4UFsgf6R4z1Uk",
@@ -443,9 +442,6 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
-        
-        // Es vital especificar la región si tus functions no están en us-central1 (por defecto es us-central1)
-        const functions = getFunctions(app); 
 
         let currentUser = null;
 
@@ -489,7 +485,7 @@
             }
         });
 
-        // ── LLAMADA A LA CLOUD FUNCTION (SEGURIDAD ABSOLUTA) ──
+        // ── LÓGICA DE VALIDACIÓN Y CANJEO EN FIRESTORE CLIENT-SIDE ──
         document.getElementById('redeem-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             
@@ -504,39 +500,63 @@
             lucide.createIcons();
 
             try {
-                // Llamamos a la Cloud Function llamada 'redeemPlusCode'
-                const redeemFunction = httpsCallable(functions, 'redeemPlusCode');
-                const result = await redeemFunction({ code: codeValue });
+                // 1. Buscar el código en la colección promo_codes
+                const codesRef = collection(db, 'promo_codes');
+                const q = query(codesRef, where('code', '==', codeValue));
+                const querySnapshot = await getDocs(q);
 
-                // Si la función devuelve success
-                if (result.data.success) {
-                    showToast("¡Código canjeado con éxito! Bienvenido a Interra-hub PLUS.", "success");
-                    
-                    // Transición UI
-                    document.getElementById('redeem-container').style.display = 'none';
-                    document.getElementById('active-premium-msg').style.display = 'block';
-                    
-                    // Pequeña espera y redirigimos al panel para que vea su nueva insignia
-                    setTimeout(() => {
-                        window.location.href = 'panel.html';
-                    }, 2500);
-                } else {
-                    // El servidor nos dirá por qué falló
-                    showToast(result.data.message || "Código inválido o ya utilizado.", "error");
-                    btn.disabled = false;
-                    btn.innerHTML = `<i data-lucide="key" style="width: 18px;"></i> Canjear`;
-                    lucide.createIcons();
+                if (querySnapshot.empty) {
+                    throw new Error("Código inválido o inexistente.");
                 }
 
-            } catch (error) {
-                console.error("Function error:", error);
-                
-                // Errores lanzados intencionadamente desde el backend (ej: no autenticado)
-                let errorMsg = "Ocurrió un error al contactar con el servidor.";
-                if (error.code === 'functions/not-found') errorMsg = "La conexión con el servidor premium no está lista.";
-                if (error.message) errorMsg = error.message;
+                const codeDoc = querySnapshot.docs[0];
+                const codeData = codeDoc.data();
 
-                showToast(errorMsg, "error");
+                // 2. Verificar si ya fue usado o está inactivo
+                if (codeData.used === true) {
+                    throw new Error("Este código ya ha sido utilizado.");
+                }
+                
+                if (codeData.active === false) {
+                    throw new Error("Este código ya no se encuentra activo.");
+                }
+
+                // 3. Calcular la fecha de expiración basada en la duración del código
+                // Asumimos que la duración viene en días. Si no está definida, damos 30 días por defecto.
+                const durationDays = codeData.duration || 30; 
+                const expirationDate = new Date();
+                expirationDate.setDate(expirationDate.getDate() + durationDays);
+
+                // 4. Actualizar el perfil del usuario para otorgar ventajas PLUS
+                const userRef = doc(db, 'usuarios', currentUser.uid);
+                await updateDoc(userRef, {
+                    plan: 'PLUS',
+                    plusExpiration: expirationDate.toISOString(),
+                    premiumSince: new Date().toISOString()
+                });
+
+                // 5. Invalidar el código promocional en la base de datos
+                await updateDoc(doc(db, 'promo_codes', codeDoc.id), {
+                    used: true,
+                    usedBy: currentUser.uid,
+                    usedAt: new Date().toISOString()
+                });
+
+                // Éxito en todo el proceso
+                showToast("¡Código canjeado con éxito! Bienvenido a Interra-hub PLUS.", "success");
+                
+                // Transición UI
+                document.getElementById('redeem-container').style.display = 'none';
+                document.getElementById('active-premium-msg').style.display = 'block';
+                
+                // Pequeña espera y redirigimos al panel para que vea su nueva insignia
+                setTimeout(() => {
+                    window.location.href = 'panel.html';
+                }, 2500);
+
+            } catch (error) {
+                console.error("Error validando el código:", error);
+                showToast(error.message || "Ocurrió un error al procesar tu código.", "error");
                 btn.disabled = false;
                 btn.innerHTML = `<i data-lucide="key" style="width: 18px;"></i> Canjear`;
                 lucide.createIcons();
