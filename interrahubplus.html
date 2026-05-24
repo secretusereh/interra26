@@ -69,7 +69,8 @@
         }
         .btn-back:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.15); transform: translateX(-3px); }
 
-        .user-status { font-size: 0.8rem; color: var(--text-muted); display: flex; align-items: center; gap: 8px;}
+        .user-status { font-size: 0.8rem; color: var(--text-muted); display: flex; align-items: center; gap: 8px; transition: var(--transition);}
+        .user-status:hover { color: var(--primary); }
 
         /* =========================================
            PLATAFORMA DE COMPRA / CHECKOUT INTERFACES
@@ -466,9 +467,14 @@
 
         // ── PROTECCIÓN, ESTADO DE SESIÓN Y CADUCIDAD ──
         onAuthStateChanged(auth, async (user) => {
+            const statusEl = document.getElementById('user-status');
+            
             if (user) {
                 currentUser = user;
-                document.getElementById('user-status').innerHTML = `<i data-lucide="user" style="width: 14px;"></i> ${user.email}`;
+                statusEl.innerHTML = `<i data-lucide="user" style="width: 14px;"></i> ${user.email}`;
+                statusEl.style.cursor = 'default';
+                statusEl.style.color = 'var(--text-muted)';
+                statusEl.onclick = null;
                 
                 try {
                     const userRef = doc(db, "usuarios", user.uid);
@@ -491,7 +497,6 @@
                                         plusExpiration: null
                                     });
                                     showToast("Tu suscripción PLUS ha expirado. Vuelve a renovarla.", "info");
-                                    // La UI se queda como está por defecto (cajón de canjeo visible)
                                 } else {
                                     // Si no ha caducado, mostramos que es PLUS y calculamos los días que le quedan
                                     const diffTime = Math.abs(expDate - now);
@@ -512,15 +517,32 @@
                 } catch(e) {
                     console.error("Error leyendo datos del usuario", e);
                 }
-                lucide.createIcons();
             } else {
-                window.location.href = 'registro.html';
+                currentUser = null;
+                // Ajustamos la UI para visitantes no registrados
+                statusEl.innerHTML = `<i data-lucide="log-in" style="width: 14px;"></i> Iniciar sesión`;
+                statusEl.style.cursor = 'pointer';
+                statusEl.style.color = 'var(--gold)';
+                statusEl.onclick = () => window.location.href = 'registro.html';
+                
+                document.getElementById('redeem-container').style.display = 'block';
+                document.getElementById('active-premium-msg').style.display = 'none';
             }
+            lucide.createIcons();
         });
 
         // ── LÓGICA DE VALIDACIÓN Y CANJEO EN FIRESTORE CLIENT-SIDE ──
         document.getElementById('redeem-form').addEventListener('submit', async (e) => {
             e.preventDefault();
+
+            // Validación crucial: Solo usuarios logueados pueden canjear
+            if (!currentUser) {
+                showToast("Debes iniciar sesión o registrarte para canjear un código.", "error");
+                setTimeout(() => {
+                    window.location.href = 'registro.html';
+                }, 2500);
+                return;
+            }
             
             const btn = document.getElementById('btn-redeem');
             const input = document.getElementById('promo-code');
@@ -555,7 +577,6 @@
                 }
 
                 // 3. Calcular la fecha de expiración basada en la duración del código
-                // Asumimos que la duración viene en días. Si no está definida, damos 30 días por defecto.
                 const durationDays = codeData.duration || 30; 
                 const expirationDate = new Date();
                 expirationDate.setDate(expirationDate.getDate() + durationDays);
@@ -583,7 +604,7 @@
                 document.getElementById('expiration-text').innerText = `Estás disfrutando de todos los beneficios premium. Te quedan ${durationDays} días.`;
                 document.getElementById('active-premium-msg').style.display = 'block';
                 
-                // Pequeña espera y redirigimos al panel para que vea su nueva insignia
+                // Pequeña espera y redirigimos al panel
                 setTimeout(() => {
                     window.location.href = 'panel.html';
                 }, 2500);
