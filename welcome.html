@@ -15,469 +15,387 @@
     <meta property="og:url" content="https://interra-hub.vercel.app/welcome.html">
     <meta property="og:site_name" content="Interra-hub">
 
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="¡BETA de Interra-hub Abierta!">
+    <meta name="twitter:description" content="Consigue uno de los 10 códigos limitados para Interra-hub PLUS.">
+    <meta name="twitter:image" content="https://interra-hub.vercel.app/banner.PNG">
+
     <link rel="icon" type="image/png" href="interrahublogo.PNG">
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800;900&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
 
     <style>
         :root {
-            /* Paleta Cinematográfica Premium */
-            --bg-matte: #070708;
-            --surface-glass: rgba(18, 18, 20, 0.65);
-            --accent-red: #f41111;
-            --accent-red-glow: rgba(244, 17, 17, 0.3);
+            --bg-matte: #050505;
+            --surface-glass: rgba(25, 25, 25, 0.4);
+            --border-glass: rgba(255, 255, 255, 0.08);
             --text-main: #ffffff;
-            --text-muted: #8e8e93;
-            --border-subtle: rgba(255, 255, 255, 0.08);
-            --transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            --text-muted: #999999;
+            --gold-accent: #ffd700;
+            --gold-glow: rgba(255, 215, 0, 0.15);
+            --transition-smooth: 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        * {
-            margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
         
         html { scroll-behavior: smooth; }
 
         body {
-            background-color: var(--bg-matte);
-            color: var(--text-main);
-            min-height: 100vh;
-            overflow-x: hidden;
-            position: relative;
+            background-color: var(--bg-matte); color: var(--text-main);
+            min-height: 100vh; overflow-x: hidden; position: relative;
         }
 
-        /* 1. Fondo: Grid sutil y viñeteado oscuro */
+        /* Ambientación de fondo sutil */
         body::before {
-            content: ''; position: fixed; inset: 0;
-            background-image: 
-                linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
-            background-size: 40px 40px;
-            z-index: -3; pointer-events: none;
-        }
-        body::after {
-            content: ''; position: fixed; inset: 0;
-            background: radial-gradient(circle at center, transparent 30%, rgba(0,0,0,0.8) 100%);
+            content: ''; position: fixed; top: 0; left: 50%; transform: translateX(-50%);
+            width: 100vw; height: 100vh;
+            background: radial-gradient(circle at top, var(--gold-glow) 0%, transparent 60%);
             z-index: -2; pointer-events: none;
         }
 
-        ::selection { background: var(--accent-red); color: #fff; }
+        ::selection { background: var(--gold-accent); color: #000; }
 
-        /* Lienzo de polvo cinematográfico */
-        #party-canvas {
+        /* Lienzo de polvo dorado interactivo */
+        #particle-canvas {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -1; pointer-events: none; opacity: 0.4;
+            z-index: -1; pointer-events: none; opacity: 0.6;
         }
 
-        .wrapper { position: relative; z-index: 10; }
+        .wrapper { position: relative; z-index: 10; display: flex; flex-direction: column; align-items: center; }
 
         /* =========================================
-           TOP NAV & LOGO ACRÍLICO IZQUIERDO
+           NAVEGACIÓN Y LOGO
            ========================================= */
         nav {
-            width: 100%; padding: 2.5rem 5%;
-            display: flex; align-items: center; justify-content: space-between;
+            width: 100%; max-width: 1200px; padding: 2rem 5%;
+            display: flex; justify-content: space-between; align-items: center;
         }
         
-        .nav-logo-group {
-            display: flex; align-items: center; gap: 1rem; text-decoration: none;
+        .nav-logo {
+            display: flex; align-items: center; gap: 12px; text-decoration: none; color: #fff;
+            font-weight: 800; font-size: 1.3rem; letter-spacing: -0.5px;
+            transition: var(--transition-smooth);
         }
+        .nav-logo:hover { opacity: 0.8; }
         
-        .nav-icon {
-            width: 45px; height: 45px;
-            background: linear-gradient(135deg, #222 0%, #050505 100%);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 12px;
-            display: flex; justify-content: center; align-items: center;
-            font-weight: 900; font-size: 1.2rem; color: #fff; letter-spacing: -1px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.5), inset 0 1px 3px rgba(255,255,255,0.15);
+        /* Uso del logo de imagen requerido */
+        .img-logo {
+            width: 45px; height: 45px; object-fit: contain;
+            filter: drop-shadow(0 4px 10px rgba(0,0,0,0.5));
+            border-radius: 10px;
         }
-        .text-red { color: var(--accent-red); }
 
-        .nav-wordmark {
-            font-size: 1.3rem; font-weight: 600; color: #fff; letter-spacing: -0.5px;
+        .btn-demo {
+            background: rgba(255,255,255,0.05); border: 1px solid var(--border-glass);
+            color: #fff; padding: 0.6rem 1.2rem; border-radius: 30px; font-size: 0.85rem; font-weight: 600;
+            text-decoration: none; backdrop-filter: blur(10px); transition: 0.3s;
         }
+        .btn-demo:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2); }
 
         /* =========================================
-           HERO SECTION (55% / 45% LAYOUT)
+           HERO SECTION
            ========================================= */
         .hero {
-            min-height: 80vh; max-width: 1300px; margin: 0 auto;
-            padding: 2rem 5% 6rem; display: grid;
-            grid-template-columns: 55% 45%; align-items: center; gap: 4rem;
+            min-height: 85vh; width: 100%; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; text-align: center;
+            padding: 2rem 5%; position: relative; max-width: 900px; margin: 0 auto;
         }
 
-        /* LADO IZQUIERDO: TEXTO Y CAJA PROMOCIONAL */
-        .hero-left {
-            display: flex; flex-direction: column; align-items: flex-start; text-align: left;
-        }
-        
-        .hero-line-1 {
-            font-size: 1rem; font-weight: 700; color: var(--accent-red);
-            text-transform: uppercase; letter-spacing: 2px; margin-bottom: 0px;
-        }
-        .hero-line-2 {
-            font-size: clamp(5rem, 8vw, 8.5rem); font-weight: 900; color: #fff;
-            letter-spacing: -3px; line-height: 1; margin-bottom: -5px;
-            text-shadow: 0 4px 0 #333, 0 10px 20px rgba(0,0,0,0.8);
-        }
-        .hero-line-3 {
-            font-size: clamp(1.8rem, 3vw, 2.5rem); font-weight: 700; color: #fff; margin-bottom: 1.5rem;
-        }
-        
-        .hero-desc {
-            font-size: 1.15rem; color: var(--text-muted); line-height: 1.6;
-            max-width: 480px; margin-bottom: 3rem; font-weight: 400;
+        .badge-beta {
+            background: rgba(255, 215, 0, 0.05); border: 1px solid rgba(255, 215, 0, 0.2);
+            color: var(--gold-accent); padding: 0.5rem 1.2rem; border-radius: 40px;
+            font-size: 0.75rem; font-weight: 800; letter-spacing: 1px; text-transform: uppercase;
+            margin-bottom: 2rem; display: inline-flex; align-items: center; gap: 8px;
         }
 
-        /* Caja Promocional Premium */
-        .promo-card {
-            background: var(--surface-glass);
-            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--border-subtle); border-radius: 24px;
-            padding: 1.5rem 2rem; display: flex; align-items: center; gap: 1.5rem;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.6); max-width: 550px; width: 100%;
+        .hero h1 {
+            font-size: clamp(2.5rem, 6vw, 4.5rem); font-weight: 900; line-height: 1.1;
+            letter-spacing: -2px; margin-bottom: 1.5rem; text-shadow: 0 10px 30px rgba(0,0,0,0.8);
         }
-        
-        .promo-icon {
-            width: 55px; height: 55px; border-radius: 14px;
-            background: transparent; border: 1.5px solid var(--text-muted);
-            color: var(--text-main); display: flex; justify-content: center; align-items: center; flex-shrink: 0;
+        .hero p {
+            font-size: clamp(1.1rem, 2vw, 1.3rem); color: rgba(255,255,255,0.8);
+            line-height: 1.6; font-weight: 300; margin-bottom: 3rem; max-width: 700px;
         }
-        .promo-icon svg { stroke: var(--text-main); }
-        .promo-icon .accent-svg { stroke: var(--accent-red); }
+        .hero p strong { color: #fff; font-weight: 600; }
 
-        .promo-content { flex-grow: 1; display: flex; align-items: center; justify-content: space-between; gap: 1rem;}
-        
-        .promo-text { font-size: 1.05rem; color: var(--text-main); font-weight: 600; line-height: 1.3;}
-        .promo-text span { font-size: 1.3rem; font-weight: 900; color: var(--accent-red); display: block;}
-
-        .btn-gratis {
-            background: var(--accent-red); color: #fff; font-weight: 800; font-size: 1.1rem;
-            border: none; padding: 0.9rem 1.8rem; border-radius: 14px; cursor: pointer;
-            box-shadow: 0 4px 15px var(--accent-red-glow), inset 0 2px 4px rgba(255,255,255,0.3);
-            transition: var(--transition); letter-spacing: 1px; flex-shrink: 0;
+        /* Botón Maestro */
+        .btn-main-action {
+            background: linear-gradient(135deg, #fff 0%, #e0e0e0 100%);
+            color: #000; border: none; padding: 1.2rem 2.8rem; border-radius: 40px;
+            font-size: 1.1rem; font-weight: 800; cursor: pointer; transition: var(--transition-smooth);
+            display: inline-flex; align-items: center; gap: 10px;
+            box-shadow: 0 10px 30px rgba(255,255,255,0.15);
         }
-        .btn-gratis:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(244, 17, 17, 0.5), inset 0 2px 4px rgba(255,255,255,0.3); }
-
-        /* LADO DERECHO: LOGO 3D Y ATMÓSFERA */
-        .hero-right {
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            position: relative; perspective: 1000px;
-        }
-
-        .ambient-glow {
-            position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%);
-            width: 350px; height: 350px; border-radius: 50%;
-            background: radial-gradient(circle, rgba(244, 17, 17, 0.12) 0%, transparent 65%);
-            z-index: 0; pointer-events: none;
-        }
-
-        .logo-3d-box {
-            width: 300px; height: 300px;
-            background: linear-gradient(135deg, #2b2b2b 0%, #050505 100%);
-            border-radius: 50px;
-            transform: rotateX(15deg) rotateY(-18deg); /* Perspectiva isométrica */
-            transform-style: preserve-3d;
-            display: flex; justify-content: center; align-items: center; z-index: 1;
-            /* Reflexiones, Rim Light Roja y Sombras */
-            box-shadow: 
-                -12px 5px 30px rgba(244, 17, 17, 0.15), /* Rim light roja izquierda */
-                inset 2px 3px 5px rgba(255,255,255,0.2), /* Borde superior cristalino */
-                inset -2px -5px 10px rgba(0,0,0,0.8), /* Sombra interior inferior */
-                20px 30px 50px rgba(0,0,0,0.9); /* Sombra proyectada */
-            border: 1px solid rgba(255,255,255,0.05);
-            transition: transform 0.5s ease-out;
-        }
-        .logo-3d-box:hover { transform: rotateX(10deg) rotateY(-10deg); }
-
-        .logo-3d-text {
-            font-size: 8rem; font-weight: 900; color: #fff; letter-spacing: -5px;
-            transform: translateZ(50px); /* Extrusión hacia adelante */
-            text-shadow: 
-                -1px 1px 0 #bbb, -2px 2px 0 #999, -3px 3px 0 #777, -4px 4px 0 #555, /* Volumen */
-                -5px 5px 15px rgba(0,0,0,0.8); /* Sombra de las letras */
-        }
-        .logo-3d-dot {
-            color: var(--accent-red);
-            text-shadow: 
-                0 0 20px var(--accent-red),
-                -1px 1px 0 #900, -2px 2px 0 #600,
-                -5px 5px 15px rgba(0,0,0,0.8);
-        }
-
-        /* Etiqueta / Submarca */
-        .logo-pill {
-            margin-top: 2.5rem; background: #0a0a0c; border: 1px solid var(--border-subtle);
-            border-radius: 40px; padding: 0.7rem 1.8rem; font-size: 1rem; font-weight: 600;
-            color: var(--text-main); box-shadow: 0 10px 20px rgba(0,0,0,0.6); z-index: 2;
+        .btn-main-action:hover {
+            transform: translateY(-3px) scale(1.02); box-shadow: 0 15px 40px rgba(255,255,255,0.25);
         }
 
         /* =========================================
-           SECCIONES DE CONTENIDO MANTENIDAS (RESTYLED)
+           INDICADOR DE SCROLL CONTINUO
            ========================================= */
-        .section-explain, .section-tutorial, .section-viral {
-            padding: 6rem 5%; max-width: 1100px; margin: 0 auto;
+        .scroll-down-wrapper {
+            position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%);
+            display: flex; flex-direction: column; align-items: center; gap: 8px;
+            text-decoration: none; color: var(--text-muted); transition: 0.3s;
         }
+        .scroll-down-wrapper:hover { color: #fff; }
+        .scroll-text { font-size: 0.75rem; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; }
+        .bounce-arrow { animation: bounce 2s infinite; color: var(--gold-accent); }
+
+        /* =========================================
+           ¿DE QUÉ VA TODO ESTO? (EXPLICACIÓN FÁCIL)
+           ========================================= */
+        .section-core { padding: 8rem 5%; width: 100%; max-width: 1000px; }
         
-        .section-header { text-align: center; margin-bottom: 4rem; }
-        .section-header h2 { font-size: 2.5rem; font-weight: 800; letter-spacing: -1px; margin-bottom: 1rem; }
-        .section-header p { color: var(--text-muted); font-size: 1.1rem; max-width: 600px; margin: 0 auto; line-height: 1.6; }
+        .section-title { text-align: center; margin-bottom: 4rem; }
+        .section-title h2 { font-size: 2.5rem; font-weight: 800; letter-spacing: -1px; margin-bottom: 1rem; }
+        .section-title p { color: var(--text-muted); font-size: 1.1rem; max-width: 600px; margin: 0 auto; line-height: 1.6;}
 
-        .explain-flow { display: flex; flex-direction: column; gap: 2.5rem; }
+        .steps-container { display: flex; flex-direction: column; gap: 1.5rem; }
 
-        .flow-card {
-            background: var(--surface-glass); border: 1px solid var(--border-subtle);
-            border-radius: 20px; padding: 2.5rem; display: flex; gap: 2rem; align-items: center;
-            backdrop-filter: blur(10px); transition: var(--transition);
+        .step-card {
+            background: var(--surface-glass); border: 1px solid var(--border-glass);
+            border-radius: 24px; padding: 2.5rem; display: flex; align-items: center; gap: 2rem;
+            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            transition: var(--transition-smooth);
         }
-        .flow-card:hover { border-color: rgba(255,255,255,0.15); transform: translateY(-3px); }
+        .step-card:hover { border-color: rgba(255,255,255,0.2); transform: translateX(5px); background: rgba(35, 35, 35, 0.4); }
 
-        .flow-num {
-            font-size: 3.5rem; font-weight: 900; color: transparent; -webkit-text-stroke: 1px rgba(255,255,255,0.2);
-            flex-shrink: 0;
+        .step-icon {
+            width: 60px; height: 60px; border-radius: 16px; background: rgba(255,255,255,0.05);
+            display: flex; justify-content: center; align-items: center; flex-shrink: 0;
+            color: var(--gold-accent); border: 1px solid var(--border-glass);
         }
-        
-        .flow-content h3 { font-size: 1.4rem; font-weight: 800; margin-bottom: 0.5rem; }
-        .flow-content p { color: var(--text-muted); font-size: 1.05rem; line-height: 1.6; font-weight: 300; }
-        .flow-content strong { color: var(--text-main); font-weight: 600; }
 
+        .step-content h3 { font-size: 1.3rem; font-weight: 800; margin-bottom: 0.5rem; color: #fff;}
+        .step-content p { font-size: 1rem; color: var(--text-muted); line-height: 1.6; font-weight: 400;}
+        .step-content strong { color: #fff; }
+
+        /* =========================================
+           CONSEJOS EXTRA (APRENDIZAJE Y BETA)
+           ========================================= */
         .tuto-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 4rem;
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem; margin-top: 5rem;
         }
         .tuto-box {
-            background: rgba(10,10,12,0.8); border: 1px solid var(--border-subtle);
-            border-radius: 20px; padding: 2.5rem; transition: var(--transition);
+            background: rgba(10,10,10,0.8); border: 1px solid var(--border-glass);
+            border-radius: 20px; padding: 2rem; text-align: left; transition: 0.3s;
         }
-        .tuto-box:hover { border-color: rgba(255,255,255,0.15); }
-        .tuto-icon { color: var(--text-main); margin-bottom: 1.5rem; }
-        .tuto-box h4 { font-size: 1.2rem; font-weight: 800; margin-bottom: 0.8rem; }
-        .tuto-box p { color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; }
-        .tuto-box a { color: var(--accent-red); font-weight: 600; text-decoration: none; }
-
-        /* Viralidad */
-        .section-viral { text-align: center; max-width: 800px; margin-top: 2rem; border-top: 1px solid var(--border-subtle); padding-top: 6rem;}
-        .section-viral h2 { font-size: 2.2rem; font-weight: 800; margin-bottom: 1rem; }
-        .section-viral p { color: var(--text-muted); font-size: 1.1rem; margin-bottom: 3rem; line-height: 1.6; }
-        
-        .share-flex { display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap; }
-        .btn-wa {
-            background: #25D366; color: white; padding: 1.1rem 2.2rem; border-radius: 16px;
-            font-weight: 800; font-size: 1.05rem; text-decoration: none; display: inline-flex; align-items: center; gap: 10px;
-            transition: 0.3s;
-        }
-        .btn-wa:hover { filter: brightness(1.1); transform: scale(1.02); }
-        .btn-secondary {
-            background: rgba(255,255,255,0.03); color: var(--text-main); border: 1px solid var(--border-subtle);
-            padding: 1.1rem 2.2rem; border-radius: 16px; font-weight: 600; font-size: 1.05rem;
-            cursor: pointer; transition: 0.3s; display: inline-flex; align-items: center; gap: 10px;
-        }
-        .btn-secondary:hover { background: rgba(255,255,255,0.08); }
+        .tuto-box:hover { border-color: rgba(255,215,0,0.3); }
+        .tuto-box h4 { font-size: 1.15rem; font-weight: 800; margin-bottom: 0.8rem; display: flex; align-items: center; gap: 10px;}
+        .tuto-box p { font-size: 0.95rem; color: var(--text-muted); line-height: 1.6; }
+        .tuto-box a { color: var(--gold-accent); text-decoration: none; font-weight: 600; }
+        .tuto-box a:hover { text-decoration: underline; }
 
         /* =========================================
-           SISTEMA MODAL (UI PREMIUM)
+           VIRALIDAD / COMPARTIR
+           ========================================= */
+        .section-viral {
+            padding: 6rem 5% 8rem; text-align: center; width: 100%; max-width: 800px;
+            border-top: 1px solid var(--border-glass); margin-top: 4rem;
+        }
+        .section-viral h2 { font-size: 2.2rem; font-weight: 800; margin-bottom: 1rem; letter-spacing: -1px; }
+        .section-viral p { color: var(--text-muted); font-size: 1.1rem; margin-bottom: 3rem; line-height: 1.6; }
+
+        .share-actions { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; }
+        
+        .btn-wa {
+            background: #25D366; color: white; padding: 1rem 2rem; border-radius: 40px;
+            font-weight: 800; font-size: 1rem; text-decoration: none; display: inline-flex; align-items: center; gap: 10px;
+            transition: 0.3s; box-shadow: 0 10px 20px rgba(37, 211, 102, 0.2);
+        }
+        .btn-wa:hover { transform: scale(1.05); box-shadow: 0 15px 30px rgba(37, 211, 102, 0.4); }
+
+        /* =========================================
+           MODAL DE CÓDIGOS (PEQUEÑO Y ELEGANTE)
            ========================================= */
         .modal-overlay {
-            position: fixed; inset: 0; background: rgba(0, 0, 0, 0.9);
-            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            position: fixed; inset: 0; background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
             z-index: 99999; display: flex; align-items: center; justify-content: center;
-            padding: 1.5rem; opacity: 0; pointer-events: none; transition: opacity 0.4s ease;
+            padding: 1rem; opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
         }
         .modal-overlay.open { opacity: 1; pointer-events: all; }
+
+        .modal-content {
+            background: #0a0a0c; border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 24px; width: 100%; max-width: 420px; padding: 2.5rem 2rem;
+            transform: scale(0.95); transition: transform 0.3s ease;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.8); text-align: center; position: relative;
+        }
+        .modal-overlay.open .modal-content { transform: scale(1); }
+
+        .btn-close {
+            position: absolute; top: 15px; right: 15px; background: transparent; border: none;
+            color: var(--text-muted); cursor: pointer; padding: 5px; transition: 0.2s;
+        }
+        .btn-close:hover { color: #fff; transform: rotate(90deg); }
+
+        .modal-content h3 { font-size: 1.4rem; font-weight: 800; margin-bottom: 1rem; color: #fff; }
+        .instructions-box {
+            background: rgba(255,255,255,0.03); border-radius: 12px; padding: 1rem;
+            margin-bottom: 1.5rem; text-align: left; border: 1px solid var(--border-glass);
+        }
+        .instructions-box p { font-size: 0.85rem; color: #ccc; line-height: 1.5; margin-bottom: 0.5rem; }
+        .instructions-box p:last-child { margin-bottom: 0; }
+        .instructions-box strong { color: var(--gold-accent); }
+
+        .codes-list {
+            display: flex; flex-direction: column; gap: 0.5rem;
+            max-height: 200px; overflow-y: auto; padding-right: 5px;
+        }
+        .codes-list::-webkit-scrollbar { width: 4px; }
+        .codes-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 10px; }
+
+        .code-item {
+            background: #000; border: 1px solid var(--border-glass); border-radius: 10px;
+            padding: 0.6rem 1rem; display: flex; justify-content: space-between; align-items: center;
+        }
+        .code-val { font-family: monospace; font-size: 1rem; font-weight: 800; color: #fff; letter-spacing: 1px; }
         
-        .modal-card {
-            background: #101012; border: 1px solid rgba(255,255,255,0.1); border-radius: 24px;
-            width: 100%; max-width: 550px; padding: 3rem 2.5rem; transform: scale(0.95);
-            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            position: relative; box-shadow: 0 40px 80px rgba(0,0,0,0.8);
+        .btn-copy {
+            background: var(--gold-accent); color: #000; border: none; padding: 0.3rem 0.8rem;
+            border-radius: 6px; font-size: 0.75rem; font-weight: 800; cursor: pointer; transition: 0.2s;
         }
-        .modal-overlay.open .modal-card { transform: scale(1); }
-        
-        .modal-close-btn {
-            position: absolute; top: 20px; right: 20px; background: transparent; border: none;
-            color: var(--text-muted); cursor: pointer; transition: 0.3s; padding: 5px;
-        }
-        .modal-close-btn:hover { color: var(--text-main); }
+        .btn-copy:hover { filter: brightness(1.1); }
 
-        .modal-card h3 { font-size: 1.8rem; font-weight: 800; margin-bottom: 0.5rem; }
-        .modal-card p.tuto-step { font-size: 0.95rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 2rem; }
-        .modal-card p.tuto-step strong { color: var(--text-main); font-weight: 600;}
-
-        .compact-codes-list {
-            display: flex; flex-direction: column; gap: 0.8rem;
-            max-height: 280px; overflow-y: auto; padding-right: 5px;
-        }
-        .compact-codes-list::-webkit-scrollbar { width: 5px; }
-        .compact-codes-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 10px; }
-
-        .compact-row {
-            background: #000; border: 1px solid var(--border-subtle);
-            border-radius: 12px; padding: 0.8rem 1.2rem; display: flex;
-            justify-content: space-between; align-items: center;
-        }
-        .compact-val { font-family: monospace; font-size: 1.1rem; font-weight: 800; letter-spacing: 1px; color: #fff;}
-        
-        .btn-mini-copy {
-            background: var(--text-main); color: #000; border: none;
-            padding: 0.4rem 1rem; border-radius: 8px; font-size: 0.8rem; font-weight: 700;
-            cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 6px;
-        }
-        .btn-mini-copy:hover { opacity: 0.8; }
-
-        /* Toasts System */
-        #toast-container { position: fixed; bottom: 30px; right: 30px; z-index: 210000; display: flex; flex-direction: column; gap: 15px; }
+        /* Toasts */
+        #toast-container { position: fixed; bottom: 30px; right: 30px; z-index: 200000; display: flex; flex-direction: column; gap: 10px; }
         .toast {
-            background: #1a1a1c; border: 1px solid rgba(255,255,255,0.1);
-            color: white; padding: 1.2rem 2rem; border-radius: 14px; display: flex; align-items: center; gap: 15px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.6); animation: slideIn 0.5s var(--transition) forwards; font-size: 0.95rem; font-weight: 600;
+            background: #111; border: 1px solid rgba(255,255,255,0.1); color: white;
+            padding: 1rem 1.5rem; border-radius: 12px; display: flex; align-items: center; gap: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5); animation: slideIn 0.5s var(--transition-smooth) forwards; font-size: 0.9rem; font-weight: 600;
         }
 
         /* Animaciones */
         .reveal { opacity: 0; transform: translateY(30px); transition: 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
         .reveal.active { opacity: 1; transform: translateY(0); }
+
+        @keyframes bounce { 0%, 20%, 50%, 80%, 100% { transform: translateY(0); } 40% { transform: translateY(-8px); } 60% { transform: translateY(-4px); } }
         @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
 
-        /* Responsive */
-        @media (max-width: 1000px) {
-            .hero { grid-template-columns: 1fr; text-align: center; gap: 3rem; padding-top: 4rem; }
-            .hero-left { align-items: center; text-align: center; }
-            .promo-card { flex-direction: column; text-align: center; padding: 2rem; }
-            .promo-content { flex-direction: column; }
-            .flow-card { flex-direction: column; text-align: center; }
+        @media (max-width: 768px) {
+            .step-card { flex-direction: column; text-align: center; gap: 1rem; padding: 2rem 1.5rem; }
+            .hero { padding-top: 4rem; }
+            #toast-container { bottom: 20px; left: 20px; right: 20px; }
         }
     </style>
 </head>
 <body>
 
-    <canvas id="party-canvas"></canvas>
+    <canvas id="particle-canvas"></canvas>
 
     <div class="wrapper">
         
         <nav>
-            <a href="index.html" class="nav-logo-group">
-                <div class="nav-icon">lh<span class="text-red">.</span></div>
-                <div class="nav-wordmark">interra-hub</div>
+            <a href="index.html" class="nav-logo">
+                <img src="interrahublogo.PNG" alt="Interra-hub Logo" class="img-logo" onerror="this.style.display='none'">
+                interra-hub
             </a>
+            <a href="https://interra-hub.vercel.app/index.html" target="_blank" class="btn-demo">Ver Viaje Ejemplo</a>
         </nav>
 
         <header class="hero">
+            <div class="badge-beta reveal active">
+                <i data-lucide="sparkles" style="width: 14px;"></i> Acceso Anticipado
+            </div>
             
-            <div class="hero-left reveal active">
-                <h3 class="hero-line-1">¡Por la bienvenida a la</h3>
-                <h1 class="hero-line-2">BETA</h1>
-                <h2 class="hero-line-3">de <span class="text-red">interra-hub!</span></h2>
-                
-                <p class="hero-desc">
-                    Eres de los primeros en pisar nuestra plataforma. Queremos agradecer tu apoyo inicial ofreciéndote acceso privilegiado a nuestra élite viajera.<br><br>
-                    <span class="text-red" style="font-weight: 600;">Tu apoyo impulsa el futuro.</span>
-                </p>
-                
-                <div class="promo-card">
-                    <div class="promo-icon">
-                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <rect x="3" y="8" width="18" height="4" rx="1" ry="1"></rect>
-                            <path d="M12 8v13"></path><path d="M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7"></path>
-                            <path class="accent-svg" d="M7.5 8a2.5 2.5 0 0 1 0-5A4.8 8 0 0 1 12 8a4.8 8 0 0 1 4.5-5 2.5 2.5 0 0 1 0 5"></path>
-                        </svg>
-                    </div>
-                    <div class="promo-content">
-                        <div class="promo-text">
-                            Disfruta de tu<br><span>3 MESES PLUS</span>
-                        </div>
-                        <button class="btn-gratis" id="openCodesBtn">¡GRATIS!</button>
-                    </div>
-                </div>
+            <h1 class="reveal active" style="transition-delay: 0.1s;">La app definitiva para organizar tu Interrail.</h1>
+            
+            <p class="reveal active" style="transition-delay: 0.2s;">
+                Gracias por ser de los primeros en probar la Beta. Tu apoyo nos ayuda a mejorar. Para agradecértelo, consigue <strong>3 meses de Interra-hub PLUS gratis</strong> y planifica sin límites.
+            </p>
+            
+            <div class="reveal active" style="transition-delay: 0.3s;">
+                <button class="btn-main-action" id="btnOpenModal">
+                    <i data-lucide="key" style="width: 20px;"></i> SOLICITAR CÓDIGO PLUS
+                </button>
             </div>
 
-            <div class="hero-right reveal active" style="transition-delay: 0.2s;">
-                <div class="ambient-glow"></div>
-                
-                <div class="logo-3d-box">
-                    <div class="logo-3d-text">lh<span class="logo-3d-dot">.</span></div>
-                </div>
-                
-                <div class="logo-pill">
-                    interra-hub <span class="text-red">PLUS</span>
-                </div>
-            </div>
-
+            <a href="#info" class="scroll-down-wrapper reveal active" style="transition-delay: 0.6s;">
+                <span class="scroll-text">MÁS INFORMACIÓN</span>
+                <i data-lucide="chevrons-down" class="bounce-arrow" style="width: 24px; height: 24px;"></i>
+            </a>
         </header>
 
-        <section class="section-explain" id="como-funciona">
-            <div class="section-header reveal">
+        <section class="section-core" id="info">
+            <div class="section-title reveal">
                 <h2>¿De qué va todo esto?</h2>
-                <p>Es el planificador definitivo para viajes en grupo. Diseña tu ruta colaborativa, cuadra gastos automáticamente y olvídate de los excels.</p>
+                <p>La base es simple: tener tu viaje bajo control y compartirlo con los tuyos para evitar el caos de WhatsApp y los Excels.</p>
             </div>
 
-            <div class="explain-flow">
-                <div class="flow-card reveal">
-                    <div class="flow-num">01</div>
-                    <div class="flow-content">
-                        <h3>Crea tu viaje base</h3>
-                        <p>Añade vuelos, trenes y hoteles. Todo se sincroniza en tiempo real para todos tus amigos.</p>
+            <div class="steps-container">
+                <div class="step-card reveal">
+                    <div class="step-icon"><i data-lucide="map" style="width: 32px; height: 32px;"></i></div>
+                    <div class="step-content">
+                        <h3>Crea tu itinerario base</h3>
+                        <p>Diseña el viaje añadiendo trenes, ubicaciones y hoteles. Toda tu ruta queda estructurada día a día en un solo lugar.</p>
                     </div>
                 </div>
 
-                <div class="flow-card reveal">
-                    <div class="flow-num">02</div>
-                    <div class="flow-content">
-                        <h3>Comparte como Visor</h3>
-                        <p>Invita a familiares o amigos como visores. Así <strong>podrán ver dónde y cuándo vais a estar</strong> en cada sitio.</p>
+                <div class="step-card reveal">
+                    <div class="step-icon"><i data-lucide="users" style="width: 32px; height: 32px;"></i></div>
+                    <div class="step-content">
+                        <h3>Comparte como "Visor"</h3>
+                        <p>Invita a familiares o amigos compartiendo el enlace. Ellos entrarán como visores y <strong>podrán ver dónde y cuándo vais a estar en cada sitio</strong> para poder cuadrar planes fácilmente.</p>
                     </div>
                 </div>
 
-                <div class="flow-card reveal">
-                    <div class="flow-num">03</div>
-                    <div class="flow-content">
-                        <h3>¿Sin cuenta? Exporta en PDF</h3>
-                        <p>Si alguien no quiere registrarse, sin problema. <strong>Comparte el itinerario completo mediante un PDF</strong> impecable.</p>
+                <div class="step-card reveal">
+                    <div class="step-icon"><i data-lucide="file-down" style="width: 32px; height: 32px;"></i></div>
+                    <div class="step-content">
+                        <h3>¿No quieren registrarse? Pdf al canto.</h3>
+                        <p>Si hay gente que no quiere crearse una cuenta, no pasa absolutamente nada. <strong>Genera un PDF impecable</strong> con todo el resumen del viaje y compártelo.</p>
                     </div>
                 </div>
             </div>
 
             <div class="tuto-grid">
                 <div class="tuto-box reveal">
-                    <div class="tuto-icon"><i data-lucide="mouse-pointer-click" style="width: 28px;"></i></div>
-                    <h4>Aprende a usarlo</h4>
-                    <p>Visita <a href="https://interra-hub.vercel.app/index.html" target="_blank">interra-hub.vercel.app</a> para ver un viaje de ejemplo y trastear sin miedo.</p>
+                    <h4><i data-lucide="rocket" style="color: var(--gold-accent); width: 20px;"></i> Se vienen cositas...</h4>
+                    <p>Aparte de estas funciones, iremos añadiendo herramientas extras muy guapas estas semanas. ¡No le pierdas la pista a la app!</p>
                 </div>
                 <div class="tuto-box reveal" style="transition-delay: 0.1s;">
-                    <div class="tuto-icon"><i data-lucide="rocket" style="width: 28px;"></i></div>
-                    <h4>Vienen cositas</h4>
-                    <p>Aunque sea fase Beta, pronto añadiremos funciones muy guapas. ¡Tu opinión al final del index nos ayuda a mejorar la app!</p>
+                    <h4><i data-lucide="message-square" style="color: #fff; width: 20px;"></i> Tu opinión importa</h4>
+                    <p>Al estar en fase Beta es vital que nos ayudes. Abajo del todo en el inicio de la app tienes un formulario para dar tu opinión.</p>
+                </div>
+                <div class="tuto-box reveal" style="transition-delay: 0.2s;">
+                    <h4><i data-lucide="mouse-pointer-click" style="color: #fff; width: 20px;"></i> ¿Quieres aprender?</h4>
+                    <p>Entra en <a href="https://interra-hub.vercel.app/index.html" target="_blank">interra-hub.vercel.app</a> y trastea con el viaje de ejemplo que hemos preparado.</p>
                 </div>
             </div>
         </section>
 
         <section class="section-viral reveal">
-            <h2>Haz spam masivo a tu equipo</h2>
-            <p>Si conoces gente haciendo Interrail, pásales esto. Ayúdanos a crecer en la Beta y viajad organizados.</p>
+            <h2>Haz que corra la voz</h2>
+            <p>Es importante hacer spam. Compártelo con tus amigos y con cualquier persona que conozcas que vaya a hacer un Interrail o un viaje este verano.</p>
             
-            <div class="share-flex">
-                <a href="#" id="btn-share-wa" class="btn-wa">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <div class="share-actions">
+                <a href="#" id="btnWaShare" class="btn-wa">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/>
                     </svg> Compartir por WhatsApp
                 </a>
-                <button id="btn-share-link" class="btn-secondary">
-                    <i data-lucide="link" style="width: 18px;"></i> Copiar enlace promocional
-                </button>
             </div>
         </section>
 
-        <div class="modal-overlay" id="codeModalOverlay">
-            <div class="modal-card">
-                <button class="modal-close-btn" id="closeCodesBtn"><i data-lucide="x" style="width: 20px;"></i></button>
+        <div class="modal-overlay" id="codesModal">
+            <div class="modal-content">
+                <button class="btn-close" id="btnCloseModal"><i data-lucide="x"></i></button>
                 
                 <h3>Códigos Limitados</h3>
-                <p class="tuto-step">
-                    Copia un código de abajo. Una vez iniciada sesión en la app, ve al Panel de Viajes, haz clic en tu estado actual <strong>"ESTÁNDAR"</strong> dentro de tu perfil y canjéalo.
-                </p>
                 
-                <div class="compact-codes-list" id="modal-codes-container">
+                <div class="instructions-box">
+                    <p>1. <strong>Copia un código</strong> de la lista inferior.</p>
+                    <p>2. Inicia sesión en la plataforma.</p>
+                    <p>3. En el panel de viajes, pulsa arriba a la derecha en tu perfil actual <strong>"ESTÁNDAR"</strong> y canjéalo ahí.</p>
+                </div>
+                
+                <div class="codes-list" id="codeListContainer">
                     </div>
             </div>
         </div>
@@ -488,108 +406,103 @@
     <script>
         lucide.createIcons();
 
-        const codesList = [
+        // 1. INYECTAR CÓDIGOS EN EL MODAL PEQUEÑO
+        const promoCodes = [
             "698-BOW-235", "144-QJN-637", "836-QEQ-119", "841-GZR-588", 
             "344-UGX-722", "344-VNX-494", "286-VQA-776", "127-UZN-754", 
             "927-MDF-490", "773-FEK-048"
         ];
 
-        const modalCodesContainer = document.getElementById('modal-codes-container');
-        codesList.forEach(code => {
-            const row = document.createElement('div');
-            row.className = 'compact-row';
-            row.innerHTML = `
-                <span class="compact-val">${code}</span>
-                <button class="btn-mini-copy" onclick="copyCodeValue('${code}')">
-                    <i data-lucide="copy" style="width: 14px;"></i> Copiar
-                </button>
+        const containerCodes = document.getElementById('codeListContainer');
+        promoCodes.forEach(code => {
+            const div = document.createElement('div');
+            div.className = 'code-item';
+            div.innerHTML = `
+                <span class="code-val">${code}</span>
+                <button class="btn-copy" onclick="copyToClipboard('${code}')">Copiar</button>
             `;
-            modalCodesContainer.appendChild(row);
+            containerCodes.appendChild(div);
         });
-        lucide.createIcons();
 
-        // Controladores del Modal
-        const modalOverlay = document.getElementById('codeModalOverlay');
-        document.getElementById('openCodesBtn').addEventListener('click', () => modalOverlay.classList.add('open'));
-        document.getElementById('closeCodesBtn').addEventListener('click', () => modalOverlay.classList.remove('open'));
-        modalOverlay.addEventListener('click', (e) => { if (e.target === modalOverlay) modalOverlay.classList.remove('open'); });
+        // 2. LÓGICA DEL MODAL
+        const modal = document.getElementById('codesModal');
+        document.getElementById('btnOpenModal').addEventListener('click', () => modal.classList.add('open'));
+        document.getElementById('btnCloseModal').addEventListener('click', () => modal.classList.remove('open'));
+        modal.addEventListener('click', (e) => { if(e.target === modal) modal.classList.remove('open'); });
 
-        // Sistema Toasts
-        function triggerScreenToast(msg) {
-            const container = document.getElementById('toast-container');
-            const toast = document.createElement('div');
-            toast.className = 'toast';
-            toast.innerHTML = `<i data-lucide="check-circle" style="color: var(--accent-red); width: 18px;"></i> <span>${msg}</span>`;
-            container.appendChild(toast);
+        // 3. TOASTS Y COPIA AL PORTAPAPELES
+        function showToast(message) {
+            const tc = document.getElementById('toast-container');
+            const t = document.createElement('div');
+            t.className = 'toast';
+            t.innerHTML = `<i data-lucide="check-circle" style="color: var(--gold-accent); width: 18px;"></i> <span>${message}</span>`;
+            tc.appendChild(t);
             lucide.createIcons();
             setTimeout(() => {
-                toast.style.animation = 'slideIn 0.5s reverse forwards';
-                setTimeout(() => toast.remove(), 500);
-            }, 3500);
+                t.style.animation = 'slideIn 0.5s reverse forwards';
+                setTimeout(() => t.remove(), 500);
+            }, 3000);
         }
 
-        window.copyCodeValue = function(codeStr) {
-            navigator.clipboard.writeText(codeStr).then(() => triggerScreenToast(`Código ${codeStr} copiado. ¡Canjéalo en tu perfil!`));
+        window.copyToClipboard = function(code) {
+            navigator.clipboard.writeText(code).then(() => {
+                showToast(`¡Código copiado! Ve a tu perfil en la app.`);
+            });
         };
 
-        // Viralidad WhatsApp / Link
-        const promoUrl = "https://interra-hub.vercel.app/welcome.html";
-        const shareText = `🌍 ¡Oye! En Interra-hub acaban de lanzar la BETA y dan 3 meses de PLUS gratis para organizar viajes en grupo. Pilla uno de los códigos: ${promoUrl}`;
-        
-        document.getElementById('btn-share-wa').href = `https://api.whatsapp.com/send?text=${encodeURIComponent(shareText)}`;
-        document.getElementById('btn-share-link').addEventListener('click', () => {
-            navigator.clipboard.writeText(shareText).then(() => triggerScreenToast("Enlace promocional copiado al portapapeles."));
-        });
+        // 4. COMPARTIR EN WHATSAPP
+        const viralMessage = `🌍 ¡Locura! Interra-hub ha abierto su BETA para planificar viajes en grupo sin excels. Regalan 3 meses de plan PLUS, pilla tu código gratis aquí: https://interra-hub.vercel.app/welcome.html`;
+        document.getElementById('btnWaShare').href = `https://api.whatsapp.com/send?text=${encodeURIComponent(viralMessage)}`;
 
-        // Intersection Observer (Animaciones de scroll)
+        // 5. ANIMACIÓN SCROLL (INTERSECTION OBSERVER)
+        const observerOptions = { threshold: 0.15, rootMargin: "0px 0px -50px 0px" };
         const observer = new IntersectionObserver((entries, obs) => {
             entries.forEach(entry => {
-                if (!entry.isIntersecting) return;
-                entry.target.classList.add('active');
-                obs.unobserve(entry.target);
+                if(entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    obs.unobserve(entry.target);
+                }
             });
-        }, { threshold: 0.1, rootMargin: "0px 0px -40px 0px" });
+        }, observerOptions);
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-        // Partículas Cinematográficas Sutiles (Baja saturación y ruido)
-        const canvas = document.getElementById('party-canvas');
+        // 6. MOTOR DE POLVO CINEMÁTICO (CANVAS)
+        const canvas = document.getElementById('particle-canvas');
         const ctx = canvas.getContext('2d');
-        function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
-        window.addEventListener('resize', resize);
-        resize();
+        function initCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        window.addEventListener('resize', initCanvas);
+        initCanvas();
 
-        class CinematicDust {
-            constructor() { this.reset(); this.y = Math.random() * canvas.height; }
-            reset() {
+        class DustParticle {
+            constructor() { this.spawn(true); }
+            spawn(randomY = false) {
                 this.x = Math.random() * canvas.width;
-                this.y = -10;
-                this.size = Math.random() * 1.5 + 0.5; // Muy pequeñas
-                this.speedY = Math.random() * 0.5 + 0.1; // Muy lentas
-                // Solo tonos blancos/grises para no generar "ruido"
-                this.color = `rgba(255, 255, 255, ${Math.random() * 0.3 + 0.1})`; 
+                this.y = randomY ? Math.random() * canvas.height : -10;
+                this.size = Math.random() * 1.5 + 0.5;
+                this.speed = Math.random() * 0.4 + 0.1;
+                this.opacity = Math.random() * 0.4 + 0.1;
             }
             update() {
-                this.y += this.speedY;
-                if (this.y > canvas.height) this.reset();
+                this.y += this.speed;
+                if(this.y > canvas.height) this.spawn(false);
             }
             draw() {
-                ctx.fillStyle = this.color;
+                ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`;
                 ctx.beginPath();
                 ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
                 ctx.fill();
             }
         }
-        
-        let dustArray = [];
-        // Menos cantidad para mantener la elegancia
-        for (let i = 0; i < 40; i++) dustArray.push(new CinematicDust());
-        
-        function animateDust() {
+
+        let particles = [];
+        for(let i=0; i<60; i++) particles.push(new DustParticle());
+
+        function loopCanvas() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            dustArray.forEach(p => { p.update(); p.draw(); });
-            requestAnimationFrame(animateDust);
+            particles.forEach(p => { p.update(); p.draw(); });
+            requestAnimationFrame(loopCanvas);
         }
-        animateDust();
+        loopCanvas();
     </script>
 </body>
 </html>
