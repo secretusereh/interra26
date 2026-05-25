@@ -8,18 +8,6 @@
     
     <meta name="description" content="Eres de los primeros en llegar. Celebra el lanzamiento de la BETA de Interra-hub y consigue 3 meses de PLUS gratis.">
     
-    <meta property="og:type" content="website">
-    <meta property="og:title" content="🎁 ¡BETA de Interra-hub Abierta!">
-    <meta property="og:description" content="Únete antes que nadie al planificador definitivo de viajes. Pilla uno de los códigos exclusivos para conseguir Interra-hub PLUS gratis.">
-    <meta property="og:image" content="https://tudominio.com/banner.PNG"> 
-    <meta property="og:url" content="https://tudominio.com/welcome.html">
-    <meta property="og:site_name" content="Interra-hub">
-
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="¡BETA de Interra-hub Abierta!">
-    <meta name="twitter:description" content="Consigue uno de los 10 códigos limitados para Interra-hub PLUS.">
-    <meta name="twitter:image" content="https://tudominio.com/banner.PNG">
-
     <link rel="icon" type="image/png" href="interrahublogo.PNG">
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -29,16 +17,17 @@
 
     <style>
         :root {
-            --bg-color: #030303;
-            --surface: rgba(20, 20, 20, 0.5);
-            --surface-solid: #0f0f0f;
+            /* Paleta de colores solicitada: Negro, Gris Oscuro, Blanco y Rojo */
+            --bg-color: #050505;
+            --surface: #141414;
+            --surface-light: #222222;
             --primary: #ffffff;
-            --text-muted: #888888;
-            --gold: #ffd700;
-            --gold-gradient: linear-gradient(135deg, #ffd700 0%, #ffaa00 100%);
-            --beta-gradient: linear-gradient(135deg, #a855f7 0%, #ec4899 100%);
-            --border-subtle: rgba(255, 255, 255, 0.08);
-            --border-gold: rgba(255, 215, 0, 0.3);
+            --text-muted: #a0a0a0;
+            --accent: #e60000;
+            --accent-hover: #ff1a1a;
+            --accent-gradient: linear-gradient(135deg, #e60000 0%, #8b0000 100%);
+            --border-subtle: rgba(255, 255, 255, 0.1);
+            --border-accent: rgba(230, 0, 0, 0.3);
             --transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
@@ -56,206 +45,193 @@
         body {
             background-color: var(--bg-color);
             color: var(--primary);
-            min-height: 100vh;
             overflow-x: hidden;
             position: relative;
-            background-image: radial-gradient(circle at 50% 0%, rgba(168, 85, 247, 0.15), transparent 60%);
         }
 
-        ::selection { background: #a855f7; color: var(--primary); }
+        ::selection { background: var(--accent); color: var(--primary); }
 
-        /* Lienzo para partículas (Fondo animado JS) */
+        /* Lienzo para partículas estilo chispas rojas/blancas */
         #party-canvas {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             z-index: 1; pointer-events: none;
+            opacity: 0.6;
         }
 
-        /* Contenedor Principal Z-Index */
         .wrapper {
             position: relative; z-index: 10;
         }
 
-        /* Nav Minimalista */
         nav {
             width: 100%; padding: 1.5rem 5%;
             display: flex; justify-content: center; align-items: center;
-            position: absolute; top: 0; left: 0; z-index: 100;
+            position: fixed; top: 0; left: 0; z-index: 100;
+            background: linear-gradient(to bottom, rgba(5,5,5,0.9), transparent);
         }
         .logo {
             font-weight: 800; font-size: 1.5rem; letter-spacing: -0.5px;
             display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--primary);
         }
-        .logo .dot { color: #a855f7; }
+        .logo .dot { color: var(--accent); }
+
+        /* =========================================
+           SECCIONES GENERALES (Pantalla Completa)
+           ========================================= */
+        section {
+            min-height: 100vh;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            text-align: center; padding: 6rem 5%;
+            position: relative;
+        }
+
+        .section-content {
+            max-width: 1000px; margin: 0 auto;
+        }
+
+        /* Indicador de Scroll (Cajitas curvadas) */
+        .scroll-indicator {
+            position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%);
+            display: flex; flex-direction: column; align-items: center; gap: 10px;
+            text-decoration: none; color: var(--text-muted); font-size: 0.8rem; font-weight: 600;
+            letter-spacing: 1px; transition: var(--transition);
+            background: var(--surface); padding: 12px 24px; border-radius: 30px;
+            border: 1px solid var(--border-subtle);
+            cursor: pointer; z-index: 50;
+        }
+        .scroll-indicator:hover {
+            color: var(--primary); border-color: var(--accent);
+            background: rgba(230, 0, 0, 0.1); transform: translateX(-50%) translateY(-5px);
+        }
+        .scroll-indicator i { animation: bounce 2s infinite; color: var(--accent); }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(5px); }
+            60% { transform: translateY(3px); }
+        }
 
         /* =========================================
            HERO SECTION
            ========================================= */
-        .hero {
-            min-height: 90vh;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            text-align: center; padding: 8rem 5% 4rem;
-        }
-        
-        .badge-party {
-            background: rgba(168, 85, 247, 0.1);
-            border: 1px solid rgba(168, 85, 247, 0.3);
-            color: #d8b4fe; border-radius: 30px;
-            padding: 0.5rem 1.2rem; font-size: 0.8rem; font-weight: 800; letter-spacing: 1.5px;
-            text-transform: uppercase; margin-bottom: 2rem;
-            animation: float 4s ease-in-out infinite;
+        .badge-beta {
+            background: rgba(230, 0, 0, 0.1); border: 1px solid var(--border-accent);
+            color: #ff4d4d; border-radius: 30px; padding: 0.5rem 1.2rem; font-size: 0.8rem; 
+            font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 2rem;
             backdrop-filter: blur(10px); display: inline-flex; align-items: center; gap: 8px;
         }
 
-        .hero h1 {
+        h1 {
             font-size: clamp(2.5rem, 6vw, 5rem); font-weight: 800;
             letter-spacing: -2px; line-height: 1.1; margin-bottom: 1.5rem;
-            max-width: 900px; text-shadow: 0 10px 30px rgba(168, 85, 247, 0.3);
         }
-        .hero h1 span {
-            background: var(--beta-gradient);
+        h1 span {
+            background: var(--accent-gradient);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            background-clip: text;
         }
-
-        .hero p {
-            color: rgba(255, 255, 255, 0.8); font-size: clamp(1.1rem, 2vw, 1.3rem);
-            line-height: 1.6; max-width: 700px; margin-bottom: 3rem; font-weight: 300;
-        }
-
-        /* =========================================
-           SECCIÓN: CÓDIGOS PROMOCIONALES
-           ========================================= */
-        .section-codes {
-            padding: 6rem 5%; max-width: 1200px; margin: 0 auto; text-align: center;
-        }
-        .section-header h2 {
-            font-size: 2.8rem; font-weight: 800; margin-bottom: 1rem; letter-spacing: -1px;
-        }
-        .section-header h2 span { color: var(--gold); }
-        .section-header p {
-            color: var(--text-muted); font-size: 1.1rem; max-width: 700px; margin: 0 auto 4rem; line-height: 1.6;
-        }
-
-        .codes-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .code-card {
-            background: rgba(255, 215, 0, 0.03);
-            border: 1px solid var(--border-gold);
-            border-radius: 20px; padding: 2rem 1.5rem;
-            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-            transition: var(--transition);
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            position: relative; overflow: hidden;
-        }
-        .code-card::before {
-            content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,215,0,0.1), transparent);
-            transform: skewX(-20deg); transition: 0.5s;
-        }
-        .code-card:hover {
-            transform: translateY(-5px); border-color: var(--gold);
-            box-shadow: 0 15px 30px rgba(255, 215, 0, 0.1);
-        }
-        .code-card:hover::before { left: 150%; }
-
-        .code-value {
-            font-family: monospace; font-size: 1.6rem; font-weight: 800;
-            color: var(--primary); letter-spacing: 2px; margin-bottom: 1.5rem;
-        }
-
-        .btn-copy {
-            background: var(--gold-gradient); color: #000; border: none;
-            padding: 0.7rem 1.5rem; border-radius: 30px; font-weight: 800; font-size: 0.9rem;
-            cursor: pointer; transition: 0.3s; display: inline-flex; align-items: center; gap: 8px;
-        }
-        .btn-copy:hover { transform: scale(1.05); box-shadow: 0 0 20px rgba(255,215,0,0.4); }
-
-        .scarcity-alert {
-            margin-top: 4rem; display: inline-flex; align-items: center; gap: 10px;
-            background: rgba(236, 72, 153, 0.1); border: 1px solid rgba(236, 72, 153, 0.3);
-            padding: 1rem 2rem; border-radius: 100px; color: #fbcfe8; font-weight: 600; font-size: 0.95rem;
+        p.subtitle {
+            color: var(--text-muted); font-size: clamp(1.1rem, 2vw, 1.3rem);
+            line-height: 1.6; margin-bottom: 3rem; font-weight: 300;
         }
 
         /* =========================================
-           SECCIÓN: FUTURO Y APP INFO
+           SECCIÓN: QUÉ ES INTERRA-HUB
            ========================================= */
-        .section-info {
-            padding: 8rem 5%; background: var(--surface-solid);
-            border-top: 1px solid var(--border-subtle); border-bottom: 1px solid var(--border-subtle);
-        }
-        .info-container { max-width: 1000px; margin: 0 auto; text-align: center; }
+        #info { background-color: var(--surface); border-top: 1px solid var(--border-subtle); }
         
         .bento-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem; margin-top: 4rem; text-align: left;
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem; margin-top: 3rem; text-align: left;
         }
         .bento-box {
             background: var(--bg-color); border: 1px solid var(--border-subtle);
-            border-radius: 24px; padding: 3rem 2rem;
-            transition: var(--transition);
+            border-radius: 24px; padding: 2.5rem 2rem; transition: var(--transition);
         }
-        .bento-box:hover { border-color: rgba(168, 85, 247, 0.5); transform: translateY(-5px); }
+        .bento-box:hover { border-color: var(--accent); transform: translateY(-5px); box-shadow: 0 10px 30px rgba(230,0,0,0.1); }
         .bento-icon {
-            width: 50px; height: 50px; border-radius: 16px; background: rgba(255,255,255,0.05);
-            display: flex; justify-content: center; align-items: center; margin-bottom: 1.5rem; color: #d8b4fe;
+            width: 50px; height: 50px; border-radius: 16px; background: rgba(230,0,0,0.1);
+            display: flex; justify-content: center; align-items: center; margin-bottom: 1.5rem; color: var(--accent);
         }
-        .bento-box h3 { font-size: 1.4rem; font-weight: 800; margin-bottom: 1rem; }
+        .bento-box h3 { font-size: 1.3rem; font-weight: 800; margin-bottom: 1rem; color: var(--primary); }
         .bento-box p { color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; font-weight: 300; }
 
         /* =========================================
-           SECCIÓN: COMPARTIR (VIRALIDAD)
+           SECCIÓN: GUÍA Y VIAJE SIMULADO
            ========================================= */
-        .section-share {
-            padding: 8rem 5% 6rem; text-align: center; max-width: 800px; margin: 0 auto;
+        .guide-box {
+            background: var(--accent-gradient); border-radius: 30px; padding: 4rem 3rem;
+            margin-top: 3rem; box-shadow: 0 20px 50px rgba(230,0,0,0.2);
         }
-        .section-share h2 { font-size: 2.5rem; font-weight: 800; margin-bottom: 1rem; letter-spacing: -1px; }
-        .section-share p { color: var(--text-muted); font-size: 1.1rem; margin-bottom: 3rem; line-height: 1.6; }
-
-        .share-actions {
-            display: flex; gap: 1.5rem; flex-wrap: wrap; justify-content: center;
+        .guide-box h2 { font-size: 2.5rem; color: white; margin-bottom: 1.5rem; }
+        .guide-box p { color: rgba(255,255,255,0.9); font-size: 1.2rem; margin-bottom: 2.5rem; }
+        
+        .btn-white {
+            background: white; color: var(--accent); border: none; text-decoration: none;
+            padding: 1rem 2.5rem; border-radius: 40px; font-weight: 800; font-size: 1.1rem;
+            cursor: pointer; transition: 0.3s; display: inline-flex; align-items: center; gap: 10px;
         }
+        .btn-white:hover { transform: scale(1.05); box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
 
-        .btn-whatsapp {
-            background: #25D366; color: white; border: none;
-            padding: 1.2rem 2.5rem; border-radius: 40px; font-weight: 800; font-size: 1.1rem;
-            cursor: pointer; transition: var(--transition); text-decoration: none;
-            display: inline-flex; align-items: center; gap: 12px;
-            box-shadow: 0 10px 30px rgba(37, 211, 102, 0.2);
+        /* =========================================
+           SECCIÓN: COMPARTIR
+           ========================================= */
+        #share { background-color: var(--surface); }
+        .share-actions { display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap; margin-top: 3rem; }
+        
+        .btn-wa {
+            background: #25D366; color: white; text-decoration: none; border: none;
+            padding: 1rem 2rem; border-radius: 40px; font-weight: 800; font-size: 1rem;
+            display: inline-flex; align-items: center; gap: 10px; transition: 0.3s;
         }
-        .btn-whatsapp:hover { transform: scale(1.03); box-shadow: 0 15px 40px rgba(37, 211, 102, 0.4); }
+        .btn-wa:hover { transform: scale(1.05); box-shadow: 0 10px 30px rgba(37, 211, 102, 0.3); }
 
-        .btn-link {
-            background: rgba(255,255,255,0.05); color: var(--primary); border: 1px solid var(--border-subtle);
-            padding: 1.2rem 2.5rem; border-radius: 40px; font-weight: 600; font-size: 1.1rem;
-            cursor: pointer; transition: var(--transition); display: inline-flex; align-items: center; gap: 12px;
+        .btn-native {
+            background: var(--bg-color); color: var(--primary); border: 1px solid var(--border-subtle);
+            padding: 1rem 2rem; border-radius: 40px; font-weight: 800; font-size: 1rem;
+            display: inline-flex; align-items: center; gap: 10px; transition: 0.3s; cursor: pointer;
         }
-        .btn-link:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.3); }
+        .btn-native:hover { background: var(--surface-light); border-color: var(--text-muted); }
 
-        /* Toasts System */
-        #toast-container { position: fixed; bottom: 40px; right: 40px; z-index: 20000; display: flex; flex-direction: column; gap: 15px; }
-        .toast {
-            background: rgba(15, 15, 15, 0.95); backdrop-filter: blur(10px); border: 1px solid var(--border-gold);
-            color: white; padding: 1.2rem 2rem; border-radius: 18px; display: flex; align-items: center; gap: 15px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5); animation: slideIn 0.5s var(--transition) forwards; font-size: 0.95rem; font-weight: 600;
+        /* =========================================
+           SECCIÓN: CÓDIGOS PLUS
+           ========================================= */
+        .codes-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem; margin-top: 3rem; width: 100%;
         }
+        .code-card {
+            background: var(--surface-light); border: 1px solid var(--border-subtle);
+            border-radius: 20px; padding: 1.5rem; text-align: center;
+            transition: var(--transition);
+        }
+        .code-card:hover { border-color: var(--accent); transform: translateY(-3px); }
+        .code-value {
+            font-family: monospace; font-size: 1.3rem; font-weight: 800;
+            color: var(--primary); letter-spacing: 1px; margin-bottom: 1rem;
+        }
+        .btn-copy {
+            background: transparent; color: var(--text-muted); border: 1px solid var(--border-subtle);
+            padding: 0.5rem 1rem; border-radius: 20px; font-weight: 600; font-size: 0.8rem;
+            cursor: pointer; transition: 0.3s; display: inline-flex; align-items: center; gap: 6px; width: 100%; justify-content: center;
+        }
+        .btn-copy:hover { background: var(--accent); color: white; border-color: var(--accent); }
 
-        /* Utilidades de Animación por Scroll (Intersection Observer) */
+        /* Utilidades y Animaciones */
         .reveal { opacity: 0; transform: translateY(40px); transition: 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
         .reveal.active { opacity: 1; transform: translateY(0); }
 
-        /* Animaciones Keyframes */
-        @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-10px); } 100% { transform: translateY(0px); } }
+        #toast-container { position: fixed; bottom: 40px; right: 40px; z-index: 20000; display: flex; flex-direction: column; gap: 15px; }
+        .toast {
+            background: var(--surface-light); border: 1px solid var(--border-accent);
+            color: white; padding: 1.2rem 2rem; border-radius: 15px; display: flex; align-items: center; gap: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5); font-weight: 600;
+            animation: slideIn 0.5s forwards;
+        }
         @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
 
         @media (max-width: 768px) {
-            .codes-grid { grid-template-columns: 1fr; }
             .share-actions { flex-direction: column; }
-            .btn-whatsapp, .btn-link { width: 100%; justify-content: center; }
+            .btn-wa, .btn-native { width: 100%; justify-content: center; }
             #toast-container { bottom: 20px; right: 20px; left: 20px; }
         }
     </style>
@@ -269,72 +245,90 @@
             <a href="index.html" class="logo">Interra-hub<span class="dot">.</span></a>
         </nav>
 
-        <header class="hero">
-            <div class="badge-party">
-                <i data-lucide="party-popper" style="width: 16px;"></i> Lanzamiento Exclusivo
-            </div>
-            <h1 class="reveal active">Bienvenido a la BETA de <span>Interra-hub</span></h1>
-            <p class="reveal active" style="transition-delay: 0.1s;">
-                Eres de los primeros en pisar nuestra plataforma. Queremos agradecer tu apoyo inicial ofreciéndote acceso privilegiado a nuestra élite viajera. ¿Listo para planificar sin caos?
-            </p>
-        </header>
-
-        <section class="section-codes">
-            <div class="section-header reveal">
-                <h2>Tu recompensa: <span>3 Meses PLUS Gratis</span></h2>
-                <p>Hemos generado 10 códigos únicos de un solo uso para desbloquear Interra-hub PLUS de forma vitalicia. El que avisa no es traidor: <strong>cuando se usen, se acabó.</strong> ¡Sé rápido!</p>
-            </div>
-
-            <div class="codes-grid" id="codes-container">
+        <section id="hero">
+            <div class="section-content">
+                <div class="badge-beta reveal active">
+                    <i data-lucide="zap" style="width: 16px;"></i> Lanzamiento Exclusivo
                 </div>
-
-            <div class="scarcity-alert reveal">
-                <i data-lucide="alert-circle" style="width: 18px;"></i>
-                Sólo aplicable a cuentas registradas durante la Fase Beta.
+                <h1 class="reveal active">Bienvenido a la BETA de <span>Interra-hub</span></h1>
+                <p class="subtitle reveal active" style="transition-delay: 0.1s; max-width: 700px; margin-left: auto; margin-right: auto;">
+                    Eres de los primeros en pisar nuestra plataforma. Queremos agradecer tu apoyo inicial ofreciéndote acceso privilegiado a nuestra élite viajera. ¿Listo para planificar sin caos?
+                </p>
             </div>
+            <a href="#info" class="scroll-indicator reveal active" style="transition-delay: 0.3s;">
+                MÁS INFORMACIÓN <i data-lucide="chevrons-down"></i>
+            </a>
         </section>
 
-        <section class="section-info">
-            <div class="info-container">
-                <h2 style="font-size: 2.5rem; font-weight: 800; margin-bottom: 1rem;" class="reveal">¿Qué es Interra-hub?</h2>
-                <p style="color: var(--text-muted); font-size: 1.1rem; line-height: 1.6;" class="reveal">
-                    Recomendamos encarecidamente que pruebes la app para tu próximo viaje. Es el planificador definitivo para viajes en grupo: diseña tu ruta colaborativa, cuadra gastos automáticamente y olvídate de los excels infinitos.
-                </p>
+        <section id="info">
+            <div class="section-content reveal">
+                <h2>¿Qué es <span>Interra-hub</span>?</h2>
+                <p class="subtitle" style="margin-top: 1rem;">Nuestra plataforma está pensada para que todo el grupo se haga una cuenta y colabore en directo en el viaje de su vida.</p>
 
                 <div class="bento-grid">
-                    <div class="bento-box reveal">
-                        <div class="bento-icon"><i data-lucide="map"></i></div>
-                        <h3>Rutas Inteligentes</h3>
-                        <p>Añade vuelos, trenes y hoteles. Sincronización en tiempo real para todos tus amigos.</p>
+                    <div class="bento-box">
+                        <div class="bento-icon"><i data-lucide="route"></i></div>
+                        <h3>Organización de Interrailes</h3>
+                        <p>Añade vuelos, trenes y hoteles. Todo se sincroniza en tiempo real para todos tus amigos. Olvídate de los documentos compartidos caóticos.</p>
                     </div>
-                    <div class="bento-box reveal" style="transition-delay: 0.1s;">
-                        <div class="bento-icon" style="color: var(--gold);"><i data-lucide="calculator"></i></div>
+                    <div class="bento-box">
+                        <div class="bento-icon"><i data-lucide="banknote"></i></div>
                         <h3>Motor Financiero</h3>
-                        <p>Introduce tickets y cenas. Nuestro algoritmo calcula quién debe qué al céntimo.</p>
+                        <p>El fin de las deudas sin pagar. Introduce los tickets y cenas del viaje, y nuestro algoritmo calculará automáticamente quién le debe dinero a quién para saldar cuentas al instante.</p>
                     </div>
-                    <div class="bento-box reveal" style="transition-delay: 0.2s;">
-                        <div class="bento-icon" style="color: #4da6ff;"><i data-lucide="rocket"></i></div>
-                        <h3>Se vienen cositas...</h3>
-                        <p>Estas próximas semanas iremos actualizando cosas <strong>muy guapas</strong>. No pierdas de vista la app porque el roadmap de 2027 es una locura.</p>
+                    <div class="bento-box">
+                        <div class="bento-icon"><i data-lucide="sparkles"></i></div>
+                        <h3>Futuro y Feedback</h3>
+                        <p>En futuras actualizaciones se irán metiendo muchas más herramientas. ¡Incluso podrás pedirnos funcionalidades que creas que son necesarias y las programaremos!</p>
                     </div>
                 </div>
             </div>
+            <a href="#guide" class="scroll-indicator reveal">
+                MÁS INFORMACIÓN <i data-lucide="chevrons-down"></i>
+            </a>
         </section>
 
-        <section class="section-share reveal">
-            <h2>Que no viajen en el pasado</h2>
-            <p>Tus amigos también necesitan organizarse. Invítalos a la BETA antes de que se acaben los códigos y probad la plataforma juntos. ¡Facilítales la vida!</p>
-            
-            <div class="share-actions">
-                <a href="#" id="btn-share-wa" class="btn-whatsapp">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/>
-                    </svg>
-                    Reenviar por WhatsApp
-                </a>
-                <button id="btn-share-link" class="btn-link">
-                    <i data-lucide="link"></i> Copiar enlace
-                </button>
+        <section id="guide">
+            <div class="section-content reveal" style="width: 100%;">
+                <div class="guide-box">
+                    <h2>Descubre la Magia de Verdad</h2>
+                    <p>Leer características está bien, pero lo más divertido e interesante de Interra-hub no es eso.<br>Entra en la <strong>Guía Interra-hub</strong>, donde con un viaje simulado te explicamos de forma interactiva cómo funciona la aplicación por dentro.</p>
+                    <a href="https://interra-hub.vercel.app/index.html" target="_blank" class="btn-white">
+                        <i data-lucide="play-circle"></i> Iniciar Viaje Simulado
+                    </a>
+                </div>
+            </div>
+            <a href="#share" class="scroll-indicator reveal">
+                MÁS INFORMACIÓN <i data-lucide="chevrons-down"></i>
+            </a>
+        </section>
+
+        <section id="share">
+            <div class="section-content reveal">
+                <h2>Invita a tus amigos</h2>
+                <p class="subtitle" style="margin-top: 1rem;">No dejes que se queden en el pasado. Compartid la BETA y aprovechad para organizar el mejor viaje de vuestra vida juntos.</p>
+                
+                <div class="share-actions">
+                    <a href="#" id="btn-share-wa" class="btn-wa">
+                        <i data-lucide="message-circle"></i> Enviar por WhatsApp
+                    </a>
+                    <button id="btn-share-native" class="btn-native">
+                        <i data-lucide="share-2"></i> Compartir App
+                    </button>
+                </div>
+            </div>
+            <a href="#codes" class="scroll-indicator reveal">
+                RECOMPENSAS BЕТА <i data-lucide="chevrons-down"></i>
+            </a>
+        </section>
+
+        <section id="codes">
+            <div class="section-content reveal" style="width: 100%;">
+                <h2>Solicitar <span>Código PLUS</span></h2>
+                <p class="subtitle" style="margin-top: 1rem;">Tu premio por ser de los primeros. Copia uno de los códigos para obtener 3 meses gratis. Los más rápidos serán los beneficiados.</p>
+
+                <div class="codes-grid" id="codes-container">
+                    </div>
             </div>
         </section>
 
@@ -342,10 +336,9 @@
     </div>
 
     <script>
-        // 1. Inicializar iconos
         lucide.createIcons();
 
-        // 2. Renderizar los 10 códigos de forma dinámica
+        // Generar códigos
         const codes = [
             "698-BOW-235", "144-QJN-637", "836-QEQ-119", "841-GZR-588", 
             "344-UGX-722", "344-VNX-494", "286-VQA-776", "127-UZN-754", 
@@ -353,27 +346,25 @@
         ];
         
         const codesContainer = document.getElementById('codes-container');
-        codes.forEach((code, index) => {
+        codes.forEach((code) => {
             const card = document.createElement('div');
-            card.className = 'code-card reveal';
-            card.style.transitionDelay = `${index * 0.05}s`; // Efecto cascada
+            card.className = 'code-card';
             card.innerHTML = `
                 <div class="code-value">${code}</div>
                 <button class="btn-copy" onclick="copyCode('${code}')">
-                    <i data-lucide="copy" style="width: 16px;"></i> Copiar Código
+                    <i data-lucide="copy"></i> Copiar
                 </button>
             `;
             codesContainer.appendChild(card);
         });
-        // Reinicializar iconos para los botones nuevos
         lucide.createIcons();
 
-        // 3. Sistema de Toasts (Notificaciones elegantes)
+        // Toasts
         function showToast(message) {
             const container = document.getElementById('toast-container');
             const toast = document.createElement('div');
             toast.className = 'toast';
-            toast.innerHTML = `<i data-lucide="check-circle" style="color: var(--gold);"></i> <span>${message}</span>`;
+            toast.innerHTML = `<i data-lucide="check-circle" style="color: var(--accent);"></i> <span>${message}</span>`;
             container.appendChild(toast);
             lucide.createIcons();
             
@@ -383,42 +374,52 @@
             }, 3000);
         }
 
-        // 4. Lógica de Portapapeles
         window.copyCode = function(code) {
             navigator.clipboard.writeText(code).then(() => {
-                showToast(`¡Código ${code} copiado al portapapeles!`);
-            }).catch(err => {
-                console.error('Error al copiar: ', err);
+                showToast(`¡Código ${code} copiado! Úsalo al registrarte.`);
             });
         };
 
-        // 5. Lógica de Compartir (WhatsApp & Link)
-        const domainURL = window.location.href; // O pon 'https://tudominio.com/welcome.html'
-        const shareText = `🔥 ¡Locura total! Interra-hub ha abierto su BETA y regala 3 meses de la suscripción PLUS. Quedan pocos códigos, pilla el tuyo aquí antes de que se agoten: ${domainURL}`;
+        // Compartir
+        const shareText = `🔥 ¡Locura! Interra-hub ha abierto su BETA para organizar Interrailes. Entra, aprende cómo funciona en la Guía y pilla un código PLUS gratis antes de que vuelen:`;
+        const shareUrl = 'https://interra-hub.vercel.app/index.html';
+
+        document.getElementById('btn-share-wa').href = `https://api.whatsapp.com/send?text=${encodeURIComponent(shareText + ' ' + shareUrl)}`;
         
-        document.getElementById('btn-share-wa').href = `https://api.whatsapp.com/send?text=${encodeURIComponent(shareText)}`;
-        
-        document.getElementById('btn-share-link').addEventListener('click', () => {
-            navigator.clipboard.writeText(shareText).then(() => {
-                showToast("Mensaje promocional copiado. ¡Pégalo a tus amigos!");
-            });
+        document.getElementById('btn-share-native').addEventListener('click', async () => {
+            if (navigator.share) {
+                try {
+                    await navigator.share({
+                        title: 'Interra-hub BETA',
+                        text: shareText,
+                        url: shareUrl
+                    });
+                } catch (err) {
+                    console.log('Error compartiendo:', err);
+                }
+            } else {
+                navigator.clipboard.writeText(`${shareText} ${shareUrl}`).then(() => {
+                    showToast("Enlace copiado al portapapeles.");
+                });
+            }
         });
 
-        // 6. Intersection Observer (Animaciones al hacer scroll)
+        // Intersection Observer para animaciones (reveal)
         const revealElements = document.querySelectorAll('.reveal');
-        const revealOptions = { threshold: 0.1, rootMargin: "0px 0px -50px 0px" };
-        
         const revealOnScroll = new IntersectionObserver(function(entries, observer) {
             entries.forEach(entry => {
                 if (!entry.isIntersecting) return;
                 entry.target.classList.add('active');
-                observer.unobserve(entry.target);
+                // No desobservamos los scroll indicators para que hagan el efecto al volver a subir si queremos
+                if(!entry.target.classList.contains('scroll-indicator')){
+                    observer.unobserve(entry.target);
+                }
             });
-        }, revealOptions);
+        }, { threshold: 0.15 });
 
         revealElements.forEach(el => revealOnScroll.observe(el));
 
-        // 7. SISTEMA DE PARTÍCULAS (CONFETI PRO EN CANVAS)
+        // Partículas (Estilo chispas rojas/blancas)
         const canvas = document.getElementById('party-canvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
@@ -430,64 +431,42 @@
         window.addEventListener('resize', resizeCanvas);
         resizeCanvas();
 
-        const colors = ['#ffd700', '#ffaa00', '#a855f7', '#ec4899', '#ffffff'];
+        const colors = ['#e60000', '#ff4d4d', '#ffffff', '#333333'];
 
         class Particle {
             constructor() {
                 this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height - canvas.height; // Empiezan arriba
-                this.size = Math.random() * 5 + 2;
-                this.speedY = Math.random() * 2 + 1; // Caída lenta y elegante
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 3 + 1;
+                this.speedY = (Math.random() - 0.5) * 1; 
                 this.speedX = (Math.random() - 0.5) * 1;
                 this.color = colors[Math.floor(Math.random() * colors.length)];
-                this.opacity = Math.random() * 0.5 + 0.3;
-                this.angle = Math.random() * 360;
-                this.spin = (Math.random() - 0.5) * 0.1;
+                this.opacity = Math.random() * 0.5 + 0.1;
             }
             update() {
                 this.y += this.speedY;
                 this.x += this.speedX;
-                this.angle += this.spin;
-                // Si cae por debajo de la pantalla, reaparece arriba
-                if (this.y > canvas.height) {
-                    this.y = -10;
-                    this.x = Math.random() * canvas.width;
-                }
+                if (this.y < 0) this.y = canvas.height;
+                if (this.y > canvas.height) this.y = 0;
+                if (this.x < 0) this.x = canvas.width;
+                if (this.x > canvas.width) this.x = 0;
             }
             draw() {
-                ctx.save();
-                ctx.translate(this.x, this.y);
-                ctx.rotate(this.angle);
                 ctx.globalAlpha = this.opacity;
                 ctx.fillStyle = this.color;
-                
-                // Dibujar forma de confeti o círculo
-                if(Math.random() > 0.5){
-                    ctx.fillRect(-this.size/2, -this.size/2, this.size, this.size*2);
-                } else {
-                    ctx.beginPath();
-                    ctx.arc(0, 0, this.size, 0, Math.PI * 2);
-                    ctx.fill();
-                }
-                ctx.restore();
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
             }
         }
 
-        // Crear 70 partículas para no saturar pero mantener la fiesta
-        for (let i = 0; i < 70; i++) {
-            particles.push(new Particle());
-        }
+        for (let i = 0; i < 60; i++) particles.push(new Particle());
 
         function animateParticles() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particles.forEach(p => {
-                p.update();
-                p.draw();
-            });
+            particles.forEach(p => { p.update(); p.draw(); });
             requestAnimationFrame(animateParticles);
         }
-        
-        // Iniciar la fiesta visual
         animateParticles();
 
     </script>
