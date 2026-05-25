@@ -3,995 +3,492 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
     <title>¡Bienvenido a la BETA! | Interra-hub</title>
-
-    <meta name="description" content="Únete al planificador definitivo de viajes en grupo. Planifica tu ruta, comparte con amigos y familia, y consigue 3 meses de PLUS gratis.">
+    
+    <meta name="description" content="Eres de los primeros en llegar. Celebra el lanzamiento de la BETA de Interra-hub y consigue 3 meses de PLUS gratis.">
+    
     <meta property="og:type" content="website">
     <meta property="og:title" content="🎁 ¡BETA de Interra-hub Abierta!">
-    <meta property="og:description" content="Organiza tu Interrail con amigos de forma sencilla. Entra y consigue uno de los 10 códigos exclusivos para el plan PLUS gratis.">
-    <meta property="og:image" content="https://interra-hub.vercel.app/banner.PNG"> 
-    <meta property="og:url" content="https://interra-hub.vercel.app/welcome.html">
+    <meta property="og:description" content="Únete antes que nadie al planificador definitivo de viajes. Pilla uno de los códigos exclusivos para conseguir Interra-hub PLUS gratis.">
+    <meta property="og:image" content="https://tudominio.com/banner.PNG"> 
+    <meta property="og:url" content="https://tudominio.com/welcome.html">
     <meta property="og:site_name" content="Interra-hub">
+
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="¡BETA de Interra-hub Abierta!">
     <meta name="twitter:description" content="Consigue uno de los 10 códigos limitados para Interra-hub PLUS.">
-    <meta name="twitter:image" content="https://interra-hub.vercel.app/banner.PNG">
+    <meta name="twitter:image" content="https://tudominio.com/banner.PNG">
 
     <link rel="icon" type="image/png" href="interrahublogo.PNG">
-
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;800&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
 
     <style>
-        /* ---------------------------------------------------------------------
-           1. CSS VARIABLES (DESIGN SYSTEM)
-           --------------------------------------------------------------------- */
         :root {
-            /* Matte Black / Dark Theme Palette */
-            --bg-matte: #070708;
-            --bg-matte-lighter: #0d0d0f;
-            --bg-glass: rgba(15, 15, 17, 0.65);
-            
-            /* Premium Red Accents */
-            --accent-red: #ea1313;
-            --accent-red-glow: rgba(234, 19, 19, 0.4);
-            --accent-red-dim: rgba(234, 19, 19, 0.1);
-            
-            /* Typography Colors */
-            --text-pure-white: #ffffff;
-            --text-off-white: #f5f5f7;
-            --text-muted: #86868b;
-            
-            /* Structural Variables */
-            --border-glass: rgba(255, 255, 255, 0.06);
-            --border-glass-highlight: rgba(255, 255, 255, 0.12);
-            --radius-sm: 8px;
-            --radius-md: 16px;
-            --radius-lg: 24px;
-            --radius-pill: 9999px;
-            
-            /* Animations & Easing */
-            --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
-            --ease-in-out-circ: cubic-bezier(0.785, 0.135, 0.15, 0.86);
-            --transition-fast: 0.2s var(--ease-out-expo);
-            --transition-normal: 0.4s var(--ease-out-expo);
-            --transition-slow: 0.8s var(--ease-out-expo);
+            --bg-color: #030303;
+            --surface: rgba(20, 20, 20, 0.5);
+            --surface-solid: #0f0f0f;
+            --primary: #ffffff;
+            --text-muted: #888888;
+            --gold: #ffd700;
+            --gold-gradient: linear-gradient(135deg, #ffd700 0%, #ffaa00 100%);
+            --beta-gradient: linear-gradient(135deg, #a855f7 0%, #ec4899 100%);
+            --border-subtle: rgba(255, 255, 255, 0.08);
+            --border-gold: rgba(255, 215, 0, 0.3);
+            --transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        /* ---------------------------------------------------------------------
-           2. GLOBAL RESET & BASE STYLES
-           --------------------------------------------------------------------- */
-        *, *::before, *::after {
-            margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Sora', sans-serif;
         }
-
+        
         html {
             scroll-behavior: smooth;
-            background-color: var(--bg-matte);
         }
 
         body {
-            color: var(--text-off-white);
-            line-height: 1.5;
+            background-color: var(--bg-color);
+            color: var(--primary);
             min-height: 100vh;
             overflow-x: hidden;
             position: relative;
-            /* Disable default cursor for custom cinematic cursor */
-            cursor: none; 
+            background-image: radial-gradient(circle at 50% 0%, rgba(168, 85, 247, 0.15), transparent 60%);
         }
 
-        ::selection { background-color: var(--accent-red); color: var(--text-pure-white); }
-        a, button { cursor: none; } /* Override default pointer for custom cursor */
+        ::selection { background: #a855f7; color: var(--primary); }
 
-        /* ---------------------------------------------------------------------
-           3. CINEMATIC BACKGROUND EFFECTS
-           --------------------------------------------------------------------- */
-        /* CSS Noise Grain Texture for cinematic feel */
-        .cinematic-grain {
-            position: fixed; inset: 0; z-index: -4; pointer-events: none; opacity: 0.04;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        /* Lienzo para partículas (Fondo animado JS) */
+        #party-canvas {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 1; pointer-events: none;
         }
 
-        /* Subtle Technological Grid */
-        .tech-grid {
-            position: fixed; inset: 0; z-index: -3; pointer-events: none;
-            background-image: 
-                linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
-            background-size: 50px 50px;
-            mask-image: radial-gradient(circle at center, black 20%, transparent 80%);
-            -webkit-mask-image: radial-gradient(circle at center, black 20%, transparent 80%);
-        }
-
-        /* Ambient Center Red Glow */
-        .ambient-glow {
-            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            width: 100vw; height: 100vh; z-index: -2; pointer-events: none;
-            background: radial-gradient(circle at 60% 40%, rgba(234, 19, 19, 0.05) 0%, transparent 50%);
-        }
-
-        /* Deep Vignette */
-        .vignette {
-            position: fixed; inset: 0; z-index: -1; pointer-events: none;
-            background: radial-gradient(circle at center, transparent 40%, rgba(3, 3, 4, 0.8) 100%);
-        }
-
-        /* Canvas for Interactive Cinematic Dust */
-        #cinematic-dust-canvas {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 0; pointer-events: none; opacity: 0.7;
-        }
-
-        /* Main Wrapper */
-        .app-wrapper {
-            position: relative; z-index: 10; display: flex; flex-direction: column; width: 100%;
-        }
-
-        /* ---------------------------------------------------------------------
-           4. CUSTOM CURSOR
-           --------------------------------------------------------------------- */
-        .custom-cursor-dot {
-            position: fixed; top: 0; left: 0; width: 6px; height: 6px;
-            background-color: var(--accent-red); border-radius: 50%;
-            transform: translate(-50%, -50%); z-index: 999999; pointer-events: none;
-            transition: width 0.2s, height 0.2s;
-        }
-        .custom-cursor-outline {
-            position: fixed; top: 0; left: 0; width: 40px; height: 40px;
-            border: 1px solid rgba(234, 19, 19, 0.5); border-radius: 50%;
-            transform: translate(-50%, -50%); z-index: 999998; pointer-events: none;
-            transition: width 0.2s, height 0.2s, border-color 0.2s, background-color 0.2s;
-            transition-timing-function: var(--ease-out-expo);
-        }
-        /* Hover states applied via JS */
-        .cursor-hover .custom-cursor-outline {
-            width: 60px; height: 60px; background-color: rgba(234, 19, 19, 0.05); border-color: var(--accent-red);
-        }
-        .cursor-hover .custom-cursor-dot { width: 0; height: 0; }
-
-        /* ---------------------------------------------------------------------
-           5. NAVIGATION & TOP BAR
-           --------------------------------------------------------------------- */
-        .main-nav {
-            width: 100%; padding: 2.5rem 5%; display: flex; justify-content: space-between; align-items: center;
-            max-width: 1400px; margin: 0 auto;
-        }
-
-        .brand-signature {
-            display: flex; align-items: center; gap: 1rem; text-decoration: none;
-        }
-
-        /* Signature Icon: Acrylic Dark Square */
-        .brand-icon-box {
-            width: 48px; height: 48px; border-radius: var(--radius-sm);
-            background: linear-gradient(135deg, #1c1c1e 0%, #000000 100%);
-            border: 1px solid rgba(255,255,255,0.08);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.8), inset 0 1px 2px rgba(255,255,255,0.15);
-            display: flex; justify-content: center; align-items: center;
-            font-size: 1.2rem; font-weight: 800; color: var(--text-pure-white); letter-spacing: -0.5px;
-            position: relative; overflow: hidden;
-        }
-        .brand-icon-box .dot { color: var(--accent-red); text-shadow: 0 0 10px var(--accent-red); }
-        
-        /* Inner reflection for acrylic look */
-        .brand-icon-box::after {
-            content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
-            transform: skewX(-20deg); transition: var(--transition-slow);
-        }
-        .brand-signature:hover .brand-icon-box::after { left: 150%; }
-
-        .brand-name {
-            font-size: 1.25rem; font-weight: 500; color: var(--text-off-white); letter-spacing: -0.5px;
-        }
-
-        /* Demo Button */
-        .btn-ghost-nav {
-            background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-glass);
-            color: var(--text-pure-white); padding: 0.6rem 1.4rem; border-radius: var(--radius-pill);
-            font-size: 0.85rem; font-weight: 600; text-decoration: none;
-            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-            transition: var(--transition-normal); display: inline-flex; align-items: center; gap: 8px;
-        }
-        .btn-ghost-nav:hover {
-            background: rgba(255, 255, 255, 0.06); border-color: var(--border-glass-highlight); transform: translateY(-2px);
-        }
-
-        /* ---------------------------------------------------------------------
-           6. HERO SECTION (THE CORE LAYOUT)
-           --------------------------------------------------------------------- */
-        .hero-section {
-            min-height: 80vh; max-width: 1400px; margin: 0 auto; width: 100%;
-            padding: 2rem 5% 6rem; display: grid; grid-template-columns: 55% 45%;
-            align-items: center; gap: 2rem; position: relative;
-        }
-
-        /* --- HERO LEFT: TEXT COMPOSITION --- */
-        .hero-left-content {
-            display: flex; flex-direction: column; align-items: flex-start; z-index: 2;
-        }
-
-        .typography-tension {
-            font-size: 1.1rem; font-weight: 800; color: var(--accent-red);
-            text-transform: uppercase; letter-spacing: 3px; margin-bottom: -10px;
-            display: block; position: relative; text-shadow: 0 0 20px var(--accent-red-dim);
-        }
-
-        .typography-dominant {
-            font-size: clamp(6rem, 10vw, 11rem); font-weight: 900; color: var(--text-pure-white);
-            line-height: 1; letter-spacing: -4px; margin-bottom: -15px;
-            text-shadow: 
-                0 10px 30px rgba(0,0,0,0.8),
-                -1px -1px 0 rgba(255,255,255,0.1),
-                1px 1px 0 rgba(0,0,0,0.9);
-            /* Subtle 3D Bevel effect on text */
-            position: relative; z-index: 1;
-        }
-
-        .typography-continuity {
-            font-size: clamp(2rem, 4vw, 3.5rem); font-weight: 800; color: var(--text-pure-white);
-            margin-bottom: 1.5rem; letter-spacing: -1.5px;
-        }
-        .typography-continuity .red-highlight { color: var(--accent-red); }
-
-        .hero-description {
-            font-size: 1.1rem; color: var(--text-muted); line-height: 1.7;
-            max-width: 500px; margin-bottom: 3.5rem; font-weight: 400;
-        }
-        .hero-description .emotional-highlight {
-            color: var(--accent-red); font-weight: 600; display: block; margin-top: 0.5rem;
-        }
-
-        /* PROMO BOX (Premium Glass UI) */
-        .premium-promo-card {
-            background: var(--bg-glass); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--border-glass); border-radius: var(--radius-lg);
-            padding: 1.8rem 2.5rem; display: flex; align-items: center; gap: 2rem;
-            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.05);
-            max-width: 600px; width: 100%; position: relative; overflow: hidden;
-            transition: border-color var(--transition-normal);
-        }
-        .premium-promo-card:hover { border-color: rgba(234, 19, 19, 0.3); }
-
-        .promo-gift-icon {
-            width: 64px; height: 64px; border-radius: var(--radius-md);
-            border: 1.5px solid rgba(255,255,255,0.1); display: flex; justify-content: center; align-items: center;
-            background: rgba(0,0,0,0.3); color: var(--text-pure-white); flex-shrink: 0;
-            box-shadow: inset 0 2px 10px rgba(0,0,0,0.5);
-        }
-
-        .promo-text-data {
-            flex-grow: 1; display: flex; align-items: center; justify-content: space-between; gap: 1rem;
-        }
-        
-        .promo-text-hierarchy {
-            display: flex; flex-direction: column; line-height: 1.1;
-        }
-        .promo-text-hierarchy .huge {
-            font-size: 2rem; font-weight: 900; color: var(--accent-red); letter-spacing: -1px;
-        }
-        .promo-text-hierarchy .sub {
-            font-size: 1rem; font-weight: 600; color: var(--text-off-white); letter-spacing: 1px;
-        }
-
-        .btn-action-glow {
-            background: var(--accent-red); color: var(--text-pure-white); border: none;
-            padding: 1rem 2rem; border-radius: var(--radius-md); font-weight: 800; font-size: 1.1rem;
-            cursor: none; /* Let custom cursor handle it */
-            box-shadow: 0 0 20px var(--accent-red-glow), inset 0 2px 5px rgba(255,255,255,0.3);
-            text-shadow: 0 2px 4px rgba(0,0,0,0.3); transition: var(--transition-normal);
-            position: relative; overflow: hidden; display: inline-block; text-transform: uppercase;
-        }
-        /* Shine effect on button */
-        .btn-action-glow::before {
-            content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
-            transform: skewX(-20deg); transition: 0.5s;
-        }
-        .btn-action-glow:hover {
-            transform: translateY(-3px) scale(1.02); box-shadow: 0 10px 30px rgba(234, 19, 19, 0.6), inset 0 2px 5px rgba(255,255,255,0.4);
-        }
-        .btn-action-glow:hover::before { left: 150%; }
-
-        /* --- HERO RIGHT: 3D LOGO COMPOSITION --- */
-        .hero-right-visual {
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            position: relative; width: 100%; height: 100%; perspective: 1200px; /* Crucial for 3D */
-        }
-
-        /* The 3D Object Container */
-        .logo-3d-model {
-            width: 320px; height: 320px;
-            /* Piano Black Material */
-            background: linear-gradient(145deg, #1f1f22 0%, #050505 100%);
-            border-radius: 60px;
-            /* Core 3D Positioning */
-            transform-style: preserve-3d;
-            transform: rotateX(15deg) rotateY(-20deg);
-            display: flex; justify-content: center; align-items: center;
-            position: relative; z-index: 2;
-            /* Complex Shadows to fake thickness and environment */
-            box-shadow: 
-                -15px 5px 35px rgba(234, 19, 19, 0.2), /* Rim light roja izquierda */
-                inset 2px 2px 4px rgba(255,255,255,0.15), /* Highlight borde superior */
-                inset -5px -5px 15px rgba(0,0,0,0.9), /* Sombra interior */
-                25px 35px 50px rgba(0,0,0,0.95); /* Drop shadow profunda */
-            /* Outline sutil para dar borde de cristal */
-            border: 1px solid rgba(255,255,255,0.03);
-            /* Transition handled by JS, but fallback here */
-            transition: transform 0.1s linear; 
-        }
-
-        /* The "lh." text extruded */
-        .logo-3d-extrusion {
-            font-size: 9rem; font-weight: 900; color: var(--text-pure-white);
-            letter-spacing: -6px; transform: translateZ(60px); /* Pops out of the box */
-            text-shadow: 
-                -1px 1px 0 #ccc, 
-                -2px 2px 0 #aaa, 
-                -3px 3px 0 #888, 
-                -4px 4px 0 #666, /* Fake 3D depth */
-                -10px 10px 20px rgba(0,0,0,0.8); /* Shadow cast onto the box */
-        }
-        
-        .logo-3d-extrusion .red-dot {
-            color: var(--accent-red);
-            text-shadow: 
-                -1px 1px 0 #900, 
-                -2px 2px 0 #600,
-                0 0 30px var(--accent-red), /* Glow */
-                -10px 10px 20px rgba(0,0,0,0.8);
-        }
-
-        /* Bottom Pill Tag */
-        .sub-brand-pill {
-            margin-top: 3rem; background: #0a0a0c; border: 1px solid var(--border-glass);
-            border-radius: var(--radius-pill); padding: 0.8rem 2rem;
-            font-size: 1.1rem; font-weight: 600; color: var(--text-pure-white);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5); z-index: 3;
-            transform: translateZ(20px); /* Slight pop if wrapper has 3D */
-            display: flex; align-items: center; gap: 8px;
-        }
-
-        /* Scroll Indicator */
-        .scroll-down-indicator {
-            position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
-            display: flex; flex-direction: column; align-items: center; gap: 10px;
-            color: var(--text-muted); text-decoration: none; transition: var(--transition-fast);
-        }
-        .scroll-down-indicator:hover { color: var(--text-pure-white); }
-        .scroll-down-text { font-size: 0.75rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; }
-        .arrow-bounce { animation: cinematicBounce 2.5s infinite var(--ease-in-out-circ); color: var(--accent-red); }
-
-        @keyframes cinematicBounce {
-            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-            40% { transform: translateY(-10px); }
-            60% { transform: translateY(-5px); }
-        }
-
-        /* ---------------------------------------------------------------------
-           7. CONTENT SECTIONS (INFO, TUTORIAL, SHARE)
-           --------------------------------------------------------------------- */
-        .content-section {
-            padding: 8rem 5%; width: 100%; max-width: 1100px; margin: 0 auto;
+        /* Contenedor Principal Z-Index */
+        .wrapper {
             position: relative; z-index: 10;
         }
 
-        .section-heading { text-align: center; margin-bottom: 5rem; }
-        .section-heading h2 { font-size: 2.8rem; font-weight: 800; letter-spacing: -1.5px; margin-bottom: 1rem; color: var(--text-pure-white); }
-        .section-heading p { font-size: 1.15rem; color: var(--text-muted); max-width: 650px; margin: 0 auto; line-height: 1.6; }
-
-        /* Flow Cards Architecture */
-        .feature-stack { display: flex; flex-direction: column; gap: 2rem; }
-
-        .cinematic-card {
-            background: var(--bg-glass); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
-            border: 1px solid var(--border-glass); border-radius: var(--radius-lg);
-            padding: 3rem; display: flex; align-items: center; gap: 3rem;
-            transition: var(--transition-normal); position: relative; overflow: hidden;
+        /* Nav Minimalista */
+        nav {
+            width: 100%; padding: 1.5rem 5%;
+            display: flex; justify-content: center; align-items: center;
+            position: absolute; top: 0; left: 0; z-index: 100;
         }
-        .cinematic-card:hover {
-            border-color: rgba(255,255,255,0.15); transform: translateY(-5px); background: rgba(25, 25, 27, 0.8);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+        .logo {
+            font-weight: 800; font-size: 1.5rem; letter-spacing: -0.5px;
+            display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--primary);
         }
-        /* Card Hover Accent */
-        .cinematic-card::before {
-            content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%;
-            background: var(--accent-red); opacity: 0; transition: var(--transition-normal);
-        }
-        .cinematic-card:hover::before { opacity: 1; }
+        .logo .dot { color: #a855f7; }
 
-        .card-number-huge {
-            font-size: 4rem; font-weight: 900; color: transparent;
-            -webkit-text-stroke: 1.5px rgba(255,255,255,0.1); flex-shrink: 0;
-            line-height: 1; transition: var(--transition-normal);
-        }
-        .cinematic-card:hover .card-number-huge { -webkit-text-stroke-color: var(--accent-red); }
-
-        .card-text-content h3 { font-size: 1.5rem; font-weight: 800; margin-bottom: 0.8rem; color: var(--text-pure-white); }
-        .card-text-content p { font-size: 1.05rem; color: var(--text-muted); line-height: 1.7; }
-        .card-text-content strong { color: var(--text-pure-white); font-weight: 600; }
-
-        /* Secondary Grid (Tutorials) */
-        .tutorial-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem; margin-top: 5rem; padding-top: 5rem; border-top: 1px solid var(--border-glass);
-        }
-        .tuto-item {
-            background: rgba(10, 10, 12, 0.5); border: 1px solid var(--border-glass);
-            border-radius: var(--radius-md); padding: 2.5rem; transition: var(--transition-normal);
-        }
-        .tuto-item:hover { border-color: rgba(255,255,255,0.15); background: rgba(15, 15, 17, 0.8); }
-        .tuto-item-icon { color: var(--accent-red); margin-bottom: 1.5rem; }
-        .tuto-item h4 { font-size: 1.25rem; font-weight: 700; margin-bottom: 1rem; color: var(--text-pure-white); }
-        .tuto-item p { font-size: 0.95rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 1rem; }
-        .tuto-item a { color: var(--text-pure-white); font-weight: 600; text-decoration: none; border-bottom: 1px solid var(--accent-red); padding-bottom: 2px;}
-
-        /* ---------------------------------------------------------------------
-           8. VIRAL / SHARE SECTION
-           --------------------------------------------------------------------- */
-        .viral-section {
-            text-align: center; padding: 6rem 5% 10rem; border-top: 1px solid var(--border-glass);
-            background: radial-gradient(circle at top, rgba(234, 19, 19, 0.03) 0%, transparent 60%);
+        /* =========================================
+           HERO SECTION
+           ========================================= */
+        .hero {
+            min-height: 90vh;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            text-align: center; padding: 8rem 5% 4rem;
         }
         
-        .share-buttons-container {
-            display: flex; justify-content: center; gap: 1.5rem; flex-wrap: wrap; margin-top: 3rem;
+        .badge-party {
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            color: #d8b4fe; border-radius: 30px;
+            padding: 0.5rem 1.2rem; font-size: 0.8rem; font-weight: 800; letter-spacing: 1.5px;
+            text-transform: uppercase; margin-bottom: 2rem;
+            animation: float 4s ease-in-out infinite;
+            backdrop-filter: blur(10px); display: inline-flex; align-items: center; gap: 8px;
         }
 
-        .btn-social-massive {
-            background: #25D366; color: #fff; padding: 1.2rem 2.5rem; border-radius: var(--radius-pill);
-            font-size: 1.1rem; font-weight: 800; text-decoration: none; display: inline-flex; align-items: center; gap: 12px;
-            box-shadow: 0 10px 30px rgba(37, 211, 102, 0.2); transition: var(--transition-normal); border: none; cursor: none;
+        .hero h1 {
+            font-size: clamp(2.5rem, 6vw, 5rem); font-weight: 800;
+            letter-spacing: -2px; line-height: 1.1; margin-bottom: 1.5rem;
+            max-width: 900px; text-shadow: 0 10px 30px rgba(168, 85, 247, 0.3);
         }
-        .btn-social-massive:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 15px 40px rgba(37, 211, 102, 0.4); }
-
-        .btn-link-copy {
-            background: rgba(255,255,255,0.03); color: var(--text-pure-white); border: 1px solid var(--border-glass);
-            padding: 1.2rem 2.5rem; border-radius: var(--radius-pill); font-size: 1.1rem; font-weight: 600;
-            cursor: none; transition: var(--transition-normal); display: inline-flex; align-items: center; gap: 12px;
+        .hero h1 span {
+            background: var(--beta-gradient);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
-        .btn-link-copy:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.2); }
 
-        /* ---------------------------------------------------------------------
-           9. REDEMPTION MODAL (UI GLASS)
-           --------------------------------------------------------------------- */
-        .modal-engine {
-            position: fixed; inset: 0; background: rgba(0, 0, 0, 0.85);
+        .hero p {
+            color: rgba(255, 255, 255, 0.8); font-size: clamp(1.1rem, 2vw, 1.3rem);
+            line-height: 1.6; max-width: 700px; margin-bottom: 3rem; font-weight: 300;
+        }
+
+        /* =========================================
+           SECCIÓN: CÓDIGOS PROMOCIONALES
+           ========================================= */
+        .section-codes {
+            padding: 6rem 5%; max-width: 1200px; margin: 0 auto; text-align: center;
+        }
+        .section-header h2 {
+            font-size: 2.8rem; font-weight: 800; margin-bottom: 1rem; letter-spacing: -1px;
+        }
+        .section-header h2 span { color: var(--gold); }
+        .section-header p {
+            color: var(--text-muted); font-size: 1.1rem; max-width: 700px; margin: 0 auto 4rem; line-height: 1.6;
+        }
+
+        .codes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .code-card {
+            background: rgba(255, 215, 0, 0.03);
+            border: 1px solid var(--border-gold);
+            border-radius: 20px; padding: 2rem 1.5rem;
             backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-            z-index: 999999; display: flex; align-items: center; justify-content: center;
-            padding: 1.5rem; opacity: 0; pointer-events: none; transition: opacity var(--transition-normal);
+            transition: var(--transition);
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            position: relative; overflow: hidden;
         }
-        .modal-engine.is-active { opacity: 1; pointer-events: all; }
-
-        .modal-core-window {
-            background: #0a0a0c; border: 1px solid var(--border-glass-highlight);
-            border-radius: var(--radius-lg); width: 100%; max-width: 480px; padding: 3rem;
-            transform: scale(0.95) translateY(20px); transition: transform var(--transition-normal);
-            box-shadow: 0 40px 100px rgba(0,0,0,0.9); position: relative;
+        .code-card::before {
+            content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,215,0,0.1), transparent);
+            transform: skewX(-20deg); transition: 0.5s;
         }
-        .modal-engine.is-active .modal-core-window { transform: scale(1) translateY(0); }
-
-        .modal-close-trigger {
-            position: absolute; top: 20px; right: 20px; background: transparent; border: none;
-            color: var(--text-muted); padding: 8px; transition: var(--transition-fast); cursor: none;
+        .code-card:hover {
+            transform: translateY(-5px); border-color: var(--gold);
+            box-shadow: 0 15px 30px rgba(255, 215, 0, 0.1);
         }
-        .modal-close-trigger:hover { color: var(--text-pure-white); transform: rotate(90deg); }
+        .code-card:hover::before { left: 150%; }
 
-        .modal-title { font-size: 1.6rem; font-weight: 800; color: var(--text-pure-white); margin-bottom: 1.5rem; letter-spacing: -0.5px;}
+        .code-value {
+            font-family: monospace; font-size: 1.6rem; font-weight: 800;
+            color: var(--primary); letter-spacing: 2px; margin-bottom: 1.5rem;
+        }
+
+        .btn-copy {
+            background: var(--gold-gradient); color: #000; border: none;
+            padding: 0.7rem 1.5rem; border-radius: 30px; font-weight: 800; font-size: 0.9rem;
+            cursor: pointer; transition: 0.3s; display: inline-flex; align-items: center; gap: 8px;
+        }
+        .btn-copy:hover { transform: scale(1.05); box-shadow: 0 0 20px rgba(255,215,0,0.4); }
+
+        .scarcity-alert {
+            margin-top: 4rem; display: inline-flex; align-items: center; gap: 10px;
+            background: rgba(236, 72, 153, 0.1); border: 1px solid rgba(236, 72, 153, 0.3);
+            padding: 1rem 2rem; border-radius: 100px; color: #fbcfe8; font-weight: 600; font-size: 0.95rem;
+        }
+
+        /* =========================================
+           SECCIÓN: FUTURO Y APP INFO
+           ========================================= */
+        .section-info {
+            padding: 8rem 5%; background: var(--surface-solid);
+            border-top: 1px solid var(--border-subtle); border-bottom: 1px solid var(--border-subtle);
+        }
+        .info-container { max-width: 1000px; margin: 0 auto; text-align: center; }
         
-        .modal-instructions {
-            background: rgba(255,255,255,0.02); border: 1px solid var(--border-glass);
-            border-radius: var(--radius-sm); padding: 1.2rem; margin-bottom: 2rem;
+        .bento-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem; margin-top: 4rem; text-align: left;
         }
-        .modal-instructions p { font-size: 0.9rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 0.5rem; }
-        .modal-instructions p:last-child { margin-bottom: 0; }
-        .modal-instructions strong { color: var(--text-pure-white); font-weight: 700;}
+        .bento-box {
+            background: var(--bg-color); border: 1px solid var(--border-subtle);
+            border-radius: 24px; padding: 3rem 2rem;
+            transition: var(--transition);
+        }
+        .bento-box:hover { border-color: rgba(168, 85, 247, 0.5); transform: translateY(-5px); }
+        .bento-icon {
+            width: 50px; height: 50px; border-radius: 16px; background: rgba(255,255,255,0.05);
+            display: flex; justify-content: center; align-items: center; margin-bottom: 1.5rem; color: #d8b4fe;
+        }
+        .bento-box h3 { font-size: 1.4rem; font-weight: 800; margin-bottom: 1rem; }
+        .bento-box p { color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; font-weight: 300; }
 
-        .code-scroller {
-            display: flex; flex-direction: column; gap: 0.6rem; max-height: 220px; overflow-y: auto; padding-right: 8px;
+        /* =========================================
+           SECCIÓN: COMPARTIR (VIRALIDAD)
+           ========================================= */
+        .section-share {
+            padding: 8rem 5% 6rem; text-align: center; max-width: 800px; margin: 0 auto;
         }
-        .code-scroller::-webkit-scrollbar { width: 4px; }
-        .code-scroller::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 10px; }
+        .section-share h2 { font-size: 2.5rem; font-weight: 800; margin-bottom: 1rem; letter-spacing: -1px; }
+        .section-share p { color: var(--text-muted); font-size: 1.1rem; margin-bottom: 3rem; line-height: 1.6; }
 
-        .code-row-item {
-            background: #000; border: 1px solid var(--border-glass); border-radius: var(--radius-sm);
-            padding: 0.8rem 1.2rem; display: flex; justify-content: space-between; align-items: center;
-        }
-        .code-string { font-family: 'Courier New', Courier, monospace; font-size: 1.1rem; font-weight: 800; color: var(--text-pure-white); letter-spacing: 2px;}
-        
-        .btn-clipboard {
-            background: var(--text-pure-white); color: #000; border: none; padding: 0.4rem 1rem;
-            border-radius: 6px; font-size: 0.8rem; font-weight: 800; transition: var(--transition-fast); cursor: none;
-        }
-        .btn-clipboard:hover { background: var(--accent-red); color: #fff; }
-
-        /* ---------------------------------------------------------------------
-           10. TOAST NOTIFICATION SYSTEM
-           --------------------------------------------------------------------- */
-        #toast-layer {
-            position: fixed; bottom: 40px; right: 40px; z-index: 9999999;
-            display: flex; flex-direction: column; gap: 12px; pointer-events: none;
-        }
-        .toast-message {
-            background: rgba(15, 15, 17, 0.95); border: 1px solid var(--border-glass-highlight);
-            color: var(--text-pure-white); padding: 1.2rem 2rem; border-radius: var(--radius-md);
-            display: flex; align-items: center; gap: 15px; box-shadow: 0 15px 40px rgba(0,0,0,0.6);
-            font-size: 0.95rem; font-weight: 600; backdrop-filter: blur(10px);
-            animation: toastSlideIn 0.5s var(--ease-out-expo) forwards;
-        }
-        .toast-icon { color: var(--accent-red); }
-
-        @keyframes toastSlideIn {
-            from { transform: translateX(120%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
+        .share-actions {
+            display: flex; gap: 1.5rem; flex-wrap: wrap; justify-content: center;
         }
 
-        /* ---------------------------------------------------------------------
-           11. SCROLL REVEAL ANIMATIONS
-           --------------------------------------------------------------------- */
-        .will-reveal { opacity: 0; transform: translateY(40px); transition: 1s var(--ease-out-expo); }
-        .will-reveal.is-revealed { opacity: 1; transform: translateY(0); }
+        .btn-whatsapp {
+            background: #25D366; color: white; border: none;
+            padding: 1.2rem 2.5rem; border-radius: 40px; font-weight: 800; font-size: 1.1rem;
+            cursor: pointer; transition: var(--transition); text-decoration: none;
+            display: inline-flex; align-items: center; gap: 12px;
+            box-shadow: 0 10px 30px rgba(37, 211, 102, 0.2);
+        }
+        .btn-whatsapp:hover { transform: scale(1.03); box-shadow: 0 15px 40px rgba(37, 211, 102, 0.4); }
 
-        /* ---------------------------------------------------------------------
-           12. RESPONSIVE MEDIA QUERIES
-           --------------------------------------------------------------------- */
-        @media (max-width: 1024px) {
-            .hero-section { grid-template-columns: 1fr; text-align: center; gap: 5rem; padding-top: 4rem; }
-            .hero-left-content { align-items: center; text-align: center; }
-            .hero-description { margin-left: auto; margin-right: auto; }
-            .premium-promo-card { flex-direction: column; padding: 2.5rem; }
-            .promo-text-data { flex-direction: column; text-align: center; }
-            .cinematic-card { flex-direction: column; text-align: center; padding: 2rem; gap: 1.5rem; }
-            #toast-layer { bottom: 20px; left: 20px; right: 20px; align-items: center; }
+        .btn-link {
+            background: rgba(255,255,255,0.05); color: var(--primary); border: 1px solid var(--border-subtle);
+            padding: 1.2rem 2.5rem; border-radius: 40px; font-weight: 600; font-size: 1.1rem;
+            cursor: pointer; transition: var(--transition); display: inline-flex; align-items: center; gap: 12px;
+        }
+        .btn-link:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.3); }
+
+        /* Toasts System */
+        #toast-container { position: fixed; bottom: 40px; right: 40px; z-index: 20000; display: flex; flex-direction: column; gap: 15px; }
+        .toast {
+            background: rgba(15, 15, 15, 0.95); backdrop-filter: blur(10px); border: 1px solid var(--border-gold);
+            color: white; padding: 1.2rem 2rem; border-radius: 18px; display: flex; align-items: center; gap: 15px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5); animation: slideIn 0.5s var(--transition) forwards; font-size: 0.95rem; font-weight: 600;
+        }
+
+        /* Utilidades de Animación por Scroll (Intersection Observer) */
+        .reveal { opacity: 0; transform: translateY(40px); transition: 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+
+        /* Animaciones Keyframes */
+        @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-10px); } 100% { transform: translateY(0px); } }
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+        @media (max-width: 768px) {
+            .codes-grid { grid-template-columns: 1fr; }
+            .share-actions { flex-direction: column; }
+            .btn-whatsapp, .btn-link { width: 100%; justify-content: center; }
+            #toast-container { bottom: 20px; right: 20px; left: 20px; }
         }
     </style>
 </head>
 <body>
 
-    <div class="cinematic-grain"></div>
-    <div class="tech-grid"></div>
-    <div class="vignette"></div>
-    <div class="ambient-glow"></div>
+    <canvas id="party-canvas"></canvas>
 
-    <canvas id="cinematic-dust-canvas"></canvas>
-
-    <div class="custom-cursor-dot" id="cursorDot"></div>
-    <div class="custom-cursor-outline" id="cursorOutline"></div>
-
-    <div class="app-wrapper">
-        
-        <nav class="main-nav">
-            <a href="index.html" class="brand-signature interactive-el">
-                <div class="brand-icon-box">lh<span class="dot">.</span></div>
-                <span class="brand-name">interra-hub</span>
-            </a>
-            <a href="https://interra-hub.vercel.app/index.html" target="_blank" class="btn-ghost-nav interactive-el">
-                <i data-lucide="play" style="width: 16px;"></i> Ver Viaje Ejemplo
-            </a>
+    <div class="wrapper">
+        <nav>
+            <a href="index.html" class="logo">Interra-hub<span class="dot">.</span></a>
         </nav>
 
-        <header class="hero-section">
-            
-            <div class="hero-left-content will-reveal is-revealed">
-                <span class="typography-tension">¡POR LA BIENVENIDA A LA</span>
-                <h1 class="typography-dominant">BETA</h1>
-                <h2 class="typography-continuity">de <span class="red-highlight">interra-hub!</span></h2>
-                
-                <p class="hero-description">
-                    Eres de los primeros en pisar nuestra plataforma. Queremos agradecer tu apoyo inicial ofreciéndote acceso privilegiado a nuestra élite viajera.
-                    <span class="emotional-highlight">Tu apoyo impulsa el futuro.</span>
-                </p>
-                
-                <div class="premium-promo-card interactive-el">
-                    <div class="promo-gift-icon">
-                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <rect x="3" y="8" width="18" height="4" rx="1" ry="1"></rect>
-                            <path d="M12 8v13"></path><path d="M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7"></path>
-                            <path class="accent-svg" d="M7.5 8a2.5 2.5 0 0 1 0-5A4.8 8 0 0 1 12 8a4.8 8 0 0 1 4.5-5 2.5 2.5 0 0 1 0 5"></path>
-                        </svg>
-                    </div>
-                    <div class="promo-text-data">
-                        <div class="promo-text-hierarchy">
-                            <span class="huge">3 MESES</span>
-                            <span class="huge">PLUS</span>
-                        </div>
-                        <button class="btn-action-glow interactive-el" id="triggerCodeModal">
-                            ¡GRATIS!
-                        </button>
-                    </div>
-                </div>
+        <header class="hero">
+            <div class="badge-party">
+                <i data-lucide="party-popper" style="width: 16px;"></i> Lanzamiento Exclusivo
             </div>
-
-            <div class="hero-right-visual will-reveal is-revealed" style="transition-delay: 0.2s;" id="scene3D">
-                <div class="logo-3d-model" id="object3D">
-                    <div class="logo-3d-extrusion">lh<span class="red-dot">.</span></div>
-                </div>
-                
-                <div class="sub-brand-pill">
-                    interra-hub <span style="color: var(--accent-red); margin-left: 5px;">PLUS</span>
-                </div>
-            </div>
-
-            <a href="#explicacion" class="scroll-down-indicator interactive-el">
-                <span class="scroll-down-text">MÁS INFORMACIÓN</span>
-                <i data-lucide="chevron-down" class="arrow-bounce" style="width: 24px; height: 24px;"></i>
-            </a>
+            <h1 class="reveal active">Bienvenido a la BETA de <span>Interra-hub</span></h1>
+            <p class="reveal active" style="transition-delay: 0.1s;">
+                Eres de los primeros en pisar nuestra plataforma. Queremos agradecer tu apoyo inicial ofreciéndote acceso privilegiado a nuestra élite viajera. ¿Listo para planificar sin caos?
+            </p>
         </header>
 
-        <main>
-            <section class="content-section" id="explicacion">
-                <div class="section-heading will-reveal">
-                    <h2>¿De qué va todo esto?</h2>
-                    <p>La base está en tener tu viaje bajo control y compartirlo con tus amigos para poder cuadrar todo al milímetro sin depender del caos de siempre.</p>
-                </div>
-
-                <div class="feature-stack">
-                    <div class="cinematic-card will-reveal">
-                        <div class="card-number-huge">01</div>
-                        <div class="card-text-content">
-                            <h3>Crea tu viaje base</h3>
-                            <p>Diseña el itinerario introduciendo trenes, vuelos y planes. Toda tu información se sincroniza de forma inmediata en la nube.</p>
-                        </div>
-                    </div>
-
-                    <div class="cinematic-card will-reveal">
-                        <div class="card-number-huge">02</div>
-                        <div class="card-text-content">
-                            <h3>Comparte con Visores</h3>
-                            <p>Pasa el enlace a tus compañeros de viaje o familiares. Si entran como visores, <strong>podrán ver dónde y cuándo vais a estar en cada sitio</strong>.</p>
-                        </div>
-                    </div>
-
-                    <div class="cinematic-card will-reveal">
-                        <div class="card-number-huge">03</div>
-                        <div class="card-text-content">
-                            <h3>¿No quieren cuenta? Usa el PDF</h3>
-                            <p>Si no quieren registrarse en la plataforma, no pasa nada. <strong>Comparte el itinerario mediante el PDF</strong> profesional que genera el sistema con un clic.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="tutorial-grid">
-                    <div class="tuto-item will-reveal">
-                        <div class="tuto-item-icon"><i data-lucide="gamepad-2" style="width: 28px; height: 28px;"></i></div>
-                        <h4>Aprende a usarlo gratis</h4>
-                        <p>Hemos preparado un entorno de pruebas. Dirígete a <a href="https://interra-hub.vercel.app/index.html" target="_blank" class="interactive-el">interra-hub.vercel.app/index.html</a> para explorar un viaje de ejemplo real.</p>
-                    </div>
-                    <div class="tuto-item will-reveal" style="transition-delay: 0.1s;">
-                        <div class="tuto-item-icon"><i data-lucide="rocket" style="width: 28px; height: 28px;"></i></div>
-                        <h4>Fase Beta Activa</h4>
-                        <p>Estas próximas semanas iremos actualizando cosas muy guapas. A parte de todas las funciones extra que tiene la app, el futuro es brillante.</p>
-                    </div>
-                    <div class="tuto-item will-reveal" style="transition-delay: 0.2s;">
-                        <div class="tuto-item-icon"><i data-lucide="message-square-plus" style="width: 28px; height: 28px;"></i></div>
-                        <h4>Danos tu opinión</h4>
-                        <p>Abajo del todo en el index principal de la aplicación, puedes dar tu opinión mediante un formulario. Nos ayuda a pulir el sistema a diario.</p>
-                    </div>
-                </div>
-            </section>
-
-            <section class="viral-section will-reveal">
-                <h2>Es hora de hacer Spam</h2>
-                <p>Es muy importante que lo compartan con sus amigos, y con más gente que conozcan que están haciendo Interrail este año para ayudarnos en la Beta.</p>
-                
-                <div class="share-buttons-container">
-                    <a href="#" id="btnShareWa" class="btn-social-massive interactive-el">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/>
-                        </svg>
-                        Compartir por WhatsApp
-                    </a>
-                    <button id="btnShareLink" class="btn-link-copy interactive-el">
-                        <i data-lucide="link" style="width: 20px;"></i>
-                        Copiar enlace
-                    </button>
-                </div>
-            </section>
-        </main>
-
-        <div class="modal-engine" id="redemptionModal">
-            <div class="modal-core-window">
-                <button class="modal-close-trigger interactive-el" id="closeModalTrigger">
-                    <i data-lucide="x" style="width: 24px; height: 24px;"></i>
-                </button>
-                
-                <h3 class="modal-title">Códigos de Recompensa</h3>
-                
-                <div class="modal-instructions">
-                    <p>1. <strong>Copia un código</strong> de la siguiente lista.</p>
-                    <p>2. Inicia sesión en la plataforma.</p>
-                    <p>3. En el panel de viajes (arriba derecha), haz clic en tu perfil actual <strong>"ESTÁNDAR"</strong> y canjea tu código ahí.</p>
-                </div>
-                
-                <div class="code-scroller" id="codeListInjectionPoint">
-                    </div>
+        <section class="section-codes">
+            <div class="section-header reveal">
+                <h2>Tu recompensa: <span>3 Meses PLUS Gratis</span></h2>
+                <p>Hemos generado 10 códigos únicos de un solo uso para desbloquear Interra-hub PLUS de forma vitalicia. El que avisa no es traidor: <strong>cuando se usen, se acabó.</strong> ¡Sé rápido!</p>
             </div>
-        </div>
 
-        <div id="toast-layer"></div>
+            <div class="codes-grid" id="codes-container">
+                </div>
 
+            <div class="scarcity-alert reveal">
+                <i data-lucide="alert-circle" style="width: 18px;"></i>
+                Sólo aplicable a cuentas registradas durante la Fase Beta.
+            </div>
+        </section>
+
+        <section class="section-info">
+            <div class="info-container">
+                <h2 style="font-size: 2.5rem; font-weight: 800; margin-bottom: 1rem;" class="reveal">¿Qué es Interra-hub?</h2>
+                <p style="color: var(--text-muted); font-size: 1.1rem; line-height: 1.6;" class="reveal">
+                    Recomendamos encarecidamente que pruebes la app para tu próximo viaje. Es el planificador definitivo para viajes en grupo: diseña tu ruta colaborativa, cuadra gastos automáticamente y olvídate de los excels infinitos.
+                </p>
+
+                <div class="bento-grid">
+                    <div class="bento-box reveal">
+                        <div class="bento-icon"><i data-lucide="map"></i></div>
+                        <h3>Rutas Inteligentes</h3>
+                        <p>Añade vuelos, trenes y hoteles. Sincronización en tiempo real para todos tus amigos.</p>
+                    </div>
+                    <div class="bento-box reveal" style="transition-delay: 0.1s;">
+                        <div class="bento-icon" style="color: var(--gold);"><i data-lucide="calculator"></i></div>
+                        <h3>Motor Financiero</h3>
+                        <p>Introduce tickets y cenas. Nuestro algoritmo calcula quién debe qué al céntimo.</p>
+                    </div>
+                    <div class="bento-box reveal" style="transition-delay: 0.2s;">
+                        <div class="bento-icon" style="color: #4da6ff;"><i data-lucide="rocket"></i></div>
+                        <h3>Se vienen cositas...</h3>
+                        <p>Estas próximas semanas iremos actualizando cosas <strong>muy guapas</strong>. No pierdas de vista la app porque el roadmap de 2027 es una locura.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section-share reveal">
+            <h2>Que no viajen en el pasado</h2>
+            <p>Tus amigos también necesitan organizarse. Invítalos a la BETA antes de que se acaben los códigos y probad la plataforma juntos. ¡Facilítales la vida!</p>
+            
+            <div class="share-actions">
+                <a href="#" id="btn-share-wa" class="btn-whatsapp">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/>
+                    </svg>
+                    Reenviar por WhatsApp
+                </a>
+                <button id="btn-share-link" class="btn-link">
+                    <i data-lucide="link"></i> Copiar enlace
+                </button>
+            </div>
+        </section>
+
+        <div id="toast-container"></div>
     </div>
 
     <script>
-        // ---------------------------------------------------------------------
-        // 1. INITIALIZE ICONS
-        // ---------------------------------------------------------------------
+        // 1. Inicializar iconos
         lucide.createIcons();
 
-        // ---------------------------------------------------------------------
-        // 2. CUSTOM CURSOR ENGINE
-        // ---------------------------------------------------------------------
-        const cursorDot = document.getElementById('cursorDot');
-        const cursorOutline = document.getElementById('cursorOutline');
-        const interactables = document.querySelectorAll('.interactive-el, a, button');
-
-        // Mouse tracking state
-        let mouseX = window.innerWidth / 2;
-        let mouseY = window.innerHeight / 2;
-        let outlineX = mouseX;
-        let outlineY = mouseY;
-
-        // Mouse move listener
-        window.addEventListener('mousemove', (e) => {
-            mouseX = e.clientX;
-            mouseY = e.clientY;
-            // Immediate update for dot
-            cursorDot.style.left = `${mouseX}px`;
-            cursorDot.style.top = `${mouseY}px`;
-        });
-
-        // Smooth trailing animation for outline
-        function animateCursor() {
-            let dx = mouseX - outlineX;
-            let dy = mouseY - outlineY;
-            // Lerp (Linear Interpolation) for smoothness
-            outlineX += dx * 0.15;
-            outlineY += dy * 0.15;
-            
-            cursorOutline.style.left = `${outlineX}px`;
-            cursorOutline.style.top = `${outlineY}px`;
-            requestAnimationFrame(animateCursor);
-        }
-        animateCursor();
-
-        // Hover states
-        interactables.forEach(el => {
-            el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
-            el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
-        });
-
-        // ---------------------------------------------------------------------
-        // 3. 3D MATHEMATICAL MODEL (TILT EFFECT ON HERO)
-        // ---------------------------------------------------------------------
-        const scene = document.getElementById('scene3D');
-        const object3D = document.getElementById('object3D');
-
-        scene.addEventListener('mousemove', (e) => {
-            const rect = scene.getBoundingClientRect();
-            // Calculate mouse position relative to the center of the scene [-1 to 1]
-            const x = (e.clientX - rect.left - rect.width / 2) / (rect.width / 2);
-            const y = (e.clientY - rect.top - rect.height / 2) / (rect.height / 2);
-            
-            // Multiply by intensity (degrees)
-            const rotateX = y * -20 + 15; // Base offset of 15deg
-            const rotateY = x * 20 - 20;  // Base offset of -20deg
-            
-            // Apply inline style dynamically
-            object3D.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-        });
-
-        scene.addEventListener('mouseleave', () => {
-            // Snap back to original state with transition
-            object3D.style.transition = 'transform 0.8s cubic-bezier(0.16, 1, 0.3, 1)';
-            object3D.style.transform = `rotateX(15deg) rotateY(-20deg)`;
-            setTimeout(() => { object3D.style.transition = 'none'; }, 800);
-        });
-
-        // ---------------------------------------------------------------------
-        // 4. DATA INJECTION (PROMO CODES)
-        // ---------------------------------------------------------------------
-        const premiumCodes = [
+        // 2. Renderizar los 10 códigos de forma dinámica
+        const codes = [
             "698-BOW-235", "144-QJN-637", "836-QEQ-119", "841-GZR-588", 
             "344-UGX-722", "344-VNX-494", "286-VQA-776", "127-UZN-754", 
             "927-MDF-490", "773-FEK-048"
         ];
-
-        const listContainer = document.getElementById('codeListInjectionPoint');
         
-        premiumCodes.forEach(code => {
-            const el = document.createElement('div');
-            el.className = 'code-row-item';
-            el.innerHTML = `
-                <span class="code-string">${code}</span>
-                <button class="btn-clipboard interactive-el" onclick="executeClipboardCopy('${code}')">Copiar</button>
+        const codesContainer = document.getElementById('codes-container');
+        codes.forEach((code, index) => {
+            const card = document.createElement('div');
+            card.className = 'code-card reveal';
+            card.style.transitionDelay = `${index * 0.05}s`; // Efecto cascada
+            card.innerHTML = `
+                <div class="code-value">${code}</div>
+                <button class="btn-copy" onclick="copyCode('${code}')">
+                    <i data-lucide="copy" style="width: 16px;"></i> Copiar Código
+                </button>
             `;
-            listContainer.appendChild(el);
+            codesContainer.appendChild(card);
         });
-        
-        // Re-bind cursor events for newly injected buttons
-        document.querySelectorAll('.btn-clipboard').forEach(el => {
-            el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
-            el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
-        });
+        // Reinicializar iconos para los botones nuevos
+        lucide.createIcons();
 
-        // ---------------------------------------------------------------------
-        // 5. MODAL LOGIC ENGINE
-        // ---------------------------------------------------------------------
-        const modalEngine = document.getElementById('redemptionModal');
-        const triggerBtn = document.getElementById('triggerCodeModal');
-        const closeBtn = document.getElementById('closeModalTrigger');
-
-        triggerBtn.addEventListener('click', () => modalEngine.classList.add('is-active'));
-        closeBtn.addEventListener('click', () => modalEngine.classList.remove('is-active'));
-        
-        // Close on overlay click
-        modalEngine.addEventListener('click', (e) => {
-            if (e.target === modalEngine) modalEngine.classList.remove('is-active');
-        });
-        // Close on ESC key
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') modalEngine.classList.remove('is-active');
-        });
-
-        // ---------------------------------------------------------------------
-        // 6. TOAST NOTIFICATION CONTROLLER & CLIPBOARD API
-        // ---------------------------------------------------------------------
-        function spawnToast(msg) {
-            const layer = document.getElementById('toast-layer');
+        // 3. Sistema de Toasts (Notificaciones elegantes)
+        function showToast(message) {
+            const container = document.getElementById('toast-container');
             const toast = document.createElement('div');
-            toast.className = 'toast-message';
-            toast.innerHTML = `<i data-lucide="check-circle" class="toast-icon" style="width: 20px;"></i> <span>${msg}</span>`;
-            
-            layer.appendChild(toast);
+            toast.className = 'toast';
+            toast.innerHTML = `<i data-lucide="check-circle" style="color: var(--gold);"></i> <span>${message}</span>`;
+            container.appendChild(toast);
             lucide.createIcons();
             
-            // Self-destruct logic
             setTimeout(() => {
-                toast.style.animation = 'toastSlideIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) reverse forwards';
+                toast.style.animation = 'slideIn 0.5s reverse forwards';
                 setTimeout(() => toast.remove(), 500);
-            }, 3500);
+            }, 3000);
         }
 
-        window.executeClipboardCopy = function(targetText) {
-            navigator.clipboard.writeText(targetText).then(() => {
-                spawnToast(`Código copiado. Dirígete a la aplicación para canjearlo.`);
+        // 4. Lógica de Portapapeles
+        window.copyCode = function(code) {
+            navigator.clipboard.writeText(code).then(() => {
+                showToast(`¡Código ${code} copiado al portapapeles!`);
             }).catch(err => {
-                console.error('Clipboard operation failed: ', err);
-                spawnToast('Error al copiar. Inténtalo manualmente.');
+                console.error('Error al copiar: ', err);
             });
         };
 
-        // ---------------------------------------------------------------------
-        // 7. VIRAL SHARE SYSTEM
-        // ---------------------------------------------------------------------
-        const appUrl = "https://interra-hub.vercel.app/welcome.html";
-        const copyText = `🚀 ¡Cuidado! Interra-hub ha abierto su BETA cerrada para planificar viajes en grupo (el fin de los excels). Regalan 3 meses de plan PLUS, pilla tu código gratis aquí antes de que vuelen: ${appUrl}`;
+        // 5. Lógica de Compartir (WhatsApp & Link)
+        const domainURL = window.location.href; // O pon 'https://tudominio.com/welcome.html'
+        const shareText = `🔥 ¡Locura total! Interra-hub ha abierto su BETA y regala 3 meses de la suscripción PLUS. Quedan pocos códigos, pilla el tuyo aquí antes de que se agoten: ${domainURL}`;
         
-        document.getElementById('btnShareWa').href = `https://api.whatsapp.com/send?text=${encodeURIComponent(copyText)}`;
+        document.getElementById('btn-share-wa').href = `https://api.whatsapp.com/send?text=${encodeURIComponent(shareText)}`;
         
-        document.getElementById('btnShareLink').addEventListener('click', (e) => {
-            e.preventDefault(); // Prevent jump
-            navigator.clipboard.writeText(copyText).then(() => {
-                spawnToast("Texto promocional copiado. Pégalo en tus grupos de viaje.");
+        document.getElementById('btn-share-link').addEventListener('click', () => {
+            navigator.clipboard.writeText(shareText).then(() => {
+                showToast("Mensaje promocional copiado. ¡Pégalo a tus amigos!");
             });
         });
 
-        // ---------------------------------------------------------------------
-        // 8. SCROLL REVEAL OBSERVER (INTERSECTION OBSERVER API)
-        // ---------------------------------------------------------------------
-        const revealElements = document.querySelectorAll('.will-reveal');
+        // 6. Intersection Observer (Animaciones al hacer scroll)
+        const revealElements = document.querySelectorAll('.reveal');
+        const revealOptions = { threshold: 0.1, rootMargin: "0px 0px -50px 0px" };
         
-        // Remove 'is-revealed' initially (useful if JS is enabled)
-        revealElements.forEach(el => el.classList.remove('is-revealed'));
-
-        const revealOptions = {
-            threshold: 0.1,
-            rootMargin: "0px 0px -80px 0px"
-        };
-        
-        const scrollObserver = new IntersectionObserver((entries, observer) => {
+        const revealOnScroll = new IntersectionObserver(function(entries, observer) {
             entries.forEach(entry => {
-                if(entry.isIntersecting) {
-                    // Slight delay for organic feel
-                    setTimeout(() => {
-                        entry.target.classList.add('is-revealed');
-                    }, 50);
-                    observer.unobserve(entry.target);
-                }
+                if (!entry.isIntersecting) return;
+                entry.target.classList.add('active');
+                observer.unobserve(entry.target);
             });
         }, revealOptions);
 
-        revealElements.forEach(el => scrollObserver.observe(el));
+        revealElements.forEach(el => revealOnScroll.observe(el));
 
-        // ---------------------------------------------------------------------
-        // 9. CINEMATIC DUST PARTICLE ENGINE (CANVAS API)
-        // ---------------------------------------------------------------------
-        const canvasObj = document.getElementById('cinematic-dust-canvas');
-        const ctx = canvasObj.getContext('2d');
-        let dustArray = [];
-
-        function setCanvasDimensions() {
-            canvasObj.width = window.innerWidth;
-            canvasObj.height = window.innerHeight;
+        // 7. SISTEMA DE PARTÍCULAS (CONFETI PRO EN CANVAS)
+        const canvas = document.getElementById('party-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
         }
-        window.addEventListener('resize', setCanvasDimensions);
-        setCanvasDimensions();
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
 
-        class ParticleNode {
+        const colors = ['#ffd700', '#ffaa00', '#a855f7', '#ec4899', '#ffffff'];
+
+        class Particle {
             constructor() {
-                this.resetConfig(true);
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height - canvas.height; // Empiezan arriba
+                this.size = Math.random() * 5 + 2;
+                this.speedY = Math.random() * 2 + 1; // Caída lenta y elegante
+                this.speedX = (Math.random() - 0.5) * 1;
+                this.color = colors[Math.floor(Math.random() * colors.length)];
+                this.opacity = Math.random() * 0.5 + 0.3;
+                this.angle = Math.random() * 360;
+                this.spin = (Math.random() - 0.5) * 0.1;
             }
-            
-            resetConfig(fullRandom = false) {
-                this.x = Math.random() * canvasObj.width;
-                // If initializing, spread everywhere. If resetting, spawn at bottom to float up
-                this.y = fullRandom ? Math.random() * canvasObj.height : canvasObj.height + 10;
-                
-                // Extremely tiny, subtle sizes
-                this.radius = Math.random() * 1.2 + 0.2;
-                
-                // Float UPWARDS slowly
-                this.velocity_Y = -(Math.random() * 0.3 + 0.05);
-                this.velocity_X = (Math.random() - 0.5) * 0.2;
-                
-                // Color variation (whites, slight grays, slight warm tones)
-                const tones = ['255,255,255', '240,240,245', '255,240,230'];
-                this.baseColor = tones[Math.floor(Math.random() * tones.length)];
-                
-                // Fading life cycle
-                this.opacity = Math.random() * 0.4 + 0.1;
-                this.pulseRate = Math.random() * 0.02 + 0.005;
-                this.pulseAngle = Math.random() * Math.PI * 2;
-            }
-
-            processLogic() {
-                this.y += this.velocity_Y;
-                this.x += this.velocity_X;
-                
-                // Parallax effect with mouse
-                let dx = mouseX - (canvasObj.width / 2);
-                let dy = mouseY - (canvasObj.height / 2);
-                this.x -= dx * 0.0001; // Tiny interaction
-                
-                // Pulse opacity
-                this.pulseAngle += this.pulseRate;
-                this.currentOpacity = this.opacity + Math.sin(this.pulseAngle) * 0.2;
-                if(this.currentOpacity < 0) this.currentOpacity = 0;
-
-                // Recycle if out of bounds
-                if (this.y < -10 || this.x < -10 || this.x > canvasObj.width + 10) {
-                    this.resetConfig(false);
+            update() {
+                this.y += this.speedY;
+                this.x += this.speedX;
+                this.angle += this.spin;
+                // Si cae por debajo de la pantalla, reaparece arriba
+                if (this.y > canvas.height) {
+                    this.y = -10;
+                    this.x = Math.random() * canvas.width;
                 }
             }
-
-            renderGraphics() {
-                ctx.fillStyle = `rgba(${this.baseColor}, ${this.currentOpacity})`;
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-                ctx.fill();
+            draw() {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.rotate(this.angle);
+                ctx.globalAlpha = this.opacity;
+                ctx.fillStyle = this.color;
+                
+                // Dibujar forma de confeti o círculo
+                if(Math.random() > 0.5){
+                    ctx.fillRect(-this.size/2, -this.size/2, this.size, this.size*2);
+                } else {
+                    ctx.beginPath();
+                    ctx.arc(0, 0, this.size, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+                ctx.restore();
             }
         }
 
-        // Generate particle pool (Low density for premium feel, not noisy)
-        const density = window.innerWidth < 768 ? 40 : 80;
-        for (let i = 0; i < density; i++) {
-            dustArray.push(new ParticleNode());
+        // Crear 70 partículas para no saturar pero mantener la fiesta
+        for (let i = 0; i < 70; i++) {
+            particles.push(new Particle());
         }
 
-        function engineLoop() {
-            ctx.clearRect(0, 0, canvasObj.width, canvasObj.height);
-            for (let i = 0; i < dustArray.length; i++) {
-                dustArray[i].processLogic();
-                dustArray[i].renderGraphics();
-            }
-            requestAnimationFrame(engineLoop);
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animateParticles);
         }
         
-        // Start engine
-        engineLoop();
+        // Iniciar la fiesta visual
+        animateParticles();
 
     </script>
 </body>
