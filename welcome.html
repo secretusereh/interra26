@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>¡Bienvenido a la BETA! | Interra-hub</title>
+    
+    <meta name="description" content="Eres de los primeros en llegar. Celebra el lanzamiento de la BETA de Interra-hub y consigue 3 meses de PLUS gratis.">
+    
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="🎁 ¡BETA de Interra-hub Abierta!">
+    <meta property="og:description" content="Únete antes que nadie al planificador definitivo de viajes. Pilla uno de los códigos exclusivos para conseguir Interra-hub PLUS gratis.">
+    <meta property="og:image" content="https://tudominio.com/banner.PNG"> 
+    <meta property="og:url" content="https://tudominio.com/welcome.html">
+    <meta property="og:site_name" content="Interra-hub">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="¡BETA de Interra-hub Abierta!">
+    <meta name="twitter:description" content="Consigue uno de los 10 códigos limitados para Interra-hub PLUS.">
+    <meta name="twitter:image" content="https://tudominio.com/banner.PNG">
+
+    <link rel="icon" type="image/png" href="interrahublogo.PNG">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        :root {
+            --bg-color: #030303;
+            --surface: rgba(20, 20, 20, 0.5);
+            --surface-solid: #0f0f0f;
+            --primary: #ffffff;
+            --text-muted: #888888;
+            --gold: #ffd700;
+            --gold-gradient: linear-gradient(135deg, #ffd700 0%, #ffaa00 100%);
+            --beta-gradient: linear-gradient(135deg, #a855f7 0%, #ec4899 100%);
+            --border-subtle: rgba(255, 255, 255, 0.08);
+            --border-gold: rgba(255, 215, 0, 0.3);
+            --transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Sora', sans-serif;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+            background-image: radial-gradient(circle at 50% 0%, rgba(168, 85, 247, 0.15), transparent 60%);
+        }
+
+        ::selection { background: #a855f7; color: var(--primary); }
+
+        /* Lienzo para partículas (Fondo animado JS) */
+        #party-canvas {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 1; pointer-events: none;
+        }
+
+        /* Contenedor Principal Z-Index */
+        .wrapper {
+            position: relative; z-index: 10;
+        }
+
+        /* Nav Minimalista */
+        nav {
+            width: 100%; padding: 1.5rem 5%;
+            display: flex; justify-content: center; align-items: center;
+            position: absolute; top: 0; left: 0; z-index: 100;
+        }
+        .logo {
+            font-weight: 800; font-size: 1.5rem; letter-spacing: -0.5px;
+            display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--primary);
+        }
+        .logo .dot { color: #a855f7; }
+
+        /* =========================================
+           HERO SECTION
+           ========================================= */
+        .hero {
+            min-height: 90vh;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            text-align: center; padding: 8rem 5% 4rem;
+        }
+        
+        .badge-party {
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            color: #d8b4fe; border-radius: 30px;
+            padding: 0.5rem 1.2rem; font-size: 0.8rem; font-weight: 800; letter-spacing: 1.5px;
+            text-transform: uppercase; margin-bottom: 2rem;
+            animation: float 4s ease-in-out infinite;
+            backdrop-filter: blur(10px); display: inline-flex; align-items: center; gap: 8px;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 6vw, 5rem); font-weight: 800;
+            letter-spacing: -2px; line-height: 1.1; margin-bottom: 1.5rem;
+            max-width: 900px; text-shadow: 0 10px 30px rgba(168, 85, 247, 0.3);
+        }
+        .hero h1 span {
+            background: var(--beta-gradient);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            color: rgba(255, 255, 255, 0.8); font-size: clamp(1.1rem, 2vw, 1.3rem);
+            line-height: 1.6; max-width: 700px; margin-bottom: 3rem; font-weight: 300;
+        }
+
+        /* =========================================
+           SECCIÓN: CÓDIGOS PROMOCIONALES
+           ========================================= */
+        .section-codes {
+            padding: 6rem 5%; max-width: 1200px; margin: 0 auto; text-align: center;
+        }
+        .section-header h2 {
+            font-size: 2.8rem; font-weight: 800; margin-bottom: 1rem; letter-spacing: -1px;
+        }
+        .section-header h2 span { color: var(--gold); }
+        .section-header p {
+            color: var(--text-muted); font-size: 1.1rem; max-width: 700px; margin: 0 auto 4rem; line-height: 1.6;
+        }
+
+        .codes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .code-card {
+            background: rgba(255, 215, 0, 0.03);
+            border: 1px solid var(--border-gold);
+            border-radius: 20px; padding: 2rem 1.5rem;
+            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            transition: var(--transition);
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            position: relative; overflow: hidden;
+        }
+        .code-card::before {
+            content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,215,0,0.1), transparent);
+            transform: skewX(-20deg); transition: 0.5s;
+        }
+        .code-card:hover {
+            transform: translateY(-5px); border-color: var(--gold);
+            box-shadow: 0 15px 30px rgba(255, 215, 0, 0.1);
+        }
+        .code-card:hover::before { left: 150%; }
+
+        .code-value {
+            font-family: monospace; font-size: 1.6rem; font-weight: 800;
+            color: var(--primary); letter-spacing: 2px; margin-bottom: 1.5rem;
+        }
+
+        .btn-copy {
+            background: var(--gold-gradient); color: #000; border: none;
+            padding: 0.7rem 1.5rem; border-radius: 30px; font-weight: 800; font-size: 0.9rem;
+            cursor: pointer; transition: 0.3s; display: inline-flex; align-items: center; gap: 8px;
+        }
+        .btn-copy:hover { transform: scale(1.05); box-shadow: 0 0 20px rgba(255,215,0,0.4); }
+
+        .scarcity-alert {
+            margin-top: 4rem; display: inline-flex; align-items: center; gap: 10px;
+            background: rgba(236, 72, 153, 0.1); border: 1px solid rgba(236, 72, 153, 0.3);
+            padding: 1rem 2rem; border-radius: 100px; color: #fbcfe8; font-weight: 600; font-size: 0.95rem;
+        }
+
+        /* =========================================
+           SECCIÓN: FUTURO Y APP INFO
+           ========================================= */
+        .section-info {
+            padding: 8rem 5%; background: var(--surface-solid);
+            border-top: 1px solid var(--border-subtle); border-bottom: 1px solid var(--border-subtle);
+        }
+        .info-container { max-width: 1000px; margin: 0 auto; text-align: center; }
+        
+        .bento-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem; margin-top: 4rem; text-align: left;
+        }
+        .bento-box {
+            background: var(--bg-color); border: 1px solid var(--border-subtle);
+            border-radius: 24px; padding: 3rem 2rem;
+            transition: var(--transition);
+        }
+        .bento-box:hover { border-color: rgba(168, 85, 247, 0.5); transform: translateY(-5px); }
+        .bento-icon {
+            width: 50px; height: 50px; border-radius: 16px; background: rgba(255,255,255,0.05);
+            display: flex; justify-content: center; align-items: center; margin-bottom: 1.5rem; color: #d8b4fe;
+        }
+        .bento-box h3 { font-size: 1.4rem; font-weight: 800; margin-bottom: 1rem; }
+        .bento-box p { color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; font-weight: 300; }
+
+        /* =========================================
+           SECCIÓN: COMPARTIR (VIRALIDAD)
+           ========================================= */
+        .section-share {
+            padding: 8rem 5% 6rem; text-align: center; max-width: 800px; margin: 0 auto;
+        }
+        .section-share h2 { font-size: 2.5rem; font-weight: 800; margin-bottom: 1rem; letter-spacing: -1px; }
+        .section-share p { color: var(--text-muted); font-size: 1.1rem; margin-bottom: 3rem; line-height: 1.6; }
+
+        .share-actions {
+            display: flex; gap: 1.5rem; flex-wrap: wrap; justify-content: center;
+        }
+
+        .btn-whatsapp {
+            background: #25D366; color: white; border: none;
+            padding: 1.2rem 2.5rem; border-radius: 40px; font-weight: 800; font-size: 1.1rem;
+            cursor: pointer; transition: var(--transition); text-decoration: none;
+            display: inline-flex; align-items: center; gap: 12px;
+            box-shadow: 0 10px 30px rgba(37, 211, 102, 0.2);
+        }
+        .btn-whatsapp:hover { transform: scale(1.03); box-shadow: 0 15px 40px rgba(37, 211, 102, 0.4); }
+
+        .btn-link {
+            background: rgba(255,255,255,0.05); color: var(--primary); border: 1px solid var(--border-subtle);
+            padding: 1.2rem 2.5rem; border-radius: 40px; font-weight: 600; font-size: 1.1rem;
+            cursor: pointer; transition: var(--transition); display: inline-flex; align-items: center; gap: 12px;
+        }
+        .btn-link:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.3); }
+
+        /* Toasts System */
+        #toast-container { position: fixed; bottom: 40px; right: 40px; z-index: 20000; display: flex; flex-direction: column; gap: 15px; }
+        .toast {
+            background: rgba(15, 15, 15, 0.95); backdrop-filter: blur(10px); border: 1px solid var(--border-gold);
+            color: white; padding: 1.2rem 2rem; border-radius: 18px; display: flex; align-items: center; gap: 15px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5); animation: slideIn 0.5s var(--transition) forwards; font-size: 0.95rem; font-weight: 600;
+        }
+
+        /* Utilidades de Animación por Scroll (Intersection Observer) */
+        .reveal { opacity: 0; transform: translateY(40px); transition: 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+
+        /* Animaciones Keyframes */
+        @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-10px); } 100% { transform: translateY(0px); } }
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+        @media (max-width: 768px) {
+            .codes-grid { grid-template-columns: 1fr; }
+            .share-actions { flex-direction: column; }
+            .btn-whatsapp, .btn-link { width: 100%; justify-content: center; }
+            #toast-container { bottom: 20px; right: 20px; left: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="party-canvas"></canvas>
+
+    <div class="wrapper">
+        <nav>
+            <a href="index.html" class="logo">Interra-hub<span class="dot">.</span></a>
+        </nav>
+
+        <header class="hero">
+            <div class="badge-party">
+                <i data-lucide="party-popper" style="width: 16px;"></i> Lanzamiento Exclusivo
+            </div>
+            <h1 class="reveal active">Bienvenido a la BETA de <span>Interra-hub</span></h1>
+            <p class="reveal active" style="transition-delay: 0.1s;">
+                Eres de los primeros en pisar nuestra plataforma. Queremos agradecer tu apoyo inicial ofreciéndote acceso privilegiado a nuestra élite viajera. ¿Listo para planificar sin caos?
+            </p>
+        </header>
+
+        <section class="section-codes">
+            <div class="section-header reveal">
+                <h2>Tu recompensa: <span>3 Meses PLUS Gratis</span></h2>
+                <p>Hemos generado 10 códigos únicos de un solo uso para desbloquear Interra-hub PLUS de forma vitalicia. El que avisa no es traidor: <strong>cuando se usen, se acabó.</strong> ¡Sé rápido!</p>
+            </div>
+
+            <div class="codes-grid" id="codes-container">
+                </div>
+
+            <div class="scarcity-alert reveal">
+                <i data-lucide="alert-circle" style="width: 18px;"></i>
+                Sólo aplicable a cuentas registradas durante la Fase Beta.
+            </div>
+        </section>
+
+        <section class="section-info">
+            <div class="info-container">
+                <h2 style="font-size: 2.5rem; font-weight: 800; margin-bottom: 1rem;" class="reveal">¿Qué es Interra-hub?</h2>
+                <p style="color: var(--text-muted); font-size: 1.1rem; line-height: 1.6;" class="reveal">
+                    Recomendamos encarecidamente que pruebes la app para tu próximo viaje. Es el planificador definitivo para viajes en grupo: diseña tu ruta colaborativa, cuadra gastos automáticamente y olvídate de los excels infinitos.
+                </p>
+
+                <div class="bento-grid">
+                    <div class="bento-box reveal">
+                        <div class="bento-icon"><i data-lucide="map"></i></div>
+                        <h3>Rutas Inteligentes</h3>
+                        <p>Añade vuelos, trenes y hoteles. Sincronización en tiempo real para todos tus amigos.</p>
+                    </div>
+                    <div class="bento-box reveal" style="transition-delay: 0.1s;">
+                        <div class="bento-icon" style="color: var(--gold);"><i data-lucide="calculator"></i></div>
+                        <h3>Motor Financiero</h3>
+                        <p>Introduce tickets y cenas. Nuestro algoritmo calcula quién debe qué al céntimo.</p>
+                    </div>
+                    <div class="bento-box reveal" style="transition-delay: 0.2s;">
+                        <div class="bento-icon" style="color: #4da6ff;"><i data-lucide="rocket"></i></div>
+                        <h3>Se vienen cositas...</h3>
+                        <p>Estas próximas semanas iremos actualizando cosas <strong>muy guapas</strong>. No pierdas de vista la app porque el roadmap de 2027 es una locura.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section-share reveal">
+            <h2>Que no viajen en el pasado</h2>
+            <p>Tus amigos también necesitan organizarse. Invítalos a la BETA antes de que se acaben los códigos y probad la plataforma juntos. ¡Facilítales la vida!</p>
+            
+            <div class="share-actions">
+                <a href="#" id="btn-share-wa" class="btn-whatsapp">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/>
+                    </svg>
+                    Reenviar por WhatsApp
+                </a>
+                <button id="btn-share-link" class="btn-link">
+                    <i data-lucide="link"></i> Copiar enlace
+                </button>
+            </div>
+        </section>
+
+        <div id="toast-container"></div>
+    </div>
+
+    <script>
+        // 1. Inicializar iconos
+        lucide.createIcons();
+
+        // 2. Renderizar los 10 códigos de forma dinámica
+        const codes = [
+            "698-BOW-235", "144-QJN-637", "836-QEQ-119", "841-GZR-588", 
+            "344-UGX-722", "344-VNX-494", "286-VQA-776", "127-UZN-754", 
+            "927-MDF-490", "773-FEK-048"
+        ];
+        
+        const codesContainer = document.getElementById('codes-container');
+        codes.forEach((code, index) => {
+            const card = document.createElement('div');
+            card.className = 'code-card reveal';
+            card.style.transitionDelay = `${index * 0.05}s`; // Efecto cascada
+            card.innerHTML = `
+                <div class="code-value">${code}</div>
+                <button class="btn-copy" onclick="copyCode('${code}')">
+                    <i data-lucide="copy" style="width: 16px;"></i> Copiar Código
+                </button>
+            `;
+            codesContainer.appendChild(card);
+        });
+        // Reinicializar iconos para los botones nuevos
+        lucide.createIcons();
+
+        // 3. Sistema de Toasts (Notificaciones elegantes)
+        function showToast(message) {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.innerHTML = `<i data-lucide="check-circle" style="color: var(--gold);"></i> <span>${message}</span>`;
+            container.appendChild(toast);
+            lucide.createIcons();
+            
+            setTimeout(() => {
+                toast.style.animation = 'slideIn 0.5s reverse forwards';
+                setTimeout(() => toast.remove(), 500);
+            }, 3000);
+        }
+
+        // 4. Lógica de Portapapeles
+        window.copyCode = function(code) {
+            navigator.clipboard.writeText(code).then(() => {
+                showToast(`¡Código ${code} copiado al portapapeles!`);
+            }).catch(err => {
+                console.error('Error al copiar: ', err);
+            });
+        };
+
+        // 5. Lógica de Compartir (WhatsApp & Link)
+        const domainURL = window.location.href; // O pon 'https://tudominio.com/welcome.html'
+        const shareText = `🔥 ¡Locura total! Interra-hub ha abierto su BETA y regala 3 meses de la suscripción PLUS. Quedan pocos códigos, pilla el tuyo aquí antes de que se agoten: ${domainURL}`;
+        
+        document.getElementById('btn-share-wa').href = `https://api.whatsapp.com/send?text=${encodeURIComponent(shareText)}`;
+        
+        document.getElementById('btn-share-link').addEventListener('click', () => {
+            navigator.clipboard.writeText(shareText).then(() => {
+                showToast("Mensaje promocional copiado. ¡Pégalo a tus amigos!");
+            });
+        });
+
+        // 6. Intersection Observer (Animaciones al hacer scroll)
+        const revealElements = document.querySelectorAll('.reveal');
+        const revealOptions = { threshold: 0.1, rootMargin: "0px 0px -50px 0px" };
+        
+        const revealOnScroll = new IntersectionObserver(function(entries, observer) {
+            entries.forEach(entry => {
+                if (!entry.isIntersecting) return;
+                entry.target.classList.add('active');
+                observer.unobserve(entry.target);
+            });
+        }, revealOptions);
+
+        revealElements.forEach(el => revealOnScroll.observe(el));
+
+        // 7. SISTEMA DE PARTÍCULAS (CONFETI PRO EN CANVAS)
+        const canvas = document.getElementById('party-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        const colors = ['#ffd700', '#ffaa00', '#a855f7', '#ec4899', '#ffffff'];
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height - canvas.height; // Empiezan arriba
+                this.size = Math.random() * 5 + 2;
+                this.speedY = Math.random() * 2 + 1; // Caída lenta y elegante
+                this.speedX = (Math.random() - 0.5) * 1;
+                this.color = colors[Math.floor(Math.random() * colors.length)];
+                this.opacity = Math.random() * 0.5 + 0.3;
+                this.angle = Math.random() * 360;
+                this.spin = (Math.random() - 0.5) * 0.1;
+            }
+            update() {
+                this.y += this.speedY;
+                this.x += this.speedX;
+                this.angle += this.spin;
+                // Si cae por debajo de la pantalla, reaparece arriba
+                if (this.y > canvas.height) {
+                    this.y = -10;
+                    this.x = Math.random() * canvas.width;
+                }
+            }
+            draw() {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.rotate(this.angle);
+                ctx.globalAlpha = this.opacity;
+                ctx.fillStyle = this.color;
+                
+                // Dibujar forma de confeti o círculo
+                if(Math.random() > 0.5){
+                    ctx.fillRect(-this.size/2, -this.size/2, this.size, this.size*2);
+                } else {
+                    ctx.beginPath();
+                    ctx.arc(0, 0, this.size, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+                ctx.restore();
+            }
+        }
+
+        // Crear 70 partículas para no saturar pero mantener la fiesta
+        for (let i = 0; i < 70; i++) {
+            particles.push(new Particle());
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animateParticles);
+        }
+        
+        // Iniciar la fiesta visual
+        animateParticles();
+
+    </script>
+</body>
+</html>
