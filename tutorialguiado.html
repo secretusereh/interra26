@@ -6,16 +6,19 @@
     <title>Interra-hub | Tutorial Guiado Definitivo</title>
     
     <link rel="icon" type="image/png" href="interrahublogo.PNG">
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;800&display=swap" rel="stylesheet">
+    
     <script src="https://unpkg.com/lucide@latest"></script>
+    
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
     <style>
         /* =========================================
-           VARIABLES Y DISEÑO BASE (Core System)
+           1. VARIABLES Y RESET CORE
            ========================================= */
         :root {
             --bg-color: #030303;
@@ -32,28 +35,39 @@
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Sora', sans-serif; }
-        html { scroll-behavior: smooth; }
+        
+        html { scroll-behavior: smooth; overflow-x: hidden; }
 
         body {
             background-color: var(--bg-color); color: var(--primary); min-height: 100vh;
             background-image: radial-gradient(circle at 50% -10%, rgba(255, 255, 255, 0.05), transparent 60%);
-            background-attachment: fixed; overflow-x: hidden;
+            background-attachment: fixed; overflow-x: hidden; position: relative;
         }
 
-        /* Nav */
+        /* =========================================
+           2. NAVEGACIÓN Y CABECERA (Z-Index base: 100)
+           ========================================= */
         nav {
             display: flex; justify-content: space-between; align-items: center;
             padding: 1rem 5%; background: rgba(3, 3, 3, 0.8); backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--border-subtle); position: sticky; top: 0; z-index: 100;
+            transition: background 0.3s ease, z-index 0.3s ease;
         }
+        
+        /* Elevación dinámica para el tour */
+        nav.tour-elevate-parent {
+            z-index: 9005 !important;
+            background: var(--bg-color) !important;
+        }
+
         .btn-nav { background: transparent; color: var(--text-muted); border: none; cursor: pointer; display: flex; align-items: center; gap: 8px; font-weight: 600; transition: var(--transition); }
         .btn-nav:hover { color: var(--primary); }
-        .btn-export { color: var(--primary); background: rgba(255,255,255,0.1); padding: 0.5rem 1rem; border-radius: 20px; transition: all 0.3s ease;}
-        .btn-export:hover { background: var(--primary); color: var(--bg-color); }
         
+        .btn-export { color: var(--primary); background: rgba(255,255,255,0.1); padding: 0.5rem 1rem; border-radius: 20px; transition: all 0.3s ease; position: relative;}
+        .btn-export:hover { background: var(--primary); color: var(--bg-color); }
+
         .logo { font-weight: 800; font-size: 1.3rem; display: flex; align-items: center; gap: 4px; letter-spacing: -0.5px; position: absolute; left: 50%; transform: translateX(-50%); }
 
-        /* Cabecera y Tabs */
         .trip-header { padding: 3rem 5% 1rem; max-width: 1000px; margin: 0 auto; text-align: center; }
         .trip-header h1 { font-size: 3.5rem; font-weight: 800; letter-spacing: -2px; margin-bottom: 0.5rem; word-break: break-word; color: var(--primary);}
         .trip-header p { color: var(--text-muted); font-size: 1.1rem; }
@@ -78,12 +92,13 @@
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         /* =========================================
-           TAB 1: ITINERARIO
+           3. ITINERARIO Y EVENTOS
            ========================================= */
         .day-container { margin-bottom: 3rem; position: relative; }
         .day-header { display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 0 1rem; border-bottom: 1px solid var(--border-subtle); margin-bottom: 1.5rem; }
         .day-title { font-size: 1.6rem; font-weight: 600; display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;}
         .day-date { font-size: 1rem; color: var(--text-muted); font-weight: 300; }
+        
         .btn-add-day { background: rgba(255,255,255,0.05); color: var(--primary); border: 1px solid var(--border-subtle); padding: 0.6rem 1.2rem; border-radius: 30px; font-size: 0.85rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: var(--transition); }
         .btn-add-day:hover { background: var(--primary); color: var(--bg-color); }
         
@@ -93,6 +108,7 @@
         .event-card { background: var(--surface); border: 1px solid var(--border-subtle); border-radius: 16px; padding: 1.2rem 1.5rem; margin-bottom: 1.5rem; position: relative; backdrop-filter: blur(10px); display: flex; align-items: flex-start; gap: 1.2rem; transition: var(--transition);}
         .event-card:hover { border-color: rgba(255,255,255,0.2); transform: translateX(5px); }
         .event-card::before { content: ''; position: absolute; left: -26px; top: 24px; width: 12px; height: 12px; background: var(--primary); border-radius: 50%; z-index: 2; box-shadow: 0 0 10px var(--primary);}
+        
         .event-card.type-transport::before { background: var(--accent-blue); box-shadow: 0 0 10px var(--accent-blue);}
         .event-card.type-hotel::before { background: var(--accent-green); box-shadow: 0 0 10px var(--accent-green);}
         .event-card.type-plan::before { background: var(--accent); box-shadow: 0 0 10px var(--accent);}
@@ -105,6 +121,17 @@
 
         .event-actions { display: flex; flex-direction: column; gap: 5px; opacity: 0; transition: var(--transition); }
         .event-card:hover .event-actions { opacity: 1; }
+        
+        /* Modificador estricto para que las acciones se vean perfectamente en el tour */
+        .event-actions.tour-highlight {
+            opacity: 1 !important;
+            flex-direction: row !important;
+            background: var(--surface-solid) !important;
+            padding: 10px !important;
+            border-radius: 12px !important;
+            box-shadow: 0 0 0 4px var(--accent-blue), 0 0 40px rgba(77, 166, 255, 0.7) !important;
+        }
+
         .btn-action { border: none; width: 32px; height: 32px; border-radius: 8px; cursor: pointer; display: flex; justify-content: center; align-items: center; transition: 0.3s; }
         .btn-edit { background: rgba(77, 166, 255, 0.1); color: var(--accent-blue); }
         .btn-edit:hover { background: var(--accent-blue); color: white; }
@@ -112,13 +139,16 @@
         .btn-delete:hover { background: var(--accent); color: white; }
 
         /* =========================================
-           TAB 2: MAPA
+           4. MAPA (Control estricto de Leaflet)
            ========================================= */
         #map-container { width: 100%; height: 500px; border-radius: 16px; border: 1px solid var(--border-subtle); position: relative; overflow: hidden; }
-        .leaflet-container { z-index: 1 !important; /* Importante para no pisar el tour overlay */ }
+        
+        /* Restricción absoluta de z-index para que Leaflet no superponga el tour */
+        .leaflet-container { z-index: 1 !important; }
+        .leaflet-pane, .leaflet-top, .leaflet-bottom, .leaflet-control { z-index: 1 !important; }
 
         /* =========================================
-           TAB 3: FINANCE
+           5. FINANCE Y USUARIOS
            ========================================= */
         .finance-card, .debt-card, .user-section { background: var(--surface); border: 1px solid var(--border-subtle); border-radius: 16px; padding: 1.5rem; margin-bottom: 1rem; transition: var(--transition);}
         .finance-card:hover, .debt-card:hover { background: rgba(255,255,255,0.05); transform: translateX(5px); }
@@ -132,62 +162,65 @@
         
         .btn-finance-add-circle { width: 45px; height: 45px; border-radius: 50%; background: linear-gradient(135deg, #ff4d4d, #ff8080); color: #ffffff; border: none; display: flex; justify-content: center; align-items: center; box-shadow: 0 4px 15px rgba(255, 77, 77, 0.3); transition: 0.3s; cursor: pointer;}
         .btn-finance-add-circle:hover { transform: scale(1.1); box-shadow: 0 8px 25px rgba(255, 77, 77, 0.5); }
+        
         .btn-settle { background: var(--primary); color: var(--bg-color); border: none; padding: 0.6rem 1.2rem; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.3s;}
         .btn-settle:hover { transform: scale(0.95); }
 
-        /* =========================================
-           TAB 4: EXTRA INFO
-           ========================================= */
-        .weather-card {
-            min-width: 95px; padding: 1rem 0.5rem; border-radius: 12px; text-align: center; border: 1px solid var(--border-subtle); background: rgba(255,255,255,0.03); flex-shrink: 0;
-        }
-        .weather-card.today {
-            border-color: rgba(255,77,77,0.3); background: rgba(255,77,77,0.1);
-        }
+        .weather-card { min-width: 95px; padding: 1rem 0.5rem; border-radius: 12px; text-align: center; border: 1px solid var(--border-subtle); background: rgba(255,255,255,0.03); flex-shrink: 0; }
+        .weather-card.today { border-color: rgba(255,77,77,0.3); background: rgba(255,77,77,0.1); }
 
-        /* =========================================
-           TAB 5: USUARIOS
-           ========================================= */
         .user-avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--accent-blue); display: flex; align-items: center; justify-content: center; color: white; border: 2px solid rgba(255,255,255,0.2); flex-shrink: 0;}
-        .user-role-tag { font-size: 0.7rem; padding: 0.3rem 0.6rem; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; white-space: nowrap; }
+        .user-role-tag { font-size: 0.7rem; padding: 0.3rem 0.6rem; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; font-weight: 800; white-space: nowrap; }
         .role-admin { color: var(--accent-blue); background: rgba(77,166,255,0.1); border: 1px solid var(--accent-blue); }
         .role-editor { color: var(--success); background: rgba(77,255,77,0.1); border: 1px solid var(--success); }
         .role-visor { color: var(--text-muted); background: rgba(255,255,255,0.1); border: 1px solid var(--text-muted); }
 
         /* =========================================
-           MODALES SIMULADOS
+           6. MODALES (Z-Index base: 8000)
            ========================================= */
         .modal-overlay {
             position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px);
             z-index: 8000; display: flex; justify-content: center; align-items: center;
             opacity: 0; pointer-events: none; transition: var(--transition); padding: 1rem;
         }
+        
         .modal-overlay.active { opacity: 1; pointer-events: all; }
+        
+        /* Clase crítica para elevar modales durante el tour */
+        .modal-overlay.tour-elevate-parent { z-index: 9005 !important; }
+
         .modal-content {
             background: var(--surface-solid); border: 1px solid var(--border-subtle); border-radius: 24px;
             width: 100%; max-width: 550px; padding: 1.8rem 2.5rem; transform: translateY(30px); transition: var(--transition); 
         }
         .modal-overlay.active .modal-content { transform: translateY(0); }
+        
         .modal-header { text-align: center; margin-bottom: 1.2rem; }
+        
         .type-selector { display: flex; background: rgba(255,255,255,0.03); border-radius: 12px; padding: 5px; margin-bottom: 1.5rem; }
-        .type-btn { flex: 1; background: transparent; border: none; color: var(--text-muted); padding: 0.8rem; border-radius: 8px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 0.9rem;}
+        .type-btn { flex: 1; background: transparent; border: none; color: var(--text-muted); padding: 0.8rem; border-radius: 8px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 0.9rem; transition: 0.3s;}
         .type-btn.active { background: var(--primary); color: var(--bg-color); }
+        
         .input-group { margin-bottom: 0.9rem; }
         .input-group label { display: block; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.4rem; }
         .input-group input, .input-group textarea, .input-group select {
             width: 100%; padding: 0.8rem 1rem; background: rgba(255,255,255,0.02); border: 1px solid var(--border-subtle);
             border-radius: 12px; color: white; outline: none; font-family: 'Sora', sans-serif;
         }
+        
         .form-section { display: none; animation: fadeIn 0.4s ease; }
         .form-section.active { display: block; }
+        
         .modal-actions { display: flex; gap: 1rem; margin-top: 1.2rem; }
-        .btn-cancel, .btn-submit { flex: 1; padding: 1rem; border-radius: 12px; font-weight: 600; font-size: 0.95rem; cursor: pointer; border: none;}
+        .btn-cancel, .btn-submit { flex: 1; padding: 1rem; border-radius: 12px; font-weight: 600; font-size: 0.95rem; cursor: pointer; border: none; transition: 0.3s;}
         .btn-cancel { background: transparent; border: 1px solid var(--border-subtle); color: white; }
         .btn-submit { background: var(--primary); color: var(--bg-color); }
 
         /* =========================================
-           MOTOR DEL TOUR GUIADO (NÚCLEO AVANZADO)
+           7. MOTOR DEL TOUR VIRTUAL ULTRADEFINITIVO
            ========================================= */
+        
+        /* Capa de oscuridad base (Z: 9000) */
         #tour-overlay-darkness {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(4px);
@@ -195,54 +228,52 @@
         }
         #tour-overlay-darkness.active { opacity: 1; pointer-events: all; }
 
-        /* Estilo para destacar el elemento. 
-           Usa !important para sobreescribir cualquier regla inline o previa */
+        /* Highlight ultra-forzado (Z: 9999). Sobrescribe propiedades en línea. */
         .tour-highlight {
             position: relative !important; 
             z-index: 9999 !important;
             background: var(--surface-solid) !important;
             box-shadow: 0 0 0 4px var(--accent-blue), 0 0 40px rgba(77, 166, 255, 0.7) !important;
             border-radius: 12px;
-            transition: all 0.3s ease;
-            pointer-events: none !important; /* El usuario no puede clicar el objeto real durante el tour */
+            transition: box-shadow 0.3s ease, background 0.3s ease;
+            pointer-events: none !important; /* Previene clicks accidentales en la UI bloqueada */
             color: var(--primary) !important;
         }
 
-        /* Arreglo específico para las acciones de eventos ocultas por opacity: 0 */
-        .event-actions.tour-highlight {
-            opacity: 1 !important;
-            flex-direction: row !important;
-            padding: 10px !important;
-        }
-
+        /* Tooltip Master (Z: 10000) */
         #tour-tooltip {
             position: fixed; z-index: 10000;
-            background: #111111; border: 1px solid var(--accent-blue);
-            border-radius: 20px; padding: 2rem; width: 420px; max-width: 90vw;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.9), 0 0 0 1px rgba(77, 166, 255, 0.3);
-            opacity: 0; pointer-events: none; transform: translateY(20px) scale(0.95);
-            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            background: #0f0f0f; border: 1px solid var(--accent-blue);
+            border-radius: 20px; padding: 2rem; width: 440px; max-width: 90vw;
+            box-shadow: 0 30px 80px rgba(0,0,0,0.95), 0 0 0 1px rgba(77, 166, 255, 0.4);
+            opacity: 0; pointer-events: none; 
+            /* Transiciones de geometría hiperfluidas */
+            transition: top 0.4s cubic-bezier(0.16, 1, 0.3, 1), left 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
             display: flex; flex-direction: column; gap: 1rem;
+            word-wrap: break-word; /* Prevención de colisión de textos */
         }
-        #tour-tooltip.active { opacity: 1; pointer-events: all; transform: translateY(0) scale(1); }
+        
+        #tour-tooltip.active { opacity: 1; pointer-events: all; }
         
         .tour-header { display: flex; align-items: center; gap: 15px; margin-bottom: 0.5rem; }
-        .tour-icon-box { width: 42px; height: 42px; background: rgba(77, 166, 255, 0.1); color: var(--accent-blue); border-radius: 12px; display: flex; justify-content: center; align-items: center; flex-shrink: 0;}
+        .tour-icon-box { width: 42px; height: 42px; background: rgba(77, 166, 255, 0.1); color: var(--accent-blue); border-radius: 12px; display: flex; justify-content: center; align-items: center; flex-shrink: 0; border: 1px solid rgba(77, 166, 255, 0.2);}
         .tour-title { font-size: 1.3rem; font-weight: 800; color: var(--primary); letter-spacing: -0.5px;}
-        .tour-text { font-size: 0.95rem; color: #bbbbbb; line-height: 1.7; }
+        .tour-text { font-size: 0.98rem; color: #dddddd; line-height: 1.6; }
         
         .tour-controls { display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; border-top: 1px solid var(--border-subtle); padding-top: 1.5rem; }
-        .tour-progress-bar-container { position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: rgba(255,255,255,0.05); border-radius: 20px 20px 0 0; overflow: hidden; }
-        .tour-progress-bar { height: 100%; background: var(--accent-blue); transition: width 0.4s ease; }
         
-        .tour-progress-text { font-size: 0.85rem; color: var(--text-muted); font-weight: 600; letter-spacing: 1px;}
+        .tour-progress-bar-container { position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: rgba(255,255,255,0.05); border-radius: 20px 20px 0 0; overflow: hidden; }
+        .tour-progress-bar { height: 100%; background: var(--accent-blue); transition: width 0.4s ease; box-shadow: 0 0 10px var(--accent-blue);}
+        
+        .tour-progress-text { font-size: 0.85rem; color: var(--text-muted); font-weight: 800; letter-spacing: 1px;}
         .tour-btn-group { display: flex; gap: 10px; }
-        .btn-tour { padding: 0.7rem 1.4rem; border-radius: 10px; font-weight: 600; font-size: 0.9rem; cursor: pointer; border: none; transition: var(--transition); }
+        .btn-tour { padding: 0.7rem 1.4rem; border-radius: 10px; font-weight: 800; font-size: 0.9rem; cursor: pointer; border: none; transition: var(--transition); }
         .btn-tour-prev { background: rgba(255,255,255,0.05); color: var(--primary); border: 1px solid var(--border-subtle); }
         .btn-tour-prev:hover { background: rgba(255,255,255,0.1); }
         .btn-tour-next { background: var(--accent-blue); color: #000; }
         .btn-tour-next:hover { transform: scale(0.95); box-shadow: 0 0 20px rgba(77, 166, 255, 0.4);}
 
+        /* Botón de salida de emergencia (Z: 10005) */
         .btn-exit-tour {
             position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
             background: rgba(255, 77, 77, 0.1); border: 1px solid var(--accent); color: var(--accent);
@@ -250,8 +281,9 @@
             cursor: pointer; z-index: 10005; display: none; transition: var(--transition); backdrop-filter: blur(10px);
         }
         .btn-exit-tour.active { display: flex; align-items: center; gap: 8px; }
-        .btn-exit-tour:hover { background: var(--accent); color: white; }
+        .btn-exit-tour:hover { background: var(--accent); color: white; transform: translateX(-50%) scale(1.05); }
 
+        /* Botón persistente para repetir tour (Z: 5000) */
         .btn-repeat-tour {
             position: fixed; bottom: 40px; right: 40px;
             background: var(--primary); color: var(--bg-color); border: none;
@@ -279,7 +311,7 @@
     </button>
     
     <button class="btn-repeat-tour" id="btn-repeat-tour" onclick="startTour()">
-        <i data-lucide="rotate-ccw"></i> Repetir tutorial
+        <i data-lucide="rotate-ccw"></i> Repetir Tutorial
     </button>
 
     <div id="tour-tooltip">
@@ -290,7 +322,7 @@
             <div class="tour-icon-box" id="tour-icon"><i data-lucide="info"></i></div>
             <div class="tour-title" id="tour-title">Título</div>
         </div>
-        <div class="tour-text" id="tour-text">Explicación del paso...</div>
+        <div class="tour-text" id="tour-text">Explicación...</div>
         <div class="tour-controls">
             <div class="tour-progress-text" id="tour-progress-text">1 / X</div>
             <div class="tour-btn-group">
@@ -430,6 +462,7 @@
                 <button class="btn-add-day" id="step-add-button"><i data-lucide="plus"></i> Añadir a la ruta</button>
             </div>
             <div class="timeline-wrapper" id="step-events">
+                
                 <div class="event-card type-transport">
                     <div class="event-time">09:30</div>
                     <div class="event-icon"><i data-lucide="plane"></i></div>
@@ -442,6 +475,7 @@
                         <button class="btn-action btn-delete"><i data-lucide="trash-2" style="width:16px;"></i></button>
                     </div>
                 </div>
+
                 <div class="event-card type-hotel">
                     <div class="event-time">14:00</div>
                     <div class="event-icon"><i data-lucide="bed"></i></div>
@@ -450,6 +484,7 @@
                         <div class="event-desc">Reserva a nombre de Carlos. Pagado.</div>
                     </div>
                 </div>
+
                 <div class="event-card type-plan">
                     <div class="event-time">17:00</div>
                     <div class="event-icon"><i data-lucide="map-pin"></i></div>
@@ -458,6 +493,7 @@
                         <div class="event-desc">Entradas sacadas para subir al segundo piso.</div>
                     </div>
                 </div>
+
             </div>
         </div>
         
@@ -488,7 +524,7 @@
 
     <main id="tab-mapa" class="tab-content">
         <div id="step-map-container">
-            <div id="map-mock"></div>
+            <div id="map-mock" style="width: 100%; height: 500px; border-radius: 16px; border: 1px solid var(--border-subtle); z-index: 1;"></div>
         </div>
         <p style="text-align: center; color: var(--text-muted); font-size: 0.85rem; margin-top: 1rem;">
             Generado automáticamente. Las coordenadas se optimizan y guardan inteligentemente.
@@ -548,7 +584,7 @@
     <main id="tab-extra" class="tab-content">
         <div class="user-section" id="step-extra-weather">
             <h3><i data-lucide="cloud-sun"></i> Meteorología Esperada</h3>
-            <p style="color: var(--text-muted); font-size: 0.9rem;">Pronóstico real para los próximos días basado en tus destinos.</p>
+            <p style="color: var(--text-muted); font-size: 0.9rem;">Pronóstico real de tus destinos para los próximos 10 días a partir de la fecha de hoy.</p>
             <div style="display: flex; gap: 10px; margin-top: 1.5rem; overflow-x: auto; padding-bottom: 10px;">
                 <div class="weather-card today">
                     <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 8px;">París - Hoy</div>
@@ -579,7 +615,7 @@
     <main id="tab-usuarios" class="tab-content">
         <div class="user-section" style="margin-bottom: 2rem; text-align: center; border-color: var(--border-subtle);" id="step-users-code">
             <h3 style="justify-content: center;"><i data-lucide="key"></i> Código de Invitación</h3>
-            <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem;">Comparte este código para que tus amigos se unan.</p>
+            <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem;">Comparte este código seguro para que tus amigos se unan a esta ruta.</p>
             <div style="background: rgba(255,255,255,0.03); padding: 1.5rem; border-radius: 16px; border: 1px dashed var(--border-subtle); max-width: 300px; margin: 0 auto;">
                 <div style="font-size: 2.5rem; font-weight: 800; letter-spacing: 8px; color: var(--primary); margin-bottom: 15px;">X7K9P</div>
             </div>
@@ -611,7 +647,7 @@
             </div>
             <div class="user-section" style="border-color: var(--accent-blue);">
                 <h3 style="color: var(--accent-blue);"><i data-lucide="bell"></i> Solicitudes Pendientes</h3>
-                <p style="color: var(--text-muted); font-size: 0.9rem;">Cuando alguien use tu código, aparecerá aquí para que lo aceptes o lo rechaces.</p>
+                <p style="color: var(--text-muted); font-size: 0.9rem;">Cuando alguien use tu código de invitación, aparecerá aquí para que lo aceptes o lo rechaces.</p>
             </div>
         </div>
     </main>
@@ -619,7 +655,7 @@
     <script>
         lucide.createIcons();
 
-        // Mapa Simulado (Leaflet)
+        // 1. INICIALIZACIÓN DEL MAPA SIMULADO CON LEAFLET
         const map = L.map('map-mock', { zoomControl: false, scrollWheelZoom: false }).setView([48.8566, 2.3522], 5);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OS' }).addTo(map);
         L.marker([40.4168, -3.7038]).addTo(map).bindPopup('Madrid');
@@ -627,6 +663,7 @@
         const latlngs = [[40.4168, -3.7038], [48.8566, 2.3522]];
         L.polyline(latlngs, {color: '#ff4d4d', weight: 3, dashArray: '5, 10'}).addTo(map);
 
+        // Control nativo de pestañas del mock
         function switchTab(tabName) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.tabs-container > .tab-btn').forEach(el => el.classList.remove('active'));
@@ -635,6 +672,7 @@
             if(tabName === 'mapa') { setTimeout(() => map.invalidateSize(), 100); }
         }
 
+        // Control interno de sub-pestañas en el modal de eventos
         function switchMockModalTab(tabName) {
             document.querySelectorAll('#mock-modal-selector .type-btn').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('#mock-omni-modal .form-section').forEach(el => el.classList.remove('active'));
@@ -643,7 +681,7 @@
         }
 
         // =========================================
-        // MOTOR DEL TOUR GUIADO (AVANZADO)
+        // MOTOR CORE DEL TOUR VIRTUAL ULTRADEFINITIVO
         // =========================================
         const tourSteps = [
             { // 1
@@ -658,7 +696,7 @@
                 target: '#step-add-button',
                 icon: 'plus-circle',
                 title: 'Añadir a la Ruta',
-                text: 'Este es tu botón más utilizado. Al pulsarlo en un día concreto, se abrirá el panel inteligente para añadir cualquier evento a tu viaje.',
+                text: 'Este es tu botón principal. Al pulsarlo en un día concreto de tu viaje, se abrirá el panel inteligente para añadir cualquier nuevo evento al itinerario.',
                 placement: 'bottom',
                 action: () => { window.scrollTo(0,0); switchTab('itinerario'); document.getElementById('mock-omni-modal').classList.remove('active'); }
             },
@@ -666,11 +704,10 @@
                 target: '#mock-omni-modal-content',
                 icon: 'layout-grid',
                 title: 'Tipos de Eventos',
-                text: 'En el panel, podrás elegir qué añadir: un Trayecto (vuelos, trenes), un Alojamiento (hoteles, hostels) o un Plan (museos, reservas de restaurantes).',
-                placement: 'top', // Forzamos Top para que no tape el título del modal
+                text: 'En el panel flotante, podrás elegir fácilmente qué quieres añadir: un Trayecto (como vuelos o trenes), un Alojamiento (hoteles, hostels) o un Plan (museos, reservas de restaurantes).',
+                placement: 'top', 
                 action: () => { 
                     document.getElementById('mock-omni-modal').classList.add('active'); 
-                    document.getElementById('mock-omni-modal').style.zIndex = '9005'; 
                     switchMockModalTab('transport');
                 }
             },
@@ -678,7 +715,7 @@
                 target: '#mock-hotel-dates',
                 icon: 'calendar-days',
                 title: 'Alojamiento Inteligente',
-                text: 'Al añadir un hotel, indicarás las fechas de Check-in y Check-out. El Hub calculará automáticamente las noches intermedias y las colocará en sus días correspondientes. ¡No tienes que ir día por día!',
+                text: 'Al añadir un hotel, solo necesitas indicar las fechas de Check-in y Check-out. El Hub se encargará de calcular automáticamente las noches intermedias y las colocará en sus días correspondientes. ¡No tienes que ir día por día!',
                 placement: 'bottom',
                 action: () => { switchMockModalTab('hotel'); }
             },
@@ -686,7 +723,7 @@
                 target: '#mock-common-notes',
                 icon: 'sticky-note',
                 title: 'Notas Extra de Evento',
-                text: 'Cada evento tiene un espacio para notas extra. Es el lugar perfecto para dejar un link a los billetes, códigos de reserva o precios para que tus compañeros lo vean.',
+                text: 'Cada evento cuenta con este espacio. Es el lugar perfecto para dejar un link a los billetes, códigos de reserva, confirmaciones o precios para que tus compañeros lo vean al instante.',
                 placement: 'top',
                 action: () => { switchMockModalTab('plan'); }
             },
@@ -694,7 +731,7 @@
                 target: '#mock-modal-actions',
                 icon: 'cloud-upload',
                 title: 'Guardar en la Nube',
-                text: 'Una vez relleno, pulsas en "Guardar". Tu evento se sincronizará instantáneamente con la base de datos y aparecerá en los móviles de todos tus amigos.',
+                text: 'Una vez completado el formulario, pulsas en "Guardar". Tu evento se sincronizará instantáneamente con la base de datos de alta velocidad y aparecerá en los dispositivos de todos tus amigos.',
                 placement: 'top',
                 action: () => {}
             },
@@ -702,37 +739,36 @@
                 target: '#step-events',
                 icon: 'list-ordered',
                 title: 'El Itinerario Visual',
-                text: 'Tus eventos se ordenan cronológicamente. Fíjate en los colores para distinguirlos rápidamente:<br><br>' +
-                      '<span style="display:inline-block; width:12px; height:12px; border-radius:50%; background:var(--accent-blue); margin-right:8px; box-shadow: 0 0 8px var(--accent-blue);"></span><b>Azul</b>: Trayectos y transportes.<br>' +
-                      '<span style="display:inline-block; width:12px; height:12px; border-radius:50%; background:var(--accent-green); margin-right:8px; box-shadow: 0 0 8px var(--accent-green);"></span><b>Verde</b>: Alojamientos y Check-ins.<br>' +
-                      '<span style="display:inline-block; width:12px; height:12px; border-radius:50%; background:var(--accent); margin-right:8px; box-shadow: 0 0 8px var(--accent);"></span><b>Rojo</b>: Planes y actividades.<br><br>',
+                text: 'Tus eventos se organizan cronológicamente en tarjetas. Fíjate en los colores para distinguirlos de un vistazo rápido:<br><br>' +
+                      '<span style="display:inline-block; width:12px; height:12px; border-radius:50%; background:var(--accent-blue); margin-right:8px; box-shadow: 0 0 8px var(--accent-blue);"></span><b style="color:white;">Azul</b>: Trayectos y transportes.<br>' +
+                      '<span style="display:inline-block; width:12px; height:12px; border-radius:50%; background:var(--accent-green); margin-right:8px; box-shadow: 0 0 8px var(--accent-green);"></span><b style="color:white;">Verde</b>: Alojamientos y Check-ins.<br>' +
+                      '<span style="display:inline-block; width:12px; height:12px; border-radius:50%; background:var(--accent); margin-right:8px; box-shadow: 0 0 8px var(--accent);"></span><b style="color:white;">Rojo</b>: Planes y actividades.<br><br>',
                 placement: 'top',
                 action: () => { 
                     document.getElementById('mock-omni-modal').classList.remove('active'); 
-                    document.getElementById('mock-omni-modal').style.zIndex = '8000';
                 }
             },
             { // 8
                 target: '#step-event-actions-1',
                 icon: 'edit-2',
-                title: 'Modificar la Ruta',
-                text: 'Si pasas el ratón por encima de cualquier plan (y tienes permisos de editor), aparecerán las opciones para Editar o Eliminar. Si editas un evento, se abrirá el panel anterior para cambiar datos.',
+                title: 'Modificar la Ruta Creada',
+                text: 'Al pasar el cursor sobre cualquier tarjeta (si tienes permisos de editor), aparecerán estas opciones para Editar o Eliminar. Si editas un evento, se abrirá el panel de nuevo para ajustar detalles y resincronizar.',
                 placement: 'bottom',
                 action: () => {}
             },
             { // 9
                 target: '#tab-btn-mapa',
                 icon: 'map',
-                title: 'Navegación por Pestañas',
-                text: 'Tu viaje no es solo una lista. Vamos a ver cómo el Hub dibuja tu ruta geográficamente haciendo clic en la pestaña Mapa.',
+                title: 'Navegación Multisección',
+                text: 'Tu viaje no es solo una aburrida lista hacia abajo. Vamos a ver cómo el Hub dibuja tu ruta geográficamente haciendo clic en la pestaña "Mapa".',
                 placement: 'bottom',
                 action: () => { window.scrollTo(0,0); switchTab('itinerario'); }
             },
             { // 10
                 target: '#step-map-container',
                 icon: 'navigation',
-                title: 'Ruta Geográfica',
-                text: 'El sistema procesa en segundo plano las direcciones de tus planes y genera esta ruta. Si una chincheta cae en una localización errónea, basta con editar la dirección del evento para que el sistema la recalcule.',
+                title: 'Ruta Geográfica Dinámica',
+                text: 'El sistema procesa en segundo plano las direcciones introducidas en tus planes y genera esta ruta interconectada en el mapa mundial. Si una chincheta cae en una localización errónea, basta con editar la dirección del evento y el mapa se recalculará.',
                 placement: 'bottom',
                 action: () => { switchTab('mapa'); }
             },
@@ -740,53 +776,51 @@
                 target: '#tab-btn-finance',
                 icon: 'calculator',
                 title: 'Gestión Financiera',
-                text: 'Olvídate de aplicaciones externas para dividir gastos. Todo se integra en el Hub. Veamos la pestaña Finance.',
+                text: 'Olvídate de utilizar aplicaciones externas y tediosas para dividir gastos. Todo nuestro motor contable se integra dentro de tu Hub. Veamos la pestaña Finance.',
                 placement: 'bottom',
                 action: () => { window.scrollTo(0,0); switchTab('mapa'); }
             },
             { // 12
                 target: '#step-finance-add',
                 icon: 'credit-card',
-                title: 'Registrar Gastos',
-                text: 'Con este botón podrás añadir un movimiento monetario al viaje.',
-                placement: 'bottom', // Explicitamente bottom para no pisar el título "Finance"
+                title: 'Registrar Gastos Rápidamente',
+                text: 'Con este botón principal podrás añadir cualquier movimiento monetario y gasto compartido que ocurra durante el viaje.',
+                placement: 'bottom', 
                 action: () => { switchTab('finance'); document.getElementById('mock-finance-modal').classList.remove('active'); }
             },
             { // 13
                 target: '#mock-finance-modal-content',
                 icon: 'split-square-horizontal',
                 title: 'División Inteligente',
-                text: 'Seleccionas quién ha pagado la cuenta, y mediante los checks de abajo, eliges entre quiénes se divide. El algoritmo aplicará las fracciones exactas de forma instantánea.',
+                text: 'Seleccionas al miembro que ha pagado la cuenta, y mediante los checks de abajo, eliges exactamente entre quiénes se divide la deuda. Nuestro algoritmo aplicará las fracciones matemáticas al instante.',
                 placement: 'top',
                 action: () => { 
                     document.getElementById('mock-finance-modal').classList.add('active'); 
-                    document.getElementById('mock-finance-modal').style.zIndex = '9005';
                 }
             },
             { // 14
                 target: '#step-finance-history',
                 icon: 'history',
-                title: 'Historial Transparente',
-                text: 'Todos los gastos e ingresos se registran en este libro mayor, creando un rastro financiero inmutable. Así no habrá discusiones sobre quién pagó qué.',
+                title: 'Historial Transparente y Seguro',
+                text: 'Absolutamente todos los gastos e ingresos se registran en este libro mayor, creando un rastro financiero inmutable. Así no habrá confusiones ni discusiones sobre quién pagó qué cena.',
                 placement: 'bottom',
                 action: () => { 
                     document.getElementById('mock-finance-modal').classList.remove('active'); 
-                    document.getElementById('mock-finance-modal').style.zIndex = '8000';
                 }
             },
             { // 15
                 target: '#step-finance-debts',
                 icon: 'arrow-right-left',
-                title: 'Saldos y Deudas',
-                text: 'El motor cruza automáticamente quién debe a quién, simplificando la deuda total en las mínimas transferencias posibles. ¡Magia matemática!',
+                title: 'Cruce de Saldos y Deudas',
+                text: 'Nuestro motor cruza automáticamente todas las deudas cruzadas de los miembros, simplificando el dinero total en las mínimas transferencias posibles para que los pagos sean directos.',
                 placement: 'top',
                 action: () => {}
             },
             { // 16
                 target: '#step-finance-settle',
                 icon: 'check-circle',
-                title: 'Saldar Cuentas',
-                text: 'Cuando alguien pague su deuda en la vida real (mediante Bizum, efectivo, etc.), pulsas en "Saldar" y la cuenta quedará a cero.',
+                title: 'Saldar Cuentas Reales',
+                text: 'Cuando alguien te pague su deuda pendiente en la vida real (mediante Bizum, efectivo o transferencia bancaria), simplemente pulsas en "Saldar" y esa deuda específica quedará liquidada a cero en la app.',
                 placement: 'bottom',
                 action: () => {}
             },
@@ -794,15 +828,15 @@
                 target: '#tab-btn-extra',
                 icon: 'more-horizontal',
                 title: 'Extra Info',
-                text: 'Veamos ahora un apartado clave para tener a mano datos vitales.',
+                text: 'Veamos ahora un apartado clave de soporte para tener siempre a mano datos vitales del viaje.',
                 placement: 'bottom',
                 action: () => { window.scrollTo(0,0); switchTab('finance'); }
             },
             { // 18
                 target: '#step-extra-weather',
                 icon: 'cloud-sun',
-                title: 'Clima Dinámico',
-                text: 'El sistema analiza tus destinos futuros y te muestra SIEMPRE la predicción satelital real de los próximos 10 días a partir de hoy. Así sabrás si meter paraguas o bañador.',
+                title: 'Clima Satelital Dinámico',
+                text: 'El sistema analiza tus destinos futuros y te muestra SIEMPRE la predicción satelital real de las ciudades correspondientes para los próximos 10 días desde el día actual en el que abras la web. Nunca te olvidarás del paraguas.',
                 placement: 'top',
                 action: () => { switchTab('extra'); }
             },
@@ -810,7 +844,7 @@
                 target: '#step-extra-notes',
                 icon: 'book-open',
                 title: 'Un pequeño cajón para información útil',
-                text: 'Usa este bloc de notas global para apuntar pólizas de seguros, números de asistencia, recordatorios comunes o cualquier dato que todos deban leer.',
+                text: 'Usa este bloc de notas global para escribir apuntes persistentes: pólizas de seguros, números de asistencia médica europea, recordatorios de visados o cualquier dato que todo el grupo deba tener accesible.',
                 placement: 'top',
                 action: () => {}
             },
@@ -818,23 +852,23 @@
                 target: '#tab-btn-usuarios',
                 icon: 'users',
                 title: 'Equipo y Accesos',
-                text: 'Un viaje no es nada sin tus amigos. Aprende a gestionar tu grupo en la última pestaña.',
+                text: 'Un viaje no es nada sin la coordinación de tus amigos. Aprende a gestionar los miembros de tu grupo de forma colaborativa en la última pestaña.',
                 placement: 'bottom',
                 action: () => { window.scrollTo(0,0); switchTab('extra'); }
             },
             { // 21
                 target: '#step-users-code',
                 icon: 'key',
-                title: 'Código de Invitación',
-                text: 'Copia este código y envíalo por WhatsApp. Tus amigos deberán registrarse y pegar este código en su panel para solicitar unirse a esta aventura concreta.',
+                title: 'Código Seguro de Invitación',
+                text: 'Copia este código y envíalo por WhatsApp. Tus amigos deberán registrarse y pegar esta clave en su panel principal. Una vez hecho, tú recibirás una notificación de acceso para aceptarles en esta ruta.',
                 placement: 'bottom',
                 action: () => { switchTab('usuarios'); }
             },
             { // 22
                 target: '#step-users-roles',
                 icon: 'shield',
-                title: 'El Control Total',
-                text: 'Tú eres el <b>Administrador</b> (el creador de la ruta). Tienes la potestad de asignar roles al resto:<br><br><b>Editor:</b> Puede añadir y modificar planes del viaje.<br><b>Visor:</b> Solo puede ver la ruta, sin riesgo de que rompa nada por accidente.',
+                title: 'Roles, Permisos y Control',
+                text: 'Tú eres el <b>Admin</b> (el creador absoluto de la ruta). Tienes la potestad de asignar distintos privilegios de seguridad al resto de miembros:<br><br><b>Editor:</b> Puede añadir, modificar y borrar cualquier plan.<br><b>Visor:</b> Solo puede leer el itinerario y usar mapas, pero sin riesgo de que modifique ni borre nada por accidente.',
                 placement: 'top',
                 action: () => {}
             },
@@ -842,23 +876,23 @@
                 target: '#step-export',
                 icon: 'file-down',
                 title: 'Exportación Profesional',
-                text: '¿Necesitas pasarle el plan a alguien externo (como tus padres) o llevarlo offline? Un clic aquí y generaremos un documento PDF maquetado con todo tu itinerario para imprimir o enviar.',
+                text: '¿Necesitas pasarle el plan completo a alguien fuera de la plataforma (como a tus padres) o llevarlo descargado en modo offline? Un clic aquí y el servidor generará un documento PDF precioso y maquetado con todo tu itinerario, mapa incluido, listo para imprimir.',
                 placement: 'bottom',
                 action: () => { window.scrollTo(0,0); switchTab('usuarios'); }
             },
             { // 24
                 target: 'body',
                 icon: 'party-popper',
-                title: '¡Ya eres un experto!',
-                text: 'Has completado el tour. Recuerda que Interra-hub se encuentra en Fase Beta. Si detectas algún comportamiento anómalo o error, nos harías un gran favor reportándolo mediante el formulario de nuestra página principal.',
+                title: '¡Dominio Completo!',
+                text: 'Has finalizado el tutorial con éxito. Recuerda que Interra-hub se encuentra en constante Fase Beta. Si detectas algún comportamiento anómalo, error de carga o tienes alguna sugerencia, nos harías un enorme favor reportándolo mediante el formulario de nuestra página de inicio.',
                 placement: 'center',
                 action: () => { window.scrollTo(0,0); }
             },
             { // 25
                 target: 'body',
                 icon: 'compass',
-                title: 'Comienza tu viaje',
-                text: 'Puedes volver a ver este tutorial siempre que quieras pulsando el botón flotante. Muchas gracias por tu atención y ¡suerte organizando tu viaje!',
+                title: 'Comienza tu verdadera aventura',
+                text: 'Puedes volver a ver este tutorial siempre que quieras pulsando el botón flotante situado abajo a la derecha. Muchas gracias por confiar en nuestra tecnología y ¡suerte organizando el viaje de tu vida!',
                 placement: 'center',
                 action: () => {}
             }
@@ -883,106 +917,142 @@
             overlay.classList.remove('active');
             tooltip.classList.remove('active');
             exitBtn.classList.remove('active');
+            
             document.getElementById('mock-omni-modal').classList.remove('active');
             document.getElementById('mock-finance-modal').classList.remove('active');
+            
             removeHighlight();
             
-            // Mostrar botón repetir al final con animación
             repeatBtn.classList.add('active');
         }
 
         function removeHighlight() {
             document.querySelectorAll('.tour-highlight').forEach(el => el.classList.remove('tour-highlight'));
+            document.querySelectorAll('.tour-elevate-parent').forEach(el => el.classList.remove('tour-elevate-parent'));
         }
 
         function renderTourStep() {
             const step = tourSteps[currentTourIndex];
+            
+            // Ejecución de la acción lógica del paso
             if(step.action) step.action();
 
-            // Rellenar Tooltip
+            // Inyección de textos al tooltip
             document.getElementById('tour-icon').innerHTML = `<i data-lucide="${step.icon}"></i>`;
             document.getElementById('tour-title').innerHTML = step.title;
             document.getElementById('tour-text').innerHTML = step.text;
             document.getElementById('tour-progress-text').innerText = `Paso ${currentTourIndex + 1} de ${tourSteps.length}`;
             
-            // Barra de progreso
+            // Lógica de Barra de Progreso Matemática
             const progressPercentage = ((currentTourIndex + 1) / tourSteps.length) * 100;
             progressBar.style.width = `${progressPercentage}%`;
 
-            // Botones
+            // Lógica de Botones (Prev / Next)
             const prevBtn = document.getElementById('tour-prev');
             const nextBtn = document.getElementById('tour-next');
             
             prevBtn.style.display = currentTourIndex === 0 ? 'none' : 'block';
             if(currentTourIndex === tourSteps.length - 1) {
-                nextBtn.innerText = 'Finalizar Tour';
+                nextBtn.innerText = 'Terminar';
                 nextBtn.style.background = 'var(--success)';
             } else {
                 nextBtn.innerText = 'Siguiente';
                 nextBtn.style.background = 'var(--accent-blue)';
             }
 
+            // Recarga de Iconografía nativa
             lucide.createIcons();
+            
+            // Limpieza estricta de clases de highlight anteriores
             removeHighlight();
             
-            // Procesamiento de Highlight y Posición
+            // Procesamiento principal de Highlight y Geometría
             setTimeout(() => {
                 if (step.target !== 'body' && document.querySelector(step.target)) {
                     const targetEl = document.querySelector(step.target);
-                    targetEl.classList.add('tour-highlight');
                     
-                    // Ajuste visual para el botón de exportación en Nav
-                    if(step.target === '#step-export') {
-                        targetEl.style.backgroundColor = 'var(--bg-color)';
-                    }
+                    // Lógica para elevar los contextos de apilamiento (Z-index Fix Definitivo)
+                    const parentModal = targetEl.closest('.modal-overlay');
+                    if (parentModal) parentModal.classList.add('tour-elevate-parent');
+                    
+                    const parentNav = targetEl.closest('nav');
+                    if (parentNav) parentNav.classList.add('tour-elevate-parent');
 
+                    // Inyección de Highlight forzado
+                    targetEl.classList.add('tour-highlight');
+
+                    // Desplazamiento nativo suave para centrar la acción
                     targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    setTimeout(() => positionTooltip(targetEl, step.placement), 300); 
+                    
+                    // Retardo vital para permitir que termine el Scroll antes de medir coordenadas
+                    setTimeout(() => positionTooltip(targetEl, step.placement), 400); 
                 } else {
+                    // Si el target es 'body', el tooltip simplemente va al centro de la pantalla
                     positionTooltip(document.body, 'center');
                 }
+                
+                // Aparición fluida del Tooltip
                 tooltip.classList.add('active');
             }, 50);
         }
 
+        // Motor Matemático de Posicionamiento Anticoliciones
         function positionTooltip(targetEl, placement) {
             if (placement === 'center') {
                 tooltip.style.top = '50%';
                 tooltip.style.left = '50%';
-                tooltip.style.transform = 'translate(-50%, -50%) scale(1)';
+                tooltip.style.transform = 'translate(-50%, -50%)';
                 return;
             }
 
             const rect = targetEl.getBoundingClientRect();
             const tooltipRect = tooltip.getBoundingClientRect();
             
+            const margin = 20; // Separación en píxeles
             let top, left;
 
-            // Motor de colisión dinámico forzado
-            if (placement === 'bottom') {
-                top = rect.bottom + 25;
-            } else if (placement === 'top') {
-                top = rect.top - tooltipRect.height - 25;
-            } else {
-                top = rect.bottom + 25;
-                if (top + tooltipRect.height > window.innerHeight) {
-                    top = rect.top - tooltipRect.height - 25;
+            // Análisis del espacio disponible en pantalla
+            const spaceTop = rect.top;
+            const spaceBottom = window.innerHeight - rect.bottom;
+
+            // Cálculo forzado de posición Y para evitar bloqueos
+            if (placement === 'top') {
+                if (spaceTop > tooltipRect.height + margin) {
+                    top = rect.top - tooltipRect.height - margin;
+                } else {
+                    top = rect.bottom + margin; // Rebotar hacia abajo si no cabe arriba
                 }
+            } else if (placement === 'bottom') {
+                if (spaceBottom > tooltipRect.height + margin) {
+                    top = rect.bottom + margin;
+                } else {
+                    top = rect.top - tooltipRect.height - margin; // Rebotar hacia arriba si no cabe abajo
+                }
+            } else {
+                top = rect.bottom + margin; // Valor seguro por defecto
             }
 
-            // Centrado horizontal sobre el target
+            // Cálculo de posición X y Centrado sobre el Target
             left = rect.left + (rect.width / 2) - (tooltipRect.width / 2);
 
-            // Muros de colisión X e Y
-            if (left < 20) left = 20;
-            if (left + tooltipRect.width > window.innerWidth - 20) left = window.innerWidth - tooltipRect.width - 20;
+            // Muros de Contención X
+            if (left < margin) {
+                left = margin;
+            } else if (left + tooltipRect.width > window.innerWidth - margin) {
+                left = window.innerWidth - tooltipRect.width - margin;
+            }
             
-            if (top < 20) top = rect.bottom + 25; // Si se sale por arriba, forzar abajo
-            if (top + tooltipRect.height > window.innerHeight - 20) top = rect.top - tooltipRect.height - 25; // Si se sale por abajo, forzar arriba
+            // Muros de Contención Y Finales (Por si el rebote también se sale)
+            if (top < margin) {
+                top = margin;
+            } else if (top + tooltipRect.height > window.innerHeight - margin) {
+                top = window.innerHeight - tooltipRect.height - margin;
+            }
 
+            // Aplicación matemática directa (Eliminando transforms intermedios que causan blur)
+            tooltip.style.transform = 'none';
             tooltip.style.top = `${top}px`;
             tooltip.style.left = `${left}px`;
-            tooltip.style.transform = 'scale(1)'; // Resetea transform para la animación
         }
 
         function nextStep() {
@@ -1001,7 +1071,7 @@
             }
         }
 
-        // Listener para reposicionar cuando el usuario redimensiona la ventana
+        // Listener nativo ultra-responsivo: Recalcula coordenadas si cambias el tamaño del navegador
         window.addEventListener('resize', () => {
             if(overlay.classList.contains('active')) {
                 const step = tourSteps[currentTourIndex];
@@ -1013,9 +1083,9 @@
             }
         });
 
-        // Arranque de aplicación
+        // Autoejecución del Motor al Cargar DOM (Con margen de medio segundo para procesar fuentes y CSS)
         window.onload = () => { 
-            setTimeout(startTour, 600); 
+            setTimeout(startTour, 500); 
         };
 
     </script>
