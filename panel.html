@@ -663,7 +663,7 @@
 
             if (currentUserPlan === 'PLUS') {
                 // UI PLUS
-                badge.textContent = 'VIP / PLUS';
+                badge.textContent = 'PLUS';
                 badge.className = 'plan-badge badge-plus';
                 badge.style.display = 'inline-flex';
                 badgeLink.href = '#'; 
@@ -673,10 +673,10 @@
                 // Modificación del Favicon
                 favicon.href = 'interrahubplus.png';
 
-                // Onboarding VIP Exclusivo (Solo la primera vez)
+                // Onboarding PLUS Exclusivo (Solo la primera vez)
                 if (!userData.hasSeenPlusWelcome) {
                     setTimeout(() => {
-                        showToast("¡Bienvenido a Interra-hub PLUS! Tu cuenta ha sido elevada a VIP.", "premium");
+                        showToast("¡Bienvenido a Interra-hub PLUS! Tu cuenta ahora es PLUS.", "premium");
                     }, 1500);
                     const userRef = doc(db, "usuarios", userRefPath);
                     await setDoc(userRef, { hasSeenPlusWelcome: true }, { merge: true });
