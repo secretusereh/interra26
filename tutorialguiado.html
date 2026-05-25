@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interra-hub | Tutorial Guiado</title>
+    
+    <link rel="icon" type="image/png" href="interrahublogo.PNG">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <style>
+        /* =========================================
+           VARIABLES Y DISEÑO BASE (Replica de Viaje.html)
+           ========================================= */
+        :root {
+            --bg-color: #030303;
+            --surface: rgba(20, 20, 20, 0.4);
+            --surface-solid: #141414;
+            --primary: #ffffff;
+            --text-muted: #888888;
+            --accent: #ff4d4d;
+            --accent-blue: #4da6ff;
+            --accent-green: #4dff88;
+            --success: #4dff4d;
+            --border-subtle: rgba(255, 255, 255, 0.08);
+            --transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Sora', sans-serif; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            background-color: var(--bg-color); color: var(--primary); min-height: 100vh;
+            background-image: radial-gradient(circle at 50% -10%, rgba(255, 255, 255, 0.05), transparent 60%);
+            background-attachment: fixed; overflow-x: hidden;
+        }
+
+        nav {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 1rem 5%; background: rgba(3, 3, 3, 0.8); backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-subtle); position: sticky; top: 0; z-index: 100;
+        }
+        .btn-nav { background: transparent; color: var(--text-muted); border: none; cursor: pointer; display: flex; align-items: center; gap: 8px; font-weight: 600; transition: var(--transition); }
+        .btn-nav:hover { color: var(--primary); }
+        .btn-export { color: var(--primary); background: rgba(255,255,255,0.1); padding: 0.5rem 1rem; border-radius: 20px; }
+        .btn-export:hover { background: var(--primary); color: var(--bg-color); }
+        .logo { font-weight: 800; font-size: 1.3rem; display: flex; align-items: center; gap: 4px; letter-spacing: -0.5px; position: absolute; left: 50%; transform: translateX(-50%); }
+
+        .trip-header { padding: 3rem 5% 1rem; max-width: 1000px; margin: 0 auto; text-align: center; }
+        .trip-header h1 { font-size: 3.5rem; font-weight: 800; letter-spacing: -2px; margin-bottom: 0.5rem; word-break: break-word; color: var(--primary);}
+        .trip-header p { color: var(--text-muted); font-size: 1.1rem; }
+
+        .tabs-container {
+            display: flex; justify-content: center; gap: 2rem; border-bottom: 1px solid var(--border-subtle);
+            max-width: 1000px; margin: 2rem auto 0; padding: 0 5%; flex-wrap: wrap;
+        }
+        .tab-btn {
+            background: transparent; color: var(--text-muted); border: none; font-size: 1.1rem; font-weight: 600;
+            padding: 1rem 0; cursor: pointer; position: relative; transition: var(--transition);
+            display: flex; align-items: center; gap: 8px;
+        }
+        .tab-btn.active { color: var(--primary); }
+        .tab-btn.active::after {
+            content: ''; position: absolute; bottom: -1px; left: 0; width: 100%; height: 2px;
+            background: var(--primary); border-radius: 2px 2px 0 0;
+        }
+
+        .tab-content { display: none; animation: fadeIn 0.5s ease; padding: 3rem 5% 5rem; max-width: 900px; margin: 0 auto; }
+        .tab-content.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Estructuras Itinerario Simuladas */
+        .day-container { margin-bottom: 3rem; position: relative; }
+        .day-header { display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 0 1rem; border-bottom: 1px solid var(--border-subtle); margin-bottom: 1.5rem; }
+        .day-title { font-size: 1.6rem; font-weight: 600; display: flex; align-items: baseline; gap: 10px; }
+        .day-date { font-size: 1rem; color: var(--text-muted); font-weight: 300; }
+        .btn-add-day { background: rgba(255,255,255,0.05); color: var(--primary); border: 1px solid var(--border-subtle); padding: 0.6rem 1.2rem; border-radius: 30px; font-size: 0.85rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; }
+        
+        .timeline-wrapper { position: relative; padding-left: 30px; margin-top: 1rem; }
+        .timeline-wrapper::before { content: ''; position: absolute; left: 9px; top: 20px; bottom: 20px; width: 2px; background: var(--border-subtle); }
+        
+        .event-card { background: var(--surface); border: 1px solid var(--border-subtle); border-radius: 16px; padding: 1.2rem 1.5rem; margin-bottom: 1.5rem; position: relative; backdrop-filter: blur(10px); display: flex; align-items: flex-start; gap: 1.2rem; }
+        .event-card::before { content: ''; position: absolute; left: -26px; top: 24px; width: 12px; height: 12px; background: var(--primary); border-radius: 50%; z-index: 2; box-shadow: 0 0 10px var(--primary);}
+        .event-card.type-transport::before { background: var(--accent-blue); box-shadow: 0 0 10px var(--accent-blue);}
+        .event-card.type-hotel::before { background: var(--accent-green); box-shadow: 0 0 10px var(--accent-green);}
+        .event-card.type-plan::before { background: var(--accent); box-shadow: 0 0 10px var(--accent);}
+        
+        .event-time { font-weight: 800; font-size: 1.1rem; min-width: 65px; padding-top: 2px; text-align: right; }
+        .event-icon { width: 42px; height: 42px; min-width: 42px; border-radius: 12px; display: flex; justify-content: center; align-items: center; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.05); }
+        .event-content { flex: 1; padding-top: 2px; }
+        .event-title { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.4rem; }
+        .event-desc { color: var(--text-muted); font-size: 0.9rem; line-height: 1.5; }
+
+        /* Estructuras Finance y Usuarios Simuladas */
+        .finance-card, .debt-card, .user-section { background: var(--surface); border: 1px solid var(--border-subtle); border-radius: 16px; padding: 1.5rem; margin-bottom: 1rem; }
+        .users-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+        .finance-icon { width: 45px; height: 45px; border-radius: 12px; display: flex; justify-content: center; align-items: center; flex-shrink: 0; }
+        .finance-icon.gasto { background: rgba(255,77,77,0.1); color: var(--accent); }
+        .btn-finance-add-circle { width: 45px; height: 45px; border-radius: 50%; background: linear-gradient(135deg, #ff4d4d, #ff8080); color: #ffffff; border: none; display: flex; justify-content: center; align-items: center; box-shadow: 0 4px 15px rgba(255, 77, 77, 0.3); }
+        .btn-settle { background: var(--primary); color: var(--bg-color); border: none; padding: 0.6rem 1.2rem; border-radius: 8px; font-weight: 600; }
+        .user-avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--accent-blue); display: flex; align-items: center; justify-content: center; color: white; }
+
+        /* =========================================
+           SISTEMA DE TOUR GUIADO (NÚCLEO)
+           ========================================= */
+        #tour-overlay-darkness {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(4px);
+            z-index: 9000; opacity: 0; pointer-events: none; transition: opacity 0.4s ease;
+        }
+        #tour-overlay-darkness.active { opacity: 1; pointer-events: all; }
+
+        /* La clase que se aplica al elemento objetivo para destacarlo */
+        .tour-highlight {
+            position: relative; z-index: 9001 !important;
+            box-shadow: 0 0 0 4px var(--accent-blue), 0 0 30px rgba(77, 166, 255, 0.6) !important;
+            background: var(--surface-solid) !important;
+            border-radius: inherit; transition: all 0.3s ease;
+            pointer-events: none; /* Evita que el usuario haga clicks reales durante el tour */
+        }
+
+        /* Cuadro de diálogo del Tour */
+        #tour-tooltip {
+            position: fixed; z-index: 9002;
+            background: #141414; border: 1px solid var(--accent-blue);
+            border-radius: 16px; padding: 2rem; width: 380px; max-width: 90vw;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8), 0 0 0 1px rgba(77, 166, 255, 0.3);
+            opacity: 0; pointer-events: none; transform: translateY(20px);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex; flex-direction: column; gap: 1rem;
+        }
+        #tour-tooltip.active { opacity: 1; pointer-events: all; transform: translateY(0); }
+        
+        .tour-header { display: flex; align-items: center; gap: 12px; margin-bottom: 0.5rem; }
+        .tour-icon-box { width: 36px; height: 36px; background: rgba(77, 166, 255, 0.1); color: var(--accent-blue); border-radius: 10px; display: flex; justify-content: center; align-items: center; }
+        .tour-title { font-size: 1.2rem; font-weight: 800; color: var(--primary); }
+        .tour-text { font-size: 0.95rem; color: var(--text-muted); line-height: 1.6; }
+        
+        .tour-controls { display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; border-top: 1px solid var(--border-subtle); padding-top: 1.5rem; }
+        .tour-progress { font-size: 0.8rem; color: var(--text-muted); font-weight: 600; letter-spacing: 1px;}
+        .tour-btn-group { display: flex; gap: 8px; }
+        .btn-tour { padding: 0.6rem 1.2rem; border-radius: 8px; font-weight: 600; font-size: 0.85rem; cursor: pointer; border: none; transition: var(--transition); }
+        .btn-tour-prev { background: rgba(255,255,255,0.05); color: var(--primary); border: 1px solid var(--border-subtle); }
+        .btn-tour-prev:hover { background: rgba(255,255,255,0.1); }
+        .btn-tour-next { background: var(--accent-blue); color: #000; }
+        .btn-tour-next:hover { transform: scale(0.95); box-shadow: 0 0 15px rgba(77, 166, 255, 0.4);}
+
+        .btn-exit-tour {
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+            background: rgba(255, 77, 77, 0.1); border: 1px solid var(--accent); color: var(--accent);
+            padding: 0.8rem 2rem; border-radius: 30px; font-weight: 800; font-size: 0.9rem;
+            cursor: pointer; z-index: 9005; display: none; transition: var(--transition); backdrop-filter: blur(10px);
+        }
+        .btn-exit-tour.active { display: flex; align-items: center; gap: 8px; }
+        .btn-exit-tour:hover { background: var(--accent); color: white; }
+
+    </style>
+</head>
+<body>
+
+    <div id="tour-overlay-darkness"></div>
+    <button class="btn-exit-tour" id="btn-exit-tour" onclick="endTour()">
+        <i data-lucide="x-circle"></i> Salir del Tutorial
+    </button>
+    <div id="tour-tooltip">
+        <div class="tour-header">
+            <div class="tour-icon-box" id="tour-icon"><i data-lucide="info"></i></div>
+            <div class="tour-title" id="tour-title">Título</div>
+        </div>
+        <div class="tour-text" id="tour-text">Explicación del paso...</div>
+        <div class="tour-controls">
+            <div class="tour-progress" id="tour-progress">1 / 10</div>
+            <div class="tour-btn-group">
+                <button class="btn-tour btn-tour-prev" id="tour-prev" onclick="prevStep()">Anterior</button>
+                <button class="btn-tour btn-tour-next" id="tour-next" onclick="nextStep()">Siguiente</button>
+            </div>
+        </div>
+    </div>
+
+    <nav id="step-nav">
+        <button class="btn-nav" onclick="window.location.href='index.html'">
+            <i data-lucide="arrow-left"></i> Volver a Inicio
+        </button>
+        <div class="logo">Interra-hub<span style="color: var(--accent);">.</span></div>
+        <div>
+            <button class="btn-nav btn-export" id="step-export" title="Exportar">
+                <i data-lucide="file-down"></i> Exportar PDF
+            </button>
+        </div>
+    </nav>
+
+    <div class="trip-header" id="step-header">
+        <h1>EuroTrip Épico 2026</h1>
+        <p>Del 15/07/2026 al 25/07/2026</p>
+    </div>
+
+    <div class="tabs-container" id="step-tabs">
+        <button class="tab-btn active" id="tab-btn-itinerario" onclick="switchTab('itinerario')">Itinerario</button>
+        <button class="tab-btn" id="tab-btn-mapa" onclick="switchTab('mapa')">Mapa</button>
+        <button class="tab-btn" id="tab-btn-finance" onclick="switchTab('finance')">Finance</button>
+        <button class="tab-btn" id="tab-btn-extra" onclick="switchTab('extra')">Extra Info</button>
+        <button class="tab-btn" id="tab-btn-usuarios" onclick="switchTab('usuarios')">Equipo y Accesos</button>
+    </div>
+
+    <main id="tab-itinerario" class="tab-content active">
+        <div class="day-container">
+            <div class="day-header" id="step-add-button">
+                <div class="day-title">Día 1 <span class="day-date">Miércoles 15 de Julio</span></div>
+                <button class="btn-add-day"><i data-lucide="plus"></i> Añadir a la ruta</button>
+            </div>
+            <div class="timeline-wrapper" id="step-events">
+                <div class="event-card type-transport">
+                    <div class="event-time">09:30</div>
+                    <div class="event-icon"><i data-lucide="plane"></i></div>
+                    <div class="event-content">
+                        <div class="event-title">Vuelo Madrid -> París (Orly)</div>
+                        <div class="event-desc">Terminal 4. Llevar tarjeta de embarque impresa.</div>
+                    </div>
+                </div>
+                <div class="event-card type-hotel">
+                    <div class="event-time">14:00</div>
+                    <div class="event-icon"><i data-lucide="bed"></i></div>
+                    <div class="event-content">
+                        <div class="event-title">📥 Check-in: Hotel Le Meurice, París</div>
+                        <div class="event-desc">Reserva a nombre de Carlos. Pagado.</div>
+                    </div>
+                </div>
+                <div class="event-card type-plan">
+                    <div class="event-time">17:00</div>
+                    <div class="event-icon"><i data-lucide="map-pin"></i></div>
+                    <div class="event-content">
+                        <div class="event-title">Visita Torre Eiffel y Atardecer</div>
+                        <div class="event-desc">Entradas sacadas para subir al segundo piso.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="day-container">
+            <div class="day-header">
+                <div class="day-title">Día 2 <span class="day-date">Jueves 16 de Julio</span></div>
+                <button class="btn-add-day"><i data-lucide="plus"></i> Añadir a la ruta</button>
+            </div>
+            <div class="timeline-wrapper">
+                <div class="event-card type-plan">
+                    <div class="event-time">10:00</div>
+                    <div class="event-icon"><i data-lucide="map-pin"></i></div>
+                    <div class="event-content">
+                        <div class="event-title">Museo del Louvre</div>
+                        <div class="event-desc">Entrada gratuita para menores de 26 años europeos.</div>
+                    </div>
+                </div>
+                <div class="event-card type-hotel">
+                    <div class="event-time">--:--</div>
+                    <div class="event-icon"><i data-lucide="bed"></i></div>
+                    <div class="event-content">
+                        <div class="event-title">🌙 Noche en: Hotel Le Meurice, París</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <main id="tab-mapa" class="tab-content">
+        <div id="step-map-container">
+            <div id="map-mock" style="width: 100%; height: 500px; border-radius: 16px; border: 1px solid var(--border-subtle); z-index: 10;"></div>
+        </div>
+        <p style="text-align: center; color: var(--text-muted); font-size: 0.85rem; margin-top: 1rem;">
+            Generado automáticamente. Las coordenadas se optimizan y guardan inteligentemente.
+        </p>
+    </main>
+
+    <main id="tab-finance" class="tab-content">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+            <div>
+                <h2 style="font-size: 1.8rem; font-weight: 800;">Finance</h2>
+                <p style="color: var(--text-muted); font-size: 0.9rem;">Control financiero del grupo. Cuentas claras, amistades largas.</p>
+            </div>
+            <button class="btn-finance-add-circle" id="step-finance-add" title="Añadir Movimiento">
+                <i data-lucide="plus"></i>
+            </button>
+        </div>
+        
+        <div class="tabs-container" style="margin: 0 0 2rem 0; border-bottom: 1px solid var(--border-subtle); justify-content: flex-start; gap: 1rem; padding: 0;" id="step-finance-tabs">
+            <button class="tab-btn active">Historial</button>
+            <button class="tab-btn">Saldos y Deudas</button>
+        </div>
+
+        <div id="step-finance-history">
+            <div class="finance-card">
+                <div style="display: flex; align-items: center; gap: 15px;">
+                    <div class="finance-icon gasto"><i data-lucide="shopping-cart"></i></div>
+                    <div>
+                        <h4 style="font-size: 1.1rem; font-weight: 600;">Cena en París</h4>
+                        <p style="font-size: 0.85rem; color: var(--text-muted);">Pagado por Carlos (dividido entre 3) · 15/07/2026</p>
+                    </div>
+                </div>
+                <div style="font-size: 1.3rem; font-weight: 800; color: var(--accent);">-90.00€</div>
+            </div>
+            <div class="finance-card">
+                <div style="display: flex; align-items: center; gap: 15px;">
+                    <div class="finance-icon gasto"><i data-lucide="shopping-cart"></i></div>
+                    <div>
+                        <h4 style="font-size: 1.1rem; font-weight: 600;">Billetes Louvre</h4>
+                        <p style="font-size: 0.85rem; color: var(--text-muted);">Pagado por Marta (dividido entre 3) · 14/07/2026</p>
+                    </div>
+                </div>
+                <div style="font-size: 1.3rem; font-weight: 800; color: var(--accent);">-45.00€</div>
+            </div>
+        </div>
+
+        <h3 style="margin: 2rem 0 1rem; border-bottom: 1px solid var(--border-subtle); padding-bottom: 0.5rem;"><i data-lucide="arrow-right-left"></i> Deudas Pendientes (Ejemplo)</h3>
+        <div id="step-finance-debts">
+            <div class="debt-card">
+                <div style="font-size: 1rem;">
+                    <strong>Tú</strong> debes pagar a <strong>Carlos</strong>: <span style="font-weight:800; font-size:1.1rem;">30.00€</span>
+                </div>
+                <button class="btn-settle">Saldar</button>
+            </div>
+        </div>
+    </main>
+
+    <main id="tab-extra" class="tab-content">
+        <div class="user-section" id="step-extra-weather">
+            <h3><i data-lucide="cloud-sun"></i> Meteorología Esperada</h3>
+            <p style="color: var(--text-muted); font-size: 0.9rem;">Pronóstico real para los próximos días basado en tus destinos.</p>
+            <div style="display: flex; gap: 10px; margin-top: 1.5rem; overflow-x: auto;">
+                <div style="min-width: 95px; padding: 1rem 0.5rem; border-radius: 12px; text-align: center; border: 1px solid rgba(255,77,77,0.3); background: rgba(255,77,77,0.1);">
+                    <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 8px;">París - Hoy</div>
+                    <i data-lucide="sun" style="color: #ffd700; width: 28px; height: 28px; margin: 0 auto 8px;"></i>
+                    <div style="font-weight: 800; font-size: 1.1rem; color: var(--primary);">28°</div>
+                    <div style="font-size: 0.8rem; color: var(--text-muted);">16°</div>
+                </div>
+                <div style="min-width: 95px; padding: 1rem 0.5rem; border-radius: 12px; text-align: center; border: 1px solid var(--border-subtle); background: rgba(255,255,255,0.03);">
+                    <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 8px;">París - Jue</div>
+                    <i data-lucide="cloud-rain" style="color: #4da6ff; width: 28px; height: 28px; margin: 0 auto 8px;"></i>
+                    <div style="font-weight: 800; font-size: 1.1rem; color: var(--primary);">22°</div>
+                    <div style="font-size: 0.8rem; color: var(--text-muted);">14°</div>
+                </div>
+            </div>
+        </div>
+        <div class="user-section" style="margin-top: 2rem;" id="step-extra-notes">
+            <h3><i data-lucide="info"></i> Notas Globales del Viaje</h3>
+            <textarea placeholder="Llevar adaptador de enchufe para UK. El seguro de viaje está a nombre de..." style="width: 100%; height: 100px; background: rgba(255,255,255,0.02); border: 1px solid var(--border-subtle); border-radius: 12px; padding: 1rem; color: white; margin-top: 1rem; font-family: 'Sora', sans-serif;" readonly></textarea>
+        </div>
+    </main>
+
+    <main id="tab-usuarios" class="tab-content">
+        <div class="user-section" style="margin-bottom: 2rem; text-align: center; border-color: var(--border-subtle);" id="step-users-code">
+            <h3 style="justify-content: center;"><i data-lucide="key"></i> Código de Invitación</h3>
+            <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem;">Comparte este código para que tus amigos se unan.</p>
+            <div style="background: rgba(255,255,255,0.03); padding: 1.5rem; border-radius: 16px; border: 1px dashed var(--border-subtle); max-width: 300px; margin: 0 auto;">
+                <div style="font-size: 2.5rem; font-weight: 800; letter-spacing: 8px; color: var(--primary); margin-bottom: 15px;">X7K9P</div>
+            </div>
+        </div>
+        <div class="users-grid" id="step-users-roles">
+            <div class="user-section">
+                <h3><i data-lucide="users"></i> Miembros del Viaje</h3>
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 1rem 0; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <div class="user-avatar" style="background-color: #ff4d4d;"><i data-lucide="user"></i></div>
+                        <div style="font-weight: 600;">Tú (Creador)</div>
+                    </div>
+                    <span style="font-size: 0.7rem; padding: 0.3rem 0.6rem; border-radius: 20px; background: rgba(255,255,255,0.1); color: var(--accent-blue); border: 1px solid var(--accent-blue); text-transform: uppercase; font-weight: 600;">Admin</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 1rem 0;">
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <div class="user-avatar" style="background-color: #4da6ff;"><i data-lucide="user"></i></div>
+                        <div style="font-weight: 600;">Carlos</div>
+                    </div>
+                    <span style="font-size: 0.7rem; padding: 0.3rem 0.6rem; border-radius: 20px; background: rgba(255,255,255,0.1); color: var(--success); border: 1px solid var(--success); text-transform: uppercase; font-weight: 600;">Editor</span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        lucide.createIcons();
+
+        // Inicializar un mapa simulado simple para que no esté vacío
+        const map = L.map('map-mock', { zoomControl: false, scrollWheelZoom: false }).setView([48.8566, 2.3522], 5);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OS' }).addTo(map);
+        L.marker([40.4168, -3.7038]).addTo(map).bindPopup('Madrid');
+        L.marker([48.8566, 2.3522]).addTo(map).bindPopup('París');
+        const latlngs = [[40.4168, -3.7038], [48.8566, 2.3522]];
+        L.polyline(latlngs, {color: '#ff4d4d', weight: 3, dashArray: '5, 10'}).addTo(map);
+
+        // Control de Pestañas
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tabs-container > .tab-btn').forEach(el => el.classList.remove('active'));
+            document.getElementById(`tab-${tabName}`).classList.add('active');
+            document.getElementById(`tab-btn-${tabName}`).classList.add('active');
+            if(tabName === 'mapa') { setTimeout(() => map.invalidateSize(), 100); }
+        }
+
+        // =========================================
+        // MOTOR DEL TOUR GUIADO
+        // =========================================
+        const tourSteps = [
+            {
+                target: 'body', // Central, no highlight
+                icon: 'graduation-cap',
+                title: '¡Bienvenido al Hub!',
+                text: 'Has entrado a la interfaz de planificación. Esta es tu sala de máquinas donde organizarás la ruta colaborativa minuto a minuto. ¿Preparado para aprender cómo funciona?',
+                action: () => { window.scrollTo(0,0); switchTab('itinerario'); }
+            },
+            {
+                target: '#step-add-button',
+                icon: 'plus-circle',
+                title: 'Añadir a la Ruta',
+                text: 'Este es el botón más importante. Al pulsarlo en un día concreto, podrás añadir un Trayecto (vuelos, trenes), un Alojamiento (hoteles) o un Plan (museos, cenas).',
+                action: () => { window.scrollTo(0,0); switchTab('itinerario'); }
+            },
+            {
+                target: '#step-events',
+                icon: 'list-ordered',
+                title: 'El Itinerario Visual',
+                text: 'Tus eventos se ordenan cronológicamente. Fíjate en los colores: azul para trayectos, verde para hoteles y rojo para planes. Todo el grupo verá esto actualizado en tiempo real.',
+                action: () => { switchTab('itinerario'); }
+            },
+            {
+                target: '#tab-btn-mapa',
+                icon: 'map',
+                title: 'Pestaña Mapa',
+                text: 'Vamos a ver cómo se visualiza todo lo que planeas geográficamente. Haremos clic aquí.',
+                action: () => { window.scrollTo(0,0); switchTab('itinerario'); } // Se mantiene en itinerario para que vea que vamos al mapa
+            },
+            {
+                target: '#step-map-container',
+                icon: 'navigation',
+                title: 'Ruta Geográfica',
+                text: 'El mapa lee las direcciones de tus planes y dibuja la ruta automáticamente. Si una chincheta no cae exacta, no te preocupes, puedes editar la dirección del evento para afinarla.',
+                action: () => { switchTab('mapa'); }
+            },
+            {
+                target: '#tab-btn-finance',
+                icon: 'calculator',
+                title: 'Pestaña Finance',
+                text: 'Se acabó usar excels o aplicaciones externas. Nuestro motor financiero integrado calcula quién debe a quién.',
+                action: () => { window.scrollTo(0,0); switchTab('mapa'); }
+            },
+            {
+                target: '#step-finance-add',
+                icon: 'credit-card',
+                title: 'Registrar Gastos',
+                text: 'Con este botón podrás añadir un gasto, seleccionar quién lo ha pagado de tu grupo y entre quiénes debe dividirse. ¡Matemáticas automáticas!',
+                action: () => { switchTab('finance'); }
+            },
+            {
+                target: '#step-finance-debts',
+                icon: 'arrow-right-left',
+                title: 'Saldos y Deudas',
+                text: 'En esta sección el algoritmo cruza las deudas. Te dirá exactamente quién debe dinero a quién de forma simplificada. Al pagar en la vida real, pulsa "Saldar".',
+                action: () => { switchTab('finance'); }
+            },
+            {
+                target: '#tab-btn-extra',
+                icon: 'more-horizontal',
+                title: 'Extra Info',
+                text: 'Un pequeño cajón de sastre para información útil.',
+                action: () => { window.scrollTo(0,0); switchTab('finance'); }
+            },
+            {
+                target: '#step-extra-weather',
+                icon: 'cloud-sun',
+                title: 'Clima Dinámico',
+                text: 'La plataforma detecta las ciudades en las que vas a estar según tu itinerario y te muestra la predicción meteorológica satelital real de los próximos días.',
+                action: () => { switchTab('extra'); }
+            },
+            {
+                target: '#tab-btn-usuarios',
+                icon: 'users',
+                title: 'Equipo y Accesos',
+                text: '¿Cómo invito a mis amigos? Muy fácil, vamos a la última pestaña.',
+                action: () => { window.scrollTo(0,0); switchTab('extra'); }
+            },
+            {
+                target: '#step-users-code',
+                icon: 'key',
+                title: 'Código de Invitación',
+                text: 'Comparte este código seguro. Tus amigos se crearán una cuenta, lo introducirán, y tú recibirás una notificación para aceptarles.',
+                action: () => { switchTab('usuarios'); }
+            },
+            {
+                target: '#step-users-roles',
+                icon: 'shield',
+                title: 'Roles de Permiso',
+                text: 'Puedes asignar roles. Un "Editor" puede añadir planes, pero un "Visor" solo podrá leer el itinerario sin modificar nada. Tú, como creador, tienes el control.',
+                action: () => { switchTab('usuarios'); }
+            },
+            {
+                target: '#step-export',
+                icon: 'file-down',
+                title: 'Exportación Profesional',
+                text: '¿Necesitas pasarle el plan a alguien externo? Un clic aquí y generaremos un PDF precioso con todo tu viaje maquetado y listo para enviar o imprimir.',
+                action: () => { window.scrollTo(0,0); switchTab('usuarios'); }
+            },
+            {
+                target: 'body',
+                icon: 'party-popper',
+                title: '¡Ya eres un experto!',
+                text: 'Recuerda que Interra-hub se encuentra en Fase Beta 2026. Si detectas algún fallo, nos harías un gran favor reportándolo en el formulario de la página principal. ¡Mucha suerte planificando tu aventura!',
+                action: () => { window.scrollTo(0,0); }
+            }
+        ];
+
+        let currentTourIndex = 0;
+        const overlay = document.getElementById('tour-overlay-darkness');
+        const tooltip = document.getElementById('tour-tooltip');
+        const exitBtn = document.getElementById('btn-exit-tour');
+
+        function startTour() {
+            currentTourIndex = 0;
+            overlay.classList.add('active');
+            exitBtn.classList.add('active');
+            renderTourStep();
+        }
+
+        function endTour() {
+            overlay.classList.remove('active');
+            tooltip.classList.remove('active');
+            exitBtn.classList.remove('active');
+            removeHighlight();
+        }
+
+        function removeHighlight() {
+            document.querySelectorAll('.tour-highlight').forEach(el => el.classList.remove('tour-highlight'));
+        }
+
+        function renderTourStep() {
+            const step = tourSteps[currentTourIndex];
+            
+            // Ejecutar acción preparatoria (ej. cambiar de pestaña)
+            if(step.action) step.action();
+
+            // Actualizar textos del tooltip
+            document.getElementById('tour-icon').innerHTML = `<i data-lucide="${step.icon}"></i>`;
+            document.getElementById('tour-title').innerText = step.title;
+            document.getElementById('tour-text').innerText = step.text;
+            document.getElementById('tour-progress').innerText = `${currentTourIndex + 1} / ${tourSteps.length}`;
+            
+            // Botones
+            const prevBtn = document.getElementById('tour-prev');
+            const nextBtn = document.getElementById('tour-next');
+            
+            prevBtn.style.display = currentTourIndex === 0 ? 'none' : 'block';
+            if(currentTourIndex === tourSteps.length - 1) {
+                nextBtn.innerText = 'Finalizar Tour';
+                nextBtn.style.background = 'var(--success)';
+            } else {
+                nextBtn.innerText = 'Siguiente';
+                nextBtn.style.background = 'var(--accent-blue)';
+            }
+
+            lucide.createIcons();
+            
+            // Lógica de Highlight y Posicionamiento
+            removeHighlight();
+            
+            // Pequeño timeout para permitir que las animaciones de pestañas terminen
+            setTimeout(() => {
+                if (step.target !== 'body' && document.querySelector(step.target)) {
+                    const targetEl = document.querySelector(step.target);
+                    targetEl.classList.add('tour-highlight');
+                    
+                    // Hacer scroll suave hacia el elemento
+                    targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    
+                    // Posicionar tooltip
+                    setTimeout(() => positionTooltip(targetEl), 300); // Esperar al scroll
+                } else {
+                    // Posición central por defecto
+                    tooltip.style.top = '50%';
+                    tooltip.style.left = '50%';
+                    tooltip.style.transform = 'translate(-50%, -50%)';
+                }
+                tooltip.classList.add('active');
+            }, 50);
+        }
+
+        function positionTooltip(targetEl) {
+            const rect = targetEl.getBoundingClientRect();
+            const tooltipRect = tooltip.getBoundingClientRect();
+            
+            let top = rect.bottom + 20;
+            let left = rect.left + (rect.width / 2) - (tooltipRect.width / 2);
+
+            // Ajustes para no salirse de pantalla
+            if (top + tooltipRect.height > window.innerHeight) {
+                top = rect.top - tooltipRect.height - 20; // Poner arriba si no cabe abajo
+            }
+            if (left < 20) left = 20;
+            if (left + tooltipRect.width > window.innerWidth - 20) left = window.innerWidth - tooltipRect.width - 20;
+
+            tooltip.style.top = `${top}px`;
+            tooltip.style.left = `${left}px`;
+            tooltip.style.transform = 'none';
+        }
+
+        function nextStep() {
+            if (currentTourIndex < tourSteps.length - 1) {
+                currentTourIndex++;
+                renderTourStep();
+            } else {
+                endTour();
+            }
+        }
+
+        function prevStep() {
+            if (currentTourIndex > 0) {
+                currentTourIndex--;
+                renderTourStep();
+            }
+        }
+
+        // Reposicionar al hacer resize para evitar bugs visuales
+        window.addEventListener('resize', () => {
+            if(overlay.classList.contains('active')) {
+                const step = tourSteps[currentTourIndex];
+                if(step.target !== 'body' && document.querySelector(step.target)) {
+                    positionTooltip(document.querySelector(step.target));
+                }
+            }
+        });
+
+        // Iniciar tour automáticamente al cargar
+        window.onload = () => {
+            setTimeout(startTour, 500);
+        };
+
+    </script>
+</body>
+</html>
