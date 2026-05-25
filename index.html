@@ -206,35 +206,59 @@
         .bento-card h3 { font-size: 1.4rem; font-weight: 800; margin-bottom: 1rem; }
         .bento-card p { color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; font-weight: 300; }
 
-        /* =========================================
-           SECCIÓN: TUTORIAL GUIADO
-           ========================================= */
-        .section-tutorial {
-            padding: 6rem 5%;
-            background: linear-gradient(180deg, transparent 0%, rgba(77, 166, 255, 0.02) 50%, transparent 100%);
-            text-align: center;
-        }
-        .tutorial-container {
-            max-width: 900px; margin: 0 auto;
-            background: rgba(20, 20, 20, 0.6);
-            border: 1px solid rgba(77, 166, 255, 0.2);
-            border-radius: 32px; padding: 4rem 2rem;
+        /* Componente Inline: Tutorial Box */
+        .tutorial-inline-box {
+            background: var(--surface);
+            border: 1px solid rgba(77, 166, 255, 0.15);
+            border-radius: 24px;
+            padding: 1.8rem 2rem;
+            margin-top: 2rem;
             backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-            box-shadow: 0 20px 50px rgba(77, 166, 255, 0.03);
             transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 2rem;
+            text-align: left;
         }
-        .tutorial-container:hover {
+        .tutorial-inline-box:hover {
             border-color: var(--accent-blue);
-            transform: translateY(-5px);
-            box-shadow: 0 30px 60px rgba(77, 166, 255, 0.06);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(77, 166, 255, 0.05);
         }
-        .tutorial-container h2 {
-            font-size: 2.5rem; font-weight: 800; margin-bottom: 1.5rem; color: var(--primary);
-            display: flex; justify-content: center; align-items: center; gap: 12px; flex-wrap: wrap;
+        .tutorial-inline-content {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
         }
-        .tutorial-container p {
-            color: rgba(255, 255, 255, 0.85); font-size: 1.15rem; line-height: 1.7; 
-            max-width: 700px; margin: 0 auto 3rem; font-weight: 300;
+        .tutorial-inline-info h4 {
+            font-size: 1.2rem;
+            font-weight: 800;
+            margin-bottom: 0.3rem;
+            color: var(--primary);
+        }
+        .tutorial-inline-info p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            line-height: 1.5;
+            font-weight: 300;
+        }
+
+        @media (max-width: 768px) {
+            .tutorial-inline-box {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1.5rem;
+                padding: 1.5rem;
+            }
+            .tutorial-inline-content {
+                align-items: flex-start;
+                gap: 1rem;
+            }
+            .tutorial-inline-box .btn-primary {
+                width: 100%;
+                justify-content: center;
+            }
         }
 
         /* =========================================
@@ -466,16 +490,18 @@
                 <p>Visualiza el mapa dinámico de tu ruta generado automáticamente y recibe previsiones meteorológicas satelitales de las ciudades exactas en las que estaréis cada día.</p>
             </div>
         </div>
-    </section>
 
-    <section class="section-tutorial">
-        <div class="tutorial-container">
-            <h2>
-                <i data-lucide="graduation-cap" style="color: var(--accent-blue); width: 36px; height: 36px;"></i>
-                Tutorial Guiado de un Viaje
-            </h2>
-            <p>¿Es tu primera vez organizando una gran ruta colaborativa o quieres dominar todos los secretos del Hub? Sigue nuestra guía interactiva paso a paso para aprender a estructurar itinerarios, gestionar presupuestos y coordinar a tus amigos sin fricciones.</p>
-            <a href="tutorialguiado.html" class="btn-primary btn-massive">Iniciar Tutorial Guiado</a>
+        <div class="tutorial-inline-box">
+            <div class="tutorial-inline-content">
+                <div class="feature-icon icon-blue" style="margin-bottom: 0; flex-shrink: 0;">
+                    <i data-lucide="graduation-cap"></i>
+                </div>
+                <div class="tutorial-inline-info">
+                    <h4>¿Primera vez organizando una ruta?</h4>
+                    <p>Sigue nuestra guía interactiva paso a paso para aprender a dominar el Hub y coordinar a tu grupo sin fricciones.</p>
+                </div>
+            </div>
+            <a href="tutorialguiado.html" class="btn-primary" style="padding: 0.7rem 1.6rem; border-radius: 16px; font-size: 0.85rem; flex-shrink: 0;">Iniciar Tutorial</a>
         </div>
     </section>
 
@@ -603,7 +629,7 @@
             <p>Tus datos están alojados en servidores de alta seguridad provistos por <strong>Google Firebase</strong> (bases de datos de Firestore y sistema de Autenticación). Google actúa como encargado del tratamiento, cumpliendo con los estándares internacionales de seguridad y el RGPD europeo. No vendemos bases de datos de usuarios a agencias de terceros bajo ninguna circunstancia.</p>
 
             <h3>5. Retención de Datos y Derechos ARCO</h3>
-            <p>Tus datos se conservarán mientras tu cuenta permanezca activa. Como usuario, estás amparado por el Reglamento General de Protección de Datos (RGPD) y tienes derecho a solicitar el <strong>A</strong>cceso, <strong>R</strong>ectificación, <strong>C</strong>ancelación (derecho al olvido) y <strong>O</strong>posición al tratamiento de tus datos personales. Para ejercer estos derechos o eliminar permanentemente tu cuenta y todos los viajes asociados, puedes ponerte en contacto con nosotros.</p>
+            <p>Tus datos se conservarán mientras tu cuenta permanecca activa. Como usuario, estás amparado por el Reglamento General de Protección de Datos (RGPD) y tienes derecho a solicitar el <strong>A</strong>cceso, <strong>R</strong>ectificación, <strong>C</strong>ancelación (derecho al olvido) y <strong>O</strong>posición al tratamiento de tus datos personales. Para ejercer estos derechos o eliminar permanentemente tu cuenta y todos los viajes asociados, puedes ponerte en contacto con nosotros.</p>
 
             <button class="modal-close" onclick="closeModal('modal-privacy')">Entendido</button>
         </div>
