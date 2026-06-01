@@ -51,6 +51,77 @@
     <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;800&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
 
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    <link rel="stylesheet" id="silktide-consent-manager-css" href="https://cdn.jsdelivr.net/gh/silktide/consent-manager@v2.0.0/silktide-consent-manager.css" integrity="sha384-IO1E/jCrQXyH5rwcI0SXP7OXw47JFqQNDQcKhbFvqnL2IunBxxwE2Ne5XyAmCqKs" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/gh/silktide/consent-manager@v2.0.0/silktide-consent-manager.js" integrity="sha384-j4NIMOecmtzMWe9GJADIIe5hTlHG63aiTQ/2XorW10RNyQJg+IU+xwFVDy45wBah" crossorigin="anonymous"></script>
+    <script>
+    window.silktideConsentManager.init({
+      backdrop: {
+        show: true
+      },
+      icon: {
+        position: "bottomLeft"
+      },
+      prompt: {
+        position: "bottomLeft"
+      },
+      consentTypes: [
+        {
+          id: "essential",
+          label: "Essential",
+          description: "<p>Estas cookies son necesarias para el correcto funcionamiento del sitio web y no se pueden desactivar. Ayudan con tareas como iniciar sesión y configurar tus preferencias de privacidad.</p>",
+          required: true,
+          onAccept: function() {
+            console.log('Add logic for the required Essential consent type here');
+          }
+        },
+        {
+          id: "anal_ticas",
+          label: "Analíticas",
+          description: "<p>Estas cookies nos ayudan a mejorar el sitio web al rastrear qué páginas son las más populares y cómo navegan los visitantes por el sitio.</p>",
+          required: true,
+          gtag: "analytics_storage",
+          onAccept: function() {
+            console.log('Add logic for the required Analíticas consent type here');
+          }
+        },
+        {
+          id: "marketing",
+          label: "Marketing",
+          description: "<p>Nosotros y nuestros socios publicitarios utilizamos estas cookies para mostrarle anuncios relevantes en este sitio y en otros, y para medir el rendimiento de esas campañas.</p>",
+          required: true,
+          gtag: [
+            "ad_storage",
+            "ad_user_data",
+            "ad_personalization"
+          ],
+          onAccept: function() {
+            console.log('Add logic for the required Marketing consent type here');
+          }
+        }
+      ],
+      text: {
+        prompt: {
+          description: "<p>Utilizamos cookies en nuestro sitio web para mejorar su experiencia de usuario, ofrecer contenido personalizado y analizar nuestro tráfico.</p>",
+          acceptAllButtonText: "Accept all",
+          acceptAllButtonAccessibleLabel: "Accept all cookies",
+          rejectNonEssentialButtonText: "Reject non-essential",
+          rejectNonEssentialButtonAccessibleLabel: "Reject all non-essential cookies",
+          preferencesButtonText: "Preferences",
+          preferencesButtonAccessibleLabel: "Toggle preferences"
+        },
+        preferences: {
+          title: "Personaliza tus preferencias de cookies",
+          description: "<p>Respetamos su derecho a la privacidad. Puede optar por no permitir ciertos tipos de cookies. Sus preferencias de cookies se aplicarán en todo nuestro sitio web.</p>",
+          saveButtonText: "Guardar y cerrar",
+          saveButtonAccessibleLabel: "Guardar tu preferencia de cookies",
+          creditLinkText: "Get this banner for free",
+          creditLinkAccessibleLabel: "Get this banner for free"
+        }
+      }
+    });
+    </script>
+
     <style>
         /* =========================================
            VARIABLES Y CONFIGURACIÓN BASE
@@ -370,22 +441,66 @@
            FOOTER
            ========================================= */
         footer {
-            padding: 4rem 5% 2rem; border-top: 1px solid var(--border-subtle);
-            background: var(--surface-solid); text-align: center;
+            width: 100%;
+            padding: 1rem 2rem 0.8rem;
+            border-top: 1px solid rgba(255,255,255,0.06);
+            background: rgba(0,0,0,0.4);
+            flex-shrink: 0;
         }
-        .footer-logo { font-size: 1.5rem; font-weight: 800; margin-bottom: 2rem; }
+
+        .footer-inner {
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .footer-logo {
+            font-size: 1.1rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+            margin-bottom: 0.7rem;
+        }
         .footer-logo .dot { color: var(--accent); }
-        
-        .footer-links { display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap; margin-bottom: 2rem; }
-        .footer-links button {
-            background: none; border: none; color: var(--text-muted); font-size: 0.85rem;
-            cursor: pointer; transition: 0.2s; font-family: 'Sora', sans-serif;
-            text-decoration: underline; text-underline-offset: 4px; text-decoration-color: transparent;
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.2rem;
+            margin-bottom: 0.8rem;
+            flex-wrap: wrap;
         }
-        .footer-links button:hover { color: var(--primary); text-decoration-color: var(--border-subtle); }
-        
-        .footer-copy { color: rgba(255,255,255,0.3); font-size: 0.8rem; font-weight: 300; }
-        .footer-copy strong { color: rgba(255,255,255,0.6); }
+        .footer-links button {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            font-family: 'Sora', sans-serif;
+            cursor: pointer;
+            padding: 5px; /* Área táctil ampliada */
+            transition: color 0.2s;
+            text-decoration: underline;
+            text-underline-offset: 3px;
+            text-decoration-color: rgba(255,255,255,0.15);
+        }
+        .footer-links button:hover { color: var(--primary); }
+
+        .footer-studio {
+            font-size: 0.7rem;
+            color: rgba(255,255,255,0.2);
+            margin-bottom: 0.4rem;
+        }
+        .footer-studio a {
+            color: rgba(255,255,255,0.35);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .footer-studio a:hover { color: rgba(255,255,255,0.7); }
+
+        .footer-copy {
+            font-size: 0.67rem;
+            color: rgba(255,255,255,0.18);
+            font-weight: 300;
+        }
 
         /* =========================================
            MODALES Y COOKIES
@@ -418,26 +533,6 @@
             font-weight: 600; cursor: pointer; transition: 0.3s; font-family: 'Sora', sans-serif;
         }
         .modal-close:hover { background: rgba(255,255,255,0.1); }
-
-        #cookie-banner {
-            position: fixed; bottom: 30px; right: 30px; width: 340px;
-            background: rgba(20, 20, 20, 0.95); backdrop-filter: blur(12px);
-            border: 1px solid var(--border-subtle); border-radius: 18px; padding: 1.5rem;
-            display: flex; flex-direction: column; gap: 1rem; z-index: 9999;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.8);
-            opacity: 0; pointer-events: none; transform: translateY(20px); transition: 0.5s ease;
-        }
-        #cookie-banner.show { opacity: 1; pointer-events: all; transform: translateY(0); }
-        .cookie-title { font-weight: 800; font-size: 1.1rem; display: flex; align-items: center; gap: 8px; }
-        .cookie-text { font-size: 0.85rem; color: var(--text-muted); line-height: 1.5; font-weight: 300; }
-        .cookie-text a { color: var(--primary); font-weight: 600; cursor: pointer; }
-        .cookie-btn {
-            width: 100%; padding: 0.8rem; border-radius: 12px; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: 0.3s;
-        }
-        .cookie-accept { background: var(--primary); color: var(--bg-color); border: none; }
-        .cookie-accept:hover { transform: scale(0.97); }
-        .cookie-reject { background: transparent; color: var(--text-muted); border: 1px solid var(--border-subtle); margin-top: 5px;}
-        .cookie-reject:hover { background: rgba(255,255,255,0.05); color: var(--primary); }
 
         /* =========================================
            ADAPTACIÓN RESPONSIVE (MÓVILES Y TÁCTILES)
@@ -476,13 +571,6 @@
             .plus-container { padding: 3rem 1.5rem; }
             .vision-container { gap: 3rem; }
             .vision-item { flex-direction: column; gap: 1rem; }
-            
-            /* Ajuste Menú Inferior */
-            .footer-links { flex-direction: column; gap: 1rem; align-items: center; }
-            .footer-links button { padding: 10px; /* Target táctil mayor */ }
-
-            /* Cookie Banner Adaptado */
-            #cookie-banner { bottom: 20px; right: 5%; width: 90%; }
             
             /* Ajuste del botón de scroll */
             .scroll-down-indicator { bottom: 20px; }
@@ -629,15 +717,19 @@
     </section>
 
     <footer>
-        <div class="footer-logo">Interra-hub<span class="dot">.</span></div>
-        <div class="footer-links">
-            <button onclick="openModal('modal-tos')">Términos de uso</button>
-            <button onclick="openModal('modal-privacy')">Privacidad y datos</button>
-            <button onclick="openModal('modal-copyright')">Copyright</button>
-        </div>
-        <div class="footer-copy">
-            Hecho por <strong>Pipa Studio</strong> <br><br>
-            © 2026 Interra-hub · Todos los derechos reservados
+        <div class="footer-inner">
+            <div class="footer-logo">Interra-hub<span class="dot">.</span></div>
+
+            <div class="footer-links">
+                <button onclick="openModal('modal-tos')">Términos de uso</button>
+                <button onclick="openModal('modal-privacy')">Privacidad y datos</button>
+                <button onclick="openModal('modal-copyright')">Copyright</button>
+            </div>
+
+            <div class="footer-studio">
+                Hecha por <strong style="color:rgba(255,255,255,0.4);">Pipa Studios</strong>
+            </div>
+            <div class="footer-copy">© 2026 Interra-hub · Todos los derechos reservados</div>
         </div>
     </footer>
 
@@ -713,15 +805,6 @@
         </div>
     </div>
 
-    <div id="cookie-banner">
-        <div class="cookie-title"><i data-lucide="cookie" style="color: var(--warning);"></i> Privacidad y Cookies</div>
-        <div class="cookie-text">
-            Utilizamos cookies técnicas y herramientas como Vercel Analytics para asegurar que el Hub funcione perfectamente y analizar el tráfico de forma privada. Más info en <a onclick="openModal('modal-privacy')">Privacidad</a>.
-        </div>
-        <button class="cookie-btn cookie-accept" id="cookie-accept-btn">Aceptar y continuar</button>
-        <button class="cookie-btn cookie-reject" id="cookie-reject-btn">Rechazar no esenciales</button>
-    </div>
-
     <script>
         // Inicializar Iconos Lucide
         lucide.createIcons();
@@ -741,33 +824,6 @@
                 if (e.target === overlay) closeModal(overlay.id);
             });
         });
-
-        // Control de Cookies
-        document.addEventListener("DOMContentLoaded", () => {
-            const banner = document.getElementById('cookie-banner');
-            const acceptBtn = document.getElementById('cookie-accept-btn');
-            const rejectBtn = document.getElementById('cookie-reject-btn');
-
-            if (!localStorage.getItem('interrahub_cookies')) {
-                setTimeout(() => banner.classList.add('show'), 1500);
-            }
-
-            acceptBtn.addEventListener('click', () => {
-                localStorage.setItem('interrahub_cookies', 'accepted');
-                banner.classList.remove('show');
-            });
-
-            rejectBtn.addEventListener('click', () => {
-                const apoyar = confirm("¿Estás seguro? Las métricas anónimas de Vercel Analytics nos ayudan a mejorar la plataforma de cara al año que viene. ¿Deseas mantenerlas activas para apoyarnos?");
-                if (apoyar) {
-                    localStorage.setItem('interrahub_cookies', 'accepted');
-                } else {
-                    localStorage.setItem('interrahub_cookies', 'rejected');
-                }
-                banner.classList.remove('show');
-            });
-        });
     </script>
-    <script src="//code.tidio.co/gfxhupr9pntygs7wjcktdwxemoht8pbu.js" async></script>
 </body>
 </html>
