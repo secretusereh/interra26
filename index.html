@@ -1,773 +1,773 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <title>Interra-hub | Planifica viajes y rutas en grupo sin caos</title>
-    <meta name="description" content="Interra-hub es el planificador definitivo para viajes en grupo. Diseña tu ruta minuto a minuto de forma colaborativa, liquida gastos automáticamente y lleva tu itinerario en el bolsillo.">
-    <meta name="keywords" content="interrail, viajes en grupo, planificador de rutas, app para viajar, dividir gastos viaje, itinerario colaborativo, organizar viaje amigos, interrahub">
-    <meta name="author" content="Pipa Studio">
-    <meta name="robots" content="index, follow, max-image-preview:large">
-    <link rel="canonical" href="https://tudominio.com/">
-    
-    <meta property="og:type" content="website">
-    <meta property="og:title" content="Interra-hub | El hub definitivo para tus viajes">
-    <meta property="og:description" content="El fin de los excels infinitos. Organiza tu próxima aventura en grupo: mapas, itinerarios y finanzas en una sola app.">
-    <meta property="og:image" content="https://tudominio.com/interrahublogo.PNG">
-    <meta property="og:url" content="https://tudominio.com/">
-    <meta property="og:site_name" content="Interra-hub">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Interra-hub | Planifica viajes y rutas en grupo sin caos</title>
+    <meta name="description" content="Interra-hub es el planificador definitivo para viajes en grupo. Diseña tu ruta minuto a minuto de forma colaborativa, liquida gastos automáticamente y lleva tu itinerario en el bolsillo.">
+    <meta name="keywords" content="interrail, viajes en grupo, planificador de rutas, app para viajar, dividir gastos viaje, itinerario colaborativo, organizar viaje amigos, interrahub">
+    <meta name="author" content="Pipa Studio">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+    <link rel="canonical" href="https://tudominio.com/">
+    
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Interra-hub | El hub definitivo para tus viajes">
+    <meta property="og:description" content="El fin de los excels infinitos. Organiza tu próxima aventura en grupo: mapas, itinerarios y finanzas en una sola app.">
+    <meta property="og:image" content="https://tudominio.com/interrahublogo.PNG">
+    <meta property="og:url" content="https://tudominio.com/">
+    <meta property="og:site_name" content="Interra-hub">
 
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Interra-hub | Planifica viajes y rutas en grupo">
-    <meta name="twitter:description" content="Diseña tu ruta colaborativa y cuadra gastos al instante. La evolución de los viajes.">
-    <meta name="twitter:image" content="https://tudominio.com/interrahublogo.PNG">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Interra-hub | Planifica viajes y rutas en grupo">
+    <meta name="twitter:description" content="Diseña tu ruta colaborativa y cuadra gastos al instante. La evolución de los viajes.">
+    <meta name="twitter:image" content="https://tudominio.com/interrahublogo.PNG">
 
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "SoftwareApplication",
-      "name": "Interra-hub",
-      "operatingSystem": "Web",
-      "applicationCategory": "TravelApplication",
-      "description": "Plataforma colaborativa para planificar viajes en grupo e Interrail. Organiza itinerarios, gestiona alojamientos y cuadra gastos en tiempo real.",
-      "offers": {
-        "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "EUR"
-      },
-      "author": {
-        "@type": "Organization",
-        "name": "Pipa Studio"
-      }
-    }
-    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Interra-hub",
+      "operatingSystem": "Web",
+      "applicationCategory": "TravelApplication",
+      "description": "Plataforma colaborativa para planificar viajes en grupo e Interrail. Organiza itinerarios, gestiona alojamientos y cuadra gastos en tiempo real.",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "EUR"
+      },
+      "author": {
+        "@type": "Organization",
+        "name": "Pipa Studio"
+      }
+    }
+    </script>
 
-    <link rel="icon" type="image/png" href="interrahublogo.PNG">
-    <link rel="apple-touch-icon" href="interrahublogo.PNG">
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;800&display=swap" rel="stylesheet">
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="icon" type="image/png" href="interrahublogo.PNG">
+    <link rel="apple-touch-icon" href="interrahublogo.PNG">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
 
-    <style>
-        /* =========================================
-           VARIABLES Y CONFIGURACIÓN BASE
-           ========================================= */
-        :root {
-            --bg-color: #030303;
-            --surface: rgba(20, 20, 20, 0.4);
-            --surface-solid: #141414;
-            --primary: #ffffff;
-            --text-muted: #888888;
-            --accent: #ff4d4d;
-            --accent-blue: #4da6ff;
-            --success: #4dff4d;
-            --warning: #ffb84d;
-            --gold: #ffd700;
-            --gold-gradient: linear-gradient(135deg, #ffd700 0%, #ffb84d 100%);
-            --border-subtle: rgba(255, 255, 255, 0.08);
-            --transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-        }
+    <style>
+        /* =========================================
+           VARIABLES Y CONFIGURACIÓN BASE
+           ========================================= */
+        :root {
+            --bg-color: #030303;
+            --surface: rgba(20, 20, 20, 0.4);
+            --surface-solid: #141414;
+            --primary: #ffffff;
+            --text-muted: #888888;
+            --accent: #ff4d4d;
+            --accent-blue: #4da6ff;
+            --success: #4dff4d;
+            --warning: #ffb84d;
+            --gold: #ffd700;
+            --gold-gradient: linear-gradient(135deg, #ffd700 0%, #ffb84d 100%);
+            --border-subtle: rgba(255, 255, 255, 0.08);
+            --transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Sora', sans-serif; }
-        
-        html { scroll-behavior: smooth; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Sora', sans-serif; }
+        
+        html { scroll-behavior: smooth; }
 
-        body {
-            background-color: var(--bg-color);
-            color: var(--primary);
-            min-height: 100vh;
-            overflow-x: hidden;
-            background-image: radial-gradient(circle at 50% -10%, rgba(255, 255, 255, 0.03), transparent 70%);
-            background-attachment: fixed;
-        }
+        body {
+            background-color: var(--bg-color);
+            color: var(--primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            background-image: radial-gradient(circle at 50% -10%, rgba(255, 255, 255, 0.03), transparent 70%);
+            background-attachment: fixed;
+        }
 
-        ::selection { background: var(--accent); color: var(--primary); }
+        ::selection { background: var(--accent); color: var(--primary); }
 
-        /* =========================================
-           NAVEGACIÓN (NAVBAR)
-           ========================================= */
-        nav {
-            position: fixed;
-            top: 0; left: 0; width: 100%;
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 1.2rem 5%;
-            background: rgba(3, 3, 3, 0.7);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--border-subtle);
-            z-index: 1000;
-        }
-        
-        .logo {
-            font-weight: 800; font-size: 1.4rem; letter-spacing: -0.5px;
-            display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--primary);
-        }
-        .logo .dot { color: var(--accent); }
+        /* =========================================
+           NAVEGACIÓN (NAVBAR)
+           ========================================= */
+        nav {
+            position: fixed;
+            top: 0; left: 0; width: 100%;
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 1.2rem 5%;
+            background: rgba(3, 3, 3, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-subtle);
+            z-index: 1000;
+        }
+        
+        .logo {
+            font-weight: 800; font-size: 1.4rem; letter-spacing: -0.5px;
+            display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--primary);
+        }
+        .logo .dot { color: var(--accent); }
 
-        .nav-actions { display: flex; gap: 1rem; align-items: center; }
-        
-        .btn-ghost {
-            background: transparent; color: var(--text-muted); border: none;
-            font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: var(--transition);
-            text-decoration: none; padding: 0.5rem 1rem;
-        }
-        .btn-ghost:hover { color: var(--primary); }
+        .nav-actions { display: flex; gap: 1rem; align-items: center; }
+        
+        .btn-ghost {
+            background: transparent; color: var(--text-muted); border: none;
+            font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: var(--transition);
+            text-decoration: none; padding: 0.5rem 1rem;
+        }
+        .btn-ghost:hover { color: var(--primary); }
 
-        .btn-primary {
-            background: var(--primary); color: var(--bg-color); border: none;
-            padding: 0.7rem 1.5rem; border-radius: 30px; font-weight: 600; font-size: 0.9rem;
-            cursor: pointer; transition: var(--transition); text-decoration: none;
-            display: inline-flex; align-items: center; gap: 8px;
-        }
-        .btn-primary:hover { transform: scale(0.97); box-shadow: 0 0 20px rgba(255,255,255,0.2); }
+        .btn-primary {
+            background: var(--primary); color: var(--bg-color); border: none;
+            padding: 0.7rem 1.5rem; border-radius: 30px; font-weight: 600; font-size: 0.9rem;
+            cursor: pointer; transition: var(--transition); text-decoration: none;
+            display: inline-flex; align-items: center; gap: 8px;
+        }
+        .btn-primary:hover { transform: scale(0.97); box-shadow: 0 0 20px rgba(255,255,255,0.2); }
 
-        /* =========================================
-           HERO SECTION (CON FONDO DE IMAGEN Y BLUR)
-           ========================================= */
-        .hero {
-            min-height: 100vh;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            text-align: center; padding: 8rem 5% 4rem; position: relative;
-            background: linear-gradient(to bottom, rgba(3,3,3,0.5) 0%, rgba(3,3,3,0.95) 100%), url('HomeInterrahub.png') no-repeat center center;
-            background-size: cover;
-            background-attachment: fixed;
-        }
-        
-        .badge-beta {
-            background: rgba(255, 184, 77, 0.1); color: var(--warning);
-            border: 1px solid rgba(255, 184, 77, 0.2); border-radius: 30px;
-            padding: 0.5rem 1rem; font-size: 0.75rem; font-weight: 600; letter-spacing: 1px;
-            text-transform: uppercase; margin-bottom: 2rem; animation: fadeInDown 0.8s ease;
-            backdrop-filter: blur(4px);
-        }
+        /* =========================================
+           HERO SECTION (CON FONDO DE IMAGEN Y BLUR)
+           ========================================= */
+        .hero {
+            min-height: 100vh;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            text-align: center; padding: 8rem 5% 4rem; position: relative;
+            background: linear-gradient(to bottom, rgba(3,3,3,0.5) 0%, rgba(3,3,3,0.95) 100%), url('HomeInterrahub.png') no-repeat center center;
+            background-size: cover;
+            background-attachment: fixed;
+        }
+        
+        .badge-beta {
+            background: rgba(255, 184, 77, 0.1); color: var(--warning);
+            border: 1px solid rgba(255, 184, 77, 0.2); border-radius: 30px;
+            padding: 0.5rem 1rem; font-size: 0.75rem; font-weight: 600; letter-spacing: 1px;
+            text-transform: uppercase; margin-bottom: 2rem; animation: fadeInDown 0.8s ease;
+            backdrop-filter: blur(4px);
+        }
 
-        .hero h1 {
-            font-size: clamp(2.5rem, 6vw, 4.5rem); font-weight: 800;
-            letter-spacing: -2px; line-height: 1.1; margin-bottom: 1.5rem;
-            max-width: 900px; animation: fadeInUp 0.8s ease 0.2s backwards;
-            text-shadow: 0 4px 20px rgba(0,0,0,0.5);
-        }
-        .hero h1 .highlight { color: var(--accent); }
+        .hero h1 {
+            font-size: clamp(2.5rem, 6vw, 4.5rem); font-weight: 800;
+            letter-spacing: -2px; line-height: 1.1; margin-bottom: 1.5rem;
+            max-width: 900px; animation: fadeInUp 0.8s ease 0.2s backwards;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.5);
+        }
+        .hero h1 .highlight { color: var(--accent); }
 
-        .hero p {
-            color: rgba(255, 255, 255, 0.9); font-size: clamp(1rem, 2vw, 1.25rem);
-            line-height: 1.6; max-width: 800px; margin-bottom: 3rem; font-weight: 300;
-            animation: fadeInUp 0.8s ease 0.4s backwards;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.8);
-        }
+        .hero p {
+            color: rgba(255, 255, 255, 0.9); font-size: clamp(1rem, 2vw, 1.25rem);
+            line-height: 1.6; max-width: 800px; margin-bottom: 3rem; font-weight: 300;
+            animation: fadeInUp 0.8s ease 0.4s backwards;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.8);
+        }
 
-        .hero-ctas {
-            display: flex; gap: 1.5rem; flex-wrap: wrap; justify-content: center;
-            animation: fadeInUp 0.8s ease 0.6s backwards;
-            position: relative;
-            z-index: 2;
-        }
-        
-        .btn-massive {
-            padding: 1.1rem 2.8rem; font-size: 1.1rem; border-radius: 40px;
-            text-align: center;
-        }
+        .hero-ctas {
+            display: flex; gap: 1.5rem; flex-wrap: wrap; justify-content: center;
+            animation: fadeInUp 0.8s ease 0.6s backwards;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .btn-massive {
+            padding: 1.1rem 2.8rem; font-size: 1.1rem; border-radius: 40px;
+            text-align: center;
+        }
 
-        /* Indicador de bajar (Flecha) */
-        .scroll-down-indicator {
-            position: absolute;
-            bottom: 40px;
-            left: 50%;
-            transform: translateX(-50%);
-            color: var(--primary);
-            animation: bounce 2s infinite, fadeIn 1s ease 1s backwards;
-            text-decoration: none;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 50px;
-            height: 50px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 50%;
-            border: 1px solid var(--border-subtle);
-            backdrop-filter: blur(5px);
-            transition: var(--transition);
-            z-index: 10;
-        }
+        /* Indicador de bajar (Flecha) */
+        .scroll-down-indicator {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: var(--primary);
+            animation: bounce 2s infinite, fadeIn 1s ease 1s backwards;
+            text-decoration: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50%;
+            border: 1px solid var(--border-subtle);
+            backdrop-filter: blur(5px);
+            transition: var(--transition);
+            z-index: 10;
+        }
 
-        .scroll-down-indicator:hover {
-            background: rgba(255, 255, 255, 0.15);
-            color: var(--accent-blue);
-            transform: translateX(-50%) scale(1.1);
-        }
+        .scroll-down-indicator:hover {
+            background: rgba(255, 255, 255, 0.15);
+            color: var(--accent-blue);
+            transform: translateX(-50%) scale(1.1);
+        }
 
-        /* =========================================
-           SECCIÓN: CÓMO FUNCIONA
-           ========================================= */
-        .section-features {
-            padding: 6rem 5%; max-width: 1200px; margin: 0 auto; position: relative; z-index: 10;
-        }
+        /* =========================================
+           SECCIÓN: CÓMO FUNCIONA
+           ========================================= */
+        .section-features {
+            padding: 6rem 5%; max-width: 1200px; margin: 0 auto; position: relative; z-index: 10;
+        }
 
-        .section-header { text-align: center; margin-bottom: 4rem; }
-        .section-header h2 { font-size: 2.5rem; font-weight: 800; letter-spacing: -1px; margin-bottom: 1rem; }
-        .section-header p { color: var(--text-muted); font-size: 1.1rem; max-width: 600px; margin: 0 auto; line-height: 1.6; }
+        .section-header { text-align: center; margin-bottom: 4rem; }
+        .section-header h2 { font-size: 2.5rem; font-weight: 800; letter-spacing: -1px; margin-bottom: 1rem; }
+        .section-header p { color: var(--text-muted); font-size: 1.1rem; max-width: 600px; margin: 0 auto; line-height: 1.6; }
 
-        .bento-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;
-        }
+        .bento-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;
+        }
 
-        .bento-card {
-            background: var(--surface); border: 1px solid var(--border-subtle);
-            border-radius: 24px; padding: 3rem 2rem;
-            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-            transition: var(--transition);
-            display: flex; flex-direction: column; align-items: flex-start;
-        }
-        .bento-card:hover {
-            background: rgba(255,255,255,0.03); border-color: rgba(255,255,255,0.2);
-            transform: translateY(-5px);
-        }
+        .bento-card {
+            background: var(--surface); border: 1px solid var(--border-subtle);
+            border-radius: 24px; padding: 3rem 2rem;
+            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            transition: var(--transition);
+            display: flex; flex-direction: column; align-items: flex-start;
+        }
+        .bento-card:hover {
+            background: rgba(255,255,255,0.03); border-color: rgba(255,255,255,0.2);
+            transform: translateY(-5px);
+        }
 
-        .feature-icon {
-            width: 50px; height: 50px; border-radius: 16px;
-            display: flex; justify-content: center; align-items: center; margin-bottom: 1.5rem;
-        }
-        .icon-blue { background: rgba(77, 166, 255, 0.1); color: var(--accent-blue); }
-        .icon-red { background: rgba(255, 77, 77, 0.1); color: var(--accent); }
-        .icon-green { background: rgba(77, 255, 77, 0.1); color: var(--success); }
+        .feature-icon {
+            width: 50px; height: 50px; border-radius: 16px;
+            display: flex; justify-content: center; align-items: center; margin-bottom: 1.5rem;
+        }
+        .icon-blue { background: rgba(77, 166, 255, 0.1); color: var(--accent-blue); }
+        .icon-red { background: rgba(255, 77, 77, 0.1); color: var(--accent); }
+        .icon-green { background: rgba(77, 255, 77, 0.1); color: var(--success); }
 
-        .bento-card h3 { font-size: 1.4rem; font-weight: 800; margin-bottom: 1rem; }
-        .bento-card p { color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; font-weight: 300; }
+        .bento-card h3 { font-size: 1.4rem; font-weight: 800; margin-bottom: 1rem; }
+        .bento-card p { color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; font-weight: 300; }
 
-        /* Componente Inline: Tutorial Box */
-        .tutorial-inline-box {
-            background: var(--surface);
-            border: 1px solid rgba(77, 166, 255, 0.15);
-            border-radius: 24px;
-            padding: 1.8rem 2rem;
-            margin-top: 2rem;
-            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 2rem;
-            text-align: left;
-        }
-        .tutorial-inline-box:hover {
-            border-color: var(--accent-blue);
-            transform: translateY(-3px);
-            box-shadow: 0 15px 40px rgba(77, 166, 255, 0.05);
-        }
-        .tutorial-inline-content {
-            display: flex;
-            align-items: center;
-            gap: 1.5rem;
-        }
-        .tutorial-inline-info h4 {
-            font-size: 1.2rem;
-            font-weight: 800;
-            margin-bottom: 0.3rem;
-            color: var(--primary);
-        }
-        .tutorial-inline-info p {
-            color: var(--text-muted);
-            font-size: 0.9rem;
-            line-height: 1.5;
-            font-weight: 300;
-        }
+        /* Componente Inline: Tutorial Box */
+        .tutorial-inline-box {
+            background: var(--surface);
+            border: 1px solid rgba(77, 166, 255, 0.15);
+            border-radius: 24px;
+            padding: 1.8rem 2rem;
+            margin-top: 2rem;
+            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 2rem;
+            text-align: left;
+        }
+        .tutorial-inline-box:hover {
+            border-color: var(--accent-blue);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(77, 166, 255, 0.05);
+        }
+        .tutorial-inline-content {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+        .tutorial-inline-info h4 {
+            font-size: 1.2rem;
+            font-weight: 800;
+            margin-bottom: 0.3rem;
+            color: var(--primary);
+        }
+        .tutorial-inline-info p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            line-height: 1.5;
+            font-weight: 300;
+        }
 
-        /* =========================================
-           SECCIÓN: INTERRA-HUB PLUS
-           ========================================= */
-        .section-plus {
-            padding: 6rem 5%;
-            background: linear-gradient(180deg, transparent 0%, rgba(255, 215, 0, 0.03) 50%, transparent 100%);
-            text-align: center;
-        }
-        .plus-container {
-            max-width: 900px; margin: 0 auto;
-            background: rgba(20, 20, 20, 0.6);
-            border: 1px solid rgba(255, 215, 0, 0.3);
-            border-radius: 32px; padding: 4rem 2rem;
-            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-            box-shadow: 0 20px 50px rgba(255, 215, 0, 0.05);
-            transition: var(--transition);
-        }
-        .plus-container:hover {
-            border-color: rgba(255, 215, 0, 0.6);
-            transform: translateY(-5px);
-            box-shadow: 0 30px 60px rgba(255, 215, 0, 0.08);
-        }
-        .plus-container h2 {
-            font-size: 2.5rem; font-weight: 800; margin-bottom: 1.5rem; color: var(--primary);
-            display: flex; justify-content: center; align-items: center; gap: 12px; flex-wrap: wrap;
-        }
-        .plus-container p {
-            color: rgba(255,255,255,0.85); font-size: 1.15rem; line-height: 1.7; 
-            max-width: 700px; margin: 0 auto 3rem; font-weight: 300;
-        }
-        .btn-plus {
-            background: var(--gold-gradient);
-            color: #000; font-weight: 800; padding: 1.2rem 2.5rem; border-radius: 40px;
-            text-decoration: none; display: inline-flex; align-items: center; gap: 10px;
-            font-size: 1.05rem; transition: var(--transition);
-        }
-        .btn-plus:hover { transform: scale(1.05); box-shadow: 0 0 30px rgba(255, 215, 0, 0.4); }
+        /* =========================================
+           SECCIÓN: INTERRA-HUB PLUS
+           ========================================= */
+        .section-plus {
+            padding: 6rem 5%;
+            background: linear-gradient(180deg, transparent 0%, rgba(255, 215, 0, 0.03) 50%, transparent 100%);
+            text-align: center;
+        }
+        .plus-container {
+            max-width: 900px; margin: 0 auto;
+            background: rgba(20, 20, 20, 0.6);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            border-radius: 32px; padding: 4rem 2rem;
+            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            box-shadow: 0 20px 50px rgba(255, 215, 0, 0.05);
+            transition: var(--transition);
+        }
+        .plus-container:hover {
+            border-color: rgba(255, 215, 0, 0.6);
+            transform: translateY(-5px);
+            box-shadow: 0 30px 60px rgba(255, 215, 0, 0.08);
+        }
+        .plus-container h2 {
+            font-size: 2.5rem; font-weight: 800; margin-bottom: 1.5rem; color: var(--primary);
+            display: flex; justify-content: center; align-items: center; gap: 12px; flex-wrap: wrap;
+        }
+        .plus-container p {
+            color: rgba(255,255,255,0.85); font-size: 1.15rem; line-height: 1.7; 
+            max-width: 700px; margin: 0 auto 3rem; font-weight: 300;
+        }
+        .btn-plus {
+            background: var(--gold-gradient);
+            color: #000; font-weight: 800; padding: 1.2rem 2.5rem; border-radius: 40px;
+            text-decoration: none; display: inline-flex; align-items: center; gap: 10px;
+            font-size: 1.05rem; transition: var(--transition);
+        }
+        .btn-plus:hover { transform: scale(1.05); box-shadow: 0 0 30px rgba(255, 215, 0, 0.4); }
 
-        /* =========================================
-           SECCIÓN: EL FUTURO (VISIÓN)
-           ========================================= */
-        .section-vision {
-            padding: 8rem 5%; background: rgba(255,255,255,0.01);
-            border-top: 1px solid var(--border-subtle);
-            border-bottom: 1px solid var(--border-subtle);
-        }
+        /* =========================================
+           SECCIÓN: EL FUTURO (VISIÓN)
+           ========================================= */
+        .section-vision {
+            padding: 8rem 5%; background: rgba(255,255,255,0.01);
+            border-top: 1px solid var(--border-subtle);
+            border-bottom: 1px solid var(--border-subtle);
+        }
 
-        .vision-container {
-            max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr; gap: 4rem;
-        }
-        @media (min-width: 900px) {
-            .vision-container { grid-template-columns: 1fr 1.5fr; align-items: center; }
-        }
+        .vision-container {
+            max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr; gap: 4rem;
+        }
+        @media (min-width: 900px) {
+            .vision-container { grid-template-columns: 1fr 1.5fr; align-items: center; }
+        }
 
-        .vision-text h2 { font-size: 2.5rem; font-weight: 800; margin-bottom: 1.5rem; line-height: 1.2; letter-spacing: -1px; }
-        .vision-text p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.7; margin-bottom: 2rem; }
+        .vision-text h2 { font-size: 2.5rem; font-weight: 800; margin-bottom: 1.5rem; line-height: 1.2; letter-spacing: -1px; }
+        .vision-text p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.7; margin-bottom: 2rem; }
 
-        .vision-list { display: flex; flex-direction: column; gap: 2rem; }
-        .vision-item { display: flex; gap: 1.5rem; align-items: flex-start; }
-        .vision-item-icon {
-            width: 40px; height: 40px; border-radius: 50%; background: var(--primary);
-            color: var(--bg-color); display: flex; justify-content: center; align-items: center; flex-shrink: 0;
-        }
-        .vision-item-content h4 { font-size: 1.1rem; font-weight: 800; margin-bottom: 0.5rem; }
-        .vision-item-content p { color: var(--text-muted); font-size: 0.9rem; line-height: 1.6; }
+        .vision-list { display: flex; flex-direction: column; gap: 2rem; }
+        .vision-item { display: flex; gap: 1.5rem; align-items: flex-start; }
+        .vision-item-icon {
+            width: 40px; height: 40px; border-radius: 50%; background: var(--primary);
+            color: var(--bg-color); display: flex; justify-content: center; align-items: center; flex-shrink: 0;
+        }
+        .vision-item-content h4 { font-size: 1.1rem; font-weight: 800; margin-bottom: 0.5rem; }
+        .vision-item-content p { color: var(--text-muted); font-size: 0.9rem; line-height: 1.6; }
 
-        /* =========================================
-           CTA FINAL & FORMULARIO DE GOOGLE FORMS
-           ========================================= */
-        .section-cta { padding: 8rem 5%; text-align: center; max-width: 800px; margin: 0 auto; }
-        .section-cta h2 { font-size: clamp(2rem, 4vw, 3rem); font-weight: 800; margin-bottom: 1.5rem; letter-spacing: -1px; }
-        .section-cta p { color: var(--text-muted); font-size: 1.1rem; margin-bottom: 3rem; margin-inline: auto; line-height: 1.6;}
+        /* =========================================
+           CTA FINAL & FORMULARIO DE GOOGLE FORMS
+           ========================================= */
+        .section-cta { padding: 8rem 5%; text-align: center; max-width: 800px; margin: 0 auto; }
+        .section-cta h2 { font-size: clamp(2rem, 4vw, 3rem); font-weight: 800; margin-bottom: 1.5rem; letter-spacing: -1px; }
+        .section-cta p { color: var(--text-muted); font-size: 1.1rem; margin-bottom: 3rem; margin-inline: auto; line-height: 1.6;}
 
-        .feedback-form {
-            background: var(--surface); padding: 3rem 2.5rem; border-radius: 24px;
-            border: 1px solid var(--border-subtle); text-align: center;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
-            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-        }
-        .feedback-form h3 { font-size: 1.5rem; font-weight: 800; margin-bottom: 0.8rem; }
-        .feedback-form p { font-size: 0.95rem; margin-bottom: 2rem; color: var(--text-muted); line-height: 1.6; }
-        
-        /* Botón de Enlace a Google Forms */
-        .btn-submit-form {
-            width: 100%; max-width: 380px; padding: 1.1rem 2rem; background: var(--primary); color: var(--bg-color);
-            border: none; border-radius: 12px; font-weight: 700; font-size: 1rem; cursor: pointer; transition: var(--transition);
-            text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 10px;
-            margin: 0 auto;
-        }
-        .btn-submit-form:hover { transform: scale(0.98); box-shadow: 0 0 20px rgba(255,255,255,0.15); }
+        .feedback-form {
+            background: var(--surface); padding: 3rem 2.5rem; border-radius: 24px;
+            border: 1px solid var(--border-subtle); text-align: center;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+        }
+        .feedback-form h3 { font-size: 1.5rem; font-weight: 800; margin-bottom: 0.8rem; }
+        .feedback-form p { font-size: 0.95rem; margin-bottom: 2rem; color: var(--text-muted); line-height: 1.6; }
+        
+        /* Botón de Enlace a Google Forms */
+        .btn-submit-form {
+            width: 100%; max-width: 380px; padding: 1.1rem 2rem; background: var(--primary); color: var(--bg-color);
+            border: none; border-radius: 12px; font-weight: 700; font-size: 1rem; cursor: pointer; transition: var(--transition);
+            text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+            margin: 0 auto;
+        }
+        .btn-submit-form:hover { transform: scale(0.98); box-shadow: 0 0 20px rgba(255,255,255,0.15); }
 
-        /* =========================================
-           FOOTER
-           ========================================= */
-        footer {
-            padding: 4rem 5% 2rem; border-top: 1px solid var(--border-subtle);
-            background: var(--surface-solid); text-align: center;
-        }
-        .footer-logo { font-size: 1.5rem; font-weight: 800; margin-bottom: 2rem; }
-        .footer-logo .dot { color: var(--accent); }
-        
-        .footer-links { display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap; margin-bottom: 2rem; }
-        .footer-links button {
-            background: none; border: none; color: var(--text-muted); font-size: 0.85rem;
-            cursor: pointer; transition: 0.2s; font-family: 'Sora', sans-serif;
-            text-decoration: underline; text-underline-offset: 4px; text-decoration-color: transparent;
-        }
-        .footer-links button:hover { color: var(--primary); text-decoration-color: var(--border-subtle); }
-        
-        .footer-copy { color: rgba(255,255,255,0.3); font-size: 0.8rem; font-weight: 300; }
-        .footer-copy strong { color: rgba(255,255,255,0.6); }
+        /* =========================================
+           FOOTER
+           ========================================= */
+        footer {
+            padding: 4rem 5% 2rem; border-top: 1px solid var(--border-subtle);
+            background: var(--surface-solid); text-align: center;
+        }
+        .footer-logo { font-size: 1.5rem; font-weight: 800; margin-bottom: 2rem; }
+        .footer-logo .dot { color: var(--accent); }
+        
+        .footer-links { display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap; margin-bottom: 2rem; }
+        .footer-links button {
+            background: none; border: none; color: var(--text-muted); font-size: 0.85rem;
+            cursor: pointer; transition: 0.2s; font-family: 'Sora', sans-serif;
+            text-decoration: underline; text-underline-offset: 4px; text-decoration-color: transparent;
+        }
+        .footer-links button:hover { color: var(--primary); text-decoration-color: var(--border-subtle); }
+        
+        .footer-copy { color: rgba(255,255,255,0.3); font-size: 0.8rem; font-weight: 300; }
+        .footer-copy strong { color: rgba(255,255,255,0.6); }
 
-        /* =========================================
-           MODALES Y COOKIES
-           ========================================= */
-        .modal-overlay {
-            display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85);
-            backdrop-filter: blur(6px); z-index: 2000; align-items: center; justify-content: center; padding: 1rem;
-        }
-        .modal-overlay.open { display: flex; animation: fadeIn 0.3s ease; }
-        
-        .modal-box {
-            background: #141414; border: 1px solid var(--border-subtle); border-radius: 24px;
-            width: 100%; max-width: 650px; max-height: 85vh; overflow-y: auto; padding: 3rem 2.5rem;
-            animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1); text-align: left;
-        }
-        
-        .modal-box::-webkit-scrollbar { width: 6px; }
-        .modal-box::-webkit-scrollbar-track { background: transparent; }
-        .modal-box::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 10px; }
-        
-        .modal-box h2 { font-size: 1.5rem; font-weight: 800; margin-bottom: 1.5rem; letter-spacing: -0.5px; }
-        .modal-box h3 { font-size: 1.05rem; font-weight: 700; margin: 1.8rem 0 0.6rem; color: var(--primary); }
-        .modal-box p, .modal-box li { font-size: 0.9rem; font-weight: 300; color: var(--text-muted); line-height: 1.7; margin-bottom: 0.8rem; }
-        .modal-box ul { padding-left: 1.2rem; margin-bottom: 1rem; }
-        .modal-box strong { color: rgba(255,255,255,0.85); font-weight: 600; }
-        
-        .modal-close {
-            width: 100%; margin-top: 2rem; padding: 1rem; background: rgba(255,255,255,0.05);
-            border: 1px solid var(--border-subtle); border-radius: 12px; color: var(--primary);
-            font-weight: 600; cursor: pointer; transition: 0.3s; font-family: 'Sora', sans-serif;
-        }
-        .modal-close:hover { background: rgba(255,255,255,0.1); }
+        /* =========================================
+           MODALES Y COOKIES
+           ========================================= */
+        .modal-overlay {
+            display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(6px); z-index: 2000; align-items: center; justify-content: center; padding: 1rem;
+        }
+        .modal-overlay.open { display: flex; animation: fadeIn 0.3s ease; }
+        
+        .modal-box {
+            background: #141414; border: 1px solid var(--border-subtle); border-radius: 24px;
+            width: 100%; max-width: 650px; max-height: 85vh; overflow-y: auto; padding: 3rem 2.5rem;
+            animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1); text-align: left;
+        }
+        
+        .modal-box::-webkit-scrollbar { width: 6px; }
+        .modal-box::-webkit-scrollbar-track { background: transparent; }
+        .modal-box::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 10px; }
+        
+        .modal-box h2 { font-size: 1.5rem; font-weight: 800; margin-bottom: 1.5rem; letter-spacing: -0.5px; }
+        .modal-box h3 { font-size: 1.05rem; font-weight: 700; margin: 1.8rem 0 0.6rem; color: var(--primary); }
+        .modal-box p, .modal-box li { font-size: 0.9rem; font-weight: 300; color: var(--text-muted); line-height: 1.7; margin-bottom: 0.8rem; }
+        .modal-box ul { padding-left: 1.2rem; margin-bottom: 1rem; }
+        .modal-box strong { color: rgba(255,255,255,0.85); font-weight: 600; }
+        
+        .modal-close {
+            width: 100%; margin-top: 2rem; padding: 1rem; background: rgba(255,255,255,0.05);
+            border: 1px solid var(--border-subtle); border-radius: 12px; color: var(--primary);
+            font-weight: 600; cursor: pointer; transition: 0.3s; font-family: 'Sora', sans-serif;
+        }
+        .modal-close:hover { background: rgba(255,255,255,0.1); }
 
-        #cookie-banner {
-            position: fixed; bottom: 30px; right: 30px; width: 340px;
-            background: rgba(20, 20, 20, 0.95); backdrop-filter: blur(12px);
-            border: 1px solid var(--border-subtle); border-radius: 18px; padding: 1.5rem;
-            display: flex; flex-direction: column; gap: 1rem; z-index: 9999;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.8);
-            opacity: 0; pointer-events: none; transform: translateY(20px); transition: 0.5s ease;
-        }
-        #cookie-banner.show { opacity: 1; pointer-events: all; transform: translateY(0); }
-        .cookie-title { font-weight: 800; font-size: 1.1rem; display: flex; align-items: center; gap: 8px; }
-        .cookie-text { font-size: 0.85rem; color: var(--text-muted); line-height: 1.5; font-weight: 300; }
-        .cookie-text a { color: var(--primary); font-weight: 600; cursor: pointer; }
-        .cookie-btn {
-            width: 100%; padding: 0.8rem; border-radius: 12px; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: 0.3s;
-        }
-        .cookie-accept { background: var(--primary); color: var(--bg-color); border: none; }
-        .cookie-accept:hover { transform: scale(0.97); }
-        .cookie-reject { background: transparent; color: var(--text-muted); border: 1px solid var(--border-subtle); margin-top: 5px;}
-        .cookie-reject:hover { background: rgba(255,255,255,0.05); color: var(--primary); }
+        #cookie-banner {
+            position: fixed; bottom: 110px; right: 30px; width: 340px;
+            background: rgba(20, 20, 20, 0.95); backdrop-filter: blur(12px);
+            border: 1px solid var(--border-subtle); border-radius: 18px; padding: 1.5rem;
+            display: flex; flex-direction: column; gap: 1rem; z-index: 9999;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.8);
+            opacity: 0; pointer-events: none; transform: translateY(20px); transition: 0.5s ease;
+        }
+        #cookie-banner.show { opacity: 1; pointer-events: all; transform: translateY(0); }
+        .cookie-title { font-weight: 800; font-size: 1.1rem; display: flex; align-items: center; gap: 8px; }
+        .cookie-text { font-size: 0.85rem; color: var(--text-muted); line-height: 1.5; font-weight: 300; }
+        .cookie-text a { color: var(--primary); font-weight: 600; cursor: pointer; }
+        .cookie-btn {
+            width: 100%; padding: 0.8rem; border-radius: 12px; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: 0.3s;
+        }
+        .cookie-accept { background: var(--primary); color: var(--bg-color); border: none; }
+        .cookie-accept:hover { transform: scale(0.97); }
+        .cookie-reject { background: transparent; color: var(--text-muted); border: 1px solid var(--border-subtle); margin-top: 5px;}
+        .cookie-reject:hover { background: rgba(255,255,255,0.05); color: var(--primary); }
 
-        /* =========================================
-           ADAPTACIÓN RESPONSIVE (MÓVILES Y TÁCTILES)
-           ========================================= */
-        @media (max-width: 768px) {
-            /* Hero en móvil con la imagen solicitada */
-            .hero {
-                background: linear-gradient(to bottom, rgba(3,3,3,0.5) 0%, rgba(3,3,3,0.95) 100%), url('HomeInterrahubMovil.PNG') no-repeat center center;
-                background-size: cover;
-                background-attachment: scroll; /* Vital para móviles: evita bugs gráficos de iOS Safari */
-                padding: 7rem 5% 5rem; 
-            }
+        /* =========================================
+           ADAPTACIÓN RESPONSIVE (MÓVILES Y TÁCTILES)
+           ========================================= */
+        @media (max-width: 768px) {
+            /* Hero en móvil con la imagen solicitada */
+            .hero {
+                background: linear-gradient(to bottom, rgba(3,3,3,0.5) 0%, rgba(3,3,3,0.95) 100%), url('HomeInterrahubMovil.PNG') no-repeat center center;
+                background-size: cover;
+                background-attachment: scroll; /* Vital para móviles: evita bugs gráficos de iOS Safari */
+                padding: 7rem 5% 5rem; 
+            }
 
-            /* Componentes más amigables al toque (100% width) */
-            .hero-ctas { width: 100%; }
-            .btn-massive { width: 100%; justify-content: center; }
-            .btn-plus { width: 100%; justify-content: center; text-align: center; }
+            /* Componentes más amigables al toque (100% width) */
+            .hero-ctas { width: 100%; }
+            .btn-massive { width: 100%; justify-content: center; }
+            .btn-plus { width: 100%; justify-content: center; text-align: center; }
 
-            /* Grid a 1 columna para asegurar márgenes táctiles limpios */
-            .bento-grid { grid-template-columns: 1fr; }
+            /* Grid a 1 columna para asegurar márgenes táctiles limpios */
+            .bento-grid { grid-template-columns: 1fr; }
 
-            /* Cajas tutoriales y contenedores adaptados */
-            .tutorial-inline-box {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 1.5rem;
-                padding: 1.5rem;
-            }
-            .tutorial-inline-content {
-                align-items: flex-start;
-                gap: 1rem;
-                flex-direction: column;
-            }
-            .tutorial-inline-box .btn-primary { width: 100%; justify-content: center; }
+            /* Cajas tutoriales y contenedores adaptados */
+            .tutorial-inline-box {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1.5rem;
+                padding: 1.5rem;
+            }
+            .tutorial-inline-content {
+                align-items: flex-start;
+                gap: 1rem;
+                flex-direction: column;
+            }
+            .tutorial-inline-box .btn-primary { width: 100%; justify-content: center; }
 
-            .plus-container { padding: 3rem 1.5rem; }
-            .vision-container { gap: 3rem; }
-            .vision-item { flex-direction: column; gap: 1rem; }
-            
-            /* Ajuste Menú Inferior */
-            .footer-links { flex-direction: column; gap: 1rem; align-items: center; }
-            .footer-links button { padding: 10px; /* Target táctil mayor */ }
+            .plus-container { padding: 3rem 1.5rem; }
+            .vision-container { gap: 3rem; }
+            .vision-item { flex-direction: column; gap: 1rem; }
+            
+            /* Ajuste Menú Inferior */
+            .footer-links { flex-direction: column; gap: 1rem; align-items: center; }
+            .footer-links button { padding: 10px; /* Target táctil mayor */ }
 
-            /* Cookie Banner Adaptado */
-            #cookie-banner { bottom: 20px; right: 5%; width: 90%; }
-            
-            /* Ajuste del botón de scroll */
-            .scroll-down-indicator { bottom: 20px; }
-        }
+            /* Cookie Banner Adaptado */
+            #cookie-banner { bottom: 110px; right: 5%; width: 90%; }
+            
+            /* Ajuste del botón de scroll */
+            .scroll-down-indicator { bottom: 20px; }
+        }
 
-        /* Animaciones */
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes fadeInDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes slideUp { from { transform: translateY(40px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% { transform: translate(-50%, 0); }
-            40% { transform: translate(-50%, -15px); }
-            60% { transform: translate(-50%, -7px); }
-        }
-    </style>
+        /* Animaciones */
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeInDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp { from { transform: translateY(40px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translate(-50%, 0); }
+            40% { transform: translate(-50%, -15px); }
+            60% { transform: translate(-50%, -7px); }
+        }
+    </style>
 </head>
 <body>
 
-    <nav>
-        <a href="#" class="logo">Interra-hub<span class="dot">.</span></a>
-        <div class="nav-actions">
-            <a href="registro.html" class="btn-ghost">Ya tengo cuenta</a>
-        </div>
-    </nav>
+    <nav>
+        <a href="#" class="logo">Interra-hub<span class="dot">.</span></a>
+        <div class="nav-actions">
+            <a href="registro.html" class="btn-ghost">Ya tengo cuenta</a>
+        </div>
+    </nav>
 
-    <header class="hero">
-        <div class="badge-beta">
-            <i data-lucide="zap" style="width: 12px; display: inline-block; vertical-align: middle;"></i> 
-            Fase Beta 2026
-        </div>
-        <h1>Planifica tu Interrail en grupo. <span class="highlight">Sin caos.</span></h1>
-        
-        <p>El fin de los excels infinitos y los grupos de WhatsApp saturados. Diseña tu ruta colaborativa minuto a minuto, liquida gastos compartidos al instante y lleva todo tu itinerario en el bolsillo. Tu próxima gran aventura empieza aquí.</p>
-        
-        <div class="hero-ctas">
-            <a href="registro.html" class="btn-primary btn-massive">Empezar a planificar gratis</a>
-        </div>
+    <header class="hero">
+        <div class="badge-beta">
+            <i data-lucide="zap" style="width: 12px; display: inline-block; vertical-align: middle;"></i> 
+            Fase Beta 2026
+        </div>
+        <h1>Planifica tu Interrail en grupo. <span class="highlight">Sin caos.</span></h1>
+        
+        <p>El fin de los excels infinitos y los grupos de WhatsApp saturados. Diseña tu ruta colaborativa minuto a minuto, liquida gastos compartidos al instante y lleva todo tu itinerario en el bolsillo. Tu próxima gran aventura empieza aquí.</p>
+        
+        <div class="hero-ctas">
+            <a href="registro.html" class="btn-primary btn-massive">Empezar a planificar gratis</a>
+        </div>
 
-        <a href="#features" class="scroll-down-indicator" aria-label="Bajar para más información">
-            <i data-lucide="chevron-down"></i>
-        </a>
-    </header>
+        <a href="#features" class="scroll-down-indicator" aria-label="Bajar para más información">
+            <i data-lucide="chevron-down"></i>
+        </a>
+    </header>
 
-    <section class="section-features" id="features">
-        <div class="section-header">
-            <h2>¿Cómo funciona?</h2>
-            <p>Accede de forma gratuita a nuestra plataforma y descubre por qué coordinar a tu grupo nunca había sido tan intuitivo y eficiente.</p>
-        </div>
-        
-        <div class="bento-grid">
-            <div class="bento-card">
-                <div class="feature-icon icon-blue">
-                    <i data-lucide="map"></i>
-                </div>
-                <h3>Ruta Inteligente</h3>
-                <p>Organiza el viaje día a día. Detalla trenes, vuelos, check-ins de hotel y actividades. Todo accesible en la nube para cualquier miembro de tu equipo, sin importar dónde esté.</p>
-            </div>
-            
-            <div class="bento-card">
-                <div class="feature-icon icon-red">
-                    <i data-lucide="calculator"></i>
-                </div>
-                <h3>Motor Financiero</h3>
-                <p>Registra quién paga cada cena o billete. Nuestro algoritmo liquida las deudas cruzadas de forma automática para que sepáis exactamente quién debe dinero a quién. Cuentas claras.</p>
-            </div>
-            
-            <div class="bento-card">
-                <div class="feature-icon icon-green">
-                    <i data-lucide="cloud-sun"></i>
-                </div>
-                <h3>Ubicación y Clima</h3>
-                <p>Visualiza el mapa dinámico de tu ruta generado automáticamente y recibe previsiones meteorológicas satelitales de las ciudades exactas en las que estaréis cada día.</p>
-            </div>
-        </div>
+    <section class="section-features" id="features">
+        <div class="section-header">
+            <h2>¿Cómo funciona?</h2>
+            <p>Accede de forma gratuita a nuestra plataforma y descubre por qué coordinar a tu grupo nunca había sido tan intuitivo y eficiente.</p>
+        </div>
+        
+        <div class="bento-grid">
+            <div class="bento-card">
+                <div class="feature-icon icon-blue">
+                    <i data-lucide="map"></i>
+                </div>
+                <h3>Ruta Inteligente</h3>
+                <p>Organiza el viaje día a día. Detalla trenes, vuelos, check-ins de hotel y actividades. Todo accesible en la nube para cualquier miembro de tu equipo, sin importar dónde esté.</p>
+            </div>
+            
+            <div class="bento-card">
+                <div class="feature-icon icon-red">
+                    <i data-lucide="calculator"></i>
+                </div>
+                <h3>Motor Financiero</h3>
+                <p>Registra quién paga cada cena o billete. Nuestro algoritmo liquida las deudas cruzadas de forma automática para que sepáis exactamente quién debe dinero a quién. Cuentas claras.</p>
+            </div>
+            
+            <div class="bento-card">
+                <div class="feature-icon icon-green">
+                    <i data-lucide="cloud-sun"></i>
+                </div>
+                <h3>Ubicación y Clima</h3>
+                <p>Visualiza el mapa dinámico de tu ruta generado automáticamente y recibe previsiones meteorológicas satelitales de las ciudades exactas en las que estaréis cada día.</p>
+            </div>
+        </div>
 
-        <div class="tutorial-inline-box">
-            <div class="tutorial-inline-content">
-                <div class="feature-icon icon-blue" style="margin-bottom: 0; flex-shrink: 0;">
-                    <i data-lucide="graduation-cap"></i>
-                </div>
-                <div class="tutorial-inline-info">
-                    <h4>¿Primera vez organizando una ruta?</h4>
-                    <p>Sigue nuestra guía interactiva paso a paso para aprender a dominar el Hub y coordinar a tu grupo sin fricciones.</p>
-                </div>
-            </div>
-            <a href="tutorialguiado.html" class="btn-primary" style="padding: 0.7rem 1.6rem; border-radius: 16px; font-size: 0.85rem; flex-shrink: 0;">Iniciar Tutorial</a>
-        </div>
-    </section>
+        <div class="tutorial-inline-box">
+            <div class="tutorial-inline-content">
+                <div class="feature-icon icon-blue" style="margin-bottom: 0; flex-shrink: 0;">
+                    <i data-lucide="graduation-cap"></i>
+                </div>
+                <div class="tutorial-inline-info">
+                    <h4>¿Primera vez organizando una ruta?</h4>
+                    <p>Sigue nuestra guía interactiva paso a paso para aprender a dominar el Hub y coordinar a tu grupo sin fricciones.</p>
+                </div>
+            </div>
+            <a href="tutorialguiado.html" class="btn-primary" style="padding: 0.7rem 1.6rem; border-radius: 16px; font-size: 0.85rem; flex-shrink: 0;">Iniciar Tutorial</a>
+        </div>
+    </section>
 
-    <section class="section-plus">
-        <div class="plus-container">
-            <h2>Interra-hub <span style="color: var(--gold);">PLUS</span></h2>
-            <p>Descubre nuestro plan premium para organizar tus viajes sin interrupciones, acceder a ventajas exclusivas y llevar tu experiencia al siguiente nivel. Pincha abajo para descubrir más detalles.</p>
-            <a href="interrahubplus.html" class="btn-plus">¿Quieres descubrir más sobre Interra-hub PLUS? <i data-lucide="arrow-right"></i></a>
-        </div>
-    </section>
+    <section class="section-plus">
+        <div class="plus-container">
+            <h2>Interra-hub <span style="color: var(--gold);">PLUS</span></h2>
+            <p>Descubre nuestro plan premium para organizar tus viajes sin interrupciones, acceder a ventajas exclusivas y llevar tu experiencia al siguiente nivel. Pincha abajo para descubrir más detalles.</p>
+            <a href="interrahubplus.html" class="btn-plus">¿Quieres descubrir más sobre Interra-hub PLUS? <i data-lucide="arrow-right"></i></a>
+        </div>
+    </section>
 
-    <section class="section-vision">
-        <div class="vision-container">
-            <div class="vision-text">
-                <h2>Diseñando el futuro del viaje</h2>
-                <p>Este año te ofrecemos la herramienta para que tengas el control total. El año que viene, Interra-hub evolucionará a un ecosistema integral diseñado para garantizarte la mejor experiencia (y al mejor precio) en Europa.</p>
-                <a href="registro.html" class="btn-ghost" style="padding-left: 0; color: var(--primary); text-decoration: underline; text-underline-offset: 4px;">Únete a la lista para 2027 <i data-lucide="arrow-right" style="width: 16px; vertical-align: middle;"></i></a>
-            </div>
-            <div class="vision-list">
-                <div class="vision-item">
-                    <div class="vision-item-icon"><i data-lucide="compass"></i></div>
-                    <div class="vision-item-content">
-                        <h4>Asesoría Experta Low-Cost</h4>
-                        <p>Diseñar la ruta perfecta ahorrando al máximo en pases y reservas es un arte. Muy pronto ofreceremos consultoría humana e hiper-económica para tu grupo.</p>
-                    </div>
-                </div>
-                <div class="vision-item">
-                    <div class="vision-item-icon" style="background: var(--accent); color: white;"><i data-lucide="users"></i></div>
-                    <div class="vision-item-content">
-                        <h4>Comunidad Conectada</h4>
-                        <p>Podrás publicar tu itinerario de forma segura para conocer y coordinarte con otros grupos de viajeros que coincidan en tus mismas fechas y ciudades europeas.</p>
-                    </div>
-                </div>
-                <div class="vision-item">
-                    <div class="vision-item-icon" style="background: var(--accent-blue); color: white;"><i data-lucide="ticket"></i></div>
-                    <div class="vision-item-content">
-                        <h4>Ocio y Perks Exclusivos</h4>
-                        <p>Tendremos alianzas con discotecas y eventos en las principales capitales, ofreciendo pases a precio preferente y alternativas de transporte exclusivas para miembros.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+    <section class="section-vision">
+        <div class="vision-container">
+            <div class="vision-text">
+                <h2>Diseñando el futuro del viaje</h2>
+                <p>Este año te ofrecemos la herramienta para que tengas el control total. El año que viene, Interra-hub evolucionará a un ecosistema integral diseñado para garantizarte la mejor experiencia (y al mejor precio) en Europa.</p>
+                <a href="registro.html" class="btn-ghost" style="padding-left: 0; color: var(--primary); text-decoration: underline; text-underline-offset: 4px;">Únete a la lista para 2027 <i data-lucide="arrow-right" style="width: 16px; vertical-align: middle;"></i></a>
+            </div>
+            <div class="vision-list">
+                <div class="vision-item">
+                    <div class="vision-item-icon"><i data-lucide="compass"></i></div>
+                    <div class="vision-item-content">
+                        <h4>Asesoría Experta Low-Cost</h4>
+                        <p>Diseñar la ruta perfecta ahorrando al máximo en pases y reservas es un arte. Muy pronto ofreceremos consultoría humana e hiper-económica para tu grupo.</p>
+                    </div>
+                </div>
+                <div class="vision-item">
+                    <div class="vision-item-icon" style="background: var(--accent); color: white;"><i data-lucide="users"></i></div>
+                    <div class="vision-item-content">
+                        <h4>Comunidad Conectada</h4>
+                        <p>Podrás publicar tu itinerario de forma segura para conocer y coordinarte con otros grupos de viajeros que coincidan en tus mismas fechas y ciudades europeas.</p>
+                    </div>
+                </div>
+                <div class="vision-item">
+                    <div class="vision-item-icon" style="background: var(--accent-blue); color: white;"><i data-lucide="ticket"></i></div>
+                    <div class="vision-item-content">
+                        <h4>Ocio y Perks Exclusivos</h4>
+                        <p>Tendremos alianzas con discotecas y eventos en las principales capitales, ofreciendo pases a precio preferente y alternativas de transporte exclusivas para miembros.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-    <section class="section-cta">
-        <h2>¿Listo para subir a bordo?</h2>
-        <p>Regístrate ahora y empieza a usar la plataforma gratis. Al estar en Fase Beta, tu opinión es vital para ayudarnos a pulir el sistema.</p>
-        
-        <div class="feedback-form">
-            <h3>Ayúdanos a mejorar</h3>
-            <p>Por favor, envíanos sugerencias o reporta cualquier tipo de problema que hayas detectado rellenando nuestro formulario externo oficial.</p>
-            
-            <a href="https://forms.gle/DhDwuXTQdhA3ywzC7" target="_blank" class="btn-submit-form">
-                Abrir Formulario <i data-lucide="external-link" style="width: 16px;"></i>
-            </a>
-        </div>
-    </section>
+    <section class="section-cta">
+        <h2>¿Listo para subir a bordo?</h2>
+        <p>Regístrate ahora y empieza a usar la plataforma gratis. Al estar en Fase Beta, tu opinión es vital para ayudarnos a pulir el sistema.</p>
+        
+        <div class="feedback-form">
+            <h3>Ayúdanos a mejorar</h3>
+            <p>Por favor, envíanos sugerencias o reporta cualquier tipo de problema que hayas detectado rellenando nuestro formulario externo oficial.</p>
+            
+            <a href="https://forms.gle/DhDwuXTQdhA3ywzC7" target="_blank" class="btn-submit-form">
+                Abrir Formulario <i data-lucide="external-link" style="width: 16px;"></i>
+            </a>
+        </div>
+    </section>
 
-    <footer>
-        <div class="footer-logo">Interra-hub<span class="dot">.</span></div>
-        <div class="footer-links">
-            <button onclick="openModal('modal-tos')">Términos de uso</button>
-            <button onclick="openModal('modal-privacy')">Privacidad y datos</button>
-            <button onclick="openModal('modal-copyright')">Copyright</button>
-        </div>
-        <div class="footer-copy">
-            Hecho por <strong>Pipa Studio</strong> <br><br>
-            © 2026 Interra-hub · Todos los derechos reservados
-        </div>
-    </footer>
+    <footer>
+        <div class="footer-logo">Interra-hub<span class="dot">.</span></div>
+        <div class="footer-links">
+            <button onclick="openModal('modal-tos')">Términos de uso</button>
+            <button onclick="openModal('modal-privacy')">Privacidad y datos</button>
+            <button onclick="openModal('modal-copyright')">Copyright</button>
+        </div>
+        <div class="footer-copy">
+            Hecho por <strong>Pipa Studio</strong> <br><br>
+            © 2026 Interra-hub · Todos los derechos reservados
+        </div>
+    </footer>
 
-    <div class="modal-overlay" id="modal-tos">
-        <div class="modal-box">
-            <h2>Términos y Condiciones de Uso</h2>
-            <p style="font-size: 0.8rem; margin-top: -10px;">Última actualización: Mayo 2026</p>
-            
-            <h3>1. Aceptación de los términos</h3>
-            <p>Al acceder, registrarse o utilizar la plataforma <strong>Interra-hub</strong>, el usuario acepta de manera íntegra, plena y sin reservas los presentes Términos y Condiciones de Uso. Si el usuario no está de acuerdo con cualquiera de estas condiciones, deberá abstenerse de utilizar la aplicación.</p>
-            
-            <h3>2. Naturaleza del Servicio y Fase Beta</h3>
-            <p>Interra-hub es una plataforma tecnológica concebida para facilitar la organización colaborativa de viajes. Actualmente, la plataforma se encuentra en fase <strong>Beta 2026</strong>. Esto implica que el servicio se proporciona "tal cual" y "según disponibilidad". <strong>Pipa Studio</strong> no garantiza que el servicio sea ininterrumpido, oportuno, seguro o libre de errores. El usuario asume que, durante esta fase de pruebas, pueden ocurrir pérdidas de datos o desincronizaciones, declinando Pipa Studio cualquier responsabilidad legal o compensatoria por estos hechos.</p>
-            
-            <h3>3. Obligaciones y Conducta del Usuario</h3>
-            <p>El usuario se compromete a hacer un uso lícito, diligente y adecuado de la plataforma. Queda terminantemente prohibido:</p>
-            <ul>
-                <li>Utilizar la app con fines fraudulentos, ilícitos o para coordinar actividades ilegales.</li>
-                <li>Introducir datos maliciosos, virus, troyanos o cualquier código que pueda dañar la infraestructura tecnológica de la plataforma o de <strong>Firebase (Google LLC)</strong>.</li>
-                <li>Suplantar la identidad de otros usuarios o vulnerar su privacidad.</li>
-            </ul>
+    <div class="modal-overlay" id="modal-tos">
+        <div class="modal-box">
+            <h2>Términos y Condiciones de Uso</h2>
+            <p style="font-size: 0.8rem; margin-top: -10px;">Última actualización: Mayo 2026</p>
+            
+            <h3>1. Aceptación de los términos</h3>
+            <p>Al acceder, registrarse o utilizar la plataforma <strong>Interra-hub</strong>, el usuario acepta de manera íntegra, plena y sin reservas los presentes Términos y Condiciones de Uso. Si el usuario no está de acuerdo con cualquiera de estas condiciones, deberá abstenerse de utilizar la aplicación.</p>
+            
+            <h3>2. Naturaleza del Servicio y Fase Beta</h3>
+            <p>Interra-hub es una plataforma tecnológica concebida para facilitar la organización colaborativa de viajes. Actualmente, la plataforma se encuentra en fase <strong>Beta 2026</strong>. Esto implica que el servicio se proporciona "tal cual" y "según disponibilidad". <strong>Pipa Studio</strong> no garantiza que el servicio sea ininterrumpido, oportuno, seguro o libre de errores. El usuario asume que, durante esta fase de pruebas, pueden ocurrir pérdidas de datos o desincronizaciones, declinando Pipa Studio cualquier responsabilidad legal o compensatoria por estos hechos.</p>
+            
+            <h3>3. Obligaciones y Conducta del Usuario</h3>
+            <p>El usuario se compromete a hacer un uso lícito, diligente y adecuado de la plataforma. Queda terminantemente prohibido:</p>
+            <ul>
+                <li>Utilizar la app con fines fraudulentos, ilícitos o para coordinar actividades ilegales.</li>
+                <li>Introducir datos maliciosos, virus, troyanos o cualquier código que pueda dañar la infraestructura tecnológica de la plataforma o de <strong>Firebase (Google LLC)</strong>.</li>
+                <li>Suplantar la identidad de otros usuarios o vulnerar su privacidad.</li>
+            </ul>
 
-            <h3>4. Motor Financiero y Responsabilidad de Deudas</h3>
-            <p>El módulo "Finance" es una herramienta de cálculo matemático para facilitar la división de gastos entre los miembros de un viaje. <strong>Interra-hub y Pipa Studio no intervienen, ni actúan como intermediarios financieros, ni garantizan el cobro de deudas entre los usuarios.</strong> La liquidación del dinero debe realizarse de forma externa a la plataforma. No nos hacemos responsables de disputas monetarias, impagos o errores en la introducción de gastos por parte de los usuarios.</p>
+            <h3>4. Motor Financiero y Responsabilidad de Deudas</h3>
+            <p>El módulo "Finance" es una herramienta de cálculo matemático para facilitar la división de gastos entre los miembros de un viaje. <strong>Interra-hub y Pipa Studio no intervienen, ni actúan como intermediarios financieros, ni garantizan el cobro de deudas entre los usuarios.</strong> La liquidación del dinero debe realizarse de forma externa a la plataforma. No nos hacemos responsables de disputas monetarias, impagos o errores en la introducción de gastos por parte de los usuarios.</p>
 
-            <h3>5. Propiedad Intelectual e Industrial</h3>
-            <p>Todos los derechos de propiedad intelectual del software, código fuente, diseño de interfaces, logotipos, algoritmo de reparto de gastos y minijuegos integrados son titularidad exclusiva de <strong>Pipa Studio</strong>. Queda expresamente prohibida la reproducción, distribución, comunicación pública, ingeniería inversa o transformación total o parcial sin autorización expresa por escrito.</p>
+            <h3>5. Propiedad Intelectual e Industrial</h3>
+            <p>Todos los derechos de propiedad intelectual del software, código fuente, diseño de interfaces, logotipos, algoritmo de reparto de gastos y minijuegos integrados son titularidad exclusiva de <strong>Pipa Studio</strong>. Queda expresamente prohibida la reproducción, distribución, comunicación pública, ingeniería inversa o transformación total o parcial sin autorización expresa por escrito.</p>
 
-            <h3>6. Modificaciones y Terminación</h3>
-            <p>Nos reservamos el derecho a modificar, suspender o cancelar el acceso a la plataforma o a los presentes términos en cualquier momento. El uso continuado del servicio tras dichas modificaciones implicará su aceptación automática.</p>
-            
-            <button class="modal-close" onclick="closeModal('modal-tos')">He leído y acepto los términos</button>
-        </div>
-    </div>
+            <h3>6. Modificaciones y Terminación</h3>
+            <p>Nos reservamos el derecho a modificar, suspender o cancelar el acceso a la plataforma o a los presentes términos en cualquier momento. El uso continuado del servicio tras dichas modificaciones implicará su aceptación automática.</p>
+            
+            <button class="modal-close" onclick="closeModal('modal-tos')">He leído y acepto los términos</button>
+        </div>
+    </div>
 
-    <div class="modal-overlay" id="modal-privacy">
-        <div class="modal-box">
-            <h2>Política de Privacidad y Tratamiento de Datos</h2>
-            <p style="font-size: 0.8rem; margin-top: -10px;">Última actualización: Mayo 2026</p>
-            
-            <h3>1. Identidad del Responsable</h3>
-            <p>El tratamiento de los datos personales recogidos en esta plataforma es responsabilidad exclusiva de <strong>Pipa Studio</strong>. Nuestro compromiso es garantizar la máxima seguridad y transparencia en la gestión de tu información personal.</p>
+    <div class="modal-overlay" id="modal-privacy">
+        <div class="modal-box">
+            <h2>Política de Privacidad y Tratamiento de Datos</h2>
+            <p style="font-size: 0.8rem; margin-top: -10px;">Última actualización: Mayo 2026</p>
+            
+            <h3>1. Identidad del Responsable</h3>
+            <p>El tratamiento de los datos personales recogidos en esta plataforma es responsabilidad exclusiva de <strong>Pipa Studio</strong>. Nuestro compromiso es garantizar la máxima seguridad y transparencia en la gestión de tu información personal.</p>
 
-            <h3>2. Datos que recopilamos y Finalidad</h3>
-            <p>Para proporcionar el servicio de planificación colaborativa, recopilamos y procesamos los siguientes datos:</p>
-            <ul>
-                <li><strong>Datos de registro:</strong> Nombre, dirección de correo electrónico y contraseña (cifrada irreversiblemente por Google Firebase).</li>
-                <li><strong>Datos del viaje (Contenido generado por el usuario):</strong> Destinos, fechas, presupuestos, gastos compartidos, notas y ubicaciones geográficas de hoteles/actividades.</li>
-                <li><strong>Datos técnicos y de uso:</strong> Direcciones IP, tipo de dispositivo, navegador y registros de interacción con la plataforma.</li>
-            </ul>
-            <p><strong>Uso explícito de los datos:</strong> Es importante que entiendas que <strong>tus datos pueden llegar a ser usados</strong> por nuestro equipo de forma anonimizada y agregada con fines estadísticos, de mejora del algoritmo de la plataforma, y para la personalización de futuros servicios (como la Asesoría Interrail o recomendaciones de rutas). Al usar la Beta, consientes este análisis para ayudarnos a evolucionar el producto.</p>
+            <h3>2. Datos que recopilamos y Finalidad</h3>
+            <p>Para proporcionar el servicio de planificación colaborativa, recopilamos y procesamos los siguientes datos:</p>
+            <ul>
+                <li><strong>Datos de registro:</strong> Nombre, dirección de correo electrónico y contraseña (cifrada irreversiblemente por Google Firebase).</li>
+                <li><strong>Datos del viaje (Contenido generado por el usuario):</strong> Destinos, fechas, presupuestos, gastos compartidos, notas y ubicaciones geográficas de hoteles/actividades.</li>
+                <li><strong>Datos técnicos y de uso:</strong> Direcciones IP, tipo de dispositivo, navegador y registros de interacción con la plataforma.</li>
+            </ul>
+            <p><strong>Uso explícito de los datos:</strong> Es importante que entiendas que <strong>tus datos pueden llegar a ser usados</strong> por nuestro equipo de forma anonimizada y agregada con fines estadísticos, de mejora del algoritmo de la plataforma, y para la personalización de futuros servicios (como la Asesoría Interrail o recomendaciones de rutas). Al usar la Beta, consientes este análisis para ayudarnos a evolucionar el producto.</p>
 
-            <h3>3. Analítica Web y Vercel Analytics</h3>
-            <p>Para comprender cómo los usuarios interactúan con Interra-hub y medir el rendimiento del tráfico, utilizamos <strong>Vercel Analytics</strong>. Esta herramienta de analítica orientada a la privacidad recopila métricas de visitantes (páginas vistas, tiempos de carga, sistema operativo) de manera respetuosa, ayudándonos a optimizar la velocidad y la experiencia de usuario sin rastrear individualmente a las personas a través de la web con fines publicitarios invasivos.</p>
+            <h3>3. Analítica Web y Vercel Analytics</h3>
+            <p>Para comprender cómo los usuarios interactúan con Interra-hub y medir el rendimiento del tráfico, utilizamos <strong>Vercel Analytics</strong>. Esta herramienta de analítica orientada a la privacidad recopila métricas de visitantes (páginas vistas, tiempos de carga, sistema operativo) de manera respetuosa, ayudándonos a optimizar la velocidad y la experiencia de usuario sin rastrear individualmente a las personas a través de la web con fines publicitarios invasivos.</p>
 
-            <h3>4. Proveedores de Infraestructura (Terceros)</h3>
-            <p>Tus datos están alojados en servidores de alta seguridad provistos por <strong>Google Firebase</strong> (bases de datos de Firestore y sistema de Autenticación). Google actúa como encargado del tratamiento, cumpliendo con los estándares internacionales de seguridad y el RGPD europeo. No vendemos bases de datos de usuarios a agencias de terceros bajo ninguna circunstancia.</p>
+            <h3>4. Proveedores de Infraestructura (Terceros)</h3>
+            <p>Tus datos están alojados en servidores de alta seguridad provistos por <strong>Google Firebase</strong> (bases de datos de Firestore y sistema de Autenticación). Google actúa como encargado del tratamiento, cumpliendo con los estándares internacionales de seguridad y el RGPD europeo. No vendemos bases de datos de usuarios a agencias de terceros bajo ninguna circunstancia.</p>
 
-            <h3>5. Retención de Datos y Derechos ARCO</h3>
-            <p>Tus datos se conservarán mientras tu cuenta permanecca activa. Como usuario, estás amparado por el Reglamento General de Protección de Datos (RGPD) y tienes derecho a solicitar el <strong>A</strong>cceso, <strong>R</strong>ectificación, <strong>C</strong>ancelación (derecho al olvido) y <strong>O</strong>posición al tratamiento de tus datos personales. Para ejercer estos derechos o eliminar permanentemente tu cuenta y todos los viajes asociados, puedes ponerte en contacto con nosotros.</p>
+            <h3>5. Retención de Datos y Derechos ARCO</h3>
+            <p>Tus datos se conservarán mientras tu cuenta permanecca activa. Como usuario, estás amparado por el Reglamento General de Protección de Datos (RGPD) y tienes derecho a solicitar el <strong>A</strong>cceso, <strong>R</strong>ectificación, <strong>C</strong>ancelación (derecho al olvido) y <strong>O</strong>posición al tratamiento de tus datos personales. Para ejercer estos derechos o eliminar permanentemente tu cuenta y todos los viajes asociados, puedes ponerte en contacto con nosotros.</p>
 
-            <button class="modal-close" onclick="closeModal('modal-privacy')">Entendido</button>
-        </div>
-    </div>
+            <button class="modal-close" onclick="closeModal('modal-privacy')">Entendido</button>
+        </div>
+    </div>
 
-    <div class="modal-overlay" id="modal-copyright">
-        <div class="modal-box">
-            <h2>Copyright y Propiedad Intelectual</h2>
-            <p>© 2026 <strong>Interra-hub</strong> · Todos los derechos reservados.</p>
-            <p>Esta plataforma, su código fuente original, diseño de experiencia de usuario (UX/UI), algoritmos internos y marcas asociadas han sido concebidas, diseñadas y desarrolladas por <strong>Pipa Studio</strong>.</p>
-            <p>La copia, plagio, ingeniería inversa, distribución no autorizada o explotación comercial de cualquier componente de este software (incluyendo pero no limitándose al diseño visual y el sistema "Finance") constituye una violación grave de las leyes de propiedad intelectual y será perseguida legalmente.</p>
-            <button class="modal-close" onclick="closeModal('modal-copyright')">Cerrar</button>
-        </div>
-    </div>
+    <div class="modal-overlay" id="modal-copyright">
+        <div class="modal-box">
+            <h2>Copyright y Propiedad Intelectual</h2>
+            <p>© 2026 <strong>Interra-hub</strong> · Todos los derechos reservados.</p>
+            <p>Esta plataforma, su código fuente original, diseño de experiencia de usuario (UX/UI), algoritmos internos y marcas asociadas han sido concebidas, diseñadas y desarrolladas por <strong>Pipa Studio</strong>.</p>
+            <p>La copia, plagio, ingeniería inversa, distribución no autorizada o explotación comercial de cualquier componente de este software (incluyendo pero no limitándose al diseño visual y el sistema "Finance") constituye una violación grave de las leyes de propiedad intelectual y será perseguida legalmente.</p>
+            <button class="modal-close" onclick="closeModal('modal-copyright')">Cerrar</button>
+        </div>
+    </div>
 
-    <div id="cookie-banner">
-        <div class="cookie-title"><i data-lucide="cookie" style="color: var(--warning);"></i> Privacidad y Cookies</div>
-        <div class="cookie-text">
-            Utilizamos cookies técnicas y herramientas como Vercel Analytics para asegurar que el Hub funcione perfectamente y analizar el tráfico de forma privada. Más info en <a onclick="openModal('modal-privacy')">Privacidad</a>.
-        </div>
-        <button class="cookie-btn cookie-accept" id="cookie-accept-btn">Aceptar y continuar</button>
-        <button class="cookie-btn cookie-reject" id="cookie-reject-btn">Rechazar no esenciales</button>
-    </div>
+    <div id="cookie-banner">
+        <div class="cookie-title"><i data-lucide="cookie" style="color: var(--warning);"></i> Privacidad y Cookies</div>
+        <div class="cookie-text">
+            Utilizamos cookies técnicas y herramientas como Vercel Analytics para asegurar que el Hub funcione perfectamente y analizar el tráfico de forma privada. Más info en <a onclick="openModal('modal-privacy')">Privacidad</a>.
+        </div>
+        <button class="cookie-btn cookie-accept" id="cookie-accept-btn">Aceptar y continuar</button>
+        <button class="cookie-btn cookie-reject" id="cookie-reject-btn">Rechazar no esenciales</button>
+    </div>
 
-    <script>
-        // Inicializar Iconos Lucide
-        lucide.createIcons();
+    <script>
+        // Inicializar Iconos Lucide
+        lucide.createIcons();
 
-        // Control de Modales
-        function openModal(id) {
-            document.getElementById(id).classList.add('open');
-            document.body.style.overflow = 'hidden';
-        }
-        function closeModal(id) {
-            document.getElementById(id).classList.remove('open');
-            document.body.style.overflow = '';
-        }
+        // Control de Modales
+        function openModal(id) {
+            document.getElementById(id).classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('open');
+            document.body.style.overflow = '';
+        }
 
-        document.querySelectorAll('.modal-overlay').forEach(overlay => {
-            overlay.addEventListener('click', (e) => {
-                if (e.target === overlay) closeModal(overlay.id);
-            });
-        });
+        document.querySelectorAll('.modal-overlay').forEach(overlay => {
+            overlay.addEventListener('click', (e) => {
+                if (e.target === overlay) closeModal(overlay.id);
+            });
+        });
 
-        // Control de Cookies
-        document.addEventListener("DOMContentLoaded", () => {
-            const banner = document.getElementById('cookie-banner');
-            const acceptBtn = document.getElementById('cookie-accept-btn');
-            const rejectBtn = document.getElementById('cookie-reject-btn');
+        // Control de Cookies
+        document.addEventListener("DOMContentLoaded", () => {
+            const banner = document.getElementById('cookie-banner');
+            const acceptBtn = document.getElementById('cookie-accept-btn');
+            const rejectBtn = document.getElementById('cookie-reject-btn');
 
-            if (!localStorage.getItem('interrahub_cookies')) {
-                setTimeout(() => banner.classList.add('show'), 1500);
-            }
+            if (!localStorage.getItem('interrahub_cookies')) {
+                setTimeout(() => banner.classList.add('show'), 1500);
+            }
 
-            acceptBtn.addEventListener('click', () => {
-                localStorage.setItem('interrahub_cookies', 'accepted');
-                banner.classList.remove('show');
-            });
+            acceptBtn.addEventListener('click', () => {
+                localStorage.setItem('interrahub_cookies', 'accepted');
+                banner.classList.remove('show');
+            });
 
-            rejectBtn.addEventListener('click', () => {
-                const apoyar = confirm("¿Estás seguro? Las métricas anónimas de Vercel Analytics nos ayudan a mejorar la plataforma de cara al año que viene. ¿Deseas mantenerlas activas para apoyarnos?");
-                if (apoyar) {
-                    localStorage.setItem('interrahub_cookies', 'accepted');
-                } else {
-                    localStorage.setItem('interrahub_cookies', 'rejected');
-                }
-                banner.classList.remove('show');
-            });
-        });
-    </script>
-    <script src="//code.tidio.co/gfxhupr9pntygs7wjcktdwxemoht8pbu.js" async></script>
+            rejectBtn.addEventListener('click', () => {
+                const apoyar = confirm("¿Estás seguro? Las métricas anónimas de Vercel Analytics nos ayudan a mejorar la plataforma de cara al año que viene. ¿Deseas mantenerlas activas para apoyarnos?");
+                if (apoyar) {
+                    localStorage.setItem('interrahub_cookies', 'accepted');
+                } else {
+                    localStorage.setItem('interrahub_cookies', 'rejected');
+                }
+                banner.classList.remove('show');
+            });
+        });
+    </script>
+    <script src="//code.tidio.co/gfxhupr9pntygs7wjcktdwxemoht8pbu.js" async></script>
 </body>
 </html>
