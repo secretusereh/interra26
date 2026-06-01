@@ -419,14 +419,11 @@
         }
         .modal-close:hover { background: rgba(255,255,255,0.1); }
 
-        /* COOKIE BANNER - AHORA FIJADO EN LA IZQUIERDA */
         #cookie-banner {
-            position: fixed; bottom: 30px; left: 30px; /* Cambiado a 'left' */
-            width: 340px;
+            position: fixed; bottom: 30px; right: 30px; width: 340px;
             background: rgba(20, 20, 20, 0.95); backdrop-filter: blur(12px);
             border: 1px solid var(--border-subtle); border-radius: 18px; padding: 1.5rem;
-            display: flex; flex-direction: column; gap: 1rem; 
-            z-index: 999999; /* Z-index elevado para garantizar que aparezca por encima de todo */
+            display: flex; flex-direction: column; gap: 1rem; z-index: 9999;
             box-shadow: 0 20px 40px rgba(0,0,0,0.8);
             opacity: 0; pointer-events: none; transform: translateY(20px); transition: 0.5s ease;
         }
@@ -484,8 +481,8 @@
             .footer-links { flex-direction: column; gap: 1rem; align-items: center; }
             .footer-links button { padding: 10px; /* Target táctil mayor */ }
 
-            /* Cookie Banner Adaptado a la izquierda para móviles */
-            #cookie-banner { bottom: 20px; left: 5%; width: 90%; }
+            /* Cookie Banner Adaptado */
+            #cookie-banner { bottom: 20px; right: 5%; width: 90%; }
             
             /* Ajuste del botón de scroll */
             .scroll-down-indicator { bottom: 20px; }
@@ -771,5 +768,6 @@
             });
         });
     </script>
+    <script src="//code.tidio.co/gfxhupr9pntygs7wjcktdwxemoht8pbu.js" async></script>
 </body>
 </html>
