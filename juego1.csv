@@ -1,0 +1,210 @@
+id;city;img;hint1;hint2;hint3;hint4
+roma_coliseo;Roma;[Foto del Coliseo];Capital de un imperio antiguo;Famosa por su pasta;Alberga un país independiente;El edificio de la foto es el Coliseo
+paris_torre;París;[Foto de la Torre Eiffel];Ciudad de la luz;Río Sena;Museo del Louvre;Estructura de hierro inconfundible
+londres_bigben;Londres;[Foto del Big Ben o el Parlamento];Capital del Reino Unido;Famosa por sus autobuses rojos;El río Támesis la cruza;Tiene un famoso reloj de torre
+madrid_retiro;Madrid;[Foto del estanque del Retiro];Capital de España;Famosa por el bocadillo de calamares;El oso y el madroño son su símbolo;Tiene un parque inmenso con barcas
+barcelona_sagrada;Barcelona;[Foto de la Sagrada Familia];Segunda ciudad de España;Famosa por Gaudí;Tiene un parque llamado Güell;Su basílica sigue en construcción
+berlin_muro;Berlín;[Foto de los restos del Muro];Capital alemana;Estuvo dividida durante la Guerra Fría;Puerta de Brandeburgo;Restos de un muro pintado
+praga_reloj;Praga;[Foto del Reloj Astronómico];Ciudad de las cien cúpulas;Atravesada por el río Moldava;Capital de República Checa;Famosa por su Reloj Astronómico
+amsterdam_canales;Ámsterdam;[Foto de los canales y bicicletas];Capital de los Países Bajos;Hay más bicicletas que personas;Famosa por su Barrio Rojo;Llena de canales
+budapest_parlamento;Budapest;[Foto del Parlamento junto al río];Antigua co-capital del Imperio Austrohúngaro;Famosa por sus baños termales;El Danubio la divide en dos;Tiene un parlamento neogótico gigante
+viena_schoenbrunn;Viena;[Foto del Palacio de Schönbrunn];Capital de la música clásica;Ciudad de Mozart y Beethoven;Famosa por su tarta Sacher;Capital de Austria
+lisboa_tranvia;Lisboa;[Foto de un tranvía amarillo y calles empinadas];Capital de Portugal;Famosa por sus pasteles de Belém;Ciudad de las siete colinas;Tranvías amarillos icónicos
+oporto_puente;Oporto;[Foto del Puente Don Luis I];Ciudad portuguesa del vino;Cruzada por el río Duero;Tiene la librería Lello;Famosa por su puente de hierro
+atenas_acropolis;Atenas;[Foto de la Acrópolis o el Partenón];Cuna de la civilización occidental;Capital de Grecia;Famosa por su mitología;Su templo está en lo alto de una colina
+dublin_templebar;Dublín;[Foto de la zona de Temple Bar o fábrica Guinness];Capital de Irlanda;Famosa por la cerveza negra;Ciudad de escritores como James Joyce;Barrio de Temple Bar
+edimburgo_castillo;Edimburgo;[Foto del Castillo sobre la colina];Capital de Escocia;Famosa por su festival de teatro;Tiene un castillo en un volcán extinto;Su calle principal es la Royal Mile
+florencia_duomo;Florencia;[Foto de la cúpula del Duomo];Cuna del Renacimiento;Ciudad de Leonardo y Miguel Ángel;Alberga la estatua del David;Su catedral tiene una enorme cúpula de ladrillo
+venecia_gondola;Venecia;[Foto del Gran Canal o una góndola];La ciudad de los canales;Famosa por su carnaval de máscaras;Plaza de San Marcos;Se recorre en góndola
+milan_catedral;Milán;[Foto del Duomo de Milán];Capital mundial de la moda;Norte de Italia;Tiene un duomo gótico blanco;Alberga el cuadro de La Última Cena
+napoles_vesubio;Nápoles;[Foto de la bahía con el monte Vesubio al fondo];Ciudad del sur de Italia;Cuna de la pizza margarita;Cerca de las ruinas de Pompeya;Tiene un volcán activo al lado
+munich_marienplatz;Múnich;[Foto del Ayuntamiento en Marienplatz];Ciudad de Baviera;Famosa mundialmente por el Oktoberfest;Sede de un importante equipo de fútbol;Su plaza central tiene un carillón
+frankfurt_skyline;Fráncfort;[Foto de los rascacielos financieros];Capital financiera de Alemania;Sede del Banco Central Europeo;Tiene un gran skyline;Cruzada por el río Meno
+hamburgo_puerto;Hamburgo;[Foto de los almacenes Speicherstadt];La ciudad libre y hanseática;Al norte de Alemania;Tiene uno de los mayores puertos de Europa;Famosa por su barrio de St. Pauli
+bruselas_atomium;Bruselas;[Foto del Atomium o la Grand Place];Capital de Bélgica;Sede de la Unión Europea;Famosa por los gofres y el chocolate;Tiene un monumento en forma de átomo
+brujas_canales;Brujas;[Foto de los canales medievales de Brujas];La Venecia del Norte;Ciudad medieval muy conservada;Famosa por su encaje;En Bélgica
+copenhague_nyhavn;Copenhague;[Foto del puerto de Nyhavn con casas de colores];Capital de Dinamarca;Ciudad de la Sirenita;Tiene el parque de atracciones Tívoli;Puerto con casas de colores
+estocolmo_gamlastan;Estocolmo;[Foto del casco antiguo Gamla Stan];Capital de Suecia;Construida sobre 14 islas;Sede de los premios Nobel;Tiene un casco antiguo muy colorido
+oslo_opera;Oslo;[Foto del edificio de la Ópera junto al agua];Capital de Noruega;Conocida por sus fiordos cercanos;Alberga el museo de los barcos vikingos;Su ópera parece un iceberg
+helsinki_catedral;Helsinki;[Foto de la Catedral blanca];Capital de Finlandia;En el mar Báltico;Famosa por su diseño y saunas;Catedral blanca con cúpulas verdes
+varsovia_centro;Varsovia;[Foto de la Plaza del Castillo o Palacio de Cultura];Capital de Polonia;Destruida en la guerra y reconstruida;El río Vístula la atraviesa;Ciudad natal de Chopin
+cracovia_plaza;Cracovia;[Foto de la plaza del mercado];Antigua capital polaca;Cerca del campo de Auschwitz;Tiene un castillo que escupe fuego (dragón);Su plaza principal es enorme
+reykiavik_hallgrimskirkja;Reikiavik;[Foto de la iglesia que parece un cohete];Capital de Islandia;La capital más septentrional del mundo;Tierra de hielo y fuego;Su iglesia tiene una forma muy peculiar
+zurich_lago;Zúrich;[Foto de la ciudad junto a su lago y los Alpes al fondo];Centro financiero de Suiza;Famosa por sus bancos;Situada al final de un gran lago;Rodeada de montañas
+ginebra_jetdeau;Ginebra;[Foto del chorro de agua en el lago];Ciudad suiza francófona;Sede de la Cruz Roja y la ONU;Conocida por la relojería;Tiene un enorme chorro de agua en su lago
+berna_osos;Berna;[Foto del casco antiguo junto al río];Capital política de Suiza;Tiene osos como símbolo y en la ciudad;Casco antiguo medieval;El río Aar la rodea
+dubrovnik_murallas;Dubrovnik;[Foto de la ciudad amurallada junto al mar];La perla del Adriático;Ciudad croata amurallada;Fue Desembarco del Rey en Juego de Tronos;Tejados naranjas junto al mar
+split_palacio;Split;[Foto del Palacio de Diocleciano y el paseo marítimo];Ciudad costera de Croacia;Famosa por un palacio romano antiguo;Su paseo marítimo se llama Riva;Nudo de ferris para las islas
+liubliana_dragones;Liubliana;[Foto del puente de los dragones];Capital de Eslovenia;Pequeña y muy verde;Atravesada por un río con sauces;Tiene un puente con estatuas de dragones
+tallin_muralla;Tallin;[Foto de las murallas y torres medievales];Capital de Estonia;Uno de los cascos medievales mejor conservados;Frente al golfo de Finlandia;Calles empedradas
+riga_artnouveau;Riga;[Foto de los edificios Art Nouveau];Capital de Letonia;La mayor ciudad de los estados bálticos;Famosa por su arquitectura Art Nouveau;Su centro histórico es de ladrillo
+vilna_torre;Vilna;[Foto de la torre de Gediminas];Capital de Lituania;Famosa por su arquitectura barroca;Tiene una república independiente de artistas (Uzupis);Torre de ladrillo en una colina
+bratislava_castillo;Bratislava;[Foto del castillo blanco o el ovni del puente];Capital de Eslovaquia;El Danubio la atraviesa;Su castillo parece una mesa del revés;Tiene un restaurante con forma de OVNI
+sofia_catedral;Sofía;[Foto de la Catedral de Alejandro Nevski];Capital de Bulgaria;A los pies del monte Vitosha;Uno de los países más baratos de Europa;Tiene una gran catedral ortodoxa
+bucarest_parlamento;Bucarest;[Foto del gigantesco edificio del Parlamento];Capital de Rumanía;Conocida como la pequeña París;Su Palacio del Parlamento es gigantesco;Ciudad de Vlad el Empalador
+belgrado_fortaleza;Belgrado;[Foto de la fortaleza de Kalemegdan];Capital de Serbia;Donde el río Sava se une al Danubio;Famosa por su vida nocturna en barcos;Tiene una gran fortaleza histórica
+sarajevo_puente;Sarajevo;[Foto de la zona antigua o el puente Latino];Capital de Bosnia y Herzegovina;Donde comenzó la Primera Guerra Mundial;Mezcla de culturas oriental y occidental;Rodeada de montañas olímpicas
+sevilla_giralda;Sevilla;[Foto de la Giralda o Plaza de España];Capital de Andalucía;Famosa por el flamenco;Su catedral es enorme;Tiene un campanario de origen árabe
+valencia_artes;Valencia;[Foto de la Ciudad de las Artes y las Ciencias];Ciudad del este de España;Cuna de la paella;Famosa por las Fallas;Tiene un complejo futurista blanco
+granada_alhambra;Granada;[Foto de la Alhambra con la sierra al fondo];Ciudad andaluza a los pies de Sierra Nevada;Famosa por sus tapas gratis;El barrio del Albaicín;Tiene un espectacular palacio nazarí
+bilbao_guggenheim;Bilbao;[Foto del museo Guggenheim];Ciudad más grande del País Vasco;Atravesada por la ría del Nervión;Conocida por sus pintxos;Tiene un museo de titanio
+santiago_catedral;Santiago de Compostela;[Foto de la fachada del Obradoiro];Capital de Galicia;Destino final de un famoso camino;Llueve a menudo;Tiene un enorme botafumeiro
+zaragoza_pilar;Zaragoza;[Foto de la Basílica junto al río Ebro];Capital de Aragón;A mitad de camino entre Madrid y Barcelona;El río Ebro la atraviesa;Tiene una enorme basílica de muchas cúpulas
+toledo_alcazar;Toledo;[Foto de la ciudad desde el mirador del Valle];La ciudad de las tres culturas;Antigua capital de España;Famosa por su acero y mazapán;Rodeada por el río Tajo
+cordoba_mezquita;Córdoba;[Foto de los arcos de la Mezquita];Ciudad andaluza de los patios floridos;Fue capital del califato omeya;Tiene un puente romano;Famosa por su bosque de columnas bicolor
+salamanca_universidad;Salamanca;[Foto de la fachada de la universidad o la Plaza Mayor];Ciudad universitaria por excelencia en España;Famosa por su plaza mayor;La rana en la fachada;Tiene dos catedrales
+segovia_acueducto;Segovia;[Foto del enorme acueducto romano];Ciudad de Castilla y León;Famosa por el cochinillo asado;Tiene un castillo que inspiró a Disney;Tiene un acueducto romano intacto
+mallorca_catedral;Palma de Mallorca;[Foto de la catedral de Palma frente al mar];Capital de las Islas Baleares;Destino muy popular en verano;Ensaimadas;Su catedral gótica está frente al mar
+ibiza_daltvila;Ibiza;[Foto del casco antiguo amurallado o cala];Isla del Mediterráneo;Mundialmente famosa por sus discotecas;Tiene calas de agua cristalina;Casco antiguo amurallado blanco
+tenerife_teide;Tenerife;[Foto del volcán Teide];La isla canaria más grande;Tiene el pico más alto de España;Famosa por sus carnavales;Isla de origen volcánico
+nueva_york_estatua;Nueva York;[Foto de la Estatua de la Libertad o Times Square];La ciudad que nunca duerme;Capital financiera de EE.UU.;Central Park;Tiene una estatua verde con una antorcha
+los_angeles_hollywood;Los Ángeles;[Foto del cartel de Hollywood o Santa Mónica];Ciudad de la costa oeste de EE.UU.;Meca del cine mundial;Rodeada de autopistas;Tiene el famoso cartel en la colina
+chicago_bean;Chicago;[Foto del Cloud Gate / The Bean];La ciudad de los vientos;A orillas del lago Michigan;Cuna de los rascacielos;Tiene una escultura con forma de alubia plateada
+miami_oceandrive;Miami;[Foto de la playa con edificios Art Deco];Ciudad del sol en Florida;Gran influencia latina;Famosa por South Beach;Edificios de colores pastel
+san_francisco_puente;San Francisco;[Foto del puente Golden Gate];Ciudad del norte de California;Famosa por sus cuestas y tranvías;Allí está la prisión de Alcatraz;Su puente es rojo y a menudo tiene niebla
+las_vegas_strip;Las Vegas;[Foto de los casinos iluminados de noche];La ciudad del pecado;En medio del desierto de Nevada;Capital mundial de los casinos;Tiene réplicas de París. Venecia y Egipto
+washington_capitolio;Washington DC;[Foto de la Casa Blanca o el Capitolio];Capital de Estados Unidos;No tiene rascacielos;Llena de museos gratuitos;Residencia del presidente
+toronto_cntower;Toronto;[Foto de la torre CN y el skyline];Ciudad más grande de Canadá;A orillas del lago Ontario;Muy multicultural;Tiene una torre de comunicaciones altísima
+vancouver_stanley;Vancouver;[Foto de la ciudad con montañas nevadas al fondo];Ciudad de la costa oeste de Canadá;Rodeada de agua y montañas;Tiene el enorme Stanley Park;Clima más suave del país
+montreal_notredame;Montreal;[Foto del puerto viejo o la basílica];Ciudad canadiense francófona;Tiene una ciudad subterránea para el invierno;Famosa por el poutine;Capital cultural de Quebec
+mexico_zocalo;Ciudad de México;[Foto de la plaza del Zócalo o Bellas Artes];Capital de un país norteamericano;Construida sobre un lago desecado;Tiene ruinas aztecas en el centro;Su plaza central es inmensa
+cancun_playa;Cancún;[Foto de playas de arena blanca y agua turquesa];Destino turístico en el Caribe;Ubicado en la Península de Yucatán;Famoso por los spring breakers;Arena blanca y mar turquesa
+habana_malecon;La Habana;[Foto de coches antiguos y el Malecón];Capital de una isla caribeña;Famosa por sus puros y el ron;Su paseo marítimo es muy conocido;Coches clásicos de colores
+bogota_monserrate;Bogotá;[Foto de la ciudad desde la montaña de Monserrate];Capital de Colombia;A más de 2600 metros de altitud;Museo del Oro;Rodeada de cerros verdes
+medellin_metrocable;Medellín;[Foto de teleféricos sobre barrios];La ciudad de la eterna primavera;Capital de Antioquia;Famosa por su transformación urbana;Tiene teleféricos para el transporte
+lima_plazadearmas;Lima;[Foto de la Plaza de Armas o los acantilados];Capital de Perú;Ubicada en la costa del Pacífico;Famosa por el ceviche;Conocida como la ciudad de los reyes
+cusco_machupicchu;Cusco;[Foto de la plaza o de ruinas incas];Antigua capital del imperio Inca;Ubicada a gran altitud en los Andes;Punto de partida hacia una maravilla mundial;Calles de piedra muy antiguas
+buenos_aires_obelisco;Buenos Aires;[Foto del Obelisco o Caminito];Capital de Argentina;Cuna del tango;Famosa por el asado;Tiene un gran obelisco en su avenida principal
+santiago_costanera;Santiago de Chile;[Foto de la ciudad con la Cordillera de los Andes];Capital de un país muy largo y estrecho;Rodeada por montañas inmensas;Tiene el edificio más alto de Sudamérica;Smog frecuente en invierno
+rio_cristo;Río de Janeiro;[Foto del Cristo Redentor o Copacabana];Ciudad maravillosa de Brasil;Famosa por su carnaval;Montaña del Pan de Azúcar;Tiene una estatua gigante abrazando la ciudad
+sao_paulo_avenida;São Paulo;[Foto de un mar de rascacielos o la Avenida Paulista];Motor económico de Brasil;Ciudad inmensa de rascacielos;Mucho tráfico y helicópteros;Tiene la famosa Avenida Paulista
+tokio_cruce;Tokio;[Foto del cruce de Shibuya o luces de neón];Capital de Japón;La ciudad más poblada del mundo;Mezcla tecnología y templos antiguos;Famosa por un cruce de calles abarrotado
+kioto_templos;Kioto;[Foto de un templo tradicional o bosque de bambú];Antigua capital de Japón;Famosa por las geishas;Tiene miles de templos de madera;Bosques de bambú espectaculares
+osaka_dotonbori;Osaka;[Foto del canal con carteles luminosos];Tercera ciudad de Japón;Conocida por su increíble comida callejera;Castillo rodeado de rascacielos;Cartel famoso de un corredor (Glico)
+seul_torre;Seúl;[Foto del palacio antiguo con rascacielos de fondo];Capital de Corea del Sur;Cuna del K-pop;Tecnología muy avanzada;Tiene una torre de comunicaciones en un monte
+pekin_muralla;Pekín;[Foto de la Ciudad Prohibida o la Gran Muralla];Capital de China;Alberga la Ciudad Prohibida;Sede de juegos olímpicos;Cerca de una muralla milenaria
+shanghai_bund;Shanghái;[Foto del skyline con la torre Perla Oriental];La ciudad más moderna de China;Centro financiero gigante;Un río separa lo antiguo de lo nuevo;Su torre principal tiene esferas moradas
+hong_kong_victoria;Hong Kong;[Foto de la bahía y rascacielos de noche];Antigua colonia británica;Región administrativa especial de China;Montañas y mar;Tiene una de las bahías más iluminadas
+bangkok_templos;Bangkok;[Foto de un templo dorado o los tuk-tuks];Capital de Tailandia;Famosa por la comida callejera;Templos budistas dorados;Ciudad ruidosa llena de tuk-tuks
+singapur_marina;Singapur;[Foto del hotel con forma de barco o superárboles];Ciudad-estado de Asia;Extremadamente limpia y segura;Prohíbe el chicle;Tiene un hotel con forma de barco en el techo
+kuala_lumpur_petronas;Kuala Lumpur;[Foto de las Torres Gemelas Petronas];Capital de Malasia;Mezcla de culturas malaya china e india;Clima tropical;Sus torres gemelas unidas por un puente
+jakarta_trafico;Yakarta;[Foto de una ciudad masiva con mucho tráfico];Capital de Indonesia;Ubicada en la isla de Java;Se está hundiendo lentamente;Metrópolis caótica y enorme
+bali_terrazas;Bali;[Foto de terrazas de arroz o templos hindúes];Isla turística de Indonesia;Paraíso de surfistas;Mayoría de religión hindú;Famosa por sus terrazas de arroz
+manila_jeepney;Manila;[Foto de la bahía o un transporte Jeepney colorido];Capital de Filipinas;Antigua colonia española;Muy densamente poblada;Tienen transportes muy coloridos llamados jeepneys
+mumbai_puerta;Bombay;[Foto de la Puerta de la India];Capital financiera de India;Sede de Bollywood;Contraste extremo de riqueza y pobreza;Tiene un monumento llamado la Puerta de la India
+delhi_fuerte;Nueva Delhi;[Foto del Fuerte Rojo o el caos del tráfico];Capital de la India;Tráfico muy caótico y ruidoso;Rica en especias y colores;Monumentos del imperio mogol
+agra_tajmahal;Agra;[Foto del Taj Mahal];Ciudad del norte de la India;A orillas del río Yamuna;Antigua capital mogol;Alberga el mausoleo de mármol blanco más famoso del mundo
+dubai_burjkhalifa;Dubái;[Foto del rascacielos más alto del mundo];Ciudad en los Emiratos Árabes;Creada en medio del desierto;Lujo extremo e islas artificiales;Tiene el edificio más alto del mundo
+estambul_mezquita;Estambul;[Foto de Santa Sofía o la Mezquita Azul];Ciudad entre Europa y Asia;Antigua Constantinopla;Dividida por el estrecho del Bósforo;Llena de mezquitas y bazares
+sydney_opera;Sídney;[Foto de la Casa de la Ópera y el puente];Ciudad más famosa de Australia (no la capital);Famosa por sus playas para surf;Tiene un enorme puente de acero;Su teatro parece tener velas blancas
+melbourne_tranvia;Melbourne;[Foto de callejones con arte urbano y tranvías];Capital cultural de Australia;Famosa por el café;Clima muy cambiante en un mismo día;Tiene muchos tranvías amarillos
+auckland_skytower;Auckland;[Foto de la torre de observación y veleros];Ciudad más grande de Nueva Zelanda;Conocida como la ciudad de los veleros;Rodeada de volcanes extintos;Tiene una alta torre de comunicaciones
+el_cairo_piramides;El Cairo;[Foto de las pirámides con la ciudad al fondo];Capital de Egipto;Cruzada por el río Nilo;Metrópolis enorme y polvorienta;Cerca de esfinges y tumbas faraónicas
+marrakech_plaza;Marrakech;[Foto de la plaza Jemaa el-Fna llena de puestos];Ciudad roja de Marruecos;Famosa por su bullicioso zoco;Zumos de naranja y encantadores de serpientes;Plaza Jemaa el-Fna
+ciudad_del_cabo_montana;Ciudad del Cabo;[Foto de la ciudad con la Montaña de la Mesa];Ciudad de Sudáfrica;Famosa por sus pingüinos en la playa;Cerca de la prisión de Nelson Mandela;Tiene una montaña plana de fondo
+kiev_catedral;Kiev;[Foto de monasterios con cúpulas doradas];Capital de Ucrania;Atravesada por el río Dniéper;Profundas estaciones de metro;Monasterios con cúpulas doradas
+moscu_roja;Moscú;[Foto de la Plaza Roja o San Basilio];Capital de Rusia;Inviernos congelados;Sede del Kremlin;Catedral colorida con cúpulas de bulbo
+san_petersburgo_hermitage;San Petersburgo;[Foto de palacios y canales];Antigua capital imperial rusa;Noches blancas en verano;Famoso museo del Hermitage;Conocida como la Venecia del Norte
+jerusalen_muro;Jerusalén;[Foto de la Cúpula de la Roca y el Muro];Ciudad sagrada de Oriente Medio;Importante para tres religiones;Casco antiguo amurallado;Tiene el Muro de las Lamentaciones
+teheran_torre;Teherán;[Foto de la torre Milad o montañas nevadas];Capital de Irán;A los pies de las montañas Alborz;Bazar inmenso;Antigua Persia
+riyadh_kingdom;Riad;[Foto de rascacielos en el desierto];Capital de Arabia Saudí;Desarrollo vertical reciente;Clima muy caluroso;Tiene un rascacielos con un agujero arriba
+tel_aviv_playa;Tel Aviv;[Foto de edificios modernos frente a la playa];Ciudad de Israel;Famosa por su vida nocturna;Arquitectura Bauhaus;Ciudad muy tecnológica frente al Mediterráneo
+ammán_teatro;Ammán;[Foto de colinas de casas blancas y teatro romano];Capital de Jordania;Construida sobre colinas;Tiene ruinas romanas en el centro;Punto de partida hacia Petra
+beirut_corniche;Beirut;[Foto de la costa con rocas de las Palomas];Capital del Líbano;Fue conocida como la París de Medio Oriente;Sobrevivió a muchas guerras;Paseo marítimo muy popular
+nairobi_safari;Nairobi;[Foto de la ciudad con vida salvaje cerca];Capital de Kenia;Única ciudad con un parque nacional de leones al lado;Centro neurálgico de África oriental;Cultura masái
+casablanca_mezquita;Casablanca;[Foto de la gran mezquita frente al mar];Capital económica de Marruecos;Dio nombre a una famosa película clásica;Enorme mezquita Hassan II frente al mar;Arquitectura art decó
+dakar_renacimiento;Dakar;[Foto del monumento al renacimiento africano];Capital de Senegal;En el extremo oeste de África;Famosa por un rally del motor;Monumento de bronce gigante
+la_paz_teleferico;La Paz;[Foto de teleféricos sobre ciudad de ladrillo];Capital administrativa de Bolivia;La ciudad más alta del mundo;Venden fetos de llama en sus mercados;Moverse en teleférico es lo normal
+quito_mitad;Quito;[Foto de su centro histórico o el monumento al ecuador];Capital de Ecuador;A los pies del volcán Pichincha;Centro histórico muy bien conservado;Está en la mitad del mundo
+caracas_avila;Caracas;[Foto del valle de la ciudad y el cerro Ávila];Capital de Venezuela;Separada del mar por una gran montaña;Comen arepas;Valle rodeado de verde
+montevideo_rambla;Montevideo;[Foto de la rambla junto al Río de la Plata];Capital de Uruguay;Mate y asado;Carnaval más largo del mundo;Paseo costero inmenso
+asuncion_panteon;Asunción;[Foto de edificios coloniales y río];Capital de Paraguay;Famosa por el tereré;Una de las capitales más antiguas de Sudamérica;Junto al río
+guatemala_volcan;Ciudad de Guatemala;[Foto de la ciudad y un volcán];Capital del país de la eterna primavera;Rodeada de volcanes;Legado maya;Cerca de la antigua capital colonial
+san_jose_teatro;San José;[Foto del Teatro Nacional o vegetación];Capital de Costa Rica;País sin ejército;Gente que dice Pura Vida;Rodeada de selvas y volcanes
+san_salvador_monumento;San Salvador;[Foto de la ciudad y el volcán de fondo];Capital de El Salvador;Conocida por las pupusas;País de los volcanes;Reciente adopción del Bitcoin
+la_valeta_puerto;La Valeta;[Foto de la ciudad de piedra fortificada];Capital de Malta;Isla mediterránea;Arquitectura de caballeros cruzados;Balcones de madera cerrados
+nicosia_muro;Nicosia;[Foto del centro partido];Capital de Chipre;La última capital dividida de Europa;Mitad griega y mitad turca;Isla del Mediterráneo
+zagreb_tejado;Zagreb;[Foto de la iglesia de San Marcos con tejado de escudos];Capital de Croacia;En el interior del país. sin mar;Mercados al aire libre;Iglesia con tejado de colores
+bucarest_arco;Bucarest;[Foto del Arco del Triunfo rumano];Capital de Rumanía;Tiene su propio arco del triunfo;Conocida por los perros callejeros antaño;Edificios comunistas gigantes
+sofia_mezquita;Sofía;[Foto del centro con restos romanos y mezquita];Capital de Bulgaria;Ciudad asequible;Restos romanos en el metro;Alfabeto cirílico
+tirana_bunker;Tirana;[Foto de edificios pintados de colores y un búnker];Capital de Albania;Llena de búnkeres antiguos;Los edificios grises se pintaron de colores vivos;País que estuvo muy aislado
+podgorica_puente;Podgorica;[Foto del puente del Milenio];Capital de Montenegro;Una de las capitales más pequeñas;Junto a las montañas;Puente colgante blanco
+skopie_estatuas;Skopie;[Foto de estatuas gigantes y el puente de piedra];Capital de Macedonia del Norte;Llena de estatuas neoclásicas recientes;Lugar de nacimiento de Teresa de Calcuta;Río Vardar
+chisinau_parque;Chisináu;[Foto del arco y la catedral en el parque];Capital de Moldavia;País famoso por sus bodegas de vino;Muy verde y arbolada;Una de las capitales menos visitadas
+monaco_casino;Mónaco;[Foto del puerto con yates y el casino];Microestado de la Riviera Francesa;Famoso por su casino;Hogar de millonarios;Circuito urbano de Fórmula 1
+san_marino_torre;San Marino;[Foto de la república en lo alto del monte];Microestado en Italia;Construido sobre el Monte Titano;Tiene tres torres defensivas;La república más antigua
+andorra_montanas;Andorra la Vella;[Foto de calles comerciales y nieve];Microestado entre España y Francia;Famoso por las compras libres de impuestos;Paraíso del esquí;Capital más alta de Europa
+vaduz_castillo;Vaduz;[Foto de un castillo alpino asomando sobre la ciudad];Capital de Liechtenstein;Microestado alpino;Conocida por emitir sellos postales;Castillo del príncipe en la ladera
+luxemburgo_valle;Luxemburgo;[Foto de la fortaleza y el valle en el centro];Pequeño país europeo rico;La ciudad tiene dos niveles (valle y alto);Antigua fortaleza;Sede de instituciones europeas
+reykiavik_aurora;Reikiavik;[Foto de casas de colores y auroras boreales];Capital islandesa;Se baña en aguas termales;Naturaleza extrema;Auroras boreales en invierno
+nuuk_hielo;Nuuk;[Foto de casas de madera y icebergs];Capital de Groenlandia;Población inuit mayoritaria;Ubicada en el Ártico;Icebergs cerca de la costa
+havana_capitolio;La Habana;[Foto del Capitolio cubano];Capital de Cuba;Coches americanos de los 50;Salsa y mojitos;Su Capitolio es igual al de EE.UU.
+san_juan_morro;San Juan;[Foto de fortaleza y casas coloniales de colores];Capital de Puerto Rico;Isla caribeña estadounidense;El reguetón;Fortaleza de El Morro
+panama_canal;Ciudad de Panamá;[Foto del skyline junto al mar y barcos];Centro financiero de Centroamérica;Une dos océanos;Usa el dólar;Tiene el canal de navegación más famoso
+caracas_metro;Caracas;[Foto del sistema de cable y la ciudad densa];Capital venezolana;Caos vehicular;Tierra de Bolívar;Contrastes sociales extremos
+lima_costaverde;Lima;[Foto de los acantilados de la Costa Verde];La ciudad de los reyes;Gastronomía top mundial;Niebla frecuente (panza de burro);Costas altas frente al mar
+sucre_blanco;Sucre;[Foto de casas coloniales pintadas de blanco];Capital constitucional de Bolivia;Arquitectura colonial impoluta;Conocida como la Ciudad Blanca;Estudiantes universitarios
+brasilia_oscar;Brasilia;[Foto de edificios futuristas gubernamentales];Capital de Brasil;Construida desde cero en los 60;Arquitectura de Oscar Niemeyer;Forma de avión desde el aire
+manaus_teatro;Manaos;[Foto del gran teatro en medio de la ciudad];Ciudad en el corazón de Brasil;Punto de partida del Amazonas;Fue rica por el caucho;Tiene un teatro de ópera rosa espectacular
+cali_salsa;Cali;[Foto del Cristo Rey y monumentos];Ciudad de Colombia;Clima caluroso;Capital mundial de la salsa;Caña de azúcar
+cartagena_murallas;Cartagena de Indias;[Foto de balcones de madera floridos y palenqueras];Ciudad caribeña colombiana;Calles coloniales bellísimas;García Márquez;Murallas antiguas contra piratas
+valparaiso_cerros;Valparaíso;[Foto de casas coloridas en los cerros y ascensores];Puerto principal de Chile;Pablo Neruda vivió aquí;Llena de arte urbano;Casas de colores en cerros escarpados
+mendoza_vinedos;Mendoza;[Foto de la ciudad con los Andes de fondo y viñedos];Ciudad del oeste argentino;Al pie del Aconcagua;Tierra de sol y buen vino;Malbec
+cordoba_argentina;Córdoba;[Foto de arquitectura jesuita y cañadas];Segunda ciudad de Argentina;El cuarteto;Estudiantes y sierras;Legado jesuita
+rosario_bandera;Rosario;[Foto del monumento a la bandera];Ciudad a orillas del río Paraná;Donde nació Messi;Cuna de la bandera argentina;Monumento enorme
+punta_arenas_pinguinos;Punta Arenas;[Foto de ciudad austral y estrecho];Ciudad muy al sur de Chile;Estrecho de Magallanes;Frío y viento;Tierra de fuego
+ushuaia_findelmundo;Ushuaia;[Foto de la ciudad en la bahía nevada];La ciudad del fin del mundo;En Argentina;Punto de partida a la Antártida;Montañas y mar austral
+galapagos_tortuga;Puerto Ayora;[Foto de puerto con leones marinos];Población principal de Galápagos;Perteneciente a Ecuador;Islas donde Darwin estudió;Fauna única sin miedo a los humanos
+easter_island_moai;Hanga Roa;[Foto de moais];Capital de la Isla de Pascua;Perteneciente a Chile;Uno de los lugares más aislados;Estatuas de piedra gigantes
+honolulu_waikiki;Honolulu;[Foto de la playa Waikiki y los volcanes];Capital de Hawái;Collares de flores;Surf y aloha;Playa de Waikiki
+papeete_tahiti;Papeete;[Foto de mercado y montañas verdes];Capital de la Polinesia Francesa;En la isla de Tahití;Perlas negras;Clima tropical
+suva_fiyi;Suva;[Foto de mercado y puerto];Capital de Fiyi;Nación del rugby a 7;Islas del Pacífico Sur;Agua embotellada famosa
+port_moresby_papua;Port Moresby;[Foto de la ciudad costera];Capital de Papúa Nueva Guinea;Gran diversidad lingüística;Naturaleza salvaje;Al norte de Australia
+manila_intramuros;Manila;[Foto de las murallas antiguas];Capital de Filipinas;Catolicismo asiático;Distrito histórico de Intramuros;Triciclos motorizados
+saigon_motos;Ho Chi Minh;[Foto de un río de miles de motos];Ciudad del sur de Vietnam;Antigua Saigón;Comida pho;Caos absoluto de motocicletas
+hanoi_tren;Hanói;[Foto de una calle estrecha por la que pasa un tren];Capital de Vietnam;Al norte del país;Lago Hoan Kiem;Un tren pasa por el medio de una calle habitada
+phnom_penh_palacio;Phnom Penh;[Foto del palacio real dorado];Capital de Camboya;Atravesada por el río Mekong;Oscuro pasado de los Jemeres Rojos;Palacio real parecido al tailandés
+rangun_shwedagon;Rangún;[Foto de una inmensa pagoda dorada];Mayor ciudad de Myanmar (Birmania);Los monjes budistas visten de granate;Ex colonia británica;Pagoda de Shwedagon cubierta de oro
+colombo_tuk;Colombo;[Foto del paseo Galle Face y el océano];Capital de Sri Lanka;Isla del té;Cerca de la India;Paseo marítimo popular al atardecer
+dhaka_rickshaw;Daca;[Foto de calles inundadas de rickshaws de colores];Capital de Bangladés;Densidad de población extrema;Industria textil;Capital mundial del rickshaw
+katmandu_stupa;Katmandú;[Foto de una estupa blanca con ojos pintados];Capital de Nepal;Punto de encuentro de alpinistas del Everest;Monos en los templos;Ojos de Buda pintados
+timbu_bhutan;Timbu;[Foto de monasterios budistas y montañas];Capital de Bután;País que mide la Felicidad Nacional Bruta;Sin semáforos;Ropa tradicional obligatoria
+islas_maldivas_male;Malé;[Foto de una isla completamente urbanizada];Capital de las Maldivas;Peligro de desaparición por el nivel del mar;Nación musulmana;Una de las capitales más densamente pobladas
+doha_perla;Doha;[Foto del skyline desde la corniche y museo];Capital de Qatar;Organizó un mundial de fútbol;Riqueza del gas natural;Isla artificial The Pearl
+abu_dhabi_mezquita;Abu Dabi;[Foto de la impresionante mezquita blanca];Capital de los Emiratos Árabes Unidos;Muy rica en petróleo;Parque Ferrari;Enorme mezquita blanca de mármol
+muscate_sultan;Mascate;[Foto de montañas secas y edificios blancos bajos];Capital de Omán;Sin grandes rascacielos;Olor a incienso (olíbano);Arquitectura tradicional blanca
+kuwait_torres;Kuwait;[Foto de las famosas torres con esferas];País del Golfo Pérsico;Sufrió una invasión en 1990;Mucho petróleo;Torres de agua icónicas
+manama_bahrein;Manama;[Foto de edificios modernos de cristal];Capital de Baréin;Pequeño país insular del Golfo;Primeros en encontrar petróleo en la zona;Circuito de F1
+taskent_metro;Taskent;[Foto de estaciones de metro palaciegas];Capital de Uzbekistán;Arquitectura de la Ruta de la Seda y soviética;El país de Tamerlán;Estaciones de metro preciosas
+almati_manzanas;Almatý;[Foto de la ciudad con montañas nevadas muy cerca];Mayor ciudad de Kazajistán;No es la capital;Lugar de origen de las manzanas;Baza en Asia Central
+bakú_fuego;Bakú;[Foto de las Flame Towers];Capital de Azerbaiyán;A orillas del mar Caspio;Riqueza petrolera;Torres en forma de llama
+tiflis_banos;Tiflis;[Foto de balcones de madera y baños de azufre];Capital de Georgia;Cuna del vino;Comida khachapuri;Baños de azufre
+erevan_ararat;Ereván;[Foto de la cascada de escaleras y el monte Ararat];Capital de Armenia;Conocida como la ciudad rosa;Religión cristiana antigua;Vistas al monte Ararat
+dakar_gore;Dakar;[Foto de barcas de colores en la playa];Senegal;Música mbalax;Isla de Gorea (historia de esclavitud);África Occidental
+accra_mercado;Acra;[Foto del mercado de Makola];Capital de Ghana;Rápido crecimiento;Ataúdes de formas locas;País del cacao
+lagos_puente;Lagos;[Foto de rascacielos y puente sobre la laguna];La ciudad más poblada de África;En Nigeria;Nollywood (cine);Caos de tráfico enorme
+luanda_bahia;Luanda;[Foto de la bahía y rascacielos];Capital de Angola;Petróleo y diamantes;País lusófono;Una de las ciudades más caras para los expatriados
+kinshasa_rio;Kinsasa;[Foto del caudaloso río y barcos];Capital de la República Democrática del Congo;Separada por el río de Brazzaville;Música soukous;Megaurbe africana
+addis_abeba_lucy;Adís Abeba;[Foto de la ciudad rodeada de montes y mercado];Capital de Etiopía;Sede de la Unión Africana;Café tradicional;Nunca fue colonizada
+kampala_colinas;Kampala;[Foto de mezquitas y colinas verdes];Capital de Uganda;Construida sobre colinas;El lago Victoria está muy cerca;Taxis matatu
+kigali_limpia;Kigali;[Foto de calles limpias y motos ordenadas];Capital de Ruanda;Tristemente famosa por un genocidio;El país de las mil colinas;Increíblemente limpia y segura
+dar_es_salaam_puerto;Dar es-Salam;[Foto del puerto bullicioso];Mayor ciudad de Tanzania;Punto de salto hacia Zanzíbar;Idioma suajili;Antigua colonia alemana y británica
+antananarivo_lemur;Antananarivo;[Foto de casas apelotonadas en colinas];Capital de Madagascar;Isla de baobabs y lémures;Calles empinadas y empedradas;Influencia francesa
+porto_louis_mauricio;Port Louis;[Foto de puerto protegido por montañas];Capital de Mauricio;Isla en el Índico;Dodo extinguido;Mezcla india africana y francesa
+seychelles_victoria;Victoria;[Foto de la pequeña torre del reloj y mercado];Capital de las Seychelles;Una de las capitales más pequeñas del mundo;Playas de rocas de granito únicas;Coco de mer
+pretoria_jacarandas;Pretoria;[Foto de calles teñidas de flores moradas];Capital administrativa de Sudáfrica;Famosa por sus árboles de flores moradas (jacarandás);Estatua gigante de Mandela;Cerca de Johannesburgo
+johannesburgo_oro;Johannesburgo;[Foto del centro urbano y barrios];Ciudad más poblada de Sudáfrica;Nació de la fiebre del oro;Soweto está aquí;No tiene mar ni río principal
+gaborone_diamantes;Gaborone;[Foto de la ciudad tranquila y plana];Capital de Botsuana;Delta del Okavango en su país;Éxito económico por diamantes;Safaris de elefantes
+harare_zimbabue;Harare;[Foto del centro comercial y jacarandás];Capital de Zimbabue;Antigua Salisbury;Cerca de las Cataratas Victoria;Sufrió hiperinflación extrema
+lusaka_zambia;Lusaka;[Foto de los mercados modernos y tráfico];Capital de Zambia;Comparte las Cataratas Victoria;País sin salida al mar;Cobre
+maputo_estacion;Maputo;[Foto de la bonita estación de tren blanca y verde];Capital de Mozambique;Ex colonia portuguesa;Océano Índico;Estación de tren diseñada por el equipo de Eiffel
+windhoek_iglesia;Windhoek;[Foto de la iglesia luterana alemana];Capital de Namibia;Antigua colonia alemana;Desierto de Namib cerca;Cerveza excelente
+casablanca_rick;Casablanca;[Foto del centro y palmeras];Ciudad más grande de Marruecos;Mezquita de Hassan II;Rick's Café;Capital económica
+tanger_medina;Tánger;[Foto de calles blancas frente al estrecho];Ciudad marroquí al norte;Frente a España;Lugar de inspiración para escritores;Puerta de África
+fez_curtidurias;Fez;[Foto de los fosos de tintes de piel];Ciudad imperial de Marruecos;Medina sin coches más grande del mundo;Mucha artesanía;Curtidurías con mucho olor
+tunez_cartago;Túnez;[Foto de ruinas antiguas o zoco cubierto];Capital de Túnez;Cerca de las ruinas de Cartago;Primavera árabe;Sidi Bou Said (pueblo azul y blanco)
+argel_casbah;Argel;[Foto de edificios blancos escalonados];Capital de Argelia;El país más grande de África;Su barrio antiguo es la Casbah;La ciudad blanca
+tripoli_libia;Trípoli;[Foto de la medina y ruinas romanas cercanas];Capital de Libia;Costas del Mediterráneo;Rica en petróleo;Guerra civil reciente
+aswan_nilo;Asuán;[Foto del río con falucas veleros];Sur de Egipto;La enorme presa del Nilo;Templos de Abu Simbel;Nubios
+luxor_karnak;Lúxor;[Foto del templo con columnas inmensas];Egipto;Antigua Tebas;Valle de los Reyes;Mayor museo al aire libre del mundo
+alekxandria_biblioteca;Alejandría;[Foto de la moderna biblioteca junto al mar];Egipto;Fundada por Alejandro Magno;Tuvo un faro maravilla del mundo;Gran biblioteca moderna
