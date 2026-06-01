@@ -178,6 +178,139 @@
         .btn-delete:hover { background: var(--accent); color: white; }
 
         /* =========================================
+           NUEVO: TAB ENTRETENIMIENTO
+           ========================================= */
+        .countdown-banner {
+            background: linear-gradient(135deg, rgba(255, 77, 77, 0.15), rgba(77, 166, 255, 0.15));
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 2.5rem 1.5rem;
+            text-align: center;
+            margin-bottom: 2.5rem;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+        .countdown-banner h3 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .timer-box {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 1rem 1.8rem;
+            border-radius: 30px;
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 1.2rem;
+            border: 1px solid rgba(255,255,255,0.05);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+        .timer-box i { color: var(--accent); }
+        
+        .games-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+        @media (min-width: 768px) {
+            .games-grid { grid-template-columns: 1fr 1fr; }
+        }
+        
+        .game-card {
+            background: var(--surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: 16px;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            transition: var(--transition);
+            backdrop-filter: blur(10px);
+            align-items: flex-start;
+        }
+        .game-card:hover:not(.locked) {
+            border-color: rgba(255,255,255,0.3);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        .game-icon {
+            width: 55px;
+            height: 55px;
+            border-radius: 14px;
+            background: rgba(255,255,255,0.05);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--primary);
+            font-size: 1.5rem;
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+        .game-info h4 { font-size: 1.3rem; font-weight: 800; margin-bottom: 0.5rem; color: var(--primary); }
+        .game-info p { color: var(--text-muted); font-size: 0.95rem; line-height: 1.5; }
+        
+        .btn-play {
+            margin-top: auto;
+            width: 100%;
+            background: var(--primary);
+            color: var(--bg-color);
+            text-align: center;
+            padding: 1rem;
+            border-radius: 12px;
+            font-weight: 800;
+            text-decoration: none;
+            transition: 0.3s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-play:hover {
+            transform: scale(0.97);
+            background: var(--accent);
+            color: white;
+        }
+        
+        .games-grid-full {
+            grid-column: 1 / -1;
+            margin-top: 1rem;
+            padding-top: 2rem;
+            border-top: 1px dashed var(--border-subtle);
+        }
+        
+        .game-card.locked {
+            opacity: 0.6;
+            background: rgba(20, 20, 20, 0.2);
+            border-style: dashed;
+            cursor: not-allowed;
+            flex-direction: row;
+            align-items: center;
+        }
+        .game-card.locked .game-info { flex: 1; }
+        .badge-locked {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-muted);
+            padding: 0.6rem 1rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
+        }
+
+        /* =========================================
            TAB 2: USUARIOS Y SOLICITUDES
            ========================================= */
         .users-grid { display: grid; grid-template-columns: 1fr; gap: 2rem; }
@@ -415,6 +548,7 @@
         <button class="tab-btn" id="tab-btn-mapa" onclick="switchTab('mapa', this)">Mapa</button>
         <button class="tab-btn" id="tab-btn-finance" onclick="switchTab('finance', this)">Finance</button>
         <button class="tab-btn" id="tab-btn-extra" onclick="switchTab('extra', this)">Extra Info</button>
+        <button class="tab-btn" id="tab-btn-entretenimiento" onclick="switchTab('entretenimiento', this)">Entretenimiento</button>
         <button class="tab-btn" id="tab-btn-usuarios" onclick="switchTab('usuarios', this)">
             Equipo y Accesos
             <span class="tab-badge" id="solicitudes-badge">0</span>
@@ -493,6 +627,46 @@
         </div>
     </main>
 
+    <main id="tab-entretenimiento" class="tab-content">
+        <div id="countdown-container" class="countdown-banner">
+            <h3>🌍 <span id="countdown-trip-name">Cargando viaje...</span></h3>
+            <div class="timer-box">
+                <i data-lucide="hourglass"></i> 
+                <span id="countdown-timer">Calculando tiempo...</span>
+            </div>
+        </div>
+
+        <div class="games-grid">
+            <div class="game-card">
+                <div class="game-icon"><i data-lucide="map-pin"></i></div>
+                <div class="game-info">
+                    <h4>¿Dónde es?</h4>
+                    <p>Descubre lugares y ciudades cada día de tu aventura.</p>
+                </div>
+                <a href="juego1.html" class="btn-play">JUGAR</a>
+            </div>
+
+            <div class="game-card">
+                <div class="game-icon"><i data-lucide="type"></i></div>
+                <div class="game-info">
+                    <h4>Wordle Viajeros</h4>
+                    <p>Adivina la palabra del día relacionada con los viajes.</p>
+                </div>
+                <a href="juego2.html" class="btn-play">JUGAR</a>
+            </div>
+
+            <div class="games-grid-full">
+                <div class="game-card locked">
+                    <div class="game-icon"><i data-lucide="image"></i></div>
+                    <div class="game-info">
+                        <h4>Generador de recuerdos</h4>
+                        <p>Convierte tu viaje en recuerdos únicos.</p>
+                    </div>
+                    <span class="badge-locked">🚧 Próximamente</span>
+                </div>
+            </div>
+        </div>
+    </main>
     <main id="tab-usuarios" class="tab-content">
         <div class="user-section" style="margin-bottom: 2rem; text-align: center; border-color: var(--border-subtle);">
             <h3 style="justify-content: center;"><i data-lucide="key"></i> Código de Invitación</h3>
@@ -818,6 +992,9 @@
         let currentModalType = 'transport';
         let currentFinanceType = 'gasto';
         let editingEventId = null;
+        
+        // Variables para la Cuenta Atrás (Entretenimiento)
+        let countdownInterval;
 
         const parseDDMMYYYY = (str) => { 
             const [d,m,y] = str.split('/'); 
@@ -879,6 +1056,43 @@
                 alert("Error al conectar con la base de datos.");
             }
         });
+
+        // ── CONTROL DE CUENTA ATRÁS (TAB ENTRETENIMIENTO) ──
+        function initCountdown(fechaInicioStr, tripName) {
+            const tripNameEl = document.getElementById('countdown-trip-name');
+            const timerEl = document.getElementById('countdown-timer');
+            const containerEl = document.getElementById('countdown-container');
+            
+            if (tripNameEl) tripNameEl.innerText = tripName;
+            
+            if (countdownInterval) clearInterval(countdownInterval);
+            
+            const parts = fechaInicioStr.split('/');
+            if (parts.length !== 3) return;
+            const targetDate = new Date(`${parts[2]}-${parts[1]}-${parts[0]}T00:00:00`).getTime();
+            
+            const updateTimer = () => {
+                const now = new Date().getTime();
+                const distance = targetDate - now;
+                
+                if (distance <= 0) {
+                    clearInterval(countdownInterval);
+                    containerEl.style.display = 'none'; // Se oculta al llegar a cero
+                    return;
+                }
+                
+                containerEl.style.display = 'flex'; // Asegurar que es visible
+                
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                
+                timerEl.innerText = `Faltan ${days} días, ${hours} horas y ${minutes} minutos`;
+            };
+            
+            updateTimer();
+            countdownInterval = setInterval(updateTimer, 60000); // Actualizar cada minuto
+        }
 
         // ── CONTROL MAESTRO DE FECHAS EN CALENDARIOS ──
         function updatePickersLimits(editingId = null) {
@@ -971,6 +1185,7 @@
                 }
 
                 updatePickersLimits();
+                initCountdown(currentTripData.fechaInicio, currentTripData.nombre); // Inicializar la cuenta atrás
 
                 const uids = Object.keys(miembros);
                 await Promise.all(uids.map(uid => getUserProfile(uid))); 
@@ -1021,6 +1236,7 @@
                 renderHeader();
                 renderItinerary();
                 updatePickersLimits();
+                initCountdown(newStart, newName); // Actualizamos la cuenta atrás por si cambió
                 
                 showToast("Configuración del viaje actualizada correctamente", "success");
             } catch(e) {
