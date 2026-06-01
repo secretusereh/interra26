@@ -463,9 +463,9 @@
         }
         .modal-close:hover { background: rgba(255,255,255,0.1); }
 
-        /* Estilos Originales del Banner de Cookies */
+        /* Estilos del Banner de Cookies - ANCLADO A LA IZQUIERDA */
         #cookie-banner {
-            position: fixed; bottom: 30px; right: 30px; width: 340px;
+            position: fixed; bottom: 30px; left: 30px; width: 340px; /* Cambiado a left: 30px para escritorio */
             background: rgba(20, 20, 20, 0.95); backdrop-filter: blur(12px);
             border: 1px solid var(--border-subtle); border-radius: 18px; padding: 1.5rem;
             display: flex; flex-direction: column; gap: 1rem; z-index: 9999;
@@ -483,18 +483,6 @@
         .cookie-accept:hover { transform: scale(0.97); }
         .cookie-reject { background: transparent; color: var(--text-muted); border: 1px solid var(--border-subtle); margin-top: 5px;}
         .cookie-reject:hover { background: rgba(255,255,255,0.05); color: var(--primary); }
-
-        /* Ocultar elementos de soporte mientras las cookies están pendientes */
-        body.cookies-pending #hubspot-messages-iframe-container,
-        body.cookies-pending #intercom-container,
-        body.cookies-pending .zopim,
-        body.cookies-pending #tidio-chat,
-        body.cookies-pending .customer-support-widget,
-        body.cookies-pending [id^="chat-widget"] {
-            display: none !important;
-            opacity: 0 !important;
-            pointer-events: none !important;
-        }
 
         /* =========================================
            ADAPTACIÓN RESPONSIVE (MÓVILES Y TÁCTILES)
@@ -530,7 +518,7 @@
             .vision-item { flex-direction: column; gap: 1rem; }
             
             .scroll-down-indicator { bottom: 20px; }
-            #cookie-banner { bottom: 20px; right: 5%; width: 90%; }
+            #cookie-banner { bottom: 20px; left: 5%; width: 90%; } /* Ajuste a la izquierda también en móvil */
         }
 
         /* Animaciones */
@@ -791,21 +779,19 @@
             });
         });
 
-        // Control de Cookies y Ocultar Widgets de Soporte
+        // Control de Cookies (Lógica limpia sin ocultar nada extra)
         document.addEventListener("DOMContentLoaded", () => {
             const banner = document.getElementById('cookie-banner');
             const acceptBtn = document.getElementById('cookie-accept-btn');
             const rejectBtn = document.getElementById('cookie-reject-btn');
 
             if (!localStorage.getItem('interrahub_cookies')) {
-                document.body.classList.add('cookies-pending'); // Oculta atención al cliente
                 setTimeout(() => banner.classList.add('show'), 1500);
             }
 
             acceptBtn.addEventListener('click', () => {
                 localStorage.setItem('interrahub_cookies', 'accepted');
                 banner.classList.remove('show');
-                document.body.classList.remove('cookies-pending'); // Muestra atención al cliente
             });
 
             rejectBtn.addEventListener('click', () => {
@@ -816,7 +802,6 @@
                     localStorage.setItem('interrahub_cookies', 'rejected');
                 }
                 banner.classList.remove('show');
-                document.body.classList.remove('cookies-pending'); // Muestra atención al cliente
             });
         });
     </script>
