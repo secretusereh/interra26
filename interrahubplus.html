@@ -162,6 +162,7 @@
 
         .btn-action.gold {
             background: var(--plus-gold);
+            color: var(--bg-color);
         }
 
         .btn-action:hover {
@@ -246,49 +247,40 @@
     </div>
 
     <div class="terms-box">
-        <h4><i data-lucide="shield-check" style="width: 16px; height: 16px;"></i> Activación Automática y Segura</h4>
-        <p>Al realizar la compra, aceptas los términos y condiciones de la plataforma. La activación de tu cuenta PLUS se realizará de forma <strong>completamente automática e instantánea</strong> en tu perfil una vez el pago sea procesado y verificado por Stripe de forma segura. Puedes gestionar tus métodos de pago en cualquier momento desde tu panel.</p>
+        <h4><i data-lucide="shield-check" style="width: 16px; height: 16px;"></i> Activación Automática</h4>
+        <p>Al realizar la compra, aceptas los términos y condiciones de la plataforma. La activación de tu cuenta PLUS se realizará de forma <strong>completamente automática e instantánea</strong> una vez el pago sea verificado. En Stripe podrás introducir tus códigos promocionales si dispones de ellos.</p>
     </div>
 
     <script type="module">
         import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
-        // Importamos la instancia de autenticación desde tu archivo de configuración existente
         import { auth } from "./firebase-config.js";
 
-        // Inicializar iconos de la UI
         lucide.createIcons();
 
-        // Enlaces de pago de Stripe proporcionados
         const stripeLinkMensual = "https://buy.stripe.com/8x2eVde3i0sU48QanE6Vq01";
         const stripeLinkPermanente = "https://buy.stripe.com/5kQ5kD3oE0sUfRy53k6Vq00";
 
         const btnMensual = document.getElementById('btn-mensual');
         const btnPermanente = document.getElementById('btn-permanente');
 
-        // Función auxiliar para forzar el inicio de sesión
-        const handleUnauthenticatedClick = (e) => {
+        const blockClick = (e) => {
             e.preventDefault();
-            alert("Debes iniciar sesión primero para poder adquirir la suscripción PLUS.");
+            alert("Debes iniciar sesión para poder activar la suscripción PLUS.");
             window.location.href = "registro.html";
         };
 
-        // Verificación del estado del usuario
+        // Bloqueamos los botones por defecto hasta confirmar que hay usuario
+        btnMensual.onclick = blockClick;
+        btnPermanente.onclick = blockClick;
+
         onAuthStateChanged(auth, (user) => {
             if (user) {
-                // Inyectamos el UID para que Stripe lo devuelva en el webhook (client_reference_id)
-                // Y pasamos el email para autocompletar la pasarela de pago y mejorar la conversión
-                const queryParams = `?client_reference_id=${user.uid}&prefilled_email=${encodeURIComponent(user.email)}`;
+                // Desbloqueamos los botones e inyectamos el identificador del usuario
+                btnMensual.onclick = null;
+                btnPermanente.onclick = null;
                 
-                btnMensual.href = stripeLinkMensual + queryParams;
-                btnPermanente.href = stripeLinkPermanente + queryParams;
-                
-                // Eliminamos los listeners de bloqueo si el usuario inició sesión después de cargar
-                btnMensual.removeEventListener('click', handleUnauthenticatedClick);
-                btnPermanente.removeEventListener('click', handleUnauthenticatedClick);
-            } else {
-                // Si no hay sesión activa, bloqueamos el acceso al pago
-                btnMensual.addEventListener('click', handleUnauthenticatedClick);
-                btnPermanente.addEventListener('click', handleUnauthenticatedClick);
+                btnMensual.href = `${stripeLinkMensual}?client_reference_id=${user.uid}&prefilled_email=${encodeURIComponent(user.email)}`;
+                btnPermanente.href = `${stripeLinkPermanente}?client_reference_id=${user.uid}&prefilled_email=${encodeURIComponent(user.email)}`;
             }
         });
     </script>
