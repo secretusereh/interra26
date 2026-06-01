@@ -2,619 +2,293 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <title>Interra-hub PLUS | Suscripción Premium</title>
-    <meta name="description" content="Desbloquea el plan Interra-hub PLUS. Viajes ilimitados, navegación sin anuncios, sorteos exclusivos y pases VIP para el ocio nocturno y cultural de Europa.">
-    <meta name="author" content="Pipa Studio">
-
-    <link rel="icon" type="image/png" href="interrahublogo.PNG">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Interra-hub | Suscripción PLUS</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;800&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
-
+    
     <style>
-        /* =========================================
-           VARIABLES Y CONFIGURACIÓN PREMIUM BASE
-           ========================================= */
         :root {
-            --bg-color: #030303;
-            --surface: rgba(18, 18, 18, 0.6);
-            --surface-card: #0d0d0d;
+            --bg-color: #0a0a0a;
+            --surface: #141414;
             --primary: #ffffff;
-            --text-muted: #777777;
-            --gold: #ffd700;
-            --gold-gradient: linear-gradient(135deg, #ffd700 0%, #ffb84d 100%);
-            --border-subtle: rgba(255, 255, 255, 0.06);
-            --border-gold: rgba(255, 215, 0, 0.25);
-            --transition: cubic-bezier(0.16, 1, 0.3, 1) 0.5s;
+            --text-muted: #888888;
+            --accent: #ff4d4d;
+            --success: #4dff4d;
+            --plus-gold: #FFD700;
+            --transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Sora', sans-serif; }
-        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Sora', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
         body {
+            min-height: 100vh;
             background-color: var(--bg-color);
             color: var(--primary);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            overflow-x: hidden;
-            background-image: radial-gradient(circle at 50% -20%, rgba(255, 215, 0, 0.04), transparent 50%),
-                              radial-gradient(circle at 50% 120%, rgba(255, 255, 255, 0.01), transparent 50%);
-            background-attachment: fixed;
-        }
-
-        ::selection { background: var(--gold); color: #000; }
-
-        /* =========================================
-           NAVEGACIÓN DE CABECERA
-           ========================================= */
-        nav {
-            width: 100%;
-            padding: 1.5rem 5%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: absolute;
-            top: 0; left: 0; z-index: 100;
-        }
-        
-        .btn-back {
-            background: rgba(255,255,255,0.03); color: var(--primary); border: 1px solid var(--border-subtle);
-            padding: 0.6rem 1.2rem; border-radius: 30px; font-weight: 600; font-size: 0.85rem;
-            cursor: pointer; transition: var(--transition); display: flex; align-items: center; gap: 8px;
-            text-decoration: none; backdrop-filter: blur(10px);
-        }
-        .btn-back:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.15); transform: translateX(-3px); }
-
-        .user-status { font-size: 0.8rem; color: var(--text-muted); display: flex; align-items: center; gap: 8px; transition: var(--transition);}
-        .user-status:hover { color: var(--primary); }
-
-        /* =========================================
-           PLATAFORMA DE COMPRA / CHECKOUT INTERFACES
-           ========================================= */
-        .checkout-container {
-            flex: 1;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            padding: 8rem 2rem 4rem;
-            max-width: 1200px;
-            margin: 0 auto;
-            width: 100%;
+            padding: 4rem 1rem;
+            background-image: radial-gradient(circle at 50% -20%, #2a2a2a 0%, var(--bg-color) 50%);
         }
 
-        .checkout-header {
+        .header {
             text-align: center;
-            margin-bottom: 3.5rem;
-            animation: fadeInDown 0.8s var(--transition);
+            margin-bottom: 3rem;
+            animation: slideUp 0.6s var(--transition) forwards;
         }
 
-        .checkout-header h1 {
-            font-size: clamp(2rem, 4vw, 2.8rem);
+        .brand-logo {
+            font-size: 1.8rem;
             font-weight: 800;
             letter-spacing: -1px;
-            margin-bottom: 0.8rem;
-        }
-        .checkout-header h1 span {
-            background: var(--gold-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        .checkout-header p {
-            color: var(--text-muted);
-            font-size: 1.05rem;
-            font-weight: 300;
+            margin-bottom: 1rem;
         }
 
-        /* TARJETA DE COMPRA / SUBSCRIPTION CARD */
-        .subscription-card {
-            background: var(--surface-card);
-            border: 1px solid var(--border-gold);
+        .brand-logo .dot { color: var(--accent); }
+        .brand-logo .plus { color: var(--plus-gold); }
+
+        .header p {
+            color: var(--text-muted);
+            max-width: 500px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .pricing-container {
+            display: flex;
+            gap: 2rem;
+            max-width: 900px;
             width: 100%;
-            max-width: 750px;
-            border-radius: 32px;
-            padding: 2.5rem 3.5rem;
-            box-shadow: 0 30px 70px rgba(0, 0, 0, 0.7), 0 0 40px rgba(255, 215, 0, 0.02);
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            animation: scaleUp 0.8s var(--transition) backwards 0.1s;
-        }
-
-        .subscription-card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 50%; transform: translateX(-50%);
-            width: 40%; height: 1px;
-            background: linear-gradient(90deg, transparent, var(--gold), transparent);
-        }
-
-        /* Branding de la suscripción */
-        .plan-badge-wrapper {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-        }
-        .plus-logo-img {
-            height: 38px;
-            object-fit: contain;
-        }
-        .badge-vip {
-            background: rgba(255, 215, 0, 0.08);
-            border: 1px solid var(--border-gold);
-            color: var(--gold);
-            font-size: 0.7rem;
-            font-weight: 800;
-            padding: 0.4rem 0.9rem;
-            border-radius: 20px;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-        }
-
-        /* BLOQUE DE PRECIO */
-        .price-wrapper {
-            display: flex;
             justify-content: center;
-            align-items: center;
-            margin-bottom: 2rem;
-            padding-bottom: 1.5rem;
-            border-bottom: 1px solid var(--border-subtle);
-        }
-
-        .premium-price {
-            font-size: 4.5rem;
-            font-weight: 800;
-            color: var(--primary);
-            line-height: 1;
-            letter-spacing: -2px;
-            text-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
-        }
-        .premium-price span.period {
-            font-size: 1.2rem;
-            letter-spacing: 0;
-            font-weight: 400;
-            color: var(--text-muted);
-            margin-left: 5px;
-        }
-
-        /* DESGLOSE DE CARACTERÍSTICAS */
-        .plan-features-block {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1.5rem;
-            margin-bottom: 2.5rem;
-        }
-        .feature-row {
-            display: flex;
-            align-items: flex-start;
-            gap: 14px;
-        }
-        .feature-icon-wrapper {
-            color: var(--gold);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-top: 2px;
-            flex-shrink: 0;
-        }
-        .feature-text {
-            font-size: 0.9rem;
-            line-height: 1.5;
-            color: rgba(255, 255, 255, 0.85);
-            font-weight: 300;
-        }
-        .feature-text strong {
-            font-weight: 600;
-            color: var(--primary);
-            display: block;
-            margin-bottom: 2px;
-        }
-
-        .btn-checkout-blocked {
-            width: 100%;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid var(--border-gold);
-            color: var(--gold);
-            padding: 1.2rem;
-            border-radius: 16px;
-            font-size: 1rem;
-            font-weight: 800;
-            letter-spacing: 1px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-            text-transform: uppercase;
-            cursor: not-allowed;
-            pointer-events: none;
-            box-shadow: inset 0 0 12px rgba(255, 215, 0, 0.02);
-            margin-bottom: 2rem;
-        }
-
-        /* =========================================
-           SISTEMA DE CANJEO DE CÓDIGOS
-           ========================================= */
-        .redeem-divider {
-            display: flex;
-            align-items: center;
-            text-align: center;
-            color: var(--text-muted);
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 1.5rem;
-        }
-        .redeem-divider::before, .redeem-divider::after {
-            content: '';
-            flex: 1;
-            border-bottom: 1px solid var(--border-subtle);
-        }
-        .redeem-divider:not(:empty)::before { margin-right: 1em; }
-        .redeem-divider:not(:empty)::after { margin-left: 1em; }
-
-        .redeem-box {
-            display: flex;
-            gap: 10px;
             flex-wrap: wrap;
         }
-        
-        .redeem-input {
-            flex: 1;
-            min-width: 200px;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid var(--border-subtle);
-            color: white;
-            padding: 1.2rem;
-            border-radius: 12px;
-            font-size: 1rem;
-            font-family: monospace;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            outline: none;
-            transition: var(--transition);
-        }
-        .redeem-input:focus {
-            border-color: var(--gold);
-            background: rgba(255, 215, 0, 0.05);
+
+        .pricing-card {
+            background: var(--surface);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 3rem 2.5rem;
+            width: 100%;
+            max-width: 380px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+            opacity: 0;
+            transform: translateY(20px);
+            position: relative;
+            overflow: hidden;
         }
 
-        .btn-redeem {
-            background: var(--gold-gradient);
-            color: #000;
-            border: none;
-            padding: 0 2rem;
-            border-radius: 12px;
+        .pricing-card.featured {
+            border-color: var(--plus-gold);
+            animation: slideUp 0.6s var(--transition) 0.2s forwards;
+        }
+
+        .pricing-card.standard {
+            animation: slideUp 0.6s var(--transition) 0.4s forwards;
+        }
+
+        .badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(255, 215, 0, 0.1);
+            color: var(--plus-gold);
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .price {
+            font-size: 3rem;
             font-weight: 800;
-            font-size: 0.95rem;
+            margin: 1.5rem 0 0.5rem;
+        }
+
+        .price span {
+            font-size: 1rem;
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+
+        .features {
+            list-style: none;
+            margin: 2rem 0;
+            flex-grow: 1;
+        }
+
+        .features li {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.8rem;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            color: #ccc;
+            line-height: 1.5;
+        }
+
+        .features li i {
+            color: var(--success);
+            flex-shrink: 0;
+            width: 20px;
+            height: 20px;
+        }
+
+        .btn-action {
+            width: 100%;
+            padding: 1rem;
+            background: var(--primary);
+            color: var(--bg-color);
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1rem;
             cursor: pointer;
-            transition: var(--transition);
+            transition: all 0.3s ease;
+            text-decoration: none;
+            text-align: center;
+        }
+
+        .btn-action.gold {
+            background: var(--plus-gold);
+        }
+
+        .btn-action:hover {
+            transform: scale(0.98);
+            opacity: 0.9;
+        }
+
+        .terms-box {
+            max-width: 800px;
+            margin-top: 4rem;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 16px;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+            animation: slideUp 0.6s var(--transition) 0.6s forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .terms-box h4 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
             display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-        .btn-redeem:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(255, 215, 0, 0.2);
-        }
-        .btn-redeem:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
+            gap: 0.5rem;
         }
 
-        /* Toasts */
-        #toast-container { position: fixed; bottom: 40px; right: 40px; z-index: 20000; display: flex; flex-direction: column; gap: 15px; }
-        .toast {
-            background: rgba(15, 15, 15, 0.95); backdrop-filter: blur(10px); border: 1px solid var(--border-subtle);
-            color: white; padding: 1.2rem 2rem; border-radius: 18px; display: flex; align-items: center; gap: 15px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5); animation: slideIn 0.5s var(--transition) forwards; font-size: 0.95rem;
-        }
-        .toast.info { border-color: var(--gold); }
-
-        /* =========================================
-           FOOTER
-           ========================================= */
-        footer {
-            text-align: center;
-            padding: 2.5rem;
-            border-top: 1px solid var(--border-subtle);
-            font-size: 0.8rem;
-            color: rgba(255,255,255,0.25);
-            background: #070707;
-            width: 100%;
+        @keyframes slideUp {
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        @keyframes fadeInDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes scaleUp { from { opacity: 0; transform: scale(0.96); } to { opacity: 1; transform: scale(1); } }
-        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-        @keyframes spin { 100% { transform: rotate(360deg); } }
-
-        /* RESPONSIVE */
         @media (max-width: 768px) {
-            .subscription-card { padding: 2.5rem 2rem; }
-            .plan-features-block { grid-template-columns: 1fr; gap: 1.2rem; }
-            .redeem-box { flex-direction: column; }
-            .btn-redeem { padding: 1.2rem; }
-            #toast-container { bottom: 20px; right: 20px; left: 20px; }
-        }
-        @media (max-width: 480px) {
-            .subscription-card { padding: 2.5rem 1.5rem; }
-            .premium-price { font-size: 3.8rem; }
+            .pricing-container {
+                flex-direction: column;
+                align-items: center;
+            }
         }
     </style>
 </head>
 <body>
 
-    <nav>
-        <a href="panel.html" class="btn-back">
-            <i data-lucide="arrow-left" style="width: 16px;"></i> Panel
-        </a>
-        <div class="user-status" id="user-status">Validando sesión...</div>
-    </nav>
-
-    <div class="checkout-container">
-        
-        <header class="checkout-header">
-            <h1>Eleva tu <span>pase</span></h1>
-            <p>Accede de forma exclusiva a los privilegios de la élite viajera.</p>
-        </header>
-
-        <section class="subscription-card">
-            
-            <div class="plan-badge-wrapper">
-                <img src="interrahubplus.png" alt="Interra-hub PLUS" class="plus-logo-img" onerror="this.outerHTML='<span style=\'font-weight:800; font-size:1.3rem;\'>Interra-hub <span style=\'color:var(--gold);\'>PLUS</span></span>'">
-                <span class="badge-vip">Pase VIP</span>
-            </div>
-
-            <div class="price-wrapper">
-                <div class="premium-price">--,--€<span class="period">/mes</span></div>
-            </div>
-
-            <div class="plan-features-block">
-                <div class="feature-row">
-                    <div class="feature-icon-wrapper"><i data-lucide="infinity" style="width: 20px; height: 20px;"></i></div>
-                    <div class="feature-text"><strong>Aventuras ilimitadas</strong> Diseña e indexa todas las rutas en grupo que necesites sin bloqueos.</div>
-                </div>
-                <div class="feature-row">
-                    <div class="feature-icon-wrapper"><i data-lucide="zap-off" style="width: 20px; height: 20px;"></i></div>
-                    <div class="feature-text"><strong>Experiencia sin anuncios</strong> Navegación fluida y pura a lo largo de todo tu itinerario.</div>
-                </div>
-                <div class="feature-row">
-                    <div class="feature-icon-wrapper"><i data-lucide="ticket" style="width: 20px; height: 20px;"></i></div>
-                    <div class="feature-text"><strong>Tarifas preferentes</strong> Acceso exclusivo a pases reducidos para museos y ocio nocturno.</div>
-                </div>
-                <div class="feature-row">
-                    <div class="feature-icon-wrapper"><i data-lucide="gift" style="width: 20px; height: 20px;"></i></div>
-                    <div class="feature-text"><strong>Sorteos automáticos</strong> Participación en pases de tren y estancias de hostales de Europa.</div>
-                </div>
-            </div>
-
-            <button type="button" class="btn-checkout-blocked" aria-disabled="true" disabled>
-                <i data-lucide="lock" style="width: 18px; height: 18px;"></i>
-                Pasarela de pago Próximamente
-            </button>
-
-            <div id="redeem-container">
-                <div class="redeem-divider">O canjea tu código de acceso PLUS</div>
-                <form id="redeem-form" class="redeem-box">
-                    <input type="text" id="promo-code" class="redeem-input" placeholder="Ej: INTERRA-VIP-2026" required autocomplete="off" spellcheck="false">
-                    <button type="submit" id="btn-redeem" class="btn-redeem">
-                        <i data-lucide="key" style="width: 18px;"></i> Canjear
-                    </button>
-                </form>
-            </div>
-
-            <div id="active-premium-msg" style="display: none; text-align: center; padding: 2rem 0; color: var(--gold);">
-                <i data-lucide="crown" style="width: 48px; height: 48px; margin-bottom: 1rem;"></i>
-                <h3 style="font-size: 1.5rem; font-weight: 800; margin-bottom: 0.5rem;">¡Ya eres PLUS!</h3>
-                <p id="expiration-text" style="color: var(--text-muted); font-size: 0.95rem;">Estás disfrutando de todos los beneficios premium.</p>
-            </div>
-
-        </section>
-
+    <div class="header">
+        <div class="brand-logo">Interra-hub<span class="dot">.</span><span class="plus">PLUS</span></div>
+        <p>Desbloquea el potencial completo de tus viajes. Únete a la experiencia premium y planifica sin límites.</p>
     </div>
 
-    <div id="toast-container"></div>
+    <div class="pricing-container">
+        <!-- PLAN MENSUAL -->
+        <div class="pricing-card standard">
+            <h3>Mensual</h3>
+            <div class="price">0,75 €<span>/mes</span></div>
+            <p style="color: var(--text-muted); font-size: 0.85rem;">Suscripción recurrente, cancela cuando quieras.</p>
+            
+            <ul class="features">
+                <li><i data-lucide="check-circle-2"></i> Creación de viajes ilimitados.</li>
+                <li><i data-lucide="check-circle-2"></i> Navegación fluida y 100% sin anuncios.</li>
+                <li><i data-lucide="check-circle-2"></i> Acceso a tarifas reducidas en eventos.</li>
+                <li><i data-lucide="check-circle-2"></i> Participación automática en sorteos.</li>
+            </ul>
 
-    <footer>
-        © 2026 Interra-hub · Desarrollado por <strong>Pipa Studio</strong>
-    </footer>
+            <a href="#" id="btn-mensual" class="btn-action">Elegir Mensual</a>
+        </div>
+
+        <!-- PLAN PERMANENTE -->
+        <div class="pricing-card featured">
+            <div class="badge">MEJOR VALOR</div>
+            <h3>Permanente</h3>
+            <div class="price">5,90 €<span>/pago único</span></div>
+            <p style="color: var(--text-muted); font-size: 0.85rem;">Paga una vez, disfruta para siempre.</p>
+            
+            <ul class="features">
+                <li><i data-lucide="check-circle-2"></i> <strong>Todas las ventajas del plan mensual.</strong></li>
+                <li><i data-lucide="check-circle-2"></i> Sin cuotas recurrentes. Ahorra mes a mes.</li>
+                <li><i data-lucide="check-circle-2"></i> Licencia de por vida en la plataforma.</li>
+                <li><i data-lucide="check-circle-2"></i> Soporte prioritario.</li>
+            </ul>
+
+            <a href="#" id="btn-permanente" class="btn-action gold">Obtener Licencia Permanente</a>
+        </div>
+    </div>
+
+    <div class="terms-box">
+        <h4><i data-lucide="shield-check" style="width: 16px; height: 16px;"></i> Activación Automática y Segura</h4>
+        <p>Al realizar la compra, aceptas los términos y condiciones de la plataforma. La activación de tu cuenta PLUS se realizará de forma <strong>completamente automática e instantánea</strong> en tu perfil una vez el pago sea procesado y verificado por Stripe de forma segura. Puedes gestionar tus métodos de pago en cualquier momento desde tu panel.</p>
+    </div>
 
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc, collection, query, where, getDocs, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+        import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+        // Importamos la instancia de autenticación desde tu archivo de configuración existente
+        import { auth } from "./firebase-config.js";
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyDRkUJnDLzknFz3KOnPEm4UFsgf6R4z1Uk",
-            authDomain: "interra26-22ecd.firebaseapp.com",
-            projectId: "interra26-22ecd",
-            storageBucket: "interra26-22ecd.firebasestorage.app",
-            messagingSenderId: "960505222050",
-            appId: "1:960505222050:web:a9943c6fec9532141f98fb"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-
-        let currentUser = null;
-
+        // Inicializar iconos de la UI
         lucide.createIcons();
 
-        // ── TOASTS ──
-        function showToast(message, type = 'success') {
-            const container = document.getElementById('toast-container');
-            const toast = document.createElement('div');
-            toast.className = `toast ${type}`;
-            const icon = type === 'success' ? 'check-circle' : (type === 'error' ? 'alert-triangle' : 'info');
-            const color = type === 'success' ? 'var(--success)' : (type === 'error' ? 'var(--accent)' : 'var(--gold)');
-            toast.innerHTML = `<i data-lucide="${icon}" style="color: ${color}"></i> <span>${message}</span>`;
-            container.appendChild(toast);
-            lucide.createIcons();
-            setTimeout(() => {
-                toast.style.animation = 'slideIn 0.5s reverse forwards';
-                setTimeout(() => toast.remove(), 500);
-            }, 5000);
-        }
+        // Enlaces de pago de Stripe proporcionados
+        const stripeLinkMensual = "https://buy.stripe.com/8x2eVde3i0sU48QanE6Vq01";
+        const stripeLinkPermanente = "https://buy.stripe.com/5kQ5kD3oE0sUfRy53k6Vq00";
 
-        // ── PROTECCIÓN, ESTADO DE SESIÓN Y CADUCIDAD ──
-        onAuthStateChanged(auth, async (user) => {
-            const statusEl = document.getElementById('user-status');
-            
-            if (user) {
-                currentUser = user;
-                statusEl.innerHTML = `<i data-lucide="user" style="width: 14px;"></i> ${user.email}`;
-                statusEl.style.cursor = 'default';
-                statusEl.style.color = 'var(--text-muted)';
-                statusEl.onclick = null;
-                
-                try {
-                    const userRef = doc(db, "usuarios", user.uid);
-                    const userSnap = await getDoc(userRef);
-                    
-                    if (userSnap.exists()) {
-                        const userData = userSnap.data();
-                        
-                        // Si el usuario tiene plan PLUS, comprobamos si ha caducado
-                        if (userData.plan === 'PLUS') {
-                            if (userData.plusExpiration) {
-                                const expDate = new Date(userData.plusExpiration);
-                                const now = new Date();
-                                
-                                // Si la fecha actual supera a la fecha de caducidad
-                                if (now > expDate) {
-                                    // REBAJAMOS LA CUENTA AUTOMÁTICAMENTE
-                                    await updateDoc(userRef, {
-                                        plan: 'FREE',
-                                        plusExpiration: null
-                                    });
-                                    showToast("Tu suscripción PLUS ha expirado. Vuelve a renovarla.", "info");
-                                } else {
-                                    // Si no ha caducado, mostramos que es PLUS y calculamos los días que le quedan
-                                    const diffTime = Math.abs(expDate - now);
-                                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
-                                    
-                                    document.getElementById('redeem-container').style.display = 'none';
-                                    document.getElementById('active-premium-msg').style.display = 'block';
-                                    document.getElementById('expiration-text').innerText = `Estás disfrutando de todos los beneficios premium. Te quedan ${diffDays} días.`;
-                                }
-                            } else {
-                                // Caso especial: Es PLUS pero no tiene fecha de caducidad (Plan de por vida)
-                                document.getElementById('redeem-container').style.display = 'none';
-                                document.getElementById('active-premium-msg').style.display = 'block';
-                                document.getElementById('expiration-text').innerText = `Estás disfrutando de un plan PLUS vitalicio.`;
-                            }
-                        }
-                    }
-                } catch(e) {
-                    console.error("Error leyendo datos del usuario", e);
-                }
-            } else {
-                currentUser = null;
-                // Ajustamos la UI para visitantes no registrados
-                statusEl.innerHTML = `<i data-lucide="log-in" style="width: 14px;"></i> Iniciar sesión`;
-                statusEl.style.cursor = 'pointer';
-                statusEl.style.color = 'var(--gold)';
-                statusEl.onclick = () => window.location.href = 'registro.html';
-                
-                document.getElementById('redeem-container').style.display = 'block';
-                document.getElementById('active-premium-msg').style.display = 'none';
-            }
-            lucide.createIcons();
-        });
+        const btnMensual = document.getElementById('btn-mensual');
+        const btnPermanente = document.getElementById('btn-permanente');
 
-        // ── LÓGICA DE VALIDACIÓN Y CANJEO EN FIRESTORE CLIENT-SIDE ──
-        document.getElementById('redeem-form').addEventListener('submit', async (e) => {
+        // Función auxiliar para forzar el inicio de sesión
+        const handleUnauthenticatedClick = (e) => {
             e.preventDefault();
+            alert("Debes iniciar sesión primero para poder adquirir la suscripción PLUS.");
+            window.location.href = "registro.html";
+        };
 
-            // Validación crucial: Solo usuarios logueados pueden canjear
-            if (!currentUser) {
-                showToast("Debes iniciar sesión o registrarte para canjear un código.", "error");
-                setTimeout(() => {
-                    window.location.href = 'registro.html';
-                }, 2500);
-                return;
-            }
-            
-            const btn = document.getElementById('btn-redeem');
-            const input = document.getElementById('promo-code');
-            const codeValue = input.value.trim().toUpperCase();
-
-            if (!codeValue) return;
-
-            btn.disabled = true;
-            btn.innerHTML = `<i data-lucide="loader-2" style="width: 18px; animation: spin 2s linear infinite;"></i> Procesando...`;
-            lucide.createIcons();
-
-            try {
-                // 1. Buscar el código en la colección promo_codes
-                const codesRef = collection(db, 'promo_codes');
-                const q = query(codesRef, where('code', '==', codeValue));
-                const querySnapshot = await getDocs(q);
-
-                if (querySnapshot.empty) {
-                    throw new Error("Código inválido o inexistente.");
-                }
-
-                const codeDoc = querySnapshot.docs[0];
-                const codeData = codeDoc.data();
-
-                // 2. Verificar si ya fue usado o está inactivo
-                if (codeData.used === true) {
-                    throw new Error("Este código ya ha sido utilizado.");
-                }
+        // Verificación del estado del usuario
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // Inyectamos el UID para que Stripe lo devuelva en el webhook (client_reference_id)
+                // Y pasamos el email para autocompletar la pasarela de pago y mejorar la conversión
+                const queryParams = `?client_reference_id=${user.uid}&prefilled_email=${encodeURIComponent(user.email)}`;
                 
-                if (codeData.active === false) {
-                    throw new Error("Este código ya no se encuentra activo.");
-                }
-
-                // 3. Calcular la fecha de expiración basada en la duración del código
-                const durationDays = codeData.duration || 30; 
-                const expirationDate = new Date();
-                expirationDate.setDate(expirationDate.getDate() + durationDays);
-
-                // 4. Actualizar el perfil del usuario para otorgar ventajas PLUS
-                const userRef = doc(db, 'usuarios', currentUser.uid);
-                await updateDoc(userRef, {
-                    plan: 'PLUS',
-                    plusExpiration: expirationDate.toISOString(),
-                    premiumSince: new Date().toISOString()
-                });
-
-                // 5. Invalidar el código promocional en la base de datos
-                await updateDoc(doc(db, 'promo_codes', codeDoc.id), {
-                    used: true,
-                    usedBy: currentUser.uid,
-                    usedAt: new Date().toISOString()
-                });
-
-                // Éxito en todo el proceso
-                showToast(`¡Código canjeado con éxito! Tienes PLUS durante ${durationDays} días.`, "success");
+                btnMensual.href = stripeLinkMensual + queryParams;
+                btnPermanente.href = stripeLinkPermanente + queryParams;
                 
-                // Transición UI
-                document.getElementById('redeem-container').style.display = 'none';
-                document.getElementById('expiration-text').innerText = `Estás disfrutando de todos los beneficios premium. Te quedan ${durationDays} días.`;
-                document.getElementById('active-premium-msg').style.display = 'block';
-                
-                // Pequeña espera y redirigimos al panel
-                setTimeout(() => {
-                    window.location.href = 'panel.html';
-                }, 2500);
-
-            } catch (error) {
-                console.error("Error validando el código:", error);
-                showToast(error.message || "Ocurrió un error al procesar tu código.", "error");
-                btn.disabled = false;
-                btn.innerHTML = `<i data-lucide="key" style="width: 18px;"></i> Canjear`;
-                lucide.createIcons();
+                // Eliminamos los listeners de bloqueo si el usuario inició sesión después de cargar
+                btnMensual.removeEventListener('click', handleUnauthenticatedClick);
+                btnPermanente.removeEventListener('click', handleUnauthenticatedClick);
+            } else {
+                // Si no hay sesión activa, bloqueamos el acceso al pago
+                btnMensual.addEventListener('click', handleUnauthenticatedClick);
+                btnPermanente.addEventListener('click', handleUnauthenticatedClick);
             }
         });
     </script>
