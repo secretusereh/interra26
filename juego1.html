@@ -119,7 +119,7 @@
     </div>
 
     <nav>
-        <button class="btn-nav" onclick="window.location.href='viaje.html'">
+        <button class="btn-nav" onclick="volverAlViaje()">
             <i data-lucide="arrow-left"></i> Volver al viaje
         </button>
         <div class="logo">
@@ -204,48 +204,43 @@
         import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
         // ==========================================
-        // 🔧 BASE DE DATOS DE LUGARES (TU ZONA DE EDICIÓN)
+        // CARGA DINÁMICA DE BASE DE DATOS (CSV)
         // ==========================================
-        // Sube tus fotos a Firebase Storage o Imgur y pega la URL en 'img'.
-        // Añade tantas como quieras. El juego es aleatorio y no las repetirá en 30 días.
-        const PLACES_DATABASE = [
-            {
-                id: "roma_coliseo",
-                city: "Roma",
-                img: "https://images.unsplash.com/photo-1552832230-c0197dd311b5?auto=format&fit=crop&w=800&q=80",
-                hints: ["Capital con un antiguo imperio.", "Famosa por su pasta y pizza.", "En su interior alberga un país independiente.", "El edificio de la foto es el Coliseo."]
-            },
-            {
-                id: "paris_torre",
-                city: "París",
-                img: "https://images.unsplash.com/photo-1502602881469-4478ae90aa15?auto=format&fit=crop&w=800&q=80",
-                hints: ["Conocida como la ciudad de la luz.", "El río Sena la atraviesa.", "Allí está el museo del Louvre.", "La estructura de hierro es inconfundible."]
-            },
-            {
-                id: "berlin_muro",
-                city: "Berlín",
-                img: "https://images.unsplash.com/photo-1599946347371-68eb71b16afc?auto=format&fit=crop&w=800&q=80",
-                hints: ["Capital de una potencia europea central.", "Estuvo dividida por un muro durante la Guerra Fría.", "Famosa por la Puerta de Brandeburgo.", "La ciudad de la cerveza y el currywurst."]
-            },
-            {
-                id: "praga_reloj",
-                city: "Praga",
-                img: "https://images.unsplash.com/photo-1541889025178-5a4ce2bd451d?auto=format&fit=crop&w=800&q=80",
-                hints: ["Conocida como la ciudad de las cien cúpulas.", "Su país nació tras la división de Checoslovaquia.", "Atravesada por el río Moldava.", "Famosa por su Reloj Astronómico."]
-            },
-            {
-                id: "amsterdam_canales",
-                city: "Ámsterdam",
-                img: "https://images.unsplash.com/photo-1512470876302-972faa2aa9a4?auto=format&fit=crop&w=800&q=80",
-                hints: ["Capital de los Países Bajos.", "Hay más bicicletas que personas.", "Famosa por su Barrio Rojo.", "Llena de canales Patrimonio de la Humanidad."]
-            },
-            {
-                id: "budapest_parlamento",
-                city: "Budapest",
-                img: "https://images.unsplash.com/photo-1549877452-9c387254fbf5?auto=format&fit=crop&w=800&q=80",
-                hints: ["Antigua co-capital del Imperio Austrohúngaro.", "Famosa por sus baños termales.", "El río Danubio la divide en dos partes.", "El edificio de la foto es su impresionante Parlamento."]
+        let PLACES_DATABASE = [];
+
+        async function loadPlacesFromCSV() {
+            try {
+                // El timestamp evita que el navegador cachee el CSV viejo si haces cambios
+                const response = await fetch('juego1.csv?t=' + new Date().getTime());
+                if (!response.ok) throw new Error("No se pudo leer juego1.csv");
+                
+                const csvText = await response.text();
+                const lines = csvText.split(/\r?\n/);
+                
+                // Empezamos en i=1 para saltarnos la cabecera (id;city;img;hint1...)
+                for (let i = 1; i < lines.length; i++) {
+                    const line = lines[i].trim();
+                    if (!line) continue;
+                    
+                    // Separamos por punto y coma
+                    const cols = line.split(';');
+                    if (cols.length >= 7) {
+                        PLACES_DATABASE.push({
+                            id: cols[0].trim(),
+                            city: cols[1].trim(),
+                            img: cols[2].trim(),
+                            hints: [cols[3].trim(), cols[4].trim(), cols[5].trim(), cols[6].trim()]
+                        });
+                    }
+                }
+                
+                if(PLACES_DATABASE.length === 0) throw new Error("El CSV está vacío o mal formateado");
+
+            } catch (error) {
+                console.error("Error al cargar el CSV:", error);
+                showToast("Error: No se ha podido cargar juego1.csv. Revisa la consola.", "error");
             }
-        ];
+        }
 
         // Configuración Firebase (Reutilizada de tu entorno)
         const firebaseConfig = {
@@ -273,8 +268,28 @@
         let totalScore = 0;
 
         // ==========================================
-        // UTILIDADES
+        // UTILIDADES Y NAVEGACIÓN
         // ==========================================
+        
+        // Lógica súper prime para el botón de Volver
+        window.volverAlViaje = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const tripId = urlParams.get('id');
+            
+            if (tripId) {
+                // Si la URL tiene el ID del viaje, vamos directamente ahí
+                window.location.href = `viaje.html?id=${tripId}`;
+            } else {
+                // Si no tiene el ID (porque entraste desde un link estático), volvemos atrás en el historial del navegador
+                if (window.history.length > 1) {
+                    window.history.back();
+                } else {
+                    // Fallback extremo por si se abrió en pestaña nueva
+                    window.location.href = 'panel.html';
+                }
+            }
+        }
+
         function showScreen(screenId) {
             document.querySelectorAll('.screen').forEach(el => el.classList.remove('active'));
             document.getElementById(screenId).classList.add('active');
@@ -314,7 +329,8 @@
             if (!user) { window.location.href = 'registro.html'; return; }
             currentUser = user;
             await loadUserData();
-            checkGameState();
+            await loadPlacesFromCSV(); // Primero cargamos el CSV
+            checkGameState();          // Luego arrancamos la lógica del juego
         });
 
         async function loadUserData() {
@@ -335,6 +351,11 @@
             if (now.getHours() < 11) {
                 // Modo espera
                 showScreen('screen-wait');
+                return;
+            }
+            
+            if(PLACES_DATABASE.length === 0) {
+                showToast("Falta archivo CSV o está vacío", "error");
                 return;
             }
 
@@ -359,7 +380,7 @@
             // 1. Filtrar lugares vistos en los últimos 30 días
             const thirtyDaysAgo = Date.now() - (30 * 24 * 60 * 60 * 1000);
             
-            // Limpiar historial antiguo de Firebase (opcional, pero buena práctica en memoria local)
+            // Limpiar historial antiguo
             const recentHistory = userData.history.filter(record => record.timestamp > thirtyDaysAgo);
             const seenIds = recentHistory.map(r => r.id);
 
@@ -372,7 +393,7 @@
                 availablePlaces = [...PLACES_DATABASE]; 
             }
 
-            // 3. Seleccionar 5 al azar
+            // 3. Seleccionar 5 al azar (Pseudo-aleatorio)
             availablePlaces.sort(() => 0.5 - Math.random());
             dailyRounds = availablePlaces.slice(0, 5);
             
