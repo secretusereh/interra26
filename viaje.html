@@ -655,13 +655,13 @@
             </div>
 
             <div class="games-grid-full">
-                <div class="game-card">
+                <div class="game-card locked">
                     <div class="game-icon"><i data-lucide="image"></i></div>
                     <div class="game-info">
                         <h4>Generador de recuerdos</h4>
-                        <p>Convierte tu viaje en recuerdos únicos.</p>
+                        <p>Estamos preparando algo muy, muy top. ¡Próximamente disponible!</p>
                     </div>
-                    <a href="#" id="btn-generador-recuerdos" class="btn-play">GENERAR</a>
+                    <span class="badge-locked"><i data-lucide="lock"></i> PRÓXIMAMENTE</span>
                 </div>
             </div>
         </div>
@@ -998,13 +998,15 @@
         const urlParams = new URLSearchParams(window.location.search);
         const tripId = urlParams.get('id');
         
-        // Habilitar el enlace del generador de recuerdos pasando el ID del viaje como metadato de URL
+        // Funcionalidad de Generador de Recuerdos bloqueada temporalmente
+        /*
         if (tripId) {
             const btnRecuerdos = document.getElementById('btn-generador-recuerdos');
             if (btnRecuerdos) {
                 btnRecuerdos.href = `recuerdoviaje.html?id=${tripId}`;
             }
         }
+        */
 
         let currentTripData = null;
         let currentUserRole = null;
