@@ -613,10 +613,9 @@
     <main id="tab-extra" class="tab-content">
         <div class="user-section">
             <h3><i data-lucide="cloud-sun"></i> Meteorología Esperada</h3>
-            <div style="background: rgba(255, 204, 0, 0.05); border: 1px dashed #ffcc00; border-radius: 12px; padding: 2rem 1.5rem; text-align: center; margin-top: 1rem;">
-                <i data-lucide="wrench" style="width: 32px; height: 32px; color: #ffcc00; margin-bottom: 10px;"></i>
-                <h4 style="color: #ffcc00; margin-bottom: 8px; font-size: 1.1rem;">Sección en Mantenimiento</h4>
-                <p style="color: var(--text-muted); font-size: 0.9rem;">Estamos reestructurando los algoritmos satelitales de pronóstico del tiempo para ofrecerte mucha más precisión. Volverá muy pronto.</p>
+            <p style="color: var(--text-muted); font-size: 0.9rem;">Pronóstico real para los próximos 10 días basado en tus alojamientos.</p>
+            <div id="weather-container" style="margin-top: 1.5rem;">
+                <p style="color: var(--text-muted); font-size: 0.9rem;"><i data-lucide="loader-2" style="animation: spin 2s linear infinite; width:16px;"></i> Analizando destinos...</p>
             </div>
         </div>
 
@@ -671,9 +670,9 @@
     <main id="tab-usuarios" class="tab-content">
         <button class="accordion-header" onclick="toggleAccordion('acc-usuarios', 'icon-usuarios')">
             <h3><i data-lucide="users"></i> Usuarios y Acceso</h3>
-            <i data-lucide="chevron-down" id="icon-usuarios" style="transition: transform 0.3s; transform: rotate(180deg);"></i>
+            <i data-lucide="chevron-down" id="icon-usuarios" style="transition: transform 0.3s;"></i>
         </button>
-        <div class="accordion-content open" id="acc-usuarios">
+        <div class="accordion-content" id="acc-usuarios">
             <div class="user-section" style="margin-bottom: 2rem; text-align: center; border-color: var(--border-subtle);">
                 <h3 style="justify-content: center;"><i data-lucide="key"></i> Código de Invitación</h3>
                 <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem;">Comparte este código para que tus amigos puedan enviar una solicitud para unirse a esta aventura.</p>
@@ -1017,6 +1016,10 @@
         let mapInitialized = false;
         const geocodeCache = {}; 
         
+        // Caches para la Meteorología
+        let weatherCityCache = {};
+        window.currentWeatherMap = {}; // Expuesto para el onchange del select
+        
         // Variables de Control Interno de Modal
         let selectedDateKey = null;
         let currentModalType = 'transport';
@@ -1220,7 +1223,7 @@
                 renderHeader();
                 renderItinerary();
                 renderUsers();
-                // Bloqueado temporalmente -> renderWeather();
+                renderWeather();
                 renderFinance();
 
                 document.getElementById('page-loader').style.opacity = '0';
@@ -1312,9 +1315,187 @@
             document.getElementById('trip-dates').innerText = `Del ${currentTripData.fechaInicio} al ${currentTripData.fechaFin}`;
         }
 
-        // Función bloqueada por mantenimiento, dejamos el esqueleto pero con retorno vacío
+        // ── SISTEMA DE METEOROLOGÍA INTELIGENTE ──
+        
+        async function getCleanCity(lat, lon) {
+            const key = `${lat.toFixed(3)},${lon.toFixed(3)}`;
+            if (weatherCityCache[key]) return weatherCityCache[key];
+            try {
+                const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&zoom=10&addressdetails=1`);
+                const data = await res.json();
+                let city = data.address?.city || data.address?.town || data.address?.municipality || data.address?.village || data.name;
+                
+                if(city) {
+                    weatherCityCache[key] = city;
+                    return city;
+                }
+            } catch(e) {}
+            return "Destino desconocido";
+        }
+
         async function renderWeather() {
-            return;
+            const wCont = document.getElementById('weather-container');
+            
+            if (!currentTripData || !currentTripData.eventos || currentTripData.eventos.length === 0) {
+                wCont.innerHTML = `<p style="color:var(--text-muted); font-size: 0.9rem;">Añade alojamientos a tu itinerario para ver la meteorología real de tus destinos.</p>`;
+                return;
+            }
+
+            wCont.innerHTML = `<p style="color:var(--text-muted); font-size: 0.9rem;"><i data-lucide="loader-2" style="animation: spin 2s linear infinite; width:16px;"></i> Analizando destinos y calculando meteorología...</p>`;
+            lucide.createIcons();
+
+            let alojamientos = currentTripData.eventos.filter(ev => ev.type === 'hotel');
+            if(alojamientos.length === 0) {
+                wCont.innerHTML = `<p style="color:var(--text-muted); font-size: 0.9rem;">No se han encontrado alojamientos en el itinerario. Añade dónde dormirás para calcular tu ruta meteorológica.</p>`;
+                return;
+            }
+
+            let destinationMap = {}; // Deduplicador maestro { "París": { lat, lon, dates: [] } }
+
+            for (const ev of alojamientos) {
+                let lat = ev.lat;
+                let lon = ev.lon;
+                
+                if (!lat || !lon) {
+                    const coords = await geocodeAddress(ev.title);
+                    if (coords) { lat = coords[0]; lon = coords[1]; }
+                }
+
+                if (lat && lon) {
+                    let cleanCity = await getCleanCity(lat, lon);
+                    if (cleanCity && cleanCity !== "Destino desconocido") {
+                        if (!destinationMap[cleanCity]) {
+                            destinationMap[cleanCity] = { lat: lat, lon: lon, dates: [] };
+                        }
+                        destinationMap[cleanCity].dates.push(ev.dateKey);
+                    }
+                }
+            }
+
+            const cities = Object.keys(destinationMap);
+            if (cities.length === 0) {
+                wCont.innerHTML = `<p style="color:var(--accent); font-size: 0.9rem;">No se pudieron identificar ciudades reconocibles para los alojamientos proporcionados.</p>`;
+                return;
+            }
+
+            // Seleccionar inteligentemente la ciudad por defecto
+            let today = new Date().toISOString().split('T')[0];
+            let defaultCity = cities[0];
+            let foundToday = false;
+
+            // Caso 1: Estás allí hoy
+            for (const city of cities) {
+                if (destinationMap[city].dates.includes(today)) {
+                    defaultCity = city;
+                    foundToday = true;
+                    break;
+                }
+            }
+
+            // Caso 2 & 3: Busca la fecha más cercana en el futuro, o en su defecto la más cercana del pasado
+            if (!foundToday) {
+                let closestCity = cities[0];
+                let bestDiff = Infinity;
+                
+                for (const city of cities) {
+                    let cityDates = destinationMap[city].dates.sort();
+                    let firstDate = cityDates[0];
+                    let diff = new Date(firstDate) - new Date(today);
+                    
+                    if (diff > 0 && diff < bestDiff) {
+                        bestDiff = diff;
+                        closestCity = city;
+                    }
+                }
+                
+                if (bestDiff !== Infinity) {
+                    defaultCity = closestCity;
+                } else {
+                    let lastCity = cities[0];
+                    let bestPastDiff = -Infinity;
+                    for (const city of cities) {
+                        let cityDates = destinationMap[city].dates.sort();
+                        let lastDate = cityDates[cityDates.length - 1];
+                        let diff = new Date(lastDate) - new Date(today);
+                        if (diff <= 0 && diff > bestPastDiff) {
+                            bestPastDiff = diff;
+                            lastCity = city;
+                        }
+                    }
+                    defaultCity = lastCity;
+                }
+            }
+
+            // Guardamos el mapa a nivel global para que funcione en el onchange del select
+            window.currentWeatherMap = destinationMap;
+
+            let selectHtml = `<select id="weather-city-select" class="finance-select" style="margin-bottom: 1rem; width: 100%; font-weight: 600;" onchange="loadForecastFromMap(this.value)">`;
+            cities.forEach(city => {
+                selectHtml += `<option value="${city}" ${city === defaultCity ? 'selected' : ''}>${city}</option>`;
+            });
+            selectHtml += `</select><div id="weather-forecast-display"></div>`;
+            
+            wCont.innerHTML = selectHtml;
+            loadForecastFromMap(defaultCity);
+        }
+
+        window.loadForecastFromMap = async function(cityName) {
+            const wCont = document.getElementById('weather-forecast-display');
+            wCont.innerHTML = '<p style="color:var(--text-muted); font-size: 0.9rem;"><i data-lucide="loader-2" style="animation: spin 2s linear infinite; width:16px;"></i> Consultando datos satelitales (Open-Meteo)...</p>';
+            lucide.createIcons();
+
+            const dest = window.currentWeatherMap[cityName];
+            if(!dest) return;
+
+            try {
+                // Previsión de 10 días, con temperatura min, max y probabilidad de precipitación
+                const resClima = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${dest.lat}&longitude=${dest.lon}&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max,weathercode&timezone=auto&forecast_days=10`);
+                const dataClima = await resClima.json();
+
+                let htmlClima = `
+                    <div style="width: 100%; margin-top: 1rem;">
+                        <div style="display: flex; gap: 10px; overflow-x: auto; padding-bottom: 15px; scrollbar-width: thin; scrollbar-color: var(--border-subtle) transparent;">
+                `;
+
+                for(let i=0; i<dataClima.daily.time.length; i++) {
+                    const dateObj = new Date(dataClima.daily.time[i]);
+                    const dateStr = dateObj.toLocaleDateString('es-ES', { weekday: 'short', day: 'numeric' });
+                    const maxT = Math.round(dataClima.daily.temperature_2m_max[i]);
+                    const minT = Math.round(dataClima.daily.temperature_2m_min[i]);
+                    const code = dataClima.daily.weathercode[i];
+                    const rainProb = dataClima.daily.precipitation_probability_max[i] || 0;
+
+                    let iconName = 'sun'; let iconColor = '#ffd700';
+                    if(code >= 1 && code <= 3) { iconName = 'cloud-sun'; iconColor='#e0e0e0'; }
+                    if(code >= 45 && code <= 48) { iconName = 'cloud-fog'; iconColor='#b0b0b0'; }
+                    if(code >= 51 && code <= 67) { iconName = 'cloud-rain'; iconColor='#4da6ff'; }
+                    if(code >= 71 && code <= 77) { iconName = 'snowflake'; iconColor='#ffffff'; }
+                    if(code >= 80 && code <= 82) { iconName = 'cloud-rain'; iconColor='#4da6ff'; }
+                    if(code >= 95) { iconName = 'cloud-lightning'; iconColor='#8a2be2'; }
+
+                    const isToday = new Date().toISOString().split('T')[0] === dataClima.daily.time[i];
+                    const bgStyle = isToday ? 'background: rgba(255,77,77,0.1); border-color: rgba(255,77,77,0.3);' : 'background: rgba(255,255,255,0.03); border-color: var(--border-subtle);';
+
+                    htmlClima += `
+                        <div style="min-width: 105px; padding: 1.2rem 0.8rem; border-radius: 12px; text-align: center; border: 1px solid; flex-shrink: 0; transition: 0.3s; ${bgStyle}">
+                            <div style="font-size: 0.85rem; color: var(--text-muted); text-transform: capitalize; margin-bottom: 10px; font-weight: 600;">${isToday ? 'Hoy' : dateStr}</div>
+                            <i data-lucide="${iconName}" style="color: ${iconColor}; width: 32px; height: 32px; margin: 0 auto 10px;"></i>
+                            <div style="display: flex; justify-content: center; gap: 8px; align-items: baseline; margin-bottom: 8px;">
+                                <span style="font-weight: 800; font-size: 1.2rem; color: var(--primary);">${maxT}°</span>
+                                <span style="font-size: 0.9rem; color: var(--text-muted);">${minT}°</span>
+                            </div>
+                            <div style="font-size: 0.75rem; color: var(--accent-blue); display: flex; align-items: center; justify-content: center; gap: 4px;">
+                                <i data-lucide="droplet" style="width: 12px; height: 12px;"></i> ${rainProb}%
+                            </div>
+                        </div>
+                    `;
+                }
+                htmlClima += `</div></div>`;
+                wCont.innerHTML = htmlClima;
+                lucide.createIcons();
+            } catch(e) {
+                wCont.innerHTML = `<p style="color:var(--accent); font-size: 0.9rem;">Error al conectar con el satélite meteorológico.</p>`;
+            }
         }
 
         function renderItinerary() {
