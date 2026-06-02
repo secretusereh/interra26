@@ -311,8 +311,21 @@
         }
 
         /* =========================================
-           TAB USUARIOS Y SOLICITUDES
+           TAB USUARIOS, ACORDEONES Y SOLICITUDES
            ========================================= */
+        .accordion-header {
+            width: 100%; display: flex; justify-content: space-between; align-items: center;
+            background: var(--surface); border: 1px solid var(--border-subtle);
+            padding: 1.5rem; border-radius: 16px; cursor: pointer; color: var(--primary);
+            transition: var(--transition); margin-bottom: 1rem; backdrop-filter: blur(10px);
+        }
+        .accordion-header:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.2); }
+        .accordion-header h3 { margin: 0; display: flex; align-items: center; gap: 10px; font-size: 1.2rem; }
+        .accordion-content {
+            display: none; padding: 0.5rem 0 1.5rem; animation: fadeIn 0.4s ease;
+        }
+        .accordion-content.open { display: block; }
+
         .users-grid { display: grid; grid-template-columns: 1fr; gap: 2rem; }
         @media (min-width: 768px) { .users-grid { grid-template-columns: 1fr 1fr; } }
         
@@ -600,11 +613,13 @@
     <main id="tab-extra" class="tab-content">
         <div class="user-section">
             <h3><i data-lucide="cloud-sun"></i> Meteorología Esperada</h3>
-            <p style="color: var(--text-muted); font-size: 0.9rem;">Pronóstico real para los próximos 10 días.</p>
-            <div id="weather-container" style="margin-top: 1.5rem;">
-                <p style="color: var(--text-muted); font-size: 0.9rem;">Cargando datos meteorológicos...</p>
+            <div style="background: rgba(255, 204, 0, 0.05); border: 1px dashed #ffcc00; border-radius: 12px; padding: 2rem 1.5rem; text-align: center; margin-top: 1rem;">
+                <i data-lucide="wrench" style="width: 32px; height: 32px; color: #ffcc00; margin-bottom: 10px;"></i>
+                <h4 style="color: #ffcc00; margin-bottom: 8px; font-size: 1.1rem;">Sección en Mantenimiento</h4>
+                <p style="color: var(--text-muted); font-size: 0.9rem;">Estamos reestructurando los algoritmos satelitales de pronóstico del tiempo para ofrecerte mucha más precisión. Volverá muy pronto.</p>
             </div>
         </div>
+
         <div class="user-section" style="margin-top: 2rem;">
             <h3><i data-lucide="info"></i> Notas Globales del Viaje</h3>
             <textarea id="global-notes" placeholder="Escribe aquí anotaciones importantes, documentación necesaria o recordatorios..." style="width: 100%; height: 150px; background: rgba(255,255,255,0.02); border: 1px solid var(--border-subtle); border-radius: 12px; padding: 1rem; color: white; margin-top: 1rem; font-family: 'Sora', sans-serif; resize: vertical;"></textarea>
@@ -652,45 +667,59 @@
             </div>
         </div>
     </main>
+
     <main id="tab-usuarios" class="tab-content">
-        <div class="user-section" style="margin-bottom: 2rem; display: none;" id="trip-settings-section">
-            <h3><i data-lucide="settings"></i> Configuración del Viaje</h3>
-            <p style="color: var(--text-muted); font-size: 0.9rem;">Cambia el nombre de la aventura o edita las fechas base del viaje.</p>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1.5rem;">
-                <div class="input-group" style="margin-bottom: 0;">
-                    <label>Nombre del Viaje</label>
-                    <input type="text" id="edit-trip-name" style="width: 100%;">
-                </div>
-                <div class="input-group" style="margin-bottom: 0;">
-                    <label>Fechas del Viaje</label>
-                    <input type="text" id="edit-trip-dates" placeholder="Seleccionar nuevo rango..." readonly style="width: 100%;">
+        <button class="accordion-header" onclick="toggleAccordion('acc-usuarios', 'icon-usuarios')">
+            <h3><i data-lucide="users"></i> Usuarios y Acceso</h3>
+            <i data-lucide="chevron-down" id="icon-usuarios" style="transition: transform 0.3s; transform: rotate(180deg);"></i>
+        </button>
+        <div class="accordion-content open" id="acc-usuarios">
+            <div class="user-section" style="margin-bottom: 2rem; text-align: center; border-color: var(--border-subtle);">
+                <h3 style="justify-content: center;"><i data-lucide="key"></i> Código de Invitación</h3>
+                <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem;">Comparte este código para que tus amigos puedan enviar una solicitud para unirse a esta aventura.</p>
+                <div style="background: rgba(255,255,255,0.03); padding: 1.5rem; border-radius: 16px; border: 1px dashed var(--border-subtle); max-width: 300px; margin: 0 auto;">
+                    <div style="font-size: 2.5rem; font-weight: 800; letter-spacing: 8px; color: var(--primary); margin-bottom: 15px;" id="display-trip-code">-----</div>
+                    <button class="btn-nav btn-export" style="margin: 0 auto; background: rgba(255,255,255,0.05);" onclick="copiarCodigoViaje()">
+                        <i data-lucide="copy" style="width: 16px;"></i> Copiar Código
+                    </button>
                 </div>
             </div>
-            <button class="btn-submit" onclick="saveTripSettings()" id="btn-save-trip-settings" style="margin-top: 1.5rem; width: auto; padding: 0.8rem 1.5rem;">Guardar Cambios</button>
+            <div class="users-grid">
+                <div class="user-section">
+                    <h3><i data-lucide="users"></i> Miembros del Viaje</h3>
+                    <div id="members-list">
+                        <p style="color: var(--text-muted); font-size: 0.9rem;">Cargando miembros...</p>
+                    </div>
+                </div>
+                
+                <div class="user-section" id="admin-requests-panel" style="display: none; border-color: var(--accent-blue);">
+                    <h3 style="color: var(--accent-blue);"><i data-lucide="bell"></i> Solicitudes Pendientes</h3>
+                    <div id="requests-list">
+                        <p style="color: var(--text-muted); font-size: 0.9rem;">No hay solicitudes nuevas.</p>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <div class="user-section" style="margin-bottom: 2rem; text-align: center; border-color: var(--border-subtle);">
-            <h3 style="justify-content: center;"><i data-lucide="key"></i> Código de Invitación</h3>
-            <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem;">Comparte este código para que tus amigos puedan enviar una solicitud para unirse a esta aventura.</p>
-            <div style="background: rgba(255,255,255,0.03); padding: 1.5rem; border-radius: 16px; border: 1px dashed var(--border-subtle); max-width: 300px; margin: 0 auto;">
-                <div style="font-size: 2.5rem; font-weight: 800; letter-spacing: 8px; color: var(--primary); margin-bottom: 15px;" id="display-trip-code">-----</div>
-                <button class="btn-nav btn-export" style="margin: 0 auto; background: rgba(255,255,255,0.05);" onclick="copiarCodigoViaje()">
-                    <i data-lucide="copy" style="width: 16px;"></i> Copiar Código
-                </button>
-            </div>
-        </div>
-        <div class="users-grid">
-            <div class="user-section">
-                <h3><i data-lucide="users"></i> Miembros del Viaje</h3>
-                <div id="members-list">
-                    <p style="color: var(--text-muted); font-size: 0.9rem;">Cargando miembros...</p>
-                </div>
-            </div>
-            
-            <div class="user-section" id="admin-requests-panel" style="display: none; border-color: var(--accent-blue);">
-                <h3 style="color: var(--accent-blue);"><i data-lucide="bell"></i> Solicitudes Pendientes</h3>
-                <div id="requests-list">
-                    <p style="color: var(--text-muted); font-size: 0.9rem;">No hay solicitudes nuevas.</p>
+        <div id="trip-settings-wrapper" style="display: none;">
+            <button class="accordion-header" onclick="toggleAccordion('acc-config', 'icon-config')">
+                <h3><i data-lucide="settings"></i> Configuración del Viaje</h3>
+                <i data-lucide="chevron-down" id="icon-config" style="transition: transform 0.3s;"></i>
+            </button>
+            <div class="accordion-content" id="acc-config">
+                <div class="user-section">
+                    <p style="color: var(--text-muted); font-size: 0.9rem;">Cambia el nombre de la aventura o edita las fechas base del viaje. Esto afectará a todos los miembros.</p>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1.5rem;">
+                        <div class="input-group" style="margin-bottom: 0;">
+                            <label>Nombre del Viaje</label>
+                            <input type="text" id="edit-trip-name" style="width: 100%;">
+                        </div>
+                        <div class="input-group" style="margin-bottom: 0;">
+                            <label>Fechas del Viaje</label>
+                            <input type="text" id="edit-trip-dates" placeholder="Seleccionar nuevo rango..." readonly style="width: 100%;">
+                        </div>
+                    </div>
+                    <button class="btn-submit" onclick="saveTripSettings()" id="btn-save-trip-settings" style="margin-top: 1.5rem; width: auto; padding: 0.8rem 1.5rem;">Guardar Cambios</button>
                 </div>
             </div>
         </div>
@@ -1166,7 +1195,9 @@
                 if (!currentTripData.eventos) currentTripData.eventos = [];
                 if (!currentTripData.gastos) currentTripData.gastos = [];
 
-                document.getElementById('trip-settings-section').style.display = canEdit ? 'block' : 'none';
+                // MOSTRAR ACORDEON DE CONFIGURACIÓN SOLO SI PUEDE EDITAR
+                document.getElementById('trip-settings-wrapper').style.display = canEdit ? 'block' : 'none';
+                
                 document.getElementById('edit-trip-name').value = currentTripData.nombre || '';
                 settingsDatePicker = flatpickr("#edit-trip-dates", { 
                     mode: "range", 
@@ -1189,7 +1220,7 @@
                 renderHeader();
                 renderItinerary();
                 renderUsers();
-                renderWeather();
+                // Bloqueado temporalmente -> renderWeather();
                 renderFinance();
 
                 document.getElementById('page-loader').style.opacity = '0';
@@ -1281,113 +1312,9 @@
             document.getElementById('trip-dates').innerText = `Del ${currentTripData.fechaInicio} al ${currentTripData.fechaFin}`;
         }
 
-        window.loadWeatherForCity = async function(cityName) {
-            const wCont = document.getElementById('weather-forecast-display');
-            wCont.innerHTML = '<p style="color:var(--text-muted); font-size: 0.9rem;">Consultando datos satelitales (Open-Meteo)...</p>';
-
-            let coords = null;
-            try {
-                const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(cityName)}&limit=1&addressdetails=1`);
-                const data = await res.json();
-                if(data.length > 0) {
-                    coords = {lat: data[0].lat, lon: data[0].lon};
-                }
-            } catch(e) { console.error(e); }
-
-            if(!coords) {
-                wCont.innerHTML = `<p style="color:var(--accent); font-size: 0.9rem;">No se pudieron extraer coordenadas exactas para ${cityName}.</p>`;
-                return;
-            }
-
-            try {
-                const resClima = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${coords.lat}&longitude=${coords.lon}&daily=temperature_2m_max,temperature_2m_min,weathercode&timezone=auto&forecast_days=10`);
-                const dataClima = await resClima.json();
-
-                let htmlClima = `
-                    <div style="width: 100%; margin-top: 1rem;">
-                        <div style="display: flex; gap: 10px; overflow-x: auto; padding-bottom: 10px; scrollbar-width: thin; scrollbar-color: var(--border-subtle) transparent;">
-                `;
-
-                for(let i=0; i<dataClima.daily.time.length; i++) {
-                    const dateObj = new Date(dataClima.daily.time[i]);
-                    const dateStr = dateObj.toLocaleDateString('es-ES', { weekday: 'short', day: 'numeric' });
-                    const maxT = Math.round(dataClima.daily.temperature_2m_max[i]);
-                    const minT = Math.round(dataClima.daily.temperature_2m_min[i]);
-                    const code = dataClima.daily.weathercode[i];
-
-                    let iconName = 'sun'; let iconColor = '#ffd700';
-                    if(code >= 1 && code <= 3) { iconName = 'cloud-sun'; iconColor='#e0e0e0'; }
-                    if(code >= 45 && code <= 48) { iconName = 'cloud-fog'; iconColor='#b0b0b0'; }
-                    if(code >= 51 && code <= 67) { iconName = 'cloud-rain'; iconColor='#4da6ff'; }
-                    if(code >= 71 && code <= 77) { iconName = 'snowflake'; iconColor='#ffffff'; }
-                    if(code >= 95) { iconName = 'cloud-lightning'; iconColor='#8a2be2'; }
-
-                    const isToday = new Date().toISOString().split('T')[0] === dataClima.daily.time[i];
-                    const bgStyle = isToday ? 'background: rgba(255,77,77,0.1); border-color: rgba(255,77,77,0.3);' : 'background: rgba(255,255,255,0.03); border-color: var(--border-subtle);';
-
-                    htmlClima += `
-                        <div style="min-width: 95px; padding: 1rem 0.5rem; border-radius: 12px; text-align: center; border: 1px solid; flex-shrink: 0; ${bgStyle}">
-                            <div style="font-size: 0.8rem; color: var(--text-muted); text-transform: capitalize; margin-bottom: 8px;">${isToday ? 'Hoy' : dateStr}</div>
-                            <i data-lucide="${iconName}" style="color: ${iconColor}; width: 28px; height: 28px; margin: 0 auto 8px;"></i>
-                            <div style="font-weight: 800; font-size: 1.1rem; color: var(--primary);">${maxT}°</div>
-                            <div style="font-size: 0.8rem; color: var(--text-muted);">${minT}°</div>
-                        </div>
-                    `;
-                }
-                htmlClima += `</div></div>`;
-                wCont.innerHTML = htmlClima;
-                lucide.createIcons();
-            } catch(e) {
-                wCont.innerHTML = `<p style="color:var(--accent); font-size: 0.9rem;">Error al conectar con Open-Meteo.</p>`;
-            }
-        }
-
+        // Función bloqueada por mantenimiento, dejamos el esqueleto pero con retorno vacío
         async function renderWeather() {
-            const wCont = document.getElementById('weather-container');
-            if(!currentTripData || !currentTripData.eventos || currentTripData.eventos.length === 0) {
-                wCont.innerHTML = `<p style="color:var(--text-muted); font-size: 0.9rem;">Añade destinos a tu itinerario para ver la meteorología real.</p>`;
-                return;
-            }
-
-            let citiesMap = {};
-            currentTripData.eventos.forEach(ev => {
-                let cleanQuery = ev.title.includes('->') ? ev.title.split('->').pop().trim() : ev.title;
-                cleanQuery = cleanQuery.replace('📥 Check-in: ', '').replace('📤 Check-out: ', '').replace('🌙 Noche en: ', '');
-                let mainCity = cleanQuery.split(',')[0].trim();
-                
-                if(mainCity) {
-                    if(!citiesMap[mainCity] || ev.dateKey < citiesMap[mainCity]) {
-                        citiesMap[mainCity] = ev.dateKey;
-                    }
-                }
-            });
-
-            const cities = Object.keys(citiesMap);
-            if(cities.length === 0) {
-                wCont.innerHTML = `<p style="color:var(--text-muted); font-size: 0.9rem;">No se encontraron ciudades válidas en el itinerario.</p>`;
-                return;
-            }
-
-            let today = new Date().toISOString().split('T')[0];
-            let defaultCity = cities[0];
-            let minDiff = Infinity;
-            
-            for(const [city, date] of Object.entries(citiesMap)) {
-                let diff = Math.abs(new Date(date) - new Date(today)); 
-                if(diff < minDiff) {
-                    minDiff = diff;
-                    defaultCity = city;
-                }
-            }
-
-            let selectHtml = `<select id="weather-city-select" class="finance-select" style="margin-bottom: 1rem; width: 100%;" onchange="loadWeatherForCity(this.value)">`;
-            cities.forEach(city => {
-                selectHtml += `<option value="${city}" ${city === defaultCity ? 'selected' : ''}>${city}</option>`;
-            });
-            selectHtml += `</select><div id="weather-forecast-display"></div>`;
-            
-            wCont.innerHTML = selectHtml;
-            loadWeatherForCity(defaultCity);
+            return;
         }
 
         function renderItinerary() {
@@ -1581,6 +1508,20 @@
                     document.getElementById('finance-tour-modal').classList.add('active');
                     setTourStep(1); 
                 }
+            }
+        }
+
+        // ── CONTROL DE ACORDEONES (TABS USUARIOS) ──
+        window.toggleAccordion = function(contentId, iconId) {
+            const content = document.getElementById(contentId);
+            const icon = document.getElementById(iconId);
+            
+            if (content.classList.contains('open')) {
+                content.classList.remove('open');
+                icon.style.transform = 'rotate(0deg)';
+            } else {
+                content.classList.add('open');
+                icon.style.transform = 'rotate(180deg)';
             }
         }
 
