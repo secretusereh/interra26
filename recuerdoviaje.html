@@ -1,1 +1,663 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recuerdo de Viaje - Interra-hub.</title>
+    
+    <link rel="icon" type="image/png" href="interrahublogo.PNG">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;800&display=swap" rel="stylesheet">
+    
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/exif-js"></script>
 
+    <style>
+        /* =========================================
+           VARIABLES Y DISEÑO BASE (Idéntico a la plataforma)
+           ========================================= */
+        :root {
+            --bg-color: #030303;
+            --surface: rgba(20, 20, 20, 0.4);
+            --surface-solid: #141414;
+            --primary: #ffffff;
+            --text-muted: #888888;
+            --accent: #ff4d4d;
+            --accent-blue: #4da6ff;
+            --accent-green: #4dff88;
+            --success: #4dff4d;
+            --border-subtle: rgba(255, 255, 255, 0.08);
+            --transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Sora', sans-serif; }
+
+        body {
+            background-color: var(--bg-color); color: var(--primary); min-height: 100vh;
+            background-image: radial-gradient(circle at 50% -10%, rgba(255, 255, 255, 0.05), transparent 60%);
+            background-attachment: fixed;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Nav */
+        nav {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 1rem 5%; background: rgba(3, 3, 3, 0.8); backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-subtle); position: sticky; top: 0; z-index: 100;
+        }
+        .btn-nav { background: transparent; color: var(--text-muted); border: none; cursor: pointer; display: flex; align-items: center; gap: 8px; font-weight: 600; transition: var(--transition); }
+        .btn-nav:hover { color: var(--primary); }
+        .logo { 
+            font-weight: 800; font-size: 1.3rem; display: flex; align-items: center; gap: 4px; letter-spacing: -0.5px;
+            position: absolute; left: 50%; transform: translateX(-50%);
+        }
+
+        #page-loader {
+            position: fixed; inset: 0; background: var(--bg-color); z-index: 9999;
+            display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.5s ease;
+        }
+
+        /* Contenedor Principal */
+        main { padding: 3rem 5% 5rem; max-width: 900px; margin: 0 auto; width: 100%; flex: 1; }
+        
+        .header-section { text-align: center; margin-bottom: 3rem; }
+        .header-section h1 { font-size: 3.5rem; font-weight: 800; letter-spacing: -2px; margin-bottom: 0.5rem; word-break: break-word; }
+        .header-section p { color: var(--text-muted); font-size: 1.1rem; }
+
+        .privacy-banner {
+            background: rgba(77, 255, 136, 0.05); border: 1px solid rgba(77, 255, 136, 0.2);
+            border-radius: 12px; padding: 1rem 1.5rem; margin-bottom: 2rem;
+            display: flex; align-items: center; gap: 12px; color: var(--success); font-size: 0.9rem;
+        }
+
+        /* Zona de Carga (Drag & Drop) */
+        .upload-zone {
+            background: var(--surface); border: 2px dashed var(--border-subtle);
+            border-radius: 24px; padding: 4rem 2rem; text-align: center;
+            transition: var(--transition); cursor: pointer; margin-bottom: 2rem;
+            position: relative; overflow: hidden;
+        }
+        .upload-zone:hover, .upload-zone.dragover {
+            border-color: var(--accent-blue); background: rgba(77, 166, 255, 0.05); transform: translateY(-5px);
+        }
+        .upload-zone i { color: var(--text-muted); width: 64px; height: 64px; margin-bottom: 1rem; transition: var(--transition); }
+        .upload-zone:hover i { color: var(--accent-blue); transform: scale(1.1); }
+        .upload-zone h3 { font-size: 1.5rem; font-weight: 600; margin-bottom: 0.5rem; }
+        .upload-zone p { color: var(--text-muted); font-size: 0.95rem; }
+        #file-input { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
+
+        /* Opciones Extra (Música) */
+        .options-section {
+            background: rgba(255,255,255,0.02); border: 1px solid var(--border-subtle);
+            border-radius: 16px; padding: 1.5rem; margin-bottom: 2rem;
+            display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;
+        }
+        .music-upload { position: relative; display: inline-block; overflow: hidden; }
+        .btn-secondary {
+            background: rgba(255,255,255,0.05); color: var(--primary); border: 1px solid var(--border-subtle);
+            padding: 0.8rem 1.5rem; border-radius: 12px; font-weight: 600; cursor: pointer; transition: 0.3s;
+            display: inline-flex; align-items: center; gap: 8px;
+        }
+        .btn-secondary:hover { background: rgba(255,255,255,0.1); }
+        #audio-input { position: absolute; left: 0; top: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+
+        /* Estado de progreso */
+        .progress-section { display: none; text-align: center; padding: 3rem 0; animation: fadeIn 0.5s ease; }
+        .progress-title { font-size: 1.5rem; font-weight: 800; margin-bottom: 1rem; color: var(--accent-blue); }
+        .progress-bar-container { width: 100%; height: 8px; background: rgba(255,255,255,0.1); border-radius: 10px; overflow: hidden; margin-bottom: 1rem; }
+        .progress-bar { height: 100%; width: 0%; background: linear-gradient(90deg, var(--accent-blue), var(--accent)); transition: width 0.3s ease; }
+        .progress-text { color: var(--text-muted); font-size: 0.95rem; }
+
+        /* Resultado */
+        .result-section { display: none; text-align: center; animation: fadeIn 0.6s ease; }
+        .video-container {
+            width: 100%; max-width: 800px; margin: 0 auto 2rem; border-radius: 16px;
+            overflow: hidden; border: 1px solid var(--border-subtle); box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            background: #000; aspect-ratio: 16/9;
+        }
+        video { width: 100%; height: 100%; object-fit: contain; }
+        
+        .btn-submit {
+            background: var(--primary); color: var(--bg-color); border: none; padding: 1rem 2rem;
+            border-radius: 12px; font-weight: 800; font-size: 1.1rem; cursor: pointer; transition: 0.3s;
+            display: inline-flex; align-items: center; gap: 10px; text-decoration: none;
+        }
+        .btn-submit:hover { transform: scale(0.98); background: var(--accent); color: white; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+
+        /* Canvas Oculto para Renderizado Local */
+        #render-canvas { display: none; }
+    </style>
+</head>
+<body>
+
+    <div id="page-loader">
+        <i data-lucide="camera" style="width: 48px; height: 48px; color: var(--primary); animation: spin 2s linear infinite;"></i>
+        <p style="margin-top: 15px; color: var(--text-muted);">PREPARANDO LA SALA DE MONTAJE</p>
+    </div>
+
+    <nav>
+        <button class="btn-nav" id="btn-volver">
+            <i data-lucide="arrow-left"></i> Volver a Entretenimiento
+        </button>
+        <div class="logo">
+            Interra-hub<span style="color: var(--accent);">.</span>
+        </div>
+        <div style="width: 80px;"></div> </nav>
+
+    <main>
+        <div class="header-section">
+            <h1>Recuerdo de tu viaje</h1>
+            <p>Convierte tus recuerdos en una película profesional de forma automática.</p>
+        </div>
+
+        <div class="privacy-banner">
+            <i data-lucide="shield-check" style="width: 24px; flex-shrink: 0;"></i>
+            <div>
+                <strong>Privacidad Garantizada:</strong> Tus fotografías se procesan 100% localmente en tu dispositivo. No se envían ni se almacenan en ningún servidor. Generación segura y privada.
+            </div>
+        </div>
+
+        <div id="setup-section">
+            <div class="upload-zone" id="drop-zone">
+                <i data-lucide="image-plus"></i>
+                <h3>Arrastra tus fotos aquí</h3>
+                <p>o haz clic para seleccionar fotografías</p>
+                <p style="font-size: 0.8rem; margin-top: 10px; color: var(--accent-blue);" id="file-count">0 fotos seleccionadas</p>
+                <input type="file" id="file-input" multiple accept="image/jpeg, image/png, image/webp, image/heic">
+            </div>
+
+            <div class="options-section">
+                <div>
+                    <h4 style="margin-bottom: 5px;">Música de fondo (Opcional)</h4>
+                    <p style="font-size: 0.85rem; color: var(--text-muted);">Añade tu propia canción para darle ritmo.</p>
+                </div>
+                <div class="music-upload">
+                    <button class="btn-secondary" id="btn-audio-label">
+                        <i data-lucide="music"></i> Seleccionar Audio
+                    </button>
+                    <input type="file" id="audio-input" accept="audio/mpeg, audio/wav, audio/ogg">
+                </div>
+            </div>
+
+            <div style="text-align: center;">
+                <button class="btn-submit" id="btn-generate" disabled>
+                    <i data-lucide="film"></i> Generar Película
+                </button>
+            </div>
+        </div>
+
+        <div id="progress-section" class="progress-section">
+            <div class="progress-title" id="progress-title">Analizando fotografías...</div>
+            <div class="progress-bar-container">
+                <div class="progress-bar" id="progress-bar"></div>
+            </div>
+            <div class="progress-text" id="progress-text">Extrayendo metadatos EXIF locales</div>
+        </div>
+
+        <div id="result-section" class="result-section">
+            <h2 style="font-size: 2rem; margin-bottom: 1rem;">¡Tu película está lista!</h2>
+            <div class="video-container">
+                <video id="output-video" controls></video>
+            </div>
+            <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                <a id="btn-download" class="btn-submit" download="Mi_Recuerdo_InterraHub.webm">
+                    <i data-lucide="download"></i> Descargar Vídeo
+                </a>
+                <button class="btn-secondary" onclick="resetProcess()">
+                    <i data-lucide="rotate-ccw"></i> Crear otro
+                </button>
+            </div>
+            <p style="margin-top: 1rem; color: var(--text-muted); font-size: 0.85rem;">
+                *El vídeo se exporta en formato universal WebM, compatible con todos los navegadores y reproductores modernos (VLC, móviles, etc).
+            </p>
+        </div>
+
+        <canvas id="render-canvas" width="1920" height="1080"></canvas>
+    </main>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDRkUJnDLzknFz3KOnPEm4UFsgf6R4z1Uk",
+            authDomain: "interra26-22ecd.firebaseapp.com",
+            projectId: "interra26-22ecd",
+            storageBucket: "interra26-22ecd.firebasestorage.app",
+            messagingSenderId: "960505222050",
+            appId: "1:960505222050:web:a9943c6fec9532141f98fb"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const tripId = urlParams.get('id');
+
+        let tripData = null;
+        let destinationsData = []; // [{name: 'Paris', lat: 48.8, lon: 2.3, dates: ['2026-06-01']}]
+        
+        let selectedFiles = [];
+        let audioFile = null;
+
+        // Configuración de Renderizado
+        const FPS = 30;
+        const TIME_PER_PHOTO = 3.5; // Segundos por foto
+        const TRANSITION_TIME = 0.8; // Segundos de fundido
+        const TITLE_TIME = 2.5; // Segundos de títulos
+
+        document.getElementById('btn-volver').onclick = () => {
+            if (tripId) window.location.href = `viaje.html?id=${tripId}`;
+            else window.location.href = 'panel.html';
+        };
+
+        onAuthStateChanged(auth, async (user) => {
+            if (!user || !tripId) { window.location.href = 'panel.html'; return; }
+            try {
+                await loadTripData();
+                document.getElementById('page-loader').style.opacity = '0';
+                setTimeout(() => document.getElementById('page-loader').style.display = 'none', 500);
+            } catch (error) {
+                console.error(error);
+                alert("Error al cargar datos del viaje.");
+            }
+        });
+
+        async function loadTripData() {
+            const tripSnap = await getDoc(doc(db, "viajes", tripId));
+            if (tripSnap.exists()) {
+                tripData = tripSnap.data();
+                buildDestinationsMap(tripData.eventos || []);
+            }
+        }
+
+        // Construir mapa de destinos basado en alojamientos y planes
+        function buildDestinationsMap(eventos) {
+            let destMap = {};
+            eventos.forEach(ev => {
+                if (ev.type === 'hotel' || ev.type === 'plan') {
+                    // Normalizar nombre (quitar "Check-in:", etc)
+                    let cleanName = ev.title.replace('📥 Check-in: ', '').replace('📤 Check-out: ', '').replace('🌙 Noche en: ', '').split(',')[0].trim();
+                    if (!destMap[cleanName]) {
+                        destMap[cleanName] = { name: cleanName, lat: ev.lat, lon: ev.lon, dates: [] };
+                    }
+                    if(!destMap[cleanName].dates.includes(ev.dateKey)) destMap[cleanName].dates.push(ev.dateKey);
+                }
+            });
+            destinationsData = Object.values(destMap).filter(d => d.lat !== undefined && d.lon !== undefined);
+        }
+
+        // Gestión de UI de Archivos
+        const fileInput = document.getElementById('file-input');
+        const dropZone = document.getElementById('drop-zone');
+        const fileCount = document.getElementById('file-count');
+        const btnGenerate = document.getElementById('btn-generate');
+
+        fileInput.addEventListener('change', (e) => {
+            selectedFiles = Array.from(e.target.files);
+            updateFileCount();
+        });
+
+        dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('dragover'); });
+        dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('dragover');
+            if (e.dataTransfer.files.length) {
+                selectedFiles = Array.from(e.dataTransfer.files).filter(f => f.type.startsWith('image/'));
+                updateFileCount();
+            }
+        });
+
+        function updateFileCount() {
+            fileCount.innerText = `${selectedFiles.length} fotos seleccionadas`;
+            fileCount.style.color = selectedFiles.length > 0 ? 'var(--success)' : 'var(--accent-blue)';
+            btnGenerate.disabled = selectedFiles.length === 0;
+        }
+
+        document.getElementById('audio-input').addEventListener('change', (e) => {
+            if(e.target.files.length > 0) {
+                audioFile = e.target.files[0];
+                document.getElementById('btn-audio-label').innerHTML = `<i data-lucide="check"></i> ${audioFile.name.substring(0,20)}...`;
+                lucide.createIcons();
+            }
+        });
+
+        // ── MOTOR DE GENERACIÓN ──
+        btnGenerate.addEventListener('click', async () => {
+            document.getElementById('setup-section').style.display = 'none';
+            document.getElementById('progress-section').style.display = 'block';
+            
+            try {
+                const processedImages = await processAndClassifyImages(selectedFiles);
+                const storyboard = createStoryboard(processedImages);
+                await renderVideo(storyboard);
+            } catch (error) {
+                console.error(error);
+                alert("Hubo un error procesando el vídeo. " + error.message);
+                resetProcess();
+            }
+        });
+
+        window.resetProcess = function() {
+            document.getElementById('result-section').style.display = 'none';
+            document.getElementById('progress-section').style.display = 'none';
+            document.getElementById('setup-section').style.display = 'block';
+            selectedFiles = []; audioFile = null;
+            updateFileCount();
+            document.getElementById('btn-audio-label').innerHTML = `<i data-lucide="music"></i> Seleccionar Audio`;
+            lucide.createIcons();
+        }
+
+        function updateProgress(title, text, percent) {
+            document.getElementById('progress-title').innerText = title;
+            document.getElementById('progress-text').innerText = text;
+            document.getElementById('progress-bar').style.width = `${percent}%`;
+        }
+
+        // Fórmula de distancia Haversine
+        function getDistance(lat1, lon1, lat2, lon2) {
+            const R = 6371; 
+            const dLat = (lat2 - lat1) * Math.PI / 180;
+            const dLon = (lon2 - lon1) * Math.PI / 180;
+            const a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon/2) * Math.sin(dLon/2);
+            return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        }
+
+        function convertDMSToDD(dms, ref) {
+            if (!dms || dms.length < 3) return null;
+            let dd = dms[0].valueOf() + dms[1].valueOf() / 60 + dms[2].valueOf() / 3600;
+            if (ref === "S" || ref === "W") dd = dd * -1;
+            return dd;
+        }
+
+        async function processAndClassifyImages(files) {
+            let results = [];
+            
+            for (let i = 0; i < files.length; i++) {
+                updateProgress('Analizando fotografías...', `Procesando foto ${i+1} de ${files.length} (Lectura Local)`, (i/files.length)*30);
+                let file = files[i];
+                let fileObj = { file: file, url: URL.createObjectURL(file), destination: 'Sin clasificar', timestamp: null };
+
+                // Leer EXIF
+                await new Promise((resolve) => {
+                    EXIF.getData(file, function() {
+                        let latRaw = EXIF.getTag(this, "GPSLatitude");
+                        let latRef = EXIF.getTag(this, "GPSLatitudeRef");
+                        let lonRaw = EXIF.getTag(this, "GPSLongitude");
+                        let lonRef = EXIF.getTag(this, "GPSLongitudeRef");
+                        let dateRaw = EXIF.getTag(this, "DateTimeOriginal");
+
+                        let finalLat = null, finalLon = null;
+                        if (latRaw && lonRaw) {
+                            finalLat = convertDMSToDD(latRaw, latRef);
+                            finalLon = convertDMSToDD(lonRaw, lonRef);
+                        }
+                        
+                        if (dateRaw) { // Format: "YYYY:MM:DD HH:MM:SS"
+                            const parts = dateRaw.split(' ');
+                            if(parts.length > 0) fileObj.timestamp = parts[0].replace(/:/g, '-');
+                        }
+
+                        // Lógica de Clasificación Automática
+                        let bestMatch = 'Otras fotos';
+                        if (finalLat && finalLon && destinationsData.length > 0) {
+                            let minDistance = Infinity;
+                            destinationsData.forEach(dest => {
+                                let dist = getDistance(finalLat, finalLon, dest.lat, dest.lon);
+                                if (dist < 50 && dist < minDistance) { // 50km de radio
+                                    minDistance = dist;
+                                    bestMatch = dest.name;
+                                }
+                            });
+                        } else if (fileObj.timestamp && destinationsData.length > 0) {
+                            // Backup: emparejar por fecha del itinerario
+                            const matchedDest = destinationsData.find(d => d.dates.includes(fileObj.timestamp));
+                            if(matchedDest) bestMatch = matchedDest.name;
+                        }
+
+                        fileObj.destination = bestMatch;
+                        resolve();
+                    });
+                });
+                
+                results.push(fileObj);
+            }
+            return results;
+        }
+
+        function createStoryboard(images) {
+            updateProgress('Construyendo Narrativa...', 'Organizando destinos y orden cronológico', 35);
+            
+            let grouped = {};
+            images.forEach(img => {
+                if(!grouped[img.destination]) grouped[img.destination] = [];
+                grouped[img.destination].push(img);
+            });
+
+            let storyboard = [];
+            
+            // 1. INTRO
+            storyboard.push({ type: 'intro', title: tripData ? tripData.nombre : 'Mi Gran Viaje', duration: TITLE_TIME });
+
+            // 2. DESTINOS
+            for (const [destName, photos] of Object.entries(grouped)) {
+                // Deduplicación visual garantizada: Un título por destino
+                if (destName !== 'Otras fotos' && destName !== 'Sin clasificar') {
+                    storyboard.push({ type: 'title', title: destName, duration: TITLE_TIME });
+                }
+                
+                // Añadir fotos con pre-análisis (Inteligencia Simulada: aplicar zoom aleatorio)
+                photos.forEach(p => {
+                    storyboard.push({ 
+                        type: 'photo', 
+                        url: p.url, 
+                        duration: TIME_PER_PHOTO,
+                        zoomType: Math.random() > 0.5 ? 'in' : 'out', // Ken burns direction
+                        panX: (Math.random() - 0.5) * 0.1,
+                        panY: (Math.random() - 0.5) * 0.1
+                    });
+                });
+            }
+
+            // 3. OUTRO
+            storyboard.push({ type: 'outro', title: 'Generado con Interra-hub.', duration: TITLE_TIME });
+
+            return storyboard;
+        }
+
+        async function loadImage(url) {
+            return new Promise((resolve) => {
+                const img = new Image();
+                img.onload = () => resolve(img);
+                img.src = url;
+            });
+        }
+
+        async function renderVideo(storyboard) {
+            const canvas = document.getElementById('render-canvas');
+            const ctx = canvas.getContext('2d');
+            const stream = canvas.captureStream(FPS);
+            const W = canvas.width; const H = canvas.height;
+
+            // Integración de Audio
+            let audioCtx = new AudioContext();
+            let audioDest = audioCtx.createMediaStreamDestination();
+            let mediaRecorder;
+            let tracks = [...stream.getVideoTracks()];
+
+            if (audioFile) {
+                const audioData = await audioFile.arrayBuffer();
+                const audioBuffer = await audioCtx.decodeAudioData(audioData);
+                const source = audioCtx.createBufferSource();
+                source.buffer = audioBuffer;
+                source.connect(audioDest);
+                source.start(0);
+                tracks.push(audioDest.stream.getAudioTracks()[0]);
+            }
+
+            const mixedStream = new MediaStream(tracks);
+            
+            // Safari/Apple suele requerir mp4 si está disponible, Chrome prefiere webm
+            let mimeType = 'video/webm; codecs=vp9';
+            if (!MediaRecorder.isTypeSupported(mimeType)) {
+                mimeType = 'video/mp4'; 
+                if (!MediaRecorder.isTypeSupported(mimeType)) mimeType = ''; // fallback default
+            }
+
+            mediaRecorder = new MediaRecorder(mixedStream, { mimeType: mimeType, videoBitsPerSecond: 5000000 });
+            
+            let chunks = [];
+            mediaRecorder.ondataavailable = e => { if (e.data.size > 0) chunks.push(e.data); };
+            
+            let renderPromise = new Promise(resolve => mediaRecorder.onstop = resolve);
+            
+            mediaRecorder.start();
+
+            let totalTime = storyboard.reduce((acc, clip) => acc + clip.duration, 0);
+            let currentTime = 0;
+
+            for (let i = 0; i < storyboard.length; i++) {
+                const clip = storyboard[i];
+                const isCrossfading = i < storyboard.length - 1;
+                let imgEl = clip.type === 'photo' ? await loadImage(clip.url) : null;
+
+                const framesToRender = clip.duration * FPS;
+                
+                for (let f = 0; f < framesToRender; f++) {
+                    let progress = f / framesToRender;
+                    currentTime += (1/FPS);
+                    
+                    updateProgress('Renderizando vídeo...', `Generando frame ${Math.floor(currentTime * FPS)} de ${Math.floor(totalTime * FPS)}`, 40 + (currentTime/totalTime)*60);
+
+                    // Fondo negro
+                    ctx.fillStyle = '#030303';
+                    ctx.fillRect(0, 0, W, H);
+
+                    // Lógica de Renderizado por Tipo
+                    if (clip.type === 'photo' && imgEl) {
+                        // Ken Burns
+                        let scale = clip.zoomType === 'in' ? 1 + (0.15 * progress) : 1.15 - (0.15 * progress);
+                        let dx = clip.panX * W * progress;
+                        let dy = clip.panY * H * progress;
+
+                        ctx.save();
+                        ctx.translate(W/2 + dx, H/2 + dy);
+                        ctx.scale(scale, scale);
+
+                        // Ajuste inteligente: si es vertical, poner fondo difuminado
+                        let imgAspect = imgEl.width / imgEl.height;
+                        let canvasAspect = W / H;
+
+                        if (imgAspect < canvasAspect - 0.2) { // Muy vertical
+                            ctx.filter = 'blur(40px) brightness(0.5)';
+                            ctx.drawImage(imgEl, -W/2, -H/2, W, H);
+                            ctx.filter = 'none';
+                            
+                            // Imagen centrada
+                            let drawW = H * imgAspect;
+                            ctx.drawImage(imgEl, -drawW/2, -H/2, drawW, H);
+                        } else { // Normal/Panorámica
+                            let drawH = W / imgAspect;
+                            if(drawH < H) {
+                                drawH = H;
+                                let drawW = H * imgAspect;
+                                ctx.drawImage(imgEl, -drawW/2, -H/2, drawW, H);
+                            } else {
+                                ctx.drawImage(imgEl, -W/2, -drawH/2, W, drawH);
+                            }
+                        }
+                        ctx.restore();
+
+                    } else if (clip.type === 'title' || clip.type === 'intro' || clip.type === 'outro') {
+                        // Títulos elegantes estáticos con pequeño zoom
+                        let scale = 1 + (0.05 * progress);
+                        ctx.save();
+                        ctx.translate(W/2, H/2);
+                        ctx.scale(scale, scale);
+                        
+                        ctx.fillStyle = '#ffffff';
+                        ctx.textAlign = 'center';
+                        ctx.textBaseline = 'middle';
+                        
+                        if (clip.type === 'intro') {
+                            ctx.font = '800 40px "Sora", sans-serif';
+                            ctx.fillStyle = '#ff4d4d';
+                            ctx.fillText("ESTE HA SIDO TU VIAJE", 0, -60);
+                            ctx.font = '800 120px "Sora", sans-serif';
+                            ctx.fillStyle = '#ffffff';
+                            ctx.fillText(clip.title.toUpperCase(), 0, 40);
+                        } else if (clip.type === 'outro') {
+                            ctx.font = '600 50px "Sora", sans-serif';
+                            ctx.fillText(clip.title, 0, 0);
+                        } else {
+                            ctx.font = '800 100px "Sora", sans-serif';
+                            ctx.fillText(clip.title, 0, 0);
+                        }
+                        ctx.restore();
+                    }
+
+                    // Efectos de Transición (Fade in/out)
+                    let alpha = 1;
+                    const framesFade = TRANSITION_TIME * FPS;
+                    if (f < framesFade && i > 0) {
+                        alpha = f / framesFade;
+                    } else if (f > framesToRender - framesFade && isCrossfading) {
+                        alpha = (framesToRender - f) / framesFade;
+                    }
+                    
+                    if (alpha < 1) {
+                        ctx.fillStyle = `rgba(3, 3, 3, ${1 - alpha})`;
+                        ctx.fillRect(0, 0, W, H);
+                    }
+
+                    // Forzar dibujado en Canvas esperando al evento event loop
+                    await new Promise(r => setTimeout(r, 0));
+                }
+            }
+
+            mediaRecorder.stop();
+            if(audioCtx.state === 'running') audioCtx.close();
+
+            await renderPromise;
+
+            // Procesar y mostrar resultado
+            const finalExt = mimeType.includes('mp4') ? 'mp4' : 'webm';
+            const blob = new Blob(chunks, { type: mimeType || 'video/webm' });
+            const videoUrl = URL.createObjectURL(blob);
+            
+            document.getElementById('progress-section').style.display = 'none';
+            document.getElementById('result-section').style.display = 'block';
+            
+            const vidEl = document.getElementById('output-video');
+            vidEl.src = videoUrl;
+            
+            const btnDownload = document.getElementById('btn-download');
+            btnDownload.href = videoUrl;
+            btnDownload.download = `${tripData ? tripData.nombre.replace(/\s+/g, '_') : 'Recuerdo'}_InterraHub.${finalExt}`;
+            
+            showToast("¡Película renderizada con éxito!", "success");
+        }
+
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.innerHTML = `<i data-lucide="check-circle" style="color: var(--success); width:20px;"></i> <span>${message}</span>`;
+            container.appendChild(toast);
+            lucide.createIcons();
+            setTimeout(() => { toast.style.animation = 'slideOutToast 0.4s forwards'; setTimeout(() => toast.remove(), 400); }, 3500);
+        }
+
+        lucide.createIcons();
+    </script>
+</body>
+</html>
