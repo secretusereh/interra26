@@ -178,7 +178,7 @@
         .btn-delete:hover { background: var(--accent); color: white; }
 
         /* =========================================
-           NUEVO: TAB ENTRETENIMIENTO
+           TAB ENTRETENIMIENTO
            ========================================= */
         .countdown-banner {
             background: linear-gradient(135deg, rgba(255, 77, 77, 0.15), rgba(77, 166, 255, 0.15));
@@ -311,7 +311,7 @@
         }
 
         /* =========================================
-           TAB 2: USUARIOS Y SOLICITUDES
+           TAB USUARIOS Y SOLICITUDES
            ========================================= */
         .users-grid { display: grid; grid-template-columns: 1fr; gap: 2rem; }
         @media (min-width: 768px) { .users-grid { grid-template-columns: 1fr 1fr; } }
@@ -346,7 +346,7 @@
         .color-circle.selected { border-color: white; box-shadow: 0 0 10px rgba(255,255,255,0.5); transform: scale(1.1); }
 
         /* =========================================
-           TAB 5: FINANCE (INTERRA BALANCE)
+           TAB FINANCE (INTERRA BALANCE)
            ========================================= */
         .finance-subtab { display: none; opacity: 0; }
         .finance-subtab.active { display: block; animation: slideUpFade 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
@@ -427,7 +427,7 @@
         select.finance-select option { background: #1a1a1a; color: white; }
 
         /* =========================================
-           OMNI-MODAL INTELIGENTE (OPTIMIZADO PARA NO SCROLL)
+           OMNI-MODAL INTELIGENTE
            ========================================= */
         .modal-overlay {
             position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px);
@@ -550,7 +550,7 @@
         <button class="tab-btn" id="tab-btn-extra" onclick="switchTab('extra', this)">Extra Info</button>
         <button class="tab-btn" id="tab-btn-entretenimiento" onclick="switchTab('entretenimiento', this)">Entretenimiento</button>
         <button class="tab-btn" id="tab-btn-usuarios" onclick="switchTab('usuarios', this)">
-            Equipo y Accesos
+            Equipo y Configuración
             <span class="tab-badge" id="solicitudes-badge">0</span>
         </button>
     </div>
@@ -598,25 +598,9 @@
     </main>
 
     <main id="tab-extra" class="tab-content">
-        <div class="user-section" style="margin-bottom: 2rem; display: none;" id="trip-settings-section">
-            <h3><i data-lucide="settings"></i> Configuración del Viaje</h3>
-            <p style="color: var(--text-muted); font-size: 0.9rem;">Cambia el nombre de la aventura o edita las fechas base del viaje.</p>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1.5rem;">
-                <div class="input-group" style="margin-bottom: 0;">
-                    <label>Nombre del Viaje</label>
-                    <input type="text" id="edit-trip-name" style="width: 100%;">
-                </div>
-                <div class="input-group" style="margin-bottom: 0;">
-                    <label>Fechas del Viaje</label>
-                    <input type="text" id="edit-trip-dates" placeholder="Seleccionar nuevo rango..." readonly style="width: 100%;">
-                </div>
-            </div>
-            <button class="btn-submit" onclick="saveTripSettings()" id="btn-save-trip-settings" style="margin-top: 1.5rem; width: auto; padding: 0.8rem 1.5rem;">Guardar Cambios</button>
-        </div>
-
         <div class="user-section">
             <h3><i data-lucide="cloud-sun"></i> Meteorología Esperada</h3>
-            <p style="color: var(--text-muted); font-size: 0.9rem;">Pronóstico real para los próximos 10 días de las ciudades en las que estarás.</p>
+            <p style="color: var(--text-muted); font-size: 0.9rem;">Pronóstico real para los próximos 10 días.</p>
             <div id="weather-container" style="margin-top: 1.5rem;">
                 <p style="color: var(--text-muted); font-size: 0.9rem;">Cargando datos meteorológicos...</p>
             </div>
@@ -624,6 +608,7 @@
         <div class="user-section" style="margin-top: 2rem;">
             <h3><i data-lucide="info"></i> Notas Globales del Viaje</h3>
             <textarea id="global-notes" placeholder="Escribe aquí anotaciones importantes, documentación necesaria o recordatorios..." style="width: 100%; height: 150px; background: rgba(255,255,255,0.02); border: 1px solid var(--border-subtle); border-radius: 12px; padding: 1rem; color: white; margin-top: 1rem; font-family: 'Sora', sans-serif; resize: vertical;"></textarea>
+            <button class="btn-submit" onclick="saveGlobalNotes()" id="btn-save-notes" style="margin-top: 1rem; width: auto; padding: 0.8rem 1.5rem;">Guardar Notas</button>
         </div>
     </main>
 
@@ -668,6 +653,22 @@
         </div>
     </main>
     <main id="tab-usuarios" class="tab-content">
+        <div class="user-section" style="margin-bottom: 2rem; display: none;" id="trip-settings-section">
+            <h3><i data-lucide="settings"></i> Configuración del Viaje</h3>
+            <p style="color: var(--text-muted); font-size: 0.9rem;">Cambia el nombre de la aventura o edita las fechas base del viaje.</p>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1.5rem;">
+                <div class="input-group" style="margin-bottom: 0;">
+                    <label>Nombre del Viaje</label>
+                    <input type="text" id="edit-trip-name" style="width: 100%;">
+                </div>
+                <div class="input-group" style="margin-bottom: 0;">
+                    <label>Fechas del Viaje</label>
+                    <input type="text" id="edit-trip-dates" placeholder="Seleccionar nuevo rango..." readonly style="width: 100%;">
+                </div>
+            </div>
+            <button class="btn-submit" onclick="saveTripSettings()" id="btn-save-trip-settings" style="margin-top: 1.5rem; width: auto; padding: 0.8rem 1.5rem;">Guardar Cambios</button>
+        </div>
+
         <div class="user-section" style="margin-bottom: 2rem; text-align: center; border-color: var(--border-subtle);">
             <h3 style="justify-content: center;"><i data-lucide="key"></i> Código de Invitación</h3>
             <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem;">Comparte este código para que tus amigos puedan enviar una solicitud para unirse a esta aventura.</p>
@@ -1149,6 +1150,11 @@
 
                 canEdit = isGod || currentUserRole === "admin-grupo" || currentUserRole === "editor-grupo";
 
+                // OCULTAR FINANCE PARA VISORES
+                if (!canEdit) {
+                    document.getElementById('tab-btn-finance').style.display = 'none';
+                }
+
                 if (isGod || currentUserRole === "admin-grupo") {
                     document.getElementById('admin-requests-panel').style.display = 'block';
                     const numSolicitudes = currentTripData.solicitudes ? Object.keys(currentTripData.solicitudes).length : 0;
@@ -1172,20 +1178,10 @@
                 const globalNotesInput = document.getElementById('global-notes');
                 if (globalNotesInput) {
                     globalNotesInput.value = currentTripData.globalNotes || '';
-                    globalNotesInput.onblur = async () => {
-                        if (!canEdit) return;
-                        try {
-                            await updateDoc(tripRef, { globalNotes: globalNotesInput.value });
-                            currentTripData.globalNotes = globalNotesInput.value;
-                            showToast("Notas globales guardadas", "success");
-                        } catch (e) {
-                            console.error(e);
-                        }
-                    };
                 }
 
                 updatePickersLimits();
-                initCountdown(currentTripData.fechaInicio, currentTripData.nombre); // Inicializar la cuenta atrás
+                initCountdown(currentTripData.fechaInicio, currentTripData.nombre);
 
                 const uids = Object.keys(miembros);
                 await Promise.all(uids.map(uid => getUserProfile(uid))); 
@@ -1236,7 +1232,7 @@
                 renderHeader();
                 renderItinerary();
                 updatePickersLimits();
-                initCountdown(newStart, newName); // Actualizamos la cuenta atrás por si cambió
+                initCountdown(newStart, newName); 
                 
                 showToast("Configuración del viaje actualizada correctamente", "success");
             } catch(e) {
@@ -1244,6 +1240,29 @@
                 showToast("Error al guardar la configuración en la base de datos", "error");
             } finally {
                 btn.innerText = 'Guardar Cambios'; btn.disabled = false;
+            }
+        }
+
+        window.saveGlobalNotes = async function() {
+            if (!canEdit) {
+                showToast("No tienes permisos para editar las notas globales", "error");
+                return;
+            }
+            const btn = document.getElementById('btn-save-notes');
+            btn.innerText = 'Guardando...'; btn.disabled = true;
+
+            const notesValue = document.getElementById('global-notes').value;
+            
+            try {
+                const tripRef = doc(db, "viajes", tripId);
+                await updateDoc(tripRef, { globalNotes: notesValue });
+                currentTripData.globalNotes = notesValue;
+                showToast("Notas globales guardadas con éxito", "success");
+            } catch(e) {
+                console.error(e);
+                showToast("Error al guardar notas en la base de datos", "error");
+            } finally {
+                btn.innerText = 'Guardar Notas'; btn.disabled = false;
             }
         }
 
@@ -1262,96 +1281,113 @@
             document.getElementById('trip-dates').innerText = `Del ${currentTripData.fechaInicio} al ${currentTripData.fechaFin}`;
         }
 
+        window.loadWeatherForCity = async function(cityName) {
+            const wCont = document.getElementById('weather-forecast-display');
+            wCont.innerHTML = '<p style="color:var(--text-muted); font-size: 0.9rem;">Consultando datos satelitales (Open-Meteo)...</p>';
+
+            let coords = null;
+            try {
+                const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(cityName)}&limit=1&addressdetails=1`);
+                const data = await res.json();
+                if(data.length > 0) {
+                    coords = {lat: data[0].lat, lon: data[0].lon};
+                }
+            } catch(e) { console.error(e); }
+
+            if(!coords) {
+                wCont.innerHTML = `<p style="color:var(--accent); font-size: 0.9rem;">No se pudieron extraer coordenadas exactas para ${cityName}.</p>`;
+                return;
+            }
+
+            try {
+                const resClima = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${coords.lat}&longitude=${coords.lon}&daily=temperature_2m_max,temperature_2m_min,weathercode&timezone=auto&forecast_days=10`);
+                const dataClima = await resClima.json();
+
+                let htmlClima = `
+                    <div style="width: 100%; margin-top: 1rem;">
+                        <div style="display: flex; gap: 10px; overflow-x: auto; padding-bottom: 10px; scrollbar-width: thin; scrollbar-color: var(--border-subtle) transparent;">
+                `;
+
+                for(let i=0; i<dataClima.daily.time.length; i++) {
+                    const dateObj = new Date(dataClima.daily.time[i]);
+                    const dateStr = dateObj.toLocaleDateString('es-ES', { weekday: 'short', day: 'numeric' });
+                    const maxT = Math.round(dataClima.daily.temperature_2m_max[i]);
+                    const minT = Math.round(dataClima.daily.temperature_2m_min[i]);
+                    const code = dataClima.daily.weathercode[i];
+
+                    let iconName = 'sun'; let iconColor = '#ffd700';
+                    if(code >= 1 && code <= 3) { iconName = 'cloud-sun'; iconColor='#e0e0e0'; }
+                    if(code >= 45 && code <= 48) { iconName = 'cloud-fog'; iconColor='#b0b0b0'; }
+                    if(code >= 51 && code <= 67) { iconName = 'cloud-rain'; iconColor='#4da6ff'; }
+                    if(code >= 71 && code <= 77) { iconName = 'snowflake'; iconColor='#ffffff'; }
+                    if(code >= 95) { iconName = 'cloud-lightning'; iconColor='#8a2be2'; }
+
+                    const isToday = new Date().toISOString().split('T')[0] === dataClima.daily.time[i];
+                    const bgStyle = isToday ? 'background: rgba(255,77,77,0.1); border-color: rgba(255,77,77,0.3);' : 'background: rgba(255,255,255,0.03); border-color: var(--border-subtle);';
+
+                    htmlClima += `
+                        <div style="min-width: 95px; padding: 1rem 0.5rem; border-radius: 12px; text-align: center; border: 1px solid; flex-shrink: 0; ${bgStyle}">
+                            <div style="font-size: 0.8rem; color: var(--text-muted); text-transform: capitalize; margin-bottom: 8px;">${isToday ? 'Hoy' : dateStr}</div>
+                            <i data-lucide="${iconName}" style="color: ${iconColor}; width: 28px; height: 28px; margin: 0 auto 8px;"></i>
+                            <div style="font-weight: 800; font-size: 1.1rem; color: var(--primary);">${maxT}°</div>
+                            <div style="font-size: 0.8rem; color: var(--text-muted);">${minT}°</div>
+                        </div>
+                    `;
+                }
+                htmlClima += `</div></div>`;
+                wCont.innerHTML = htmlClima;
+                lucide.createIcons();
+            } catch(e) {
+                wCont.innerHTML = `<p style="color:var(--accent); font-size: 0.9rem;">Error al conectar con Open-Meteo.</p>`;
+            }
+        }
+
         async function renderWeather() {
             const wCont = document.getElementById('weather-container');
             if(!currentTripData || !currentTripData.eventos || currentTripData.eventos.length === 0) {
                 wCont.innerHTML = `<p style="color:var(--text-muted); font-size: 0.9rem;">Añade destinos a tu itinerario para ver la meteorología real.</p>`;
                 return;
             }
-            
-            wCont.innerHTML = '<p style="color:var(--text-muted); font-size: 0.9rem; width: 100%;">Consultando datos satelitales (Open-Meteo) para los próximos 10 días...</p>';
 
-            const uniqueCities = [];
-            for (const ev of currentTripData.eventos) {
+            let citiesMap = {};
+            currentTripData.eventos.forEach(ev => {
                 let cleanQuery = ev.title.includes('->') ? ev.title.split('->').pop().trim() : ev.title;
                 cleanQuery = cleanQuery.replace('📥 Check-in: ', '').replace('📤 Check-out: ', '').replace('🌙 Noche en: ', '');
-                let cityKey = cleanQuery.toLowerCase().trim();
+                let mainCity = cleanQuery.split(',')[0].trim();
                 
-                if(cityKey && !uniqueCities.find(c => c.query === cityKey)) {
-                    uniqueCities.push({query: cityKey, original: cleanQuery});
-                }
-            }
-
-            let htmlClima = '';
-            let validCitiesCount = 0;
-
-            for (const city of uniqueCities) {
-                if(validCitiesCount >= 5) break; 
-
-                let coords = null;
-                let cityName = city.original.split(',')[0]; 
-                
-                try {
-                    const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(city.query)}&limit=1&addressdetails=1`);
-                    const data = await res.json();
-                    if(data.length > 0) {
-                        coords = {lat: data[0].lat, lon: data[0].lon};
-                        const adr = data[0].address;
-                        cityName = adr.city || adr.town || adr.municipality || adr.village || cityName;
+                if(mainCity) {
+                    if(!citiesMap[mainCity] || ev.dateKey < citiesMap[mainCity]) {
+                        citiesMap[mainCity] = ev.dateKey;
                     }
-                } catch(e) {}
+                }
+            });
 
-                if(coords) {
-                    try {
-                        const resClima = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${coords.lat}&longitude=${coords.lon}&daily=temperature_2m_max,temperature_2m_min,weathercode&timezone=auto&forecast_days=10`);
-                        const dataClima = await resClima.json();
+            const cities = Object.keys(citiesMap);
+            if(cities.length === 0) {
+                wCont.innerHTML = `<p style="color:var(--text-muted); font-size: 0.9rem;">No se encontraron ciudades válidas en el itinerario.</p>`;
+                return;
+            }
 
-                        htmlClima += `
-                            <div style="width: 100%; margin-bottom: 2rem;">
-                                <h4 style="font-size: 1.1rem; margin-bottom: 1rem; color: var(--primary); display:flex; align-items:center; gap:8px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 0.5rem;">
-                                    <i data-lucide="map-pin" style="color:var(--accent); width:18px;"></i> ${cityName}
-                                </h4>
-                                <div style="display: flex; gap: 10px; overflow-x: auto; padding-bottom: 10px; scrollbar-width: thin; scrollbar-color: var(--border-subtle) transparent;">
-                        `;
-
-                        for(let i=0; i<dataClima.daily.time.length; i++) {
-                            const dateObj = new Date(dataClima.daily.time[i]);
-                            const dateStr = dateObj.toLocaleDateString('es-ES', { weekday: 'short', day: 'numeric' });
-                            const maxT = Math.round(dataClima.daily.temperature_2m_max[i]);
-                            const minT = Math.round(dataClima.daily.temperature_2m_min[i]);
-                            const code = dataClima.daily.weathercode[i];
-
-                            let iconName = 'sun'; let iconColor = '#ffd700';
-                            if(code >= 1 && code <= 3) { iconName = 'cloud-sun'; iconColor='#e0e0e0'; }
-                            if(code >= 45 && code <= 48) { iconName = 'cloud-fog'; iconColor='#b0b0b0'; }
-                            if(code >= 51 && code <= 67) { iconName = 'cloud-rain'; iconColor='#4da6ff'; }
-                            if(code >= 71 && code <= 77) { iconName = 'snowflake'; iconColor='#ffffff'; }
-                            if(code >= 95) { iconName = 'cloud-lightning'; iconColor='#8a2be2'; }
-
-                            const isToday = new Date().toISOString().split('T')[0] === dataClima.daily.time[i];
-                            const bgStyle = isToday ? 'background: rgba(255,77,77,0.1); border-color: rgba(255,77,77,0.3);' : 'background: rgba(255,255,255,0.03); border-color: var(--border-subtle);';
-
-                            htmlClima += `
-                                <div style="min-width: 95px; padding: 1rem 0.5rem; border-radius: 12px; text-align: center; border: 1px solid; flex-shrink: 0; ${bgStyle}">
-                                    <div style="font-size: 0.8rem; color: var(--text-muted); text-transform: capitalize; margin-bottom: 8px;">${isToday ? 'Hoy' : dateStr}</div>
-                                    <i data-lucide="${iconName}" style="color: ${iconColor}; width: 28px; height: 28px; margin: 0 auto 8px;"></i>
-                                    <div style="font-weight: 800; font-size: 1.1rem; color: var(--primary);">${maxT}°</div>
-                                    <div style="font-size: 0.8rem; color: var(--text-muted);">${minT}°</div>
-                                </div>
-                            `;
-                        }
-                        htmlClima += `</div></div>`;
-                        validCitiesCount++;
-                    } catch(e) { console.error(e); }
+            let today = new Date().toISOString().split('T')[0];
+            let defaultCity = cities[0];
+            let minDiff = Infinity;
+            
+            for(const [city, date] of Object.entries(citiesMap)) {
+                let diff = Math.abs(new Date(date) - new Date(today)); 
+                if(diff < minDiff) {
+                    minDiff = diff;
+                    defaultCity = city;
                 }
             }
+
+            let selectHtml = `<select id="weather-city-select" class="finance-select" style="margin-bottom: 1rem; width: 100%;" onchange="loadWeatherForCity(this.value)">`;
+            cities.forEach(city => {
+                selectHtml += `<option value="${city}" ${city === defaultCity ? 'selected' : ''}>${city}</option>`;
+            });
+            selectHtml += `</select><div id="weather-forecast-display"></div>`;
             
-            if(!htmlClima) {
-                wCont.innerHTML = `<p style="color:var(--text-muted); font-size: 0.9rem;">No se pudieron extraer coordenadas exactas de tus destinos.</p>`;
-            } else {
-                wCont.innerHTML = htmlClima;
-                lucide.createIcons();
-            }
+            wCont.innerHTML = selectHtml;
+            loadWeatherForCity(defaultCity);
         }
 
         function renderItinerary() {
@@ -1519,6 +1555,12 @@
         }
 
         window.switchTab = function(tabName, btn) {
+            // Protección extra para evitar que los visores entren a finance inyectando JS
+            if (tabName === 'finance' && !canEdit) {
+                showToast("Acceso denegado. No tienes permisos para gestionar finanzas.", "error");
+                return;
+            }
+
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.tabs-container > .tab-btn').forEach(el => el.classList.remove('active'));
             document.getElementById(`tab-${tabName}`).classList.add('active');
