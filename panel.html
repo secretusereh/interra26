@@ -556,16 +556,20 @@
         // 2. IMPORTANTE: Cada vez que lances un update, cambia el valor de 'version' (ej: de "v1.0" a "v1.1"). 
         // Así el sistema sabrá que es nuevo y se lo mostrará a los usuarios de nuevo.
         const UPDATE_CONFIG = {
-            active: false, // <-- CAMBIAR A TRUE PARA MOSTRAR EL POPUP
-            version: "v2.0.0", // <-- CAMBIAR EN CADA NUEVA ACTUALIZACIÓN
+            active: true, // <-- CAMBIAR A TRUE PARA MOSTRAR EL POPUP
+            version: "v2.5.0", // <-- CAMBIAR EN CADA NUEVA ACTUALIZACIÓN
             features: [
-                "Interfaz completamente rediseñada y adaptada a dispositivos móviles (Smartphones y Tablets).",
-                "Nueva optimización táctil: los botones ahora responden mejor al tocarlos en pantallas táctiles.",
-                "Nuevo sistema integrado de avisos de actualización."
+                "Menus desplegables en Equipo y Configuración para que el usuario pueda ver todo lo disponible.",
+                "Sección de entretenimiento puesta en funcionamiento con 3 juegos y una cuenta atras para tu viaje.",
+                "Juego ¿Dónde es? creado, en proximas actualizaciones Wordle Viajeros."
+                "La sección Finance solo disponible ahora para Editores o Administradores de cada viaje."
+                
             ],
             fixes: [
-                "Solucionado el desbordamiento de las tarjetas de viajes en móviles.",
-                "Arreglados problemas visuales de espaciado en la barra de navegación superior."
+                "Sistema de meteorologia arreglado y mejorado.",
+                "Cambio de sitio de Configuración del Viaje."
+                "Notas Globales del Viaje ahora si funcionan."
+
             ]
         };
 
