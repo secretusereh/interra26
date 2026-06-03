@@ -9,7 +9,7 @@
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;800&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
     
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdn.jsdelivr.net/npm/exif-js"></script>
@@ -258,15 +258,15 @@
         const tripId = urlParams.get('id');
 
         let tripData = null;
-        let destinationsData = []; 
         let selectedFiles = [];
         let audioFile = null;
+        let globalUserNames = []; // Nombres de los participantes para los créditos
+        let globalVisitedCities = []; // Ciudades únicas y limpias para los créditos
 
         const TIME_PER_PHOTO = 3.5; 
         const TRANSITION_TIME = 0.6; 
-        const TITLE_TIME = 3.0; 
+        const TITLE_TIME = 4.0; 
 
-        // Frases divertidas para darle "vibes" a las transiciones
         const FUN_VIBES = [
             "¡Qué pasada de lugar! ✨", 
             "Modo explorador: ON 🧭", 
@@ -277,6 +277,9 @@
             "¡Menudas vistas! 👀",
             "Viviendo el sueño ✈️"
         ];
+
+        // Cache para Nominatim y no hacer peticiones de más
+        const reverseGeocodeCache = {};
 
         document.getElementById('btn-volver').onclick = () => {
             if (tripId) window.location.href = `viaje.html?id=${tripId}`;
@@ -299,22 +302,20 @@
             const tripSnap = await getDoc(doc(db, "viajes", tripId));
             if (tripSnap.exists()) {
                 tripData = tripSnap.data();
-                buildDestinationsMap(tripData.eventos || []);
-            }
-        }
-
-        function buildDestinationsMap(eventos) {
-            let destMap = {};
-            eventos.forEach(ev => {
-                if (ev.type === 'hotel' || ev.type === 'plan') {
-                    let cleanName = ev.title.replace('📥 Check-in: ', '').replace('📤 Check-out: ', '').replace('🌙 Noche en: ', '').split(',')[0].trim();
-                    if (!destMap[cleanName]) {
-                        destMap[cleanName] = { name: cleanName, lat: ev.lat, lon: ev.lon, dates: [] };
+                
+                // Cargar perfiles de usuarios para los créditos
+                if (tripData.miembros) {
+                    for (let uid of Object.keys(tripData.miembros)) {
+                        try {
+                            const userSnap = await getDoc(doc(db, "usuarios", uid));
+                            if (userSnap.exists() && userSnap.data().nombre) {
+                                globalUserNames.push(userSnap.data().nombre);
+                            }
+                        } catch(e) {}
                     }
-                    if(!destMap[cleanName].dates.includes(ev.dateKey)) destMap[cleanName].dates.push(ev.dateKey);
                 }
-            });
-            destinationsData = Object.values(destMap).filter(d => d.lat !== undefined && d.lon !== undefined);
+                if (globalUserNames.length === 0) globalUserNames = ["Los Viajeros"];
+            }
         }
 
         const fileInput = document.getElementById('file-input');
@@ -373,7 +374,7 @@
             document.getElementById('progress-section').style.display = 'none';
             document.getElementById('render-warning').style.display = 'none';
             document.getElementById('setup-section').style.display = 'block';
-            selectedFiles = []; audioFile = null;
+            selectedFiles = []; audioFile = null; globalVisitedCities = [];
             updateFileCount();
             document.getElementById('btn-audio-label').innerHTML = `<i data-lucide="music"></i> Seleccionar Audio`;
             lucide.createIcons();
@@ -388,69 +389,81 @@
             document.getElementById('progress-bar').style.width = `${percent}%`;
         }
 
-        function getDistance(lat1, lon1, lat2, lon2) {
-            const R = 6371; 
-            const dLat = (lat2 - lat1) * Math.PI / 180;
-            const dLon = (lon2 - lon1) * Math.PI / 180;
-            const a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon/2) * Math.sin(dLon/2);
-            return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-        }
-
-        function convertDMSToDD(dms, ref) {
-            if (!dms || dms.length < 3) return null;
-            let dd = dms[0].valueOf() + dms[1].valueOf() / 60 + dms[2].valueOf() / 3600;
-            if (ref === "S" || ref === "W") dd = dd * -1;
-            return dd;
+        // Función para limpiar la ciudad y obtener solo lo relevante
+        async function getCleanCity(lat, lon) {
+            if (!lat || !lon) return null;
+            const key = `${lat.toFixed(3)},${lon.toFixed(3)}`;
+            if (reverseGeocodeCache[key]) return reverseGeocodeCache[key];
+            
+            try {
+                const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&zoom=10&addressdetails=1`);
+                const data = await res.json();
+                let city = data.address?.city || data.address?.town || data.address?.municipality || data.address?.village || data.name;
+                if(city) {
+                    reverseGeocodeCache[key] = city;
+                    return city;
+                }
+            } catch(e) {}
+            return null;
         }
 
         async function processAndClassifyImages(files) {
             let results = [];
             
             for (let i = 0; i < files.length; i++) {
-                updateProgress('Analizando fotografías...', `Extrayendo GPS y Datos: foto ${i+1} de ${files.length}`, (i/files.length)*20);
+                updateProgress('Analizando fotografías...', `Verificando fechas y localizaciones: foto ${i+1} de ${files.length}`, (i/files.length)*20);
                 let file = files[i];
-                let fileObj = { file: file, url: URL.createObjectURL(file), destination: 'Sin clasificar', timestamp: null };
+                let fileObj = { file: file, url: URL.createObjectURL(file), destination: 'Descubriendo el mundo', dateKey: null };
 
                 await new Promise((resolve) => {
                     let watchdog = setTimeout(resolve, 500); 
                     EXIF.getData(file, function() {
                         clearTimeout(watchdog);
-                        let latRaw = EXIF.getTag(this, "GPSLatitude");
-                        let latRef = EXIF.getTag(this, "GPSLatitudeRef");
-                        let lonRaw = EXIF.getTag(this, "GPSLongitude");
-                        let lonRef = EXIF.getTag(this, "GPSLongitudeRef");
-                        let dateRaw = EXIF.getTag(this, "DateTimeOriginal");
-
-                        let finalLat = null, finalLon = null;
-                        if (latRaw && lonRaw) {
-                            finalLat = convertDMSToDD(latRaw, latRef);
-                            finalLon = convertDMSToDD(lonRaw, lonRef);
-                        }
                         
-                        if (dateRaw) { 
-                            const parts = dateRaw.split(' ');
-                            if(parts.length > 0) fileObj.timestamp = parts[0].replace(/:/g, '-');
+                        // Extraer fecha original de la foto
+                        let rawDate = EXIF.getTag(this, "DateTimeOriginal") || EXIF.getTag(this, "DateTimeDigitized");
+                        if (rawDate) {
+                            let parts = rawDate.split(' ');
+                            if (parts.length > 0) {
+                                // Convertir "YYYY:MM:DD" a "YYYY-MM-DD"
+                                fileObj.dateKey = parts[0].replace(/:/g, '-');
+                            }
+                        } else if (file.lastModified) {
+                            // Fallback a fecha de modificación del archivo
+                            const d = new Date(file.lastModified);
+                            fileObj.dateKey = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
                         }
-
-                        let bestMatch = 'Otras fotos';
-                        if (finalLat && finalLon && destinationsData.length > 0) {
-                            let minDistance = Infinity;
-                            destinationsData.forEach(dest => {
-                                let dist = getDistance(finalLat, finalLon, dest.lat, dest.lon);
-                                if (dist < 50 && dist < minDistance) { 
-                                    minDistance = dist;
-                                    bestMatch = dest.name;
-                                }
-                            });
-                        } else if (fileObj.timestamp && destinationsData.length > 0) {
-                            const matchedDest = destinationsData.find(d => d.dates.includes(fileObj.timestamp));
-                            if(matchedDest) bestMatch = matchedDest.name;
-                        }
-
-                        fileObj.destination = bestMatch;
                         resolve();
                     });
                 });
+
+                // Lógica de Matching con Firebase Viaje.html
+                if (fileObj.dateKey && tripData && tripData.eventos) {
+                    // Buscar qué había en el itinerario ese día (Priorizar hoteles para la ciudad)
+                    const dayEvents = tripData.eventos.filter(e => e.dateKey === fileObj.dateKey && (e.type === 'hotel' || e.type === 'plan'));
+                    
+                    if (dayEvents.length > 0) {
+                        let ev = dayEvents.find(e => e.type === 'hotel') || dayEvents[0];
+                        
+                        // Si tenemos lat/lon, intentamos sacar la ciudad limpia
+                        if (ev.lat && ev.lon) {
+                            let cleanCity = await getCleanCity(ev.lat, ev.lon);
+                            if (cleanCity) fileObj.destination = cleanCity;
+                        } 
+                        
+                        // Fallback: Limpiar el título a mano
+                        if (fileObj.destination === 'Descubriendo el mundo') {
+                            fileObj.destination = ev.title
+                                .replace(/📥 Check-in: |📤 Check-out: |🌙 Noche en: /g, '')
+                                .split(',')[0].trim();
+                        }
+                    }
+                }
+
+                // Guardar la ciudad única para los créditos
+                if (fileObj.destination !== 'Descubriendo el mundo' && !globalVisitedCities.includes(fileObj.destination)) {
+                    globalVisitedCities.push(fileObj.destination);
+                }
                 
                 results.push(fileObj);
             }
@@ -468,11 +481,16 @@
 
             let storyboard = [];
             
-            storyboard.push({ type: 'intro', title: tripData ? tripData.nombre : 'MI GRAN VIAJE', duration: TITLE_TIME });
+            // INTRODUCCIÓN CON MENSAJE DE INTERRA-HUB
+            storyboard.push({ 
+                type: 'intro', 
+                title: tripData ? tripData.nombre : 'MI GRAN VIAJE', 
+                subtitle: 'Organiza tu interrail con interra-hub.vercel.app', 
+                duration: TITLE_TIME 
+            });
 
             for (const [destName, photos] of Object.entries(grouped)) {
-                if (destName !== 'Otras fotos' && destName !== 'Sin clasificar') {
-                    // Seleccionamos una vibra aleatoria
+                if (destName !== 'Descubriendo el mundo') {
                     let randomVibe = FUN_VIBES[Math.floor(Math.random() * FUN_VIBES.length)];
                     storyboard.push({ type: 'title', title: destName, subtitle: randomVibe, duration: TITLE_TIME });
                 }
@@ -485,12 +503,18 @@
                         zoomType: Math.random() > 0.5 ? 'in' : 'out', 
                         panX: (Math.random() - 0.5) * 0.1,
                         panY: (Math.random() - 0.5) * 0.1,
-                        destination: p.destination // ¡Guardamos el destino para pintarlo en la foto!
+                        destination: p.destination 
                     });
                 });
             }
 
-            storyboard.push({ type: 'outro', title: 'Generado con Interra-hub ✈️', duration: TITLE_TIME });
+            // AÑADIR CRÉDITOS FINALES
+            // Calcular duración dinámica basada en los elementos a mostrar
+            let creditsDuration = Math.max(10, (globalVisitedCities.length + globalUserNames.length) * 1.8);
+            storyboard.push({ 
+                type: 'credits', 
+                duration: creditsDuration 
+            });
 
             return storyboard;
         }
@@ -518,29 +542,16 @@
             setTimeout(() => { toast.style.animation = 'slideOutToast 0.4s forwards'; setTimeout(() => toast.remove(), 400); }, 3500);
         }
 
-        // Función auxiliar para adaptar el tamaño del texto dinámicamente y que NUNCA se corte
         function fitText(ctx, text, maxWidth, startSize) {
             let size = startSize;
             do {
                 ctx.font = `800 ${size}px "Sora", sans-serif`;
                 size -= 5;
             } while (ctx.measureText(text).width > maxWidth && size > 20);
-            return size + 5; // Retorna el último tamaño válido
+            return size + 5; 
         }
 
-        // Helper para dibujar la píldora redondeada en caso de navegadores más antiguos
-        function drawRoundedRect(ctx, x, y, width, height, radius) {
-            ctx.beginPath();
-            ctx.moveTo(x + radius, y);
-            ctx.arcTo(x + width, y, x + width, y + height, radius);
-            ctx.arcTo(x + width, y + height, x, y + height, radius);
-            ctx.arcTo(x, y + height, x, y, radius);
-            ctx.arcTo(x, y, x + width, y, radius);
-            ctx.closePath();
-            ctx.fill();
-        }
-
-        // MOTOR CENTRAL DE RENDERIZADO "PRO" (¡Mejorado!)
+        // MOTOR CENTRAL DE RENDERIZADO "PRO"
         async function executeRender(storyboard) {
             const canvas = document.getElementById('render-canvas');
             const ctx = canvas.getContext('2d');
@@ -589,7 +600,7 @@
                 }
             }
 
-            const mediaRecorder = new MediaRecorder(mixedStream, { mimeType: selectedMime, videoBitsPerSecond: 8000000 });
+            const mediaRecorder = new MediaRecorder(mixedStream, { mimeType: selectedMime, videoBitsPerSecond: 10000000 });
             let chunks = [];
             mediaRecorder.ondataavailable = e => { if (e.data.size > 0) chunks.push(e.data); };
             
@@ -651,7 +662,7 @@
                     if (currentClip) {
                         let progress = (elapsed - clipStart) / currentClip.duration; 
 
-                        // Fondo Dinámico para las pantallas de título (Gradiente oscuro)
+                        // Fondo Dinámico para las pantallas
                         let grad = ctx.createLinearGradient(0, 0, W, H);
                         grad.addColorStop(0, "#0a0a0a");
                         grad.addColorStop(1, "#1a1a2e");
@@ -690,37 +701,116 @@
 
                             // BARRAS CINEMATOGRÁFICAS (Da el look "Pro" 10/10)
                             ctx.fillStyle = "#000000";
-                            ctx.fillRect(0, 0, W, 120);       // Barra Superior
-                            ctx.fillRect(0, H - 120, W, 120); // Barra Inferior
+                            ctx.fillRect(0, 0, W, 120);       
+                            ctx.fillRect(0, H - 120, W, 120); 
 
-                            // ETIQUETA DE UBICACIÓN DINÁMICA (¡Lo que pedías!)
-                            let locName = currentClip.destination;
-                            if(locName === 'Sin clasificar' || locName === 'Otras fotos') locName = 'Descubriendo el mundo';
-                            let locText = `📍 ${locName.toUpperCase()}`;
+                            // NUEVO OVERLAY DE UBICACIÓN PREMIUM
+                            let locName = currentClip.destination || 'Descubriendo el mundo';
+                            if (locName !== 'Descubriendo el mundo') {
+                                
+                                // Animación de entrada fluida desde la izquierda
+                                let slideX = (W * 0.05) - 30 + (30 * Math.min(progress / 0.15, 1));
+                                let opacity = 1;
+                                if (progress < 0.15) opacity = progress / 0.15; // Fade In
+                                if (progress > 0.85) opacity = (1 - progress) / 0.15; // Fade Out
+
+                                ctx.save();
+                                ctx.globalAlpha = opacity;
+                                ctx.textAlign = "left";
+                                ctx.textBaseline = "middle";
+
+                                // Sombras suaves para separar el texto de fondos claros
+                                ctx.shadowColor = "rgba(0,0,0,0.85)";
+                                ctx.shadowBlur = 15;
+                                ctx.shadowOffsetY = 4;
+
+                                // Texto formal y elegante (Playfair Display)
+                                ctx.font = '300 24px "Playfair Display", serif';
+                                ctx.fillStyle = "#e0e0e0";
+                                ctx.letterSpacing = "6px"; 
+                                ctx.fillText("RECUERDA CUANDO VISITASTEIS", slideX, H - 260);
+
+                                // Nombre de la ciudad masivo (Sora)
+                                ctx.font = '800 85px "Sora", sans-serif';
+                                ctx.fillStyle = "#ffffff";
+                                ctx.letterSpacing = "0px";
+                                ctx.fillText(locName.toUpperCase(), slideX, H - 180);
+
+                                ctx.restore();
+                            }
+
+                        } else if (currentClip.type === 'credits') {
+                            // LÓGICA DE CRÉDITOS SCROLLING HOLLYWOOD
                             
-                            ctx.font = '700 32px "Sora", sans-serif';
-                            let txtW = ctx.measureText(locText).width;
-                            let padX = 30, padY = 15;
-                            let pillW = txtW + (padX * 2);
-                            let pillH = 32 + (padY * 2);
-                            let pillX = W / 2 - pillW / 2;
-                            // Lo colocamos justo encima de la barra cinematográfica inferior
-                            let pillY = H - 120 - pillH - 30; 
+                            // Progreso de Y (empieza abajo del todo, termina arriba)
+                            let startY = H + 200;
+                            let listHeight = (globalVisitedCities.length * 60) + (globalUserNames.length * 60) + 600;
+                            let endY = -listHeight;
+                            let currentY = startY + (endY - startY) * progress;
 
-                            // Dibujar fondo de píldora
-                            ctx.fillStyle = "rgba(0, 0, 0, 0.75)";
-                            ctx.shadowColor = "rgba(0,0,0,0.5)";
-                            ctx.shadowBlur = 15;
-                            drawRoundedRect(ctx, pillX, pillY, pillW, pillH, pillH/2);
-                            ctx.shadowBlur = 0; // Reset shadow
+                            ctx.save();
+                            ctx.textAlign = 'center';
+                            ctx.textBaseline = 'middle';
+                            
+                            ctx.shadowColor = "rgba(0,0,0,0.9)";
+                            ctx.shadowBlur = 20;
 
-                            // Dibujar texto
-                            ctx.fillStyle = "#ffffff";
-                            ctx.textAlign = "center";
-                            ctx.textBaseline = "middle";
-                            ctx.fillText(locText, W/2, pillY + pillH/2 + 2);
+                            let yOffset = currentY;
 
-                        } else if (currentClip.type === 'title' || currentClip.type === 'intro' || currentClip.type === 'outro') {
+                            // Bloque 1: Destinos
+                            ctx.font = '800 55px "Sora", sans-serif';
+                            ctx.fillStyle = '#ff4d4d'; // Acento rojo
+                            ctx.letterSpacing = "4px";
+                            ctx.fillText("DESTINOS EXPLORADOS", W/2, yOffset);
+                            yOffset += 100;
+
+                            ctx.font = '600 45px "Playfair Display", serif';
+                            ctx.fillStyle = '#ffffff';
+                            ctx.letterSpacing = "2px";
+                            if (globalVisitedCities.length === 0) {
+                                ctx.fillText("Aventura sin límites", W/2, yOffset);
+                                yOffset += 70;
+                            } else {
+                                globalVisitedCities.forEach(city => {
+                                    ctx.fillText(city, W/2, yOffset);
+                                    yOffset += 70;
+                                });
+                            }
+
+                            yOffset += 80;
+
+                            // Bloque 2: Viajeros
+                            ctx.font = '800 55px "Sora", sans-serif';
+                            ctx.fillStyle = '#4da6ff'; // Acento azul
+                            ctx.letterSpacing = "4px";
+                            ctx.fillText("LOS AVENTUREROS", W/2, yOffset);
+                            yOffset += 100;
+
+                            ctx.font = '600 45px "Playfair Display", serif';
+                            ctx.fillStyle = '#ffffff';
+                            ctx.letterSpacing = "2px";
+                            globalUserNames.forEach(user => {
+                                ctx.fillText(user, W/2, yOffset);
+                                yOffset += 70;
+                            });
+
+                            yOffset += 150;
+
+                            // Bloque 3: Logo Final y Copyright
+                            ctx.font = '800 45px "Sora", sans-serif';
+                            ctx.fillStyle = '#ffffff';
+                            ctx.letterSpacing = "0px";
+                            ctx.fillText("Interra-hub.", W/2, yOffset);
+                            yOffset += 60;
+                            
+                            ctx.font = '400 25px "Sora", sans-serif';
+                            ctx.fillStyle = '#888888';
+                            ctx.fillText(`© ${new Date().getFullYear()} Creado automáticamente con Interra-hub`, W/2, yOffset);
+
+                            ctx.restore();
+
+                        } else if (currentClip.type === 'intro' || currentClip.type === 'title' || currentClip.type === 'outro') {
+                            
                             let scale = 1 + (0.05 * progress);
                             ctx.save();
                             ctx.translate(W/2, H/2);
@@ -729,7 +819,6 @@
                             ctx.textAlign = 'center';
                             ctx.textBaseline = 'middle';
                             
-                            // Sombras profundas para el texto
                             ctx.shadowColor = "rgba(0,0,0,0.9)";
                             ctx.shadowBlur = 25;
                             ctx.shadowOffsetY = 5;
@@ -737,18 +826,20 @@
                             if (currentClip.type === 'intro') {
                                 ctx.font = '800 40px "Sora", sans-serif';
                                 ctx.fillStyle = '#ff4d4d'; // Accent
+                                ctx.letterSpacing = "8px";
                                 ctx.fillText("ESTE HA SIDO TU VIAJE", 0, -80);
                                 
-                                // Texto dinámico para que no se corte el título del viaje
                                 let optimalSize = fitText(ctx, currentClip.title.toUpperCase(), W - 150, 130);
                                 ctx.font = `800 ${optimalSize}px "Sora", sans-serif`;
                                 ctx.fillStyle = '#ffffff';
+                                ctx.letterSpacing = "0px";
                                 ctx.fillText(currentClip.title.toUpperCase(), 0, 30);
+
+                                // El texto promocional pedido
+                                ctx.font = '400 28px "Sora", sans-serif';
+                                ctx.fillStyle = '#4da6ff'; // Acento azul
+                                ctx.fillText(currentClip.subtitle, 0, 150);
                                 
-                            } else if (currentClip.type === 'outro') {
-                                ctx.font = '600 50px "Sora", sans-serif';
-                                ctx.fillStyle = '#ffffff';
-                                ctx.fillText(currentClip.title, 0, 0);
                             } else {
                                 // Transición de Destino con "Vibes"
                                 let optimalSize = fitText(ctx, currentClip.title.toUpperCase(), W - 150, 110);
