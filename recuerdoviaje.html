@@ -266,6 +266,18 @@
         const TRANSITION_TIME = 0.6; 
         const TITLE_TIME = 3.0; 
 
+        // Frases divertidas para darle "vibes" a las transiciones
+        const FUN_VIBES = [
+            "¡Qué pasada de lugar! ✨", 
+            "Modo explorador: ON 🧭", 
+            "Coleccionando momentos 📸", 
+            "De película 🎬", 
+            "Un rincón inolvidable 🌍",
+            "Pura magia 🪄",
+            "¡Menudas vistas! 👀",
+            "Viviendo el sueño ✈️"
+        ];
+
         document.getElementById('btn-volver').onclick = () => {
             if (tripId) window.location.href = `viaje.html?id=${tripId}`;
             else window.location.href = 'panel.html';
@@ -395,7 +407,7 @@
             let results = [];
             
             for (let i = 0; i < files.length; i++) {
-                updateProgress('Analizando fotografías...', `Extrayendo EXIF: foto ${i+1} de ${files.length}`, (i/files.length)*20);
+                updateProgress('Analizando fotografías...', `Extrayendo GPS y Datos: foto ${i+1} de ${files.length}`, (i/files.length)*20);
                 let file = files[i];
                 let fileObj = { file: file, url: URL.createObjectURL(file), destination: 'Sin clasificar', timestamp: null };
 
@@ -446,7 +458,7 @@
         }
 
         function createStoryboard(images) {
-            updateProgress('Construyendo Narrativa...', 'Agrupando por destinos...', 25);
+            updateProgress('Construyendo Narrativa...', 'Preparando la claqueta...', 25);
             
             let grouped = {};
             images.forEach(img => {
@@ -460,7 +472,9 @@
 
             for (const [destName, photos] of Object.entries(grouped)) {
                 if (destName !== 'Otras fotos' && destName !== 'Sin clasificar') {
-                    storyboard.push({ type: 'title', title: destName, duration: TITLE_TIME });
+                    // Seleccionamos una vibra aleatoria
+                    let randomVibe = FUN_VIBES[Math.floor(Math.random() * FUN_VIBES.length)];
+                    storyboard.push({ type: 'title', title: destName, subtitle: randomVibe, duration: TITLE_TIME });
                 }
                 
                 photos.forEach(p => {
@@ -470,12 +484,13 @@
                         duration: TIME_PER_PHOTO,
                         zoomType: Math.random() > 0.5 ? 'in' : 'out', 
                         panX: (Math.random() - 0.5) * 0.1,
-                        panY: (Math.random() - 0.5) * 0.1
+                        panY: (Math.random() - 0.5) * 0.1,
+                        destination: p.destination // ¡Guardamos el destino para pintarlo en la foto!
                     });
                 });
             }
 
-            storyboard.push({ type: 'outro', title: 'Generado con Interra-hub', duration: TITLE_TIME });
+            storyboard.push({ type: 'outro', title: 'Generado con Interra-hub ✈️', duration: TITLE_TIME });
 
             return storyboard;
         }
@@ -503,28 +518,47 @@
             setTimeout(() => { toast.style.animation = 'slideOutToast 0.4s forwards'; setTimeout(() => toast.remove(), 400); }, 3500);
         }
 
-        // MOTOR CENTRAL DE RENDERIZADO "PRO"
+        // Función auxiliar para adaptar el tamaño del texto dinámicamente y que NUNCA se corte
+        function fitText(ctx, text, maxWidth, startSize) {
+            let size = startSize;
+            do {
+                ctx.font = `800 ${size}px "Sora", sans-serif`;
+                size -= 5;
+            } while (ctx.measureText(text).width > maxWidth && size > 20);
+            return size + 5; // Retorna el último tamaño válido
+        }
+
+        // Helper para dibujar la píldora redondeada en caso de navegadores más antiguos
+        function drawRoundedRect(ctx, x, y, width, height, radius) {
+            ctx.beginPath();
+            ctx.moveTo(x + radius, y);
+            ctx.arcTo(x + width, y, x + width, y + height, radius);
+            ctx.arcTo(x + width, y + height, x, y + height, radius);
+            ctx.arcTo(x, y + height, x, y, radius);
+            ctx.arcTo(x, y, x + width, y, radius);
+            ctx.closePath();
+            ctx.fill();
+        }
+
+        // MOTOR CENTRAL DE RENDERIZADO "PRO" (¡Mejorado!)
         async function executeRender(storyboard) {
             const canvas = document.getElementById('render-canvas');
             const ctx = canvas.getContext('2d');
             const W = canvas.width; const H = canvas.height;
 
-            // FASE 1: Precarga de Assets
-            updateProgress('Precargando Media...', 'Decodificando imágenes en RAM', 30);
+            updateProgress('Precargando Media...', 'Decodificando píxeles', 30);
             for (let i = 0; i < storyboard.length; i++) {
                 if (storyboard[i].type === 'photo') {
                     try {
                         storyboard[i].imgEl = await loadImage(storyboard[i].url);
                         storyboard[i].aspect = storyboard[i].imgEl.width / storyboard[i].imgEl.height;
                     } catch(e) {
-                        console.error("Error cargando imagen", e);
-                        storyboard[i].imgEl = null; // Skip if corrupt
+                        storyboard[i].imgEl = null; 
                     }
                 }
             }
 
-            // FASE 2: Setup Grabador y Audio (Web Audio API)
-            updateProgress('Configurando Grabador...', 'Iniciando MediaRecorder y AudioContext', 40);
+            updateProgress('Configurando Grabador...', 'Iniciando sonido y cámaras', 40);
             const stream = canvas.captureStream(30); 
             
             let audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -541,7 +575,7 @@
                     source.connect(dest);
                     tracks.push(...dest.stream.getAudioTracks());
                 } catch(e) {
-                    console.error("Error decodificando audio, procediendo sin él.", e);
+                    console.warn("Audio ignorado.", e);
                 }
             }
 
@@ -561,11 +595,9 @@
             
             let renderPromise = new Promise(resolve => mediaRecorder.onstop = resolve);
             
-            // Cálculos de tiempo
             let totalDuration = storyboard.reduce((sum, clip) => sum + clip.duration, 0);
             let startTime = 0;
 
-            // FASE 3: Bucle de Renderizado (requestAnimationFrame Sync)
             return new Promise((resolveFinal, rejectFinal) => {
                 
                 mediaRecorder.start();
@@ -578,11 +610,8 @@
 
                     if (elapsed >= totalDuration) {
                         mediaRecorder.stop();
-                        if(source) {
-                            try { source.stop(); audioCtx.close(); } catch(e){}
-                        }
-                        
-                        updateProgress('Empaquetando...', 'Guardando archivo local', 99);
+                        if(source) { try { source.stop(); audioCtx.close(); } catch(e){} }
+                        updateProgress('¡Casi listo!', 'Guardando la obra de arte...', 99);
                         
                         renderPromise.then(() => {
                             const blob = new Blob(chunks, { type: selectedMime });
@@ -604,30 +633,29 @@
                             showToast("¡Película renderizada con éxito!", "success");
                             resolveFinal();
                         }).catch(rejectFinal);
-
                         return; 
                     }
 
-                    // Actualizar UI
                     let perc = 40 + (elapsed / totalDuration) * 55;
-                    updateProgress('Renderizando frames...', `Procesando: ${Math.round((elapsed/totalDuration)*100)}%`, perc);
+                    updateProgress('Grabando...', `Renderizando frames: ${Math.round((elapsed/totalDuration)*100)}%`, perc);
 
-                    // Determinar el clip actual
                     let clipStart = 0;
                     let currentClip = null;
                     for (let clip of storyboard) {
                         if (elapsed >= clipStart && elapsed < clipStart + clip.duration) {
-                            currentClip = clip;
-                            break;
+                            currentClip = clip; break;
                         }
                         clipStart += clip.duration;
                     }
 
                     if (currentClip) {
-                        let progress = (elapsed - clipStart) / currentClip.duration; // 0.0 a 1.0
+                        let progress = (elapsed - clipStart) / currentClip.duration; 
 
-                        // Fondo Negro Limpio
-                        ctx.fillStyle = '#030303';
+                        // Fondo Dinámico para las pantallas de título (Gradiente oscuro)
+                        let grad = ctx.createLinearGradient(0, 0, W, H);
+                        grad.addColorStop(0, "#0a0a0a");
+                        grad.addColorStop(1, "#1a1a2e");
+                        ctx.fillStyle = grad;
                         ctx.fillRect(0, 0, W, H);
 
                         // Lógica Visual
@@ -643,25 +671,54 @@
                             let imgAspect = currentClip.aspect;
                             let canvasAspect = W / H;
 
-                            // Composición Blur (estilo reel) o Panorámica
                             if (imgAspect < canvasAspect - 0.2) { 
-                                ctx.filter = 'blur(40px) brightness(0.4)';
+                                ctx.filter = 'blur(50px) brightness(0.3)';
                                 ctx.drawImage(currentClip.imgEl, -W/2, -H/2, W, H);
                                 ctx.filter = 'none';
-                                
                                 let drawW = H * imgAspect;
                                 ctx.drawImage(currentClip.imgEl, -drawW/2, -H/2, drawW, H);
                             } else { 
                                 let drawH = W / imgAspect;
                                 if(drawH < H) {
-                                    drawH = H;
-                                    let drawW = H * imgAspect;
+                                    drawH = H; let drawW = H * imgAspect;
                                     ctx.drawImage(currentClip.imgEl, -drawW/2, -H/2, drawW, H);
                                 } else {
                                     ctx.drawImage(currentClip.imgEl, -W/2, -drawH/2, W, drawH);
                                 }
                             }
                             ctx.restore();
+
+                            // BARRAS CINEMATOGRÁFICAS (Da el look "Pro" 10/10)
+                            ctx.fillStyle = "#000000";
+                            ctx.fillRect(0, 0, W, 120);       // Barra Superior
+                            ctx.fillRect(0, H - 120, W, 120); // Barra Inferior
+
+                            // ETIQUETA DE UBICACIÓN DINÁMICA (¡Lo que pedías!)
+                            let locName = currentClip.destination;
+                            if(locName === 'Sin clasificar' || locName === 'Otras fotos') locName = 'Descubriendo el mundo';
+                            let locText = `📍 ${locName.toUpperCase()}`;
+                            
+                            ctx.font = '700 32px "Sora", sans-serif';
+                            let txtW = ctx.measureText(locText).width;
+                            let padX = 30, padY = 15;
+                            let pillW = txtW + (padX * 2);
+                            let pillH = 32 + (padY * 2);
+                            let pillX = W / 2 - pillW / 2;
+                            // Lo colocamos justo encima de la barra cinematográfica inferior
+                            let pillY = H - 120 - pillH - 30; 
+
+                            // Dibujar fondo de píldora
+                            ctx.fillStyle = "rgba(0, 0, 0, 0.75)";
+                            ctx.shadowColor = "rgba(0,0,0,0.5)";
+                            ctx.shadowBlur = 15;
+                            drawRoundedRect(ctx, pillX, pillY, pillW, pillH, pillH/2);
+                            ctx.shadowBlur = 0; // Reset shadow
+
+                            // Dibujar texto
+                            ctx.fillStyle = "#ffffff";
+                            ctx.textAlign = "center";
+                            ctx.textBaseline = "middle";
+                            ctx.fillText(locText, W/2, pillY + pillH/2 + 2);
 
                         } else if (currentClip.type === 'title' || currentClip.type === 'intro' || currentClip.type === 'outro') {
                             let scale = 1 + (0.05 * progress);
@@ -672,37 +729,52 @@
                             ctx.textAlign = 'center';
                             ctx.textBaseline = 'middle';
                             
+                            // Sombras profundas para el texto
+                            ctx.shadowColor = "rgba(0,0,0,0.9)";
+                            ctx.shadowBlur = 25;
+                            ctx.shadowOffsetY = 5;
+
                             if (currentClip.type === 'intro') {
                                 ctx.font = '800 40px "Sora", sans-serif';
-                                ctx.fillStyle = '#ff4d4d';
-                                ctx.fillText("ESTE HA SIDO TU VIAJE", 0, -60);
-                                ctx.font = '800 110px "Sora", sans-serif';
+                                ctx.fillStyle = '#ff4d4d'; // Accent
+                                ctx.fillText("ESTE HA SIDO TU VIAJE", 0, -80);
+                                
+                                // Texto dinámico para que no se corte el título del viaje
+                                let optimalSize = fitText(ctx, currentClip.title.toUpperCase(), W - 150, 130);
+                                ctx.font = `800 ${optimalSize}px "Sora", sans-serif`;
                                 ctx.fillStyle = '#ffffff';
-                                ctx.fillText(currentClip.title.toUpperCase(), 0, 40);
+                                ctx.fillText(currentClip.title.toUpperCase(), 0, 30);
+                                
                             } else if (currentClip.type === 'outro') {
                                 ctx.font = '600 50px "Sora", sans-serif';
                                 ctx.fillStyle = '#ffffff';
                                 ctx.fillText(currentClip.title, 0, 0);
                             } else {
-                                ctx.font = '800 100px "Sora", sans-serif';
+                                // Transición de Destino con "Vibes"
+                                let optimalSize = fitText(ctx, currentClip.title.toUpperCase(), W - 150, 110);
+                                ctx.font = `800 ${optimalSize}px "Sora", sans-serif`;
                                 ctx.fillStyle = '#ffffff';
-                                ctx.fillText(currentClip.title, 0, 0);
+                                ctx.fillText(currentClip.title.toUpperCase(), 0, -20);
+
+                                if (currentClip.subtitle) {
+                                    ctx.font = '600 45px "Sora", sans-serif';
+                                    ctx.fillStyle = '#4da6ff'; // Accent Blue
+                                    ctx.fillText(currentClip.subtitle, 0, 60);
+                                }
                             }
                             ctx.restore();
                         }
 
-                        // Lógica Universal de Fundidos (Fade In / Fade Out en negro)
+                        // Lógica Universal de Fundidos (Fade In / Fade Out en negro suave)
                         let fadeFactor = 1;
                         if (progress < TRANSITION_TIME / currentClip.duration) {
-                            // Fade in
                             fadeFactor = progress / (TRANSITION_TIME / currentClip.duration);
                         } else if (progress > 1 - (TRANSITION_TIME / currentClip.duration)) {
-                            // Fade out
                             fadeFactor = (1 - progress) / (TRANSITION_TIME / currentClip.duration);
                         }
                         
                         if (fadeFactor < 1) {
-                            ctx.fillStyle = `rgba(3, 3, 3, ${1 - fadeFactor})`;
+                            ctx.fillStyle = `rgba(10, 10, 15, ${1 - fadeFactor})`; // Fade a color muy oscuro
                             ctx.fillRect(0, 0, W, H);
                         }
                     }
