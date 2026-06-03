@@ -9,7 +9,7 @@
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;800&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Sora:wght@300;400;600;800&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
     
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdn.jsdelivr.net/npm/exif-js"></script>
@@ -260,8 +260,8 @@
         let tripData = null;
         let selectedFiles = [];
         let audioFile = null;
-        let globalUserNames = []; // Nombres de los participantes para los créditos
-        let globalVisitedCities = []; // Ciudades únicas y limpias para los créditos
+        let globalUserNames = []; 
+        let globalVisitedCities = []; 
 
         const TIME_PER_PHOTO = 3.5; 
         const TRANSITION_TIME = 0.6; 
@@ -278,8 +278,23 @@
             "Viviendo el sueño ✈️"
         ];
 
-        // Cache para Nominatim y no hacer peticiones de más
         const reverseGeocodeCache = {};
+
+        // Matemáticas para Geoposicionamiento
+        function getDistance(lat1, lon1, lat2, lon2) {
+            const R = 6371; 
+            const dLat = (lat2 - lat1) * Math.PI / 180;
+            const dLon = (lon2 - lon1) * Math.PI / 180;
+            const a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon/2) * Math.sin(dLon/2);
+            return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        }
+
+        function convertDMSToDD(dms, ref) {
+            if (!dms || dms.length < 3) return null;
+            let dd = dms[0].valueOf() + dms[1].valueOf() / 60 + dms[2].valueOf() / 3600;
+            if (ref === "S" || ref === "W") dd = dd * -1;
+            return dd;
+        }
 
         document.getElementById('btn-volver').onclick = () => {
             if (tripId) window.location.href = `viaje.html?id=${tripId}`;
@@ -303,7 +318,6 @@
             if (tripSnap.exists()) {
                 tripData = tripSnap.data();
                 
-                // Cargar perfiles de usuarios para los créditos
                 if (tripData.miembros) {
                     for (let uid of Object.keys(tripData.miembros)) {
                         try {
@@ -392,7 +406,8 @@
         // Función para limpiar la ciudad y obtener solo lo relevante
         async function getCleanCity(lat, lon) {
             if (!lat || !lon) return null;
-            const key = `${lat.toFixed(3)},${lon.toFixed(3)}`;
+            // Redondeo a 2 decimales para optimizar llamadas a la API (radio aproximado de 1.1km)
+            const key = `${lat.toFixed(2)},${lon.toFixed(2)}`;
             if (reverseGeocodeCache[key]) return reverseGeocodeCache[key];
             
             try {
@@ -407,60 +422,107 @@
             return null;
         }
 
+        // MOTOR DE DETECCIÓN SUPERIOR (NIVEL DIOS 10/10)
         async function processAndClassifyImages(files) {
             let results = [];
             
-            for (let i = 0; i < files.length; i++) {
-                updateProgress('Analizando fotografías...', `Verificando fechas y localizaciones: foto ${i+1} de ${files.length}`, (i/files.length)*20);
-                let file = files[i];
-                let fileObj = { file: file, url: URL.createObjectURL(file), destination: 'Descubriendo el mundo', dateKey: null };
+            // Mapas de pre-búsqueda para rendimiento masivo
+            let eventsByDate = {};
+            let eventsWithGPS = [];
+            if (tripData && tripData.eventos) {
+                tripData.eventos.forEach(e => {
+                    if (e.type === 'hotel' || e.type === 'plan') {
+                        if (!eventsByDate[e.dateKey]) eventsByDate[e.dateKey] = [];
+                        eventsByDate[e.dateKey].push(e);
+                        if (e.lat && e.lon) eventsWithGPS.push(e);
+                    }
+                });
+            }
 
+            const getCleanTitle = (title) => {
+                if(!title) return 'Descubriendo el mundo';
+                return title.replace(/📥 Check-in: |📤 Check-out: |🌙 Noche en: /g, '').split(',')[0].trim();
+            };
+
+            for (let i = 0; i < files.length; i++) {
+                updateProgress('Analizando fotografías...', `Motor IA detectando localizaciones exactas: foto ${i+1} de ${files.length}`, (i/files.length)*20);
+                let file = files[i];
+                let fileObj = { file: file, url: URL.createObjectURL(file), destination: 'Descubriendo el mundo', dateKey: null, lat: null, lon: null };
+
+                // Extraemos EXIF
                 await new Promise((resolve) => {
-                    let watchdog = setTimeout(resolve, 500); 
+                    let watchdog = setTimeout(resolve, 600); 
                     EXIF.getData(file, function() {
                         clearTimeout(watchdog);
                         
-                        // Extraer fecha original de la foto
+                        // Extracción inteligente de fechas
                         let rawDate = EXIF.getTag(this, "DateTimeOriginal") || EXIF.getTag(this, "DateTimeDigitized");
                         if (rawDate) {
                             let parts = rawDate.split(' ');
-                            if (parts.length > 0) {
-                                // Convertir "YYYY:MM:DD" a "YYYY-MM-DD"
-                                fileObj.dateKey = parts[0].replace(/:/g, '-');
-                            }
+                            if (parts.length > 0) fileObj.dateKey = parts[0].replace(/:/g, '-');
                         } else if (file.lastModified) {
-                            // Fallback a fecha de modificación del archivo
                             const d = new Date(file.lastModified);
                             fileObj.dateKey = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+                        }
+
+                        // Extracción estricta de GPS
+                        let latRaw = EXIF.getTag(this, "GPSLatitude");
+                        let latRef = EXIF.getTag(this, "GPSLatitudeRef");
+                        let lonRaw = EXIF.getTag(this, "GPSLongitude");
+                        let lonRef = EXIF.getTag(this, "GPSLongitudeRef");
+                        
+                        if (latRaw && lonRaw) {
+                            fileObj.lat = convertDMSToDD(latRaw, latRef);
+                            fileObj.lon = convertDMSToDD(lonRaw, lonRef);
                         }
                         resolve();
                     });
                 });
 
-                // Lógica de Matching con Firebase Viaje.html
-                if (fileObj.dateKey && tripData && tripData.eventos) {
-                    // Buscar qué había en el itinerario ese día (Priorizar hoteles para la ciudad)
-                    const dayEvents = tripData.eventos.filter(e => e.dateKey === fileObj.dateKey && (e.type === 'hotel' || e.type === 'plan'));
-                    
-                    if (dayEvents.length > 0) {
-                        let ev = dayEvents.find(e => e.type === 'hotel') || dayEvents[0];
-                        
-                        // Si tenemos lat/lon, intentamos sacar la ciudad limpia
-                        if (ev.lat && ev.lon) {
-                            let cleanCity = await getCleanCity(ev.lat, ev.lon);
-                            if (cleanCity) fileObj.destination = cleanCity;
-                        } 
-                        
-                        // Fallback: Limpiar el título a mano
-                        if (fileObj.destination === 'Descubriendo el mundo') {
-                            fileObj.destination = ev.title
-                                .replace(/📥 Check-in: |📤 Check-out: |🌙 Noche en: /g, '')
-                                .split(',')[0].trim();
+                // ALGORITMO MATCHING 10/10
+                let matched = false;
+
+                // CAPA 1: Match por GPS exacto con tu propio itinerario (Radio de 60km)
+                if (fileObj.lat && fileObj.lon && eventsWithGPS.length > 0) {
+                    let bestEvent = null;
+                    let minDistance = 60; 
+                    for (let ev of eventsWithGPS) {
+                        let dist = getDistance(fileObj.lat, fileObj.lon, ev.lat, ev.lon);
+                        if (dist < minDistance) {
+                            minDistance = dist;
+                            bestEvent = ev;
                         }
+                    }
+                    if (bestEvent) {
+                        fileObj.destination = getCleanTitle(bestEvent.title);
+                        matched = true;
                     }
                 }
 
-                // Guardar la ciudad única para los créditos
+                // CAPA 2: Match inteligente por Fecha (Si no hay GPS o no coincide)
+                if (!matched && fileObj.dateKey && eventsByDate[fileObj.dateKey]) {
+                    let dayEvents = eventsByDate[fileObj.dateKey];
+                    let bestEv = dayEvents.find(e => e.type === 'hotel') || dayEvents[0];
+                    if (bestEv) {
+                        if (bestEv.lat && bestEv.lon) {
+                            let cleanCity = await getCleanCity(bestEv.lat, bestEv.lon);
+                            fileObj.destination = cleanCity || getCleanTitle(bestEv.title);
+                        } else {
+                            fileObj.destination = getCleanTitle(bestEv.title);
+                        }
+                        matched = true;
+                    }
+                }
+
+                // CAPA 3: Fallback Final Satelital
+                if (!matched && fileObj.lat && fileObj.lon) {
+                    let cleanCity = await getCleanCity(fileObj.lat, fileObj.lon);
+                    if (cleanCity) {
+                        fileObj.destination = cleanCity;
+                        matched = true;
+                    }
+                }
+
                 if (fileObj.destination !== 'Descubriendo el mundo' && !globalVisitedCities.includes(fileObj.destination)) {
                     globalVisitedCities.push(fileObj.destination);
                 }
@@ -508,8 +570,7 @@
                 });
             }
 
-            // AÑADIR CRÉDITOS FINALES
-            // Calcular duración dinámica basada en los elementos a mostrar
+            // CRÉDITOS FINALES (Duración Dinámica)
             let creditsDuration = Math.max(10, (globalVisitedCities.length + globalUserNames.length) * 1.8);
             storyboard.push({ 
                 type: 'credits', 
@@ -551,7 +612,7 @@
             return size + 5; 
         }
 
-        // MOTOR CENTRAL DE RENDERIZADO "PRO"
+        // MOTOR CENTRAL DE RENDERIZADO "PRO" 10/10
         async function executeRender(storyboard) {
             const canvas = document.getElementById('render-canvas');
             const ctx = canvas.getContext('2d');
@@ -652,11 +713,14 @@
 
                     let clipStart = 0;
                     let currentClip = null;
-                    for (let clip of storyboard) {
-                        if (elapsed >= clipStart && elapsed < clipStart + clip.duration) {
-                            currentClip = clip; break;
+                    let clipIndex = 0;
+                    for (let i = 0; i < storyboard.length; i++) {
+                        if (elapsed >= clipStart && elapsed < clipStart + storyboard[i].duration) {
+                            currentClip = storyboard[i];
+                            clipIndex = i;
+                            break;
                         }
-                        clipStart += clip.duration;
+                        clipStart += storyboard[i].duration;
                     }
 
                     if (currentClip) {
@@ -699,50 +763,73 @@
                             }
                             ctx.restore();
 
-                            // BARRAS CINEMATOGRÁFICAS (Da el look "Pro" 10/10)
+                            // BARRAS CINEMATOGRÁFICAS
                             ctx.fillStyle = "#000000";
                             ctx.fillRect(0, 0, W, 120);       
                             ctx.fillRect(0, H - 120, W, 120); 
 
-                            // NUEVO OVERLAY DE UBICACIÓN PREMIUM
+                            // LÓGICA DEL TEXTO DE LOCALIZACIÓN MEJORADO
                             let locName = currentClip.destination || 'Descubriendo el mundo';
                             if (locName !== 'Descubriendo el mundo') {
                                 
-                                // Animación de entrada fluida desde la izquierda
-                                let slideX = (W * 0.05) - 30 + (30 * Math.min(progress / 0.15, 1));
-                                let opacity = 1;
-                                if (progress < 0.15) opacity = progress / 0.15; // Fade In
-                                if (progress > 0.85) opacity = (1 - progress) / 0.15; // Fade Out
+                                // Determinar si animar (Fade/Slide) basado en foto anterior/siguiente
+                                let isFirstOfDest = true;
+                                let isLastOfDest = true;
+                                
+                                if (clipIndex > 0 && storyboard[clipIndex - 1].destination === locName) isFirstOfDest = false;
+                                if (clipIndex < storyboard.length - 1 && storyboard[clipIndex + 1].destination === locName) isLastOfDest = false;
 
+                                let slideX = W * 0.05; // Posición estática anclada a la izquierda
+                                let opacity = 1;
+
+                                if (isFirstOfDest && progress < 0.15) {
+                                    opacity = progress / 0.15;
+                                    slideX = (W * 0.05) - 30 + (30 * opacity); // Slide-in suave
+                                }
+                                if (isLastOfDest && progress > 0.85) {
+                                    opacity = (1 - progress) / 0.15; // Fade-out suave sin deslizarse
+                                }
+
+                                // 1. DIBUJAR DIFUMINADO OSCURO DE FONDO (Para legibilidad extrema)
+                                ctx.save();
+                                ctx.globalAlpha = opacity * 0.8; // Máxima opacidad de la sombra
+                                let textGrad = ctx.createLinearGradient(0, 0, W * 0.5, 0);
+                                textGrad.addColorStop(0, "rgba(0,0,0,0.85)");
+                                textGrad.addColorStop(0.5, "rgba(0,0,0,0.3)");
+                                textGrad.addColorStop(1, "rgba(0,0,0,0)");
+                                ctx.fillStyle = textGrad;
+                                // Dibujar rectángulo gradiente de fondo detrás del texto
+                                ctx.fillRect(0, H - 340, W * 0.5, 220); 
+                                ctx.restore();
+
+                                // 2. DIBUJAR LOS TEXTOS
                                 ctx.save();
                                 ctx.globalAlpha = opacity;
                                 ctx.textAlign = "left";
                                 ctx.textBaseline = "middle";
 
-                                // Sombras suaves para separar el texto de fondos claros
+                                // Sombras extra
                                 ctx.shadowColor = "rgba(0,0,0,0.85)";
-                                ctx.shadowBlur = 15;
-                                ctx.shadowOffsetY = 4;
+                                ctx.shadowBlur = 10;
+                                ctx.shadowOffsetY = 3;
 
-                                // Texto formal y elegante (Playfair Display)
-                                ctx.font = '300 24px "Playfair Display", serif';
+                                // Texto Poppins Limpio y Elegante
+                                ctx.font = '300 24px "Poppins", sans-serif';
                                 ctx.fillStyle = "#e0e0e0";
                                 ctx.letterSpacing = "6px"; 
-                                ctx.fillText("RECUERDA CUANDO VISITASTEIS", slideX, H - 260);
+                                ctx.fillText("RECUERDA CUANDO VISITASTEIS", slideX, H - 240);
 
-                                // Nombre de la ciudad masivo (Sora)
-                                ctx.font = '800 85px "Sora", sans-serif';
+                                // Nombre de Ciudad Ajustado (Más pequeño: 60px)
+                                ctx.font = '800 60px "Sora", sans-serif';
                                 ctx.fillStyle = "#ffffff";
                                 ctx.letterSpacing = "0px";
-                                ctx.fillText(locName.toUpperCase(), slideX, H - 180);
+                                ctx.fillText(locName.toUpperCase(), slideX, H - 170);
 
                                 ctx.restore();
                             }
 
                         } else if (currentClip.type === 'credits') {
                             // LÓGICA DE CRÉDITOS SCROLLING HOLLYWOOD
-                            
-                            // Progreso de Y (empieza abajo del todo, termina arriba)
                             let startY = H + 200;
                             let listHeight = (globalVisitedCities.length * 60) + (globalUserNames.length * 60) + 600;
                             let endY = -listHeight;
