@@ -426,7 +426,7 @@
             return null;
         }
 
-        // MOTOR DE DETECCIÓN DEFINITIVO - LECTURA GPS ROBUSTA Y MATCH POR ALOJAMIENTO
+        // MOTOR DE DETECCIÓN DEFINITIVO Y ORDEN CRONOLÓGICO
         async function processAndClassifyImages(files) {
             let results = [];
             
@@ -450,21 +450,32 @@
             for (let i = 0; i < files.length; i++) {
                 updateProgress('Analizando fotografías...', `Motor IA extrayendo geodatos: foto ${i+1} de ${files.length}`, (i/files.length)*20);
                 let file = files[i];
-                let fileObj = { file: file, url: URL.createObjectURL(file), destination: 'Descubriendo el mundo', dateKey: null, lat: null, lon: null };
+                let fileObj = { file: file, url: URL.createObjectURL(file), destination: 'Descubriendo el mundo', dateKey: null, lat: null, lon: null, timestamp: null };
 
                 await new Promise((resolve) => {
                     let watchdog = setTimeout(resolve, 600); 
                     EXIF.getData(file, function() {
                         clearTimeout(watchdog);
                         
-                        // Extracción de Fechas Robustecida
+                        // Extracción de Fechas y Timestamp Exacto Robustecida
                         let rawDate = EXIF.getTag(this, "DateTimeOriginal") || EXIF.getTag(this, "DateTimeDigitized") || EXIF.getTag(this, "DateTime");
                         if (rawDate && typeof rawDate === 'string') {
                             let parts = rawDate.split(' ');
                             if (parts.length > 0) fileObj.dateKey = parts[0].replace(/:/g, '-');
-                        } else if (file.lastModified) {
+                            if (parts.length === 2) {
+                                let parsedDate = new Date(parts[0].replace(/:/g, '-') + 'T' + parts[1]);
+                                if (!isNaN(parsedDate.getTime())) fileObj.timestamp = parsedDate.getTime();
+                            }
+                        } 
+                        
+                        if (!fileObj.dateKey && file.lastModified) {
                             const d = new Date(file.lastModified);
                             fileObj.dateKey = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+                        }
+                        
+                        // Si EXIF falló o no tenía hora, usamos la de archivo como respaldo para la cronología
+                        if (!fileObj.timestamp) {
+                            fileObj.timestamp = file.lastModified || Date.now();
                         }
 
                         // Extracción estricta de GPS
@@ -539,13 +550,10 @@
         }
 
         function createStoryboard(images) {
-            updateProgress('Construyendo Narrativa...', 'Preparando la claqueta...', 25);
+            updateProgress('Construyendo Narrativa...', 'Preparando la claqueta y ordenando cronológicamente...', 25);
             
-            let grouped = {};
-            images.forEach(img => {
-                if(!grouped[img.destination]) grouped[img.destination] = [];
-                grouped[img.destination].push(img);
-            });
+            // ORDEN CRONOLÓGICO ESTRICTO POR TIMESTAMP
+            images.sort((a, b) => a.timestamp - b.timestamp);
 
             let storyboard = [];
             
@@ -556,19 +564,18 @@
                 duration: TITLE_TIME 
             });
 
-            for (const [destName, photos] of Object.entries(grouped)) {
-                photos.forEach(p => {
-                    storyboard.push({ 
-                        type: 'photo', 
-                        url: p.url, 
-                        duration: TIME_PER_PHOTO,
-                        zoomType: Math.random() > 0.5 ? 'in' : 'out', 
-                        panX: (Math.random() - 0.5) * 0.1,
-                        panY: (Math.random() - 0.5) * 0.1,
-                        destination: p.destination 
-                    });
+            // Flujo continuo y ordenado
+            images.forEach(p => {
+                storyboard.push({ 
+                    type: 'photo', 
+                    url: p.url, 
+                    duration: TIME_PER_PHOTO,
+                    zoomType: Math.random() > 0.5 ? 'in' : 'out', 
+                    panX: (Math.random() - 0.5) * 0.1,
+                    panY: (Math.random() - 0.5) * 0.1,
+                    destination: p.destination 
                 });
-            }
+            });
 
             let creditsDuration = Math.max(10, (globalVisitedCities.length + globalUserNames.length) * 1.8);
             storyboard.push({ 
