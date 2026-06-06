@@ -145,8 +145,8 @@
 <body>
 
     <div id="page-loader">
-        <i data-lucide="camera" style="width: 48px; height: 48px; color: var(--primary); animation: spin 2s linear infinite;"></i>
-        <p style="margin-top: 15px; color: var(--text-muted);">PREPARANDO LA SALA DE MONTAJE</p>
+        <i data-lucide="compass" style="width: 48px; height: 48px; color: var(--primary); animation: spin 2s linear infinite;"></i>
+        <p style="margin-top: 15px; color: var(--text-muted);">AJUSTANDO LA BRÚJULA</p>
     </div>
 
     <nav>
@@ -267,20 +267,9 @@
         const TRANSITION_TIME = 0.6; 
         const TITLE_TIME = 4.0; 
 
-        const FUN_VIBES = [
-            "¡Qué pasada de lugar! ✨", 
-            "Modo explorador: ON 🧭", 
-            "Coleccionando momentos 📸", 
-            "De película 🎬", 
-            "Un rincón inolvidable 🌍",
-            "Pura magia 🪄",
-            "¡Menudas vistas! 👀",
-            "Viviendo el sueño ✈️"
-        ];
-
         const reverseGeocodeCache = {};
 
-        // Matemáticas para Geoposicionamiento
+        // Matemáticas para Geoposicionamiento robusto
         function getDistance(lat1, lon1, lat2, lon2) {
             const R = 6371; 
             const dLat = (lat2 - lat1) * Math.PI / 180;
@@ -291,7 +280,12 @@
 
         function convertDMSToDD(dms, ref) {
             if (!dms || dms.length < 3) return null;
-            let dd = dms[0].valueOf() + dms[1].valueOf() / 60 + dms[2].valueOf() / 3600;
+            // Manejo seguro de valores Rational o Number de EXIF.js
+            let deg = typeof dms[0] === 'number' ? dms[0] : (dms[0].valueOf ? dms[0].valueOf() : 0);
+            let min = typeof dms[1] === 'number' ? dms[1] : (dms[1].valueOf ? dms[1].valueOf() : 0);
+            let sec = typeof dms[2] === 'number' ? dms[2] : (dms[2].valueOf ? dms[2].valueOf() : 0);
+            
+            let dd = deg + (min / 60) + (sec / 3600);
             if (ref === "S" || ref === "W") dd = dd * -1;
             return dd;
         }
@@ -403,10 +397,9 @@
             document.getElementById('progress-bar').style.width = `${percent}%`;
         }
 
-        // Función para limpiar la ciudad y obtener solo lo relevante
         async function getCleanCity(lat, lon) {
             if (!lat || !lon) return null;
-            // Redondeo a 2 decimales para optimizar llamadas a la API (radio aproximado de 1.1km)
+            // Redondeo a 2 decimales para optimizar llamadas a la API satelital
             const key = `${lat.toFixed(2)},${lon.toFixed(2)}`;
             if (reverseGeocodeCache[key]) return reverseGeocodeCache[key];
             
@@ -422,11 +415,11 @@
             return null;
         }
 
-        // MOTOR DE DETECCIÓN SUPERIOR (NIVEL DIOS 10/10)
+        // MOTOR DE DETECCIÓN MEJORADO
         async function processAndClassifyImages(files) {
             let results = [];
             
-            // Mapas de pre-búsqueda para rendimiento masivo
+            // Mapas de pre-búsqueda para rendimiento masivo y mayor precisión
             let eventsByDate = {};
             let eventsWithGPS = [];
             if (tripData && tripData.eventos) {
@@ -449,15 +442,14 @@
                 let file = files[i];
                 let fileObj = { file: file, url: URL.createObjectURL(file), destination: 'Descubriendo el mundo', dateKey: null, lat: null, lon: null };
 
-                // Extraemos EXIF
                 await new Promise((resolve) => {
                     let watchdog = setTimeout(resolve, 600); 
                     EXIF.getData(file, function() {
                         clearTimeout(watchdog);
                         
-                        // Extracción inteligente de fechas
-                        let rawDate = EXIF.getTag(this, "DateTimeOriginal") || EXIF.getTag(this, "DateTimeDigitized");
-                        if (rawDate) {
+                        // Extracción de Fechas Robustecida
+                        let rawDate = EXIF.getTag(this, "DateTimeOriginal") || EXIF.getTag(this, "DateTimeDigitized") || EXIF.getTag(this, "DateTime");
+                        if (rawDate && typeof rawDate === 'string') {
                             let parts = rawDate.split(' ');
                             if (parts.length > 0) fileObj.dateKey = parts[0].replace(/:/g, '-');
                         } else if (file.lastModified) {
@@ -479,13 +471,12 @@
                     });
                 });
 
-                // ALGORITMO MATCHING 10/10
                 let matched = false;
 
-                // CAPA 1: Match por GPS exacto con tu propio itinerario (Radio de 60km)
+                // CAPA 1: Match por GPS exacto con tu propio itinerario (Aumentado a Radio de 80km)
                 if (fileObj.lat && fileObj.lon && eventsWithGPS.length > 0) {
                     let bestEvent = null;
-                    let minDistance = 60; 
+                    let minDistance = 80; 
                     for (let ev of eventsWithGPS) {
                         let dist = getDistance(fileObj.lat, fileObj.lon, ev.lat, ev.lon);
                         if (dist < minDistance) {
@@ -499,27 +490,28 @@
                     }
                 }
 
-                // CAPA 2: Match inteligente por Fecha (Si no hay GPS o no coincide)
+                // CAPA 2: Match inteligente por Fecha (Súper efectivo si se borró el GPS al enviar por WhatsApp)
                 if (!matched && fileObj.dateKey && eventsByDate[fileObj.dateKey]) {
                     let dayEvents = eventsByDate[fileObj.dateKey];
-                    let bestEv = dayEvents.find(e => e.type === 'hotel') || dayEvents[0];
+                    // Prioridad: 1. Noche de Hotel, 2. Cualquier Hotel, 3. Planes del día
+                    let bestEv = dayEvents.find(e => e.type === 'hotel' && e.hotelType === 'hotel-night') 
+                              || dayEvents.find(e => e.type === 'hotel') 
+                              || dayEvents.find(e => e.type === 'plan')
+                              || dayEvents[0];
                     if (bestEv) {
-                        if (bestEv.lat && bestEv.lon) {
-                            let cleanCity = await getCleanCity(bestEv.lat, bestEv.lon);
-                            fileObj.destination = cleanCity || getCleanTitle(bestEv.title);
-                        } else {
-                            fileObj.destination = getCleanTitle(bestEv.title);
-                        }
+                        fileObj.destination = getCleanTitle(bestEv.title);
                         matched = true;
                     }
                 }
 
-                // CAPA 3: Fallback Final Satelital
+                // CAPA 3: Fallback Final Satelital (Evita saturar la API)
                 if (!matched && fileObj.lat && fileObj.lon) {
                     let cleanCity = await getCleanCity(fileObj.lat, fileObj.lon);
                     if (cleanCity) {
                         fileObj.destination = cleanCity;
                         matched = true;
+                        // Pequeño retardo para no colapsar Nominatim
+                        await new Promise(r => setTimeout(r, 200)); 
                     }
                 }
 
@@ -543,7 +535,6 @@
 
             let storyboard = [];
             
-            // INTRODUCCIÓN CON MENSAJE DE INTERRA-HUB
             storyboard.push({ 
                 type: 'intro', 
                 title: tripData ? tripData.nombre : 'MI GRAN VIAJE', 
@@ -552,11 +543,6 @@
             });
 
             for (const [destName, photos] of Object.entries(grouped)) {
-                if (destName !== 'Descubriendo el mundo') {
-                    let randomVibe = FUN_VIBES[Math.floor(Math.random() * FUN_VIBES.length)];
-                    storyboard.push({ type: 'title', title: destName, subtitle: randomVibe, duration: TITLE_TIME });
-                }
-                
                 photos.forEach(p => {
                     storyboard.push({ 
                         type: 'photo', 
@@ -570,7 +556,6 @@
                 });
             }
 
-            // CRÉDITOS FINALES (Duración Dinámica)
             let creditsDuration = Math.max(10, (globalVisitedCities.length + globalUserNames.length) * 1.8);
             storyboard.push({ 
                 type: 'credits', 
@@ -612,7 +597,6 @@
             return size + 5; 
         }
 
-        // MOTOR CENTRAL DE RENDERIZADO "PRO" 10/10
         async function executeRender(storyboard) {
             const canvas = document.getElementById('render-canvas');
             const ctx = canvas.getContext('2d');
@@ -726,14 +710,12 @@
                     if (currentClip) {
                         let progress = (elapsed - clipStart) / currentClip.duration; 
 
-                        // Fondo Dinámico para las pantallas
                         let grad = ctx.createLinearGradient(0, 0, W, H);
                         grad.addColorStop(0, "#0a0a0a");
                         grad.addColorStop(1, "#1a1a2e");
                         ctx.fillStyle = grad;
                         ctx.fillRect(0, 0, W, H);
 
-                        // Lógica Visual
                         if (currentClip.type === 'photo' && currentClip.imgEl) {
                             let scale = currentClip.zoomType === 'in' ? 1 + (0.15 * progress) : 1.15 - (0.15 * progress);
                             let dx = currentClip.panX * W * progress;
@@ -763,63 +745,54 @@
                             }
                             ctx.restore();
 
-                            // BARRAS CINEMATOGRÁFICAS
                             ctx.fillStyle = "#000000";
                             ctx.fillRect(0, 0, W, 120);       
                             ctx.fillRect(0, H - 120, W, 120); 
 
-                            // LÓGICA DEL TEXTO DE LOCALIZACIÓN MEJORADO
                             let locName = currentClip.destination || 'Descubriendo el mundo';
                             if (locName !== 'Descubriendo el mundo') {
                                 
-                                // Determinar si animar (Fade/Slide) basado en foto anterior/siguiente
                                 let isFirstOfDest = true;
                                 let isLastOfDest = true;
                                 
                                 if (clipIndex > 0 && storyboard[clipIndex - 1].destination === locName) isFirstOfDest = false;
                                 if (clipIndex < storyboard.length - 1 && storyboard[clipIndex + 1].destination === locName) isLastOfDest = false;
 
-                                let slideX = W * 0.05; // Posición estática anclada a la izquierda
+                                let slideX = W * 0.05; 
                                 let opacity = 1;
 
                                 if (isFirstOfDest && progress < 0.15) {
                                     opacity = progress / 0.15;
-                                    slideX = (W * 0.05) - 30 + (30 * opacity); // Slide-in suave
+                                    slideX = (W * 0.05) - 30 + (30 * opacity); 
                                 }
                                 if (isLastOfDest && progress > 0.85) {
-                                    opacity = (1 - progress) / 0.15; // Fade-out suave sin deslizarse
+                                    opacity = (1 - progress) / 0.15; 
                                 }
 
-                                // 1. DIBUJAR DIFUMINADO OSCURO DE FONDO (Para legibilidad extrema)
                                 ctx.save();
-                                ctx.globalAlpha = opacity * 0.8; // Máxima opacidad de la sombra
+                                ctx.globalAlpha = opacity * 0.8; 
                                 let textGrad = ctx.createLinearGradient(0, 0, W * 0.5, 0);
                                 textGrad.addColorStop(0, "rgba(0,0,0,0.85)");
                                 textGrad.addColorStop(0.5, "rgba(0,0,0,0.3)");
                                 textGrad.addColorStop(1, "rgba(0,0,0,0)");
                                 ctx.fillStyle = textGrad;
-                                // Dibujar rectángulo gradiente de fondo detrás del texto
                                 ctx.fillRect(0, H - 340, W * 0.5, 220); 
                                 ctx.restore();
 
-                                // 2. DIBUJAR LOS TEXTOS
                                 ctx.save();
                                 ctx.globalAlpha = opacity;
                                 ctx.textAlign = "left";
                                 ctx.textBaseline = "middle";
 
-                                // Sombras extra
                                 ctx.shadowColor = "rgba(0,0,0,0.85)";
                                 ctx.shadowBlur = 10;
                                 ctx.shadowOffsetY = 3;
 
-                                // Texto Poppins Limpio y Elegante
                                 ctx.font = '300 24px "Poppins", sans-serif';
                                 ctx.fillStyle = "#e0e0e0";
                                 ctx.letterSpacing = "6px"; 
                                 ctx.fillText("RECUERDA CUANDO VISITASTEIS", slideX, H - 240);
 
-                                // Nombre de Ciudad Ajustado (Más pequeño: 60px)
                                 ctx.font = '800 60px "Sora", sans-serif';
                                 ctx.fillStyle = "#ffffff";
                                 ctx.letterSpacing = "0px";
@@ -829,7 +802,6 @@
                             }
 
                         } else if (currentClip.type === 'credits') {
-                            // LÓGICA DE CRÉDITOS SCROLLING HOLLYWOOD
                             let startY = H + 200;
                             let listHeight = (globalVisitedCities.length * 60) + (globalUserNames.length * 60) + 600;
                             let endY = -listHeight;
@@ -844,9 +816,8 @@
 
                             let yOffset = currentY;
 
-                            // Bloque 1: Destinos
                             ctx.font = '800 55px "Sora", sans-serif';
-                            ctx.fillStyle = '#ff4d4d'; // Acento rojo
+                            ctx.fillStyle = '#ff4d4d'; 
                             ctx.letterSpacing = "4px";
                             ctx.fillText("DESTINOS EXPLORADOS", W/2, yOffset);
                             yOffset += 100;
@@ -866,9 +837,8 @@
 
                             yOffset += 80;
 
-                            // Bloque 2: Viajeros
                             ctx.font = '800 55px "Sora", sans-serif';
-                            ctx.fillStyle = '#4da6ff'; // Acento azul
+                            ctx.fillStyle = '#4da6ff'; 
                             ctx.letterSpacing = "4px";
                             ctx.fillText("LOS AVENTUREROS", W/2, yOffset);
                             yOffset += 100;
@@ -883,7 +853,6 @@
 
                             yOffset += 150;
 
-                            // Bloque 3: Logo Final y Copyright
                             ctx.font = '800 45px "Sora", sans-serif';
                             ctx.fillStyle = '#ffffff';
                             ctx.letterSpacing = "0px";
@@ -896,7 +865,7 @@
 
                             ctx.restore();
 
-                        } else if (currentClip.type === 'intro' || currentClip.type === 'title' || currentClip.type === 'outro') {
+                        } else if (currentClip.type === 'intro') {
                             
                             let scale = 1 + (0.05 * progress);
                             ctx.save();
@@ -910,40 +879,24 @@
                             ctx.shadowBlur = 25;
                             ctx.shadowOffsetY = 5;
 
-                            if (currentClip.type === 'intro') {
-                                ctx.font = '800 40px "Sora", sans-serif';
-                                ctx.fillStyle = '#ff4d4d'; // Accent
-                                ctx.letterSpacing = "8px";
-                                ctx.fillText("ESTE HA SIDO TU VIAJE", 0, -80);
-                                
-                                let optimalSize = fitText(ctx, currentClip.title.toUpperCase(), W - 150, 130);
-                                ctx.font = `800 ${optimalSize}px "Sora", sans-serif`;
-                                ctx.fillStyle = '#ffffff';
-                                ctx.letterSpacing = "0px";
-                                ctx.fillText(currentClip.title.toUpperCase(), 0, 30);
+                            ctx.font = '800 40px "Sora", sans-serif';
+                            ctx.fillStyle = '#ff4d4d'; 
+                            ctx.letterSpacing = "8px";
+                            ctx.fillText("ESTE HA SIDO TU VIAJE", 0, -80);
+                            
+                            let optimalSize = fitText(ctx, currentClip.title.toUpperCase(), W - 150, 130);
+                            ctx.font = `800 ${optimalSize}px "Sora", sans-serif`;
+                            ctx.fillStyle = '#ffffff';
+                            ctx.letterSpacing = "0px";
+                            ctx.fillText(currentClip.title.toUpperCase(), 0, 30);
 
-                                // El texto promocional pedido
-                                ctx.font = '400 28px "Sora", sans-serif';
-                                ctx.fillStyle = '#4da6ff'; // Acento azul
-                                ctx.fillText(currentClip.subtitle, 0, 150);
+                            ctx.font = '400 28px "Sora", sans-serif';
+                            ctx.fillStyle = '#4da6ff'; 
+                            ctx.fillText(currentClip.subtitle, 0, 150);
                                 
-                            } else {
-                                // Transición de Destino con "Vibes"
-                                let optimalSize = fitText(ctx, currentClip.title.toUpperCase(), W - 150, 110);
-                                ctx.font = `800 ${optimalSize}px "Sora", sans-serif`;
-                                ctx.fillStyle = '#ffffff';
-                                ctx.fillText(currentClip.title.toUpperCase(), 0, -20);
-
-                                if (currentClip.subtitle) {
-                                    ctx.font = '600 45px "Sora", sans-serif';
-                                    ctx.fillStyle = '#4da6ff'; // Accent Blue
-                                    ctx.fillText(currentClip.subtitle, 0, 60);
-                                }
-                            }
                             ctx.restore();
                         }
 
-                        // Lógica Universal de Fundidos (Fade In / Fade Out en negro suave)
                         let fadeFactor = 1;
                         if (progress < TRANSITION_TIME / currentClip.duration) {
                             fadeFactor = progress / (TRANSITION_TIME / currentClip.duration);
@@ -952,7 +905,7 @@
                         }
                         
                         if (fadeFactor < 1) {
-                            ctx.fillStyle = `rgba(10, 10, 15, ${1 - fadeFactor})`; // Fade a color muy oscuro
+                            ctx.fillStyle = `rgba(10, 10, 15, ${1 - fadeFactor})`; 
                             ctx.fillRect(0, 0, W, H);
                         }
                     }
