@@ -535,7 +535,7 @@
                 let file = files[i];
                 let fileObj = { 
                     file: file, 
-                    url: URL.createObjectURL(file), // Mantenemos URL para el pre-load, pero lo liberaremos luego
+                    url: null, // Optimizacion crítica: Evitamos crear ObjectURLs que generan leaks masivos de memoria
                     destination: 'Descubriendo el mundo', 
                     dateKey: null, lat: null, lon: null, timestamp: null 
                 };
@@ -626,8 +626,7 @@
             images.forEach(p => {
                 storyboard.push({ 
                     type: 'photo', 
-                    originalFile: p.file, // Clave para la optimización RAM
-                    tempUrl: p.url,
+                    originalFile: p.file, // Usamos la referencia en memoria nativa sin duplicar blobs
                     duration: TIME_PER_PHOTO,
                     zoomType: Math.random() > 0.5 ? 'in' : 'out', 
                     panX: (Math.random() - 0.5) * 0.1,
@@ -643,15 +642,15 @@
         }
 
         // ==========================================
-        // ALGORITMO OPTIMIZADO: DOWNSCALING EN MEMORIA
-        // Evita el crasheo por desbordamiento de RAM al subir +50 fotos
+        // ALGORITMO EXTREMO DE OPTIMIZACIÓN DE MEMORIA
+        // Evita crashes por desbordamiento usando Blob y baja resolución
         // ==========================================
         async function loadAndScaleImage(file) {
             return new Promise((resolve, reject) => {
                 const img = new Image();
                 const tempUrl = URL.createObjectURL(file);
                 img.onload = () => {
-                    const MAX_DIM = 1920;
+                    const MAX_DIM = 1080; // Reducción extrema a 1080p para salvar memoria RAM
                     let w = img.width;
                     let h = img.height;
                     
@@ -666,16 +665,21 @@
                     const ctx = cvs.getContext('2d');
                     ctx.drawImage(img, 0, 0, w, h);
                     
-                    const scaledImg = new Image();
-                    scaledImg.onload = () => {
-                        URL.revokeObjectURL(tempUrl); // Liberamos el pesado original de la RAM
-                        resolve(scaledImg);
-                    };
-                    scaledImg.src = cvs.toDataURL('image/jpeg', 0.85); // Alta calidad, bajísimo peso
+                    // Transición a Blob asíncrono. Bloquea menos el hilo y evita desbordamiento en memoria Base64
+                    cvs.toBlob((blob) => {
+                        URL.revokeObjectURL(tempUrl); // Liberamos la foto original de RAM inmediatamente
+                        if (!blob) { reject(new Error("Error optimizando imagen")); return; }
+                        
+                        const optimizedUrl = URL.createObjectURL(blob);
+                        const scaledImg = new Image();
+                        scaledImg.onload = () => resolve(scaledImg);
+                        scaledImg.onerror = reject;
+                        scaledImg.src = optimizedUrl;
+                    }, 'image/jpeg', 0.55); // Compresión agresiva al 55% para máximo ahorro de memoria
                 };
                 img.onerror = () => {
                     URL.revokeObjectURL(tempUrl);
-                    reject();
+                    reject(new Error("No se pudo leer la imagen original"));
                 };
                 img.src = tempUrl;
             });
@@ -750,7 +754,6 @@
             ctx.fillRect(0,0,W,H);
 
             // 2. Patrón Cascade Polaroid (Posiciones dinámicas en Z)
-            // Se han distribuido estratégicamente por la pantalla para ocupar el espacio
             const polaroidStyles = [
                 { x: W/2 - 150, y: 320, rot: -6, scale: 0.65 },
                 { x: W/2 + 180, y: 520, rot: 8, scale: 0.7 },
@@ -762,7 +765,7 @@
 
             const drawPolaroid = (img, config) => {
                 ctx.save();
-                ctx.translate(config.x, config.configY || config.y); // Manejo de fallback
+                ctx.translate(config.x, config.configY || config.y); 
                 ctx.rotate(config.rot * Math.PI / 180);
                 
                 // Ancho de polaroid estandarizado
@@ -785,7 +788,7 @@
                 ctx.restore();
             };
 
-            // Dibujamos el array completo de fotos obtenidas (pueden ser menos de 6)
+            // Dibujamos el array completo de fotos obtenidas
             for(let i=0; i<selectedPhotos.length; i++) {
                 if(polaroidStyles[i]) {
                     drawPolaroid(selectedPhotos[i], polaroidStyles[i]);
@@ -819,11 +822,9 @@
 
             // Dibujar Logo + Texto dentro de la píldora
             if (logoImg) {
-                // Logo a la izquierda
                 const logoSize = 60;
                 ctx.drawImage(logoImg, pillX + 30, pillY + (pillHeight - logoSize)/2, logoSize, logoSize);
                 
-                // Texto alineado junto al logo
                 ctx.font = '700 28px "Sora", sans-serif';
                 ctx.fillStyle = "#ffffff";
                 ctx.textAlign = "left";
@@ -831,7 +832,6 @@
                 ctx.letterSpacing = "0.5px";
                 ctx.fillText("Generado con interrahub.com", pillX + 115, pillY + pillHeight/2 + 2);
             } else {
-                // Si el logo no existe (error red), centramos el texto
                 ctx.font = '700 28px "Sora", sans-serif';
                 ctx.fillStyle = "#ffffff";
                 ctx.textAlign = "center";
@@ -841,7 +841,7 @@
             ctx.restore();
 
             // 5. Guardar resultado final
-            const collageData = canvas.toDataURL('image/jpeg', 0.95); // Alta calidad JPG
+            const collageData = canvas.toDataURL('image/jpeg', 0.95); 
             document.getElementById('output-collage').src = collageData;
             document.getElementById('btn-download-collage').href = collageData;
 
@@ -869,7 +869,7 @@
             const ctx = canvas.getContext('2d');
             const W = canvas.width; const H = canvas.height;
 
-            updateProgress('Precargando Memoria...', 'Comprimiendo imágenes para máxima fluidez', 30);
+            updateProgress('Precargando Memoria...', 'Optimizando imágenes masivas para evitar saturación de RAM', 30);
             
             let loadedCount = 0;
             let totalPhotos = storyboard.filter(s => s.type === 'photo').length;
@@ -881,7 +881,7 @@
                         storyboard[i].imgEl = await loadAndScaleImage(storyboard[i].originalFile);
                         storyboard[i].aspect = storyboard[i].imgEl.width / storyboard[i].imgEl.height;
                         loadedCount++;
-                        updateProgress('Optimizando...', `Imagen ${loadedCount} de ${totalPhotos} lista`, 30 + (loadedCount/totalPhotos)*20);
+                        updateProgress('Optimizando...', `Imagen ${loadedCount} de ${totalPhotos} lista (Comprimida y Segura)`, 30 + (loadedCount/totalPhotos)*20);
                     } catch(e) {
                         storyboard[i].imgEl = null; 
                     }
