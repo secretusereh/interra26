@@ -704,23 +704,24 @@
         }
 
         // ==========================================
-        // GENERADOR DE HISTORIA IG (9:16)
+        // GENERADOR DE HISTORIA IG (9:16) ACTUALIZADO
+        // Algoritmo dinámico y súper estético
         // ==========================================
         async function generateInstagramCollage(storyboard) {
-            updateProgress('Creando Story...', 'Diseñando historia instagrameable...', 25);
+            updateProgress('Creando Story...', 'Diseñando un layout perfecto para Instagram...', 25);
             
             const canvas = document.getElementById('collage-canvas');
             const ctx = canvas.getContext('2d');
             const W = canvas.width; const H = canvas.height;
 
-            // Extraemos fotos reales
             const photoClips = storyboard.filter(s => s.type === 'photo');
             if(photoClips.length === 0) return;
 
-            // Escogemos hasta 4 fotos equiespaciadas en la línea temporal
+            // Extraemos hasta 6 fotos para un collage enriquecido
             let selectedPhotos = [];
-            const step = Math.max(1, Math.floor(photoClips.length / 4));
-            for(let i=0; i < photoClips.length && selectedPhotos.length < 4; i+=step) {
+            const numPhotos = 6;
+            const step = Math.max(1, Math.floor(photoClips.length / numPhotos));
+            for(let i=0; i < photoClips.length && selectedPhotos.length < numPhotos; i+=step) {
                 try {
                     let img = await loadAndScaleImage(photoClips[i].originalFile);
                     selectedPhotos.push(img);
@@ -728,7 +729,7 @@
             }
             if(selectedPhotos.length === 0) return;
 
-            // 1. Fondo (Primera foto escalada y muy difuminada)
+            // 1. Fondo de lienzo (Blur + Gradient oscuro)
             ctx.fillStyle = '#111';
             ctx.fillRect(0,0,W,H);
             
@@ -737,90 +738,113 @@
             let dW = bgImg.width * ratio;
             let dH = bgImg.height * ratio;
             
-            ctx.filter = 'blur(40px) brightness(0.4)';
+            ctx.filter = 'blur(50px) brightness(0.6)';
             ctx.drawImage(bgImg, (W - dW)/2, (H - dH)/2, dW, dH);
             ctx.filter = 'none';
 
-            // 2. Título Superior
-            let tripName = tripData ? tripData.nombre.toUpperCase() : "MI VIAJE";
-            ctx.textAlign = "center";
-            ctx.fillStyle = "#ffffff";
-            ctx.shadowColor = "rgba(0,0,0,0.8)";
-            ctx.shadowBlur = 15;
-            ctx.shadowOffsetY = 4;
-            
-            let titleSize = fitText(ctx, tripName, W - 100, 90);
-            ctx.font = `800 ${titleSize}px "Sora", sans-serif`;
-            ctx.fillText(tripName, W/2, 250);
-            
-            ctx.font = '600 30px "Poppins", sans-serif';
-            ctx.fillStyle = "var(--accent-blue)";
-            ctx.letterSpacing = "4px";
-            ctx.fillText("DESTINOS INOLVIDABLES", W/2, 310);
+            // Gradiente overlay para que las fotos resalten mucho más
+            let gradOverlay = ctx.createLinearGradient(0, 0, 0, H);
+            gradOverlay.addColorStop(0, "rgba(0,0,0,0.2)");
+            gradOverlay.addColorStop(1, "rgba(0,0,0,0.85)");
+            ctx.fillStyle = gradOverlay;
+            ctx.fillRect(0,0,W,H);
 
-            // 3. Dibujar Polaroids Dinámicas
+            // 2. Patrón Cascade Polaroid (Posiciones dinámicas en Z)
+            // Se han distribuido estratégicamente por la pantalla para ocupar el espacio
             const polaroidStyles = [
-                { x: W/2, y: 650, rot: -4, scale: 0.85 },
-                { x: W/2 - 50, y: 1050, rot: 5, scale: 0.9 },
-                { x: W/2 + 30, y: 1450, rot: -3, scale: 0.85 },
-                { x: W/2, y: 1800, rot: 2, scale: 0.8 } // Si hay 4ta
+                { x: W/2 - 150, y: 320, rot: -6, scale: 0.65 },
+                { x: W/2 + 180, y: 520, rot: 8, scale: 0.7 },
+                { x: W/2 - 180, y: 820, rot: -4, scale: 0.75 },
+                { x: W/2 + 160, y: 1050, rot: 5, scale: 0.7 },
+                { x: W/2 - 130, y: 1350, rot: -7, scale: 0.75 },
+                { x: W/2 + 150, y: 1550, rot: 6, scale: 0.65 }
             ];
 
             const drawPolaroid = (img, config) => {
                 ctx.save();
-                ctx.translate(config.x, config.y);
+                ctx.translate(config.x, config.configY || config.y); // Manejo de fallback
                 ctx.rotate(config.rot * Math.PI / 180);
                 
-                // Calculamos tamaño fijo de polaroid (aprox 700px de ancho)
-                const pWidth = 700;
+                // Ancho de polaroid estandarizado
+                const pWidth = 750;
                 const pRatio = pWidth / img.width;
                 const pHeight = img.height * pRatio;
 
                 ctx.scale(config.scale, config.scale);
                 
-                // Sombra y papel blanco
-                ctx.shadowColor = 'rgba(0,0,0,0.4)';
-                ctx.shadowBlur = 30;
-                ctx.shadowOffsetY = 15;
+                // Efecto papel foto con sombra dura muy estética
+                ctx.shadowColor = 'rgba(0,0,0,0.6)';
+                ctx.shadowBlur = 40;
+                ctx.shadowOffsetY = 20;
                 ctx.fillStyle = '#ffffff';
                 ctx.fillRect(-pWidth/2 - 25, -pHeight/2 - 25, pWidth + 50, pHeight + 110);
                 
-                // Foto interior
+                // Pintar la foto dentro
                 ctx.shadowColor = 'transparent';
                 ctx.drawImage(img, -pWidth/2, -pHeight/2, pWidth, pHeight);
                 ctx.restore();
             };
 
-            // Dibujamos de atrás hacia adelante para solapamiento correcto
-            for(let i=selectedPhotos.length-1; i>=0; i--) {
+            // Dibujamos el array completo de fotos obtenidas (pueden ser menos de 6)
+            for(let i=0; i<selectedPhotos.length; i++) {
                 if(polaroidStyles[i]) {
                     drawPolaroid(selectedPhotos[i], polaroidStyles[i]);
                 }
             }
 
-            // 4. Branding inferior sutil (Seguro para UI de IG)
+            // 3. Cargar logotipo de Interrahub dinámicamente
+            const logoImg = await new Promise((resolve) => {
+                const img = new Image();
+                img.onload = () => resolve(img);
+                img.onerror = () => resolve(null); // Fallback silencioso si falla
+                img.src = 'interrahublogo.PNG'; 
+            });
+
+            // 4. Branding inferior (Píldora premium)
             ctx.save();
-            ctx.shadowColor = "rgba(0,0,0,0.9)";
-            ctx.shadowBlur = 10;
-            ctx.fillStyle = "rgba(20,20,20,0.7)";
+            ctx.shadowColor = "rgba(0,0,0,0.7)";
+            ctx.shadowBlur = 25;
+            ctx.shadowOffsetY = 10;
+            ctx.fillStyle = "rgba(15, 15, 15, 0.85)";
+            
+            // Medidas de la píldora
+            const pillWidth = 600;
+            const pillHeight = 90;
+            const pillX = W/2 - pillWidth/2;
+            const pillY = 1770;
+
             ctx.beginPath();
-            ctx.roundRect(W/2 - 250, 1780, 500, 70, 35);
+            ctx.roundRect(pillX, pillY, pillWidth, pillHeight, 45);
             ctx.fill();
 
-            ctx.font = '600 26px "Sora", sans-serif';
-            ctx.fillStyle = "#ffffff";
-            ctx.textAlign = "center";
-            ctx.textBaseline = "middle";
-            ctx.letterSpacing = "0px";
-            ctx.fillText("Crea tu viaje en interrahub.com", W/2, 1815);
+            // Dibujar Logo + Texto dentro de la píldora
+            if (logoImg) {
+                // Logo a la izquierda
+                const logoSize = 60;
+                ctx.drawImage(logoImg, pillX + 30, pillY + (pillHeight - logoSize)/2, logoSize, logoSize);
+                
+                // Texto alineado junto al logo
+                ctx.font = '700 28px "Sora", sans-serif';
+                ctx.fillStyle = "#ffffff";
+                ctx.textAlign = "left";
+                ctx.textBaseline = "middle";
+                ctx.letterSpacing = "0.5px";
+                ctx.fillText("Generado con interrahub.com", pillX + 115, pillY + pillHeight/2 + 2);
+            } else {
+                // Si el logo no existe (error red), centramos el texto
+                ctx.font = '700 28px "Sora", sans-serif';
+                ctx.fillStyle = "#ffffff";
+                ctx.textAlign = "center";
+                ctx.textBaseline = "middle";
+                ctx.fillText("Generado con interrahub.com", W/2, pillY + pillHeight/2 + 2);
+            }
             ctx.restore();
 
-            // 5. Guardar resultado
-            const collageData = canvas.toDataURL('image/jpeg', 0.9);
+            // 5. Guardar resultado final
+            const collageData = canvas.toDataURL('image/jpeg', 0.95); // Alta calidad JPG
             document.getElementById('output-collage').src = collageData;
             document.getElementById('btn-download-collage').href = collageData;
 
-            // Configurar botón de compartir de Instagram (Web Share API)
             document.getElementById('btn-share-ig').onclick = async () => {
                 try {
                     const blob = await (await fetch(collageData)).blob();
@@ -828,7 +852,7 @@
                     if (navigator.share) {
                         await navigator.share({
                             title: 'Mi Viaje',
-                            text: 'Mira el increíble recuerdo de mi viaje creado con InterraHub.',
+                            text: 'El resumen de mis aventuras gracias a InterraHub.',
                             files: [file]
                         });
                     } else {
