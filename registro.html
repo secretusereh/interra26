@@ -59,7 +59,7 @@
             flex-direction: column;
             align-items: center;
             background-image: radial-gradient(circle at 50% -20%, #2a2a2a 0%, var(--bg-color) 50%);
-            background-attachment: fixed; /* Evita que el fondo se deforme al hacer scroll */
+            background-attachment: fixed;
         }
 
         /* ── BETA BANNER (solo móvil) ── */
@@ -102,13 +102,13 @@
 
         /* ── MAIN LAYOUT MEJORADO ── */
         .page-wrapper {
-            flex: 1 0 auto; /* Permite crecer y empujar el footer */
+            flex: 1 0 auto;
             width: 100%;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 2rem 1rem; /* Espaciado extra para cuando sube el teclado */
+            padding: 2rem 1rem;
         }
 
         /* Botón de volver atrás premium */
@@ -154,7 +154,7 @@
         .header-text h1 .dot { color: var(--accent); }
         .header-text p { color: var(--text-muted); font-weight: 300; margin-top: 0.3rem; font-size: 0.88rem; }
 
-        .forms-wrapper { position: relative; min-height: 360px; /* Altura ampliada para que quepan bien en móvil */ }
+        .forms-wrapper { position: relative; min-height: 380px; }
         .form-box {
             position: absolute; width: 100%; top: 0; left: 0;
             transition: var(--transition); opacity: 0; pointer-events: none;
@@ -167,8 +167,8 @@
         .input-group input {
             width: 100%; background: transparent; border: none;
             border-bottom: 1px solid rgba(255,255,255,0.2); color: var(--primary);
-            font-size: 16px; /* Evita el zoom de iOS Safari */
-            padding: 0.8rem 0; /* Zona táctil ampliada */
+            font-size: 16px;
+            padding: 0.8rem 0;
             outline: none; transition: border-color 0.3s;
         }
         .input-group label {
@@ -181,11 +181,43 @@
             top: -12px; font-size: 0.72rem; color: var(--primary);
         }
 
+        /* ── NUEVO: CHECKBOX DE TÉRMINOS ── */
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 1.5rem;
+            margin-top: 0.5rem;
+        }
+        .checkbox-group input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: var(--primary); /* Estilo moderno para checkboxes */
+            flex-shrink: 0;
+        }
+        .checkbox-group label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            line-height: 1.4;
+            user-select: none;
+        }
+        .checkbox-group label span {
+            color: var(--primary);
+            text-decoration: underline;
+            text-decoration-color: rgba(255,255,255,0.2);
+            transition: 0.3s;
+        }
+        .checkbox-group label span:hover {
+            opacity: 0.8;
+        }
+
         button.submit-btn {
             width: 100%; padding: 0.9rem; background: var(--primary);
             color: var(--bg-color); border: none; border-radius: 12px;
-            font-weight: 600; cursor: pointer; margin-top: 0.5rem;
-            transition: all 0.3s ease; font-size: 1rem; /* Texto más legible en móvil */
+            font-weight: 600; cursor: pointer;
+            transition: all 0.3s ease; font-size: 1rem;
         }
         button.submit-btn:hover { transform: scale(0.98); opacity: 0.9; }
 
@@ -228,7 +260,7 @@
             text-decoration: underline;
             text-decoration-color: rgba(255,255,255,0.15);
             text-underline-offset: 3px;
-            padding: 8px 0; /* Área táctil súper ampliada para móviles */
+            padding: 8px 0;
         }
         .forgot-link:hover { color: var(--primary); }
 
@@ -236,18 +268,10 @@
 
         /* ── PANTALLA VERIFICACIÓN EMAIL ── */
         #verify-screen {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: var(--bg-color);
+            display: none; position: fixed; inset: 0; background: var(--bg-color);
             background-image: radial-gradient(circle at 50% -20%, #2a2a2a 0%, var(--bg-color) 50%);
-            z-index: 500;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 2rem;
-            text-align: center;
-            overflow-y: auto; /* Permite scroll en pantallas muy pequeñas */
+            z-index: 500; flex-direction: column; align-items: center; justify-content: center;
+            padding: 2rem; text-align: center; overflow-y: auto;
         }
         #verify-screen.show { display: flex; }
 
@@ -284,8 +308,7 @@
         .verify-back-btn {
             background: none; border: none; color: rgba(255,255,255,0.3); font-size: 0.78rem;
             cursor: pointer; transition: color 0.2s; text-decoration: underline;
-            text-decoration-color: rgba(255,255,255,0.1); text-underline-offset: 3px;
-            padding: 1rem; /* Área táctil ampliada */
+            text-decoration-color: rgba(255,255,255,0.1); text-underline-offset: 3px; padding: 1rem;
         }
         .verify-back-btn:hover { color: rgba(255,255,255,0.6); }
         .verify-msg { font-size: 0.8rem; min-height: 20px; margin-bottom: 0.8rem; opacity: 0; transition: 0.3s; }
@@ -304,8 +327,7 @@
         .modal-box, .reset-modal-box, .name-modal-box {
             background: #141414; border: 1px solid rgba(255,255,255,0.1);
             border-radius: 20px; width: 100%; max-width: 560px;
-            max-height: 90vh; /* Vital para móviles: permite scroll interno */
-            overflow-y: auto; padding: 2rem;
+            max-height: 90vh; overflow-y: auto; padding: 2rem;
             animation: slideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1);
             text-align: left;
         }
@@ -313,7 +335,6 @@
         
         @keyframes slideUp { from { transform: translateY(40px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
-        /* Detalles Modal Textos */
         .modal-box h2, .reset-modal-box h2, .name-modal-box h2 { font-size: 1.25rem; font-weight: 700; margin-bottom: 1.2rem; letter-spacing: -0.5px; }
         .modal-box p, .modal-box li, .reset-modal-box p, .name-modal-box p { font-size: 0.85rem; font-weight: 300; color: rgba(255,255,255,0.7); line-height: 1.6; margin-bottom: 0.8rem; }
         .modal-box h3 { font-size: 0.9rem; font-weight: 600; color: rgba(255,255,255,0.9); margin: 1.2rem 0 0.4rem; }
@@ -321,7 +342,6 @@
         .modal-box strong { color: rgba(255,255,255,0.9); font-weight: 600; }
         .modal-box a { color: rgba(255,255,255,0.6); }
 
-        /* Modales Formularios (Reset / Name) */
         .reset-spam-warning { color: var(--warning); font-size: 0.8rem; font-weight: 600; margin-bottom: 1.5rem; }
         .reset-modal-box input, .name-modal-box input {
             width: 100%; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.15);
@@ -367,7 +387,7 @@
         .footer-links { display: flex; justify-content: center; gap: 1rem; margin-bottom: 1rem; flex-wrap: wrap; }
         .footer-links button {
             background: none; border: none; color: var(--text-muted); font-size: 0.8rem;
-            cursor: pointer; padding: 8px; /* Área táctil ampliada */ transition: color 0.2s;
+            cursor: pointer; padding: 8px; transition: color 0.2s;
             text-decoration: underline; text-underline-offset: 3px; text-decoration-color: rgba(255,255,255,0.15);
         }
         .footer-links button:hover { color: var(--primary); }
@@ -440,6 +460,7 @@
                 </header>
 
                 <div class="forms-wrapper">
+                    <!-- INICIO DE SESIÓN -->
                     <form id="login-form" class="form-box active" style="text-align: left;">
                         <div class="input-group">
                             <input type="email" id="login-email" required>
@@ -469,6 +490,7 @@
                         <p class="toggle-text" style="text-align: center;">¿Nuevo aquí? <span id="to-reg">Regístrate</span></p>
                     </form>
 
+                    <!-- REGISTRO -->
                     <form id="register-form" class="form-box" style="text-align: left;">
                         <div class="input-group">
                             <input type="text" id="reg-name" required>
@@ -482,6 +504,13 @@
                             <input type="password" id="reg-password" required minlength="6">
                             <label>Contraseña</label>
                         </div>
+                        
+                        <!-- NUEVO: CHECKBOX OBLIGATORIO -->
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="reg-tyc" required>
+                            <label for="reg-tyc">He leído y acepto los <span id="link-tyc-reg">Términos y Condiciones</span></label>
+                        </div>
+
                         <button type="submit" class="submit-btn" id="reg-btn">Crear cuenta</button>
                         <div class="message-box" id="reg-msg"></div>
 
@@ -875,6 +904,12 @@
         document.getElementById('open-tos').addEventListener('click', () => openModal('modal-tos'));
         document.getElementById('open-privacy').addEventListener('click', () => openModal('modal-privacy'));
         document.getElementById('open-copyright').addEventListener('click', () => openModal('modal-copyright'));
+
+        // NUEVO: Funcionalidad para abrir el modal desde el texto del checkbox del registro
+        document.getElementById('link-tyc-reg').addEventListener('click', (e) => {
+            e.preventDefault();
+            openModal('modal-tos');
+        });
 
         document.querySelectorAll('.modal-overlay').forEach(overlay => {
             overlay.addEventListener('click', (e) => {
