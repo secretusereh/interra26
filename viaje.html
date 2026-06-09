@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Interra-hub.</title>
     
     <link rel="icon" type="image/png" href="interrahublogo.PNG">
@@ -46,6 +46,7 @@
             background-color: var(--bg-color); color: var(--primary); min-height: 100vh;
             background-image: radial-gradient(circle at 50% -10%, rgba(255, 255, 255, 0.05), transparent 60%);
             background-attachment: fixed;
+            overflow-x: hidden;
         }
 
         /* Nav */
@@ -81,14 +82,25 @@
         .trip-header h1 { font-size: 3.5rem; font-weight: 800; letter-spacing: -2px; margin-bottom: 0.5rem; word-break: break-word; }
         .trip-header p { color: var(--text-muted); font-size: 1.1rem; }
 
+        /* Ajuste crucial de diseño escalable y responsive para evitar saltos */
         .tabs-container {
-            display: flex; justify-content: center; gap: 2rem; border-bottom: 1px solid var(--border-subtle);
-            max-width: 1000px; margin: 2rem auto 0; padding: 0 5%; flex-wrap: wrap;
+            display: flex; 
+            justify-content: flex-start; 
+            gap: 2rem; 
+            border-bottom: 1px solid var(--border-subtle);
+            max-width: 1000px; 
+            margin: 2rem auto 0; 
+            padding: 0 5%; 
+            overflow-x: auto; /* Scroll horizontal en vez de wrap */
+            white-space: nowrap;
+            scrollbar-width: none; /* Ocultar scrollbar en Firefox */
         }
+        .tabs-container::-webkit-scrollbar { display: none; } /* Ocultar scrollbar Chrome/Safari */
+        
         .tab-btn {
             background: transparent; color: var(--text-muted); border: none; font-size: 1.1rem; font-weight: 600;
             padding: 1rem 0; cursor: pointer; position: relative; transition: var(--transition);
-            display: flex; align-items: center; gap: 8px;
+            display: flex; align-items: center; gap: 8px; flex-shrink: 0;
         }
         .tab-btn.active { color: var(--primary); }
         .tab-btn.active::after {
@@ -117,7 +129,7 @@
             display: flex; justify-content: space-between; align-items: center;
             padding: 0.5rem 0 1rem; border-bottom: 1px solid var(--border-subtle); margin-bottom: 1.5rem;
             position: sticky; top: 65px; z-index: 10;
-            background: transparent; 
+            background: rgba(3, 3, 3, 0.95); backdrop-filter: blur(5px); /* Mejor legibilidad en móvil al scrollear */
         }
         .day-title { font-size: 1.6rem; font-weight: 600; display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
         .day-date { font-size: 1rem; color: var(--text-muted); font-weight: 300; }
@@ -435,7 +447,7 @@
         
         select.finance-select {
             width: 100%; padding: 0.8rem 1rem; background: rgba(255,255,255,0.02); border: 1px solid var(--border-subtle);
-            border-radius: 12px; color: white; outline: none; font-size: 1rem; font-family: 'Sora', sans-serif;
+            border-radius: 12px; color: white; outline: none; font-size: 16px; font-family: 'Sora', sans-serif;
         }
         select.finance-select option { background: #1a1a1a; color: white; }
 
@@ -453,6 +465,8 @@
             background: var(--surface-solid); border: 1px solid var(--border-subtle); border-radius: 24px;
             width: 100%; max-width: 550px; padding: 1.8rem 2.5rem; transform: translateY(30px); transition: var(--transition); 
             display: flex; flex-direction: column; 
+            max-height: 90vh; /* Mejora UX Móvil */
+            overflow-y: auto; /* Mejora UX Móvil */
         }
         .modal-overlay.active .modal-content { transform: translateY(0); }
 
@@ -470,7 +484,7 @@
         .input-group label { display: block; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.4rem; text-align: left; }
         .input-group input, .input-group textarea, .input-group select {
             width: 100%; padding: 0.8rem 1rem; background: rgba(255,255,255,0.02); border: 1px solid var(--border-subtle);
-            border-radius: 12px; color: white; outline: none; font-size: 0.95rem; transition: 0.3s; text-align: left;
+            border-radius: 12px; color: white; outline: none; font-size: 16px; transition: 0.3s; text-align: left; /* Font size 16px previene Zoom en iOS */
         }
         .input-group input:focus, .input-group textarea:focus, .input-group select:focus { border-color: var(--primary); background: rgba(255,255,255,0.05); }
         .input-group textarea { resize: vertical; min-height: 60px; height: 60px; }
@@ -528,6 +542,53 @@
         .tour-dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,0.2); cursor: pointer; transition: 0.3s; }
         .tour-dot.active { background: var(--primary); transform: scale(1.2); }
         .tour-nav { display: flex; justify-content: space-between; gap: 1rem; }
+
+        /* =========================================
+           ADAPTACIONES MÓVILES (UX UI RESPONSIVE)
+           ========================================= */
+        @media (max-width: 768px) {
+            .trip-header { padding: 2rem 5% 1rem; }
+            .trip-header h1 { font-size: 2.2rem; }
+            .trip-header p { font-size: 0.95rem; }
+            
+            nav { padding: 1rem 5%; }
+            .logo { position: static; transform: none; font-size: 1.1rem; }
+            
+            .tab-btn { font-size: 0.95rem; padding: 0.8rem 0; }
+            
+            .event-card { flex-direction: column; gap: 0.8rem; padding: 1.2rem; }
+            .event-time { text-align: left; padding-bottom: 5px; border-bottom: 1px solid rgba(255,255,255,0.05); width: 100%; margin-bottom: 5px; font-size: 1rem; }
+            .event-card::before { left: -21px; } 
+            .timeline-wrapper { padding-left: 20px; }
+            .timeline-wrapper::before { left: 4px; }
+            .event-actions { flex-direction: row; opacity: 1; width: 100%; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 10px; margin-top: 5px; }
+            .btn-action { flex: 1; }
+            
+            .modal-content { padding: 1.5rem; margin: 1rem; max-width: 100%; border-radius: 20px; }
+            
+            /* Colapsar cuadrículas modales para que no se aplasten en móvil */
+            .form-section > div[style*="grid-template-columns: 1fr 1fr"] {
+                grid-template-columns: 1fr !important;
+                gap: 0.5rem !important;
+            }
+            #hotel-dates-wrapper > div { grid-template-columns: 1fr !important; gap: 0.5rem !important; }
+            #hotel-date-single-wrapper > div { grid-template-columns: 1fr !important; gap: 0.5rem !important; }
+            #finance-form > div[style*="grid-template-columns: 1fr 1fr"] { grid-template-columns: 1fr !important; gap: 0.5rem !important; }
+            #acc-config .user-section > div[style*="grid-template-columns: 1fr 1fr"] { grid-template-columns: 1fr !important; gap: 0.5rem !important; }
+            
+            .user-row { align-items: flex-start; flex-direction: column; }
+            .user-row > div:last-child { width: 100%; display: flex; justify-content: space-between; margin-top: 10px; }
+            
+            .finance-card { flex-direction: column; align-items: flex-start; gap: 10px; }
+            .finance-amount { align-self: flex-end; }
+            
+            .debt-card { flex-direction: column; align-items: flex-start; gap: 15px; }
+            .btn-settle { width: 100%; text-align: center; }
+
+            /* Optimización Toasts Móvil */
+            #toast-container { bottom: 20px; right: 20px; left: 20px; }
+            .toast { font-size: 0.8rem; padding: 0.8rem 1rem; }
+        }
     </style>
 </head>
 <body>
@@ -539,17 +600,18 @@
 
     <nav>
         <button class="btn-nav" onclick="window.location.href='panel.html'">
-            <i data-lucide="arrow-left"></i> Volver
+            <i data-lucide="arrow-left"></i> <span class="nav-text-mobile" style="display:none;">Volver</span>
         </button>
         <div class="logo">
             Interra-hub<span style="color: var(--accent);">.</span>
         </div>
         <div>
             <button class="btn-nav btn-export" title="Descarga todo tu itinerario en un pdf para compartir" onclick="iniciarDescargaPDF()">
-                <i data-lucide="file-down"></i> Exportar PDF
+                <i data-lucide="file-down"></i> <span class="nav-text-mobile" style="display:none;">PDF</span>
             </button>
         </div>
     </nav>
+    <style>@media(min-width: 768px){.nav-text-mobile{display:inline !important;}}</style>
 
     <div class="trip-header">
         <h1 id="trip-title">Cargando...</h1>
@@ -675,12 +737,18 @@
         <div class="accordion-content" id="acc-usuarios">
             <div class="user-section" style="margin-bottom: 2rem; text-align: center; border-color: var(--border-subtle);">
                 <h3 style="justify-content: center;"><i data-lucide="key"></i> Código de Invitación</h3>
-                <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem;">Comparte este código para que tus amigos puedan enviar una solicitud para unirse a esta aventura.</p>
-                <div style="background: rgba(255,255,255,0.03); padding: 1.5rem; border-radius: 16px; border: 1px dashed var(--border-subtle); max-width: 300px; margin: 0 auto;">
+                <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem;">Comparte este código para que tus amigos puedan unirse a esta aventura y organizarla juntos.</p>
+                <div style="background: rgba(255,255,255,0.03); padding: 1.5rem; border-radius: 16px; border: 1px dashed var(--border-subtle); max-width: 350px; margin: 0 auto;">
                     <div style="font-size: 2.5rem; font-weight: 800; letter-spacing: 8px; color: var(--primary); margin-bottom: 15px;" id="display-trip-code">-----</div>
-                    <button class="btn-nav btn-export" style="margin: 0 auto; background: rgba(255,255,255,0.05);" onclick="copiarCodigoViaje()">
-                        <i data-lucide="copy" style="width: 16px;"></i> Copiar Código
-                    </button>
+                    
+                    <div style="display: flex; gap: 10px; justify-content: center; margin-top: 15px; flex-wrap: wrap;">
+                        <button class="btn-nav btn-export" style="background: rgba(255,255,255,0.05); flex: 1; justify-content: center;" onclick="copiarCodigoViaje()">
+                            <i data-lucide="copy" style="width: 16px;"></i> Copiar
+                        </button>
+                        <button class="btn-nav btn-export" style="background: var(--primary); color: var(--bg-color); flex: 1; justify-content: center;" onclick="compartirViaje()">
+                            <i data-lucide="share-2" style="width: 16px;"></i> Compartir 📲
+                        </button>
+                    </div>
                 </div>
             </div>
             <div class="users-grid">
@@ -735,7 +803,7 @@
             <div class="ad-timer" id="ad-countdown">20</div>
             
             <div class="ad-container">
-                <a href="https://docs.google.com/forms/d/e/1FAIpQLSfMm-yvxtKBGMM4-2DmhyWLwX1xH8OqjXF5-ALRteNWt4XFRQ/viewform">
+                <a href="https://docs.google.com/forms/d/e/1FAIpQLSfMm-yvxtKBGMM4-2DmhyWLwX1xH8OqjXF5-ALRteNWt4XFRQ/viewform" target="_blank">
                     <i data-lucide="megaphone" style="width: 45px; height: 45px; margin-bottom: 15px; color: var(--primary);"></i><br>
                     ¿Quieres anunciarte aquí?<br>Haz clic para solicitar información.
                 </a>
@@ -2308,19 +2376,19 @@
                 if(soyAdminOGod && !isMe && !isTargetGod) {
                     controlHTML = `
                         <div style="display:flex; gap:8px; align-items:center;">
-                            <select onchange="cambiarRolMiembro('${uid}', this.value)" style="background:#1a1a1a; color:white; border:1px solid var(--border-subtle); padding:0.4rem; border-radius:8px; font-size:0.8rem; font-family:'Sora'; cursor:pointer; outline:none;">
+                            <select onchange="cambiarRolMiembro('${uid}', this.value)" style="background:#1a1a1a; color:white; border:1px solid var(--border-subtle); padding:0.4rem; border-radius:8px; font-size:16px; font-family:'Sora'; cursor:pointer; outline:none;">
                                 <option value="admin-grupo" ${rol === 'admin-grupo' ? 'selected' : ''}>Admin</option>
                                 <option value="editor-grupo" ${rol === 'editor-grupo' ? 'selected' : ''}>Editor</option>
                                 <option value="visor-grupo" ${rol === 'visor-grupo' ? 'selected' : ''}>Visor</option>
                             </select>
-                            <button onclick="eliminarMiembro('${uid}')" style="background:rgba(255,77,77,0.1); color:var(--accent); border:none; width:30px; height:30px; border-radius:6px; cursor:pointer; display:flex; align-items:center; justify-content:center;" title="Eliminar miembro de la aventura">
-                                <i data-lucide="user-x" style="width:14px;"></i>
+                            <button onclick="eliminarMiembro('${uid}')" style="background:rgba(255,77,77,0.1); color:var(--accent); border:none; width:34px; height:34px; border-radius:6px; cursor:pointer; display:flex; align-items:center; justify-content:center;" title="Eliminar miembro de la aventura">
+                                <i data-lucide="user-x" style="width:16px;"></i>
                             </button>
                         </div>
                     `;
                 }
 
-                let editProfileBtn = isMe ? `<button onclick="openProfileModal()" style="background:rgba(255,255,255,0.05); color:var(--primary); border:1px solid var(--border-subtle); border-radius:6px; padding:0.3rem 0.6rem; font-size:0.75rem; cursor:pointer; display:flex; align-items:center; gap:5px;"><i data-lucide="edit-3" style="width:12px;"></i> Editar Mi Perfil</button>` : '';
+                let editProfileBtn = isMe ? `<button onclick="openProfileModal()" style="background:rgba(255,255,255,0.05); color:var(--primary); border:1px solid var(--border-subtle); border-radius:6px; padding:0.4rem 0.8rem; font-size:0.8rem; cursor:pointer; display:flex; align-items:center; gap:5px;"><i data-lucide="edit-3" style="width:14px;"></i> Editar Mi Perfil</button>` : '';
 
                 miembrosList.innerHTML += `
                     <div class="user-row">
@@ -2334,7 +2402,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div style="display:flex; align-items:center; gap: 10px;">
+                        <div style="display:flex; align-items:center; gap: 10px; flex-wrap:wrap;">
                             ${editProfileBtn}
                             ${controlHTML}
                         </div>
@@ -2480,6 +2548,62 @@
                     showToast("Error al copiar", "error");
                 });
             }
+        }
+
+        // ── NUEVA FUNCIÓN PARA COMPARTIR VIAJE (WEB API / WHATSAPP FALLBACK) ──
+        window.compartirViaje = async function() {
+            if (!currentTripData) return;
+            const nombreViaje = currentTripData.nombre || "mi viaje";
+            const codigo = currentTripData.codigoInvitacion || "---";
+            const urlPlataforma = "https://interrahub.com"; // Asegúrate de cambiarlo si tienes otro dominio de inicio
+
+            const textoCompartir = `🌍 ¡Únete ya a mi viaje "${nombreViaje}" en Interra-hub y organízalo junto a mí! ✈️\n\n🔑 Tu código de invitación exclusivo es: *${codigo}*\n\n👉 1. Entra en ${urlPlataforma}\n👉 2. Regístrate o inicia sesión.\n👉 3. Selecciona "Unirse a un viaje existente" y pega tu código.\n\n¡Nos vemos dentro! 🎒🗺️`;
+
+            if (navigator.share) {
+                try {
+                    // Intento de compartir con imagen unete.png (si la API lo permite y el archivo existe)
+                    try {
+                        const response = await fetch('unete.png');
+                        if(response.ok) {
+                            const blob = await response.blob();
+                            const file = new File([blob], 'unete.png', { type: blob.type });
+                            
+                            if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                                await navigator.share({
+                                    title: `Únete a ${nombreViaje}`,
+                                    text: textoCompartir,
+                                    files: [file]
+                                });
+                                showToast("¡Viaje compartido exitosamente!", "success");
+                                return;
+                            }
+                        }
+                    } catch(e) {
+                        console.log("No se pudo adjuntar unete.png. Se enviará solo texto.");
+                    }
+
+                    // Fallback a compartir solo texto si la imagen falla o no hay soporte de archivos
+                    await navigator.share({
+                        title: `Únete a ${nombreViaje} en Interra-hub`,
+                        text: textoCompartir
+                    });
+                    showToast("¡Viaje compartido exitosamente!", "success");
+                } catch (err) {
+                    if(err.name !== "AbortError") {
+                        console.log("Compartir nativo falló. Redirigiendo a WhatsApp...");
+                        abrirWhatsApp(textoCompartir);
+                    }
+                }
+            } else {
+                // Fallback directo a WhatsApp para navegadores sin Web Share API (Escritorio generalmente)
+                abrirWhatsApp(textoCompartir);
+            }
+        }
+
+        function abrirWhatsApp(texto) {
+            const url = `https://wa.me/?text=${encodeURIComponent(texto)}`;
+            window.open(url, '_blank');
+            showToast("Abriendo WhatsApp...", "info");
         }
 
         window.gestionarSolicitud = async function(uid, rolElegido) {
