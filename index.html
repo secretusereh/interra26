@@ -79,7 +79,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;800&display=swap" rel="stylesheet">
     
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://unpkg.com/lucide@latest" defer></script>
 
     <style>
         :root {
@@ -338,19 +338,33 @@
             line-height: 1.6;
         }
 
-        /* Bento Grid: Reducido y Centrado */
+        /* Bento Grid: Control de Columnas Estricto y Determinista */
         .bento-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Más pequeños */
-            gap: 1.5rem; /* Menor espacio entre ellos */
+            grid-template-columns: 1fr; /* Por defecto en móvil: 1 columna */
+            gap: 1.5rem;
             margin-bottom: 4rem;
+        }
+
+        /* Breakpoint para Tablets y Escritorios Normales: Forzamos 2x2 siempre */
+        @media (min-width: 768px) {
+            .bento-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* Breakpoint para Pantallas Extra Grandes: Forzamos 4 en línea */
+        @media (min-width: 1200px) {
+            .bento-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
         }
 
         .bento-card {
             background: var(--surface);
             border: 1px solid var(--border-subtle);
             border-radius: 24px;
-            padding: 2.5rem 1.8rem; /* Padding reducido */
+            padding: 2.5rem 1.8rem;
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             transition: var(--transition);
@@ -384,7 +398,7 @@
         .icon-purple { background: rgba(179, 102, 255, 0.1); color: var(--accent-purple); }
 
         .bento-card h3 {
-            font-size: 1.3rem; /* Ligeramente más pequeño */
+            font-size: 1.3rem;
             font-weight: 800;
             margin-bottom: 1rem;
         }
@@ -662,7 +676,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            text-align: center; /* Todo el texto centrado por defecto */
+            text-align: center;
             gap: 2.5rem;
         }
 
@@ -670,7 +684,7 @@
             width: 100%;
             max-width: 1200px;
             display: flex;
-            flex-direction: column; /* Apilado para garantizar el centrado */
+            flex-direction: column;
             align-items: center;
             gap: 2rem;
         }
@@ -719,7 +733,7 @@
             color: var(--primary);
         }
 
-        /* Redes Sociales Oficiales */
+        /* Redes Sociales Oficiales Centradas */
         .footer-socials {
             display: flex;
             align-items: center;
@@ -942,9 +956,6 @@
             .hero-ctas { width: 100%; }
             .btn-massive { width: 100%; justify-content: center; }
             .btn-plus { width: 100%; justify-content: center; text-align: center; }
-            
-            /* En móvil forzamos 1 columna para mantener los cuadrados bien formados */
-            .bento-grid { grid-template-columns: 1fr; gap: 1.2rem; }
             
             .tutorial-inline-box {
                 flex-direction: column;
@@ -1255,8 +1266,12 @@
     </div>
 
     <script>
-        // Inicializar iconos de Lucide
-        lucide.createIcons();
+        // Inicializar iconos de Lucide (Se asegura que carga después del DOM si se ha diferido)
+        document.addEventListener('DOMContentLoaded', () => {
+            if(typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+        });
 
         // Controladores de estado Modal (DOM Avanzado y Accesibilidad)
         function openModal(id) {
@@ -1311,6 +1326,6 @@
         });
     </script>
     
-    <script src="//code.tidio.co/gfxhupr9pntygs7wjcktdwxemoht8pbu.js" async></script>
+    <script src="//code.tidio.co/gfxhupr9pntygs7wjcktdwxemoht8pbu.js" defer></script>
 </body>
 </html>
