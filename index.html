@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <!-- Meta Tags SEO & GEO -->
     <title>Interra-hub | Planifica viajes y rutas en grupo sin caos</title>
     <meta name="description" content="Interra-hub es el planificador definitivo para viajes en grupo. Diseña tu ruta minuto a minuto, liquida gastos, diviértete con minijuegos y lleva tu itinerario en el bolsillo.">
     <meta name="keywords" content="interrail, viajes en grupo, planificador de rutas, app para viajar, dividir gastos viaje, itinerario colaborativo, organizar viaje amigos, interrahub">
@@ -12,7 +11,6 @@
     <meta name="robots" content="index, follow, max-image-preview:large">
     <link rel="canonical" href="https://interrahub.com/">
     
-    <!-- Open Graph (Facebook, LinkedIn, Discord) -->
     <meta property="og:type" content="website">
     <meta property="og:title" content="Interra-hub | El hub definitivo para tus viajes">
     <meta property="og:description" content="El fin de los excels infinitos. Organiza tu próxima aventura en grupo: mapas, itinerarios, finanzas y entretenimiento en una sola app.">
@@ -20,7 +18,6 @@
     <meta property="og:url" content="https://interrahub.com/">
     <meta property="og:site_name" content="Interra-hub">
     
-    <!-- Twitter Cards -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:site" content="@interrahub">
     <meta name="twitter:creator" content="@interrahub">
@@ -28,7 +25,6 @@
     <meta name="twitter:description" content="Diseña tu ruta colaborativa y cuadra gastos al instante. La evolución de los viajes interrail.">
     <meta name="twitter:image" content="https://interrahub.com/interrahublogo.PNG">
 
-    <!-- Schema.org / JSON-LD Avanzado para SEO y GEO -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -51,7 +47,7 @@
           "logo": "https://interrahub.com/interrahublogo.PNG",
           "sameAs": [
             "https://instagram.com/interrahub",
-            "https://twitter.com/interrahub",
+            "https://x.com/interrahub",
             "https://tiktok.com/@interrahub"
           ]
         },
@@ -76,19 +72,15 @@
     }
     </script>
 
-    <!-- Favicon -->
     <link rel="icon" type="image/png" href="interrahublogo.PNG">
     <link rel="apple-touch-icon" href="interrahublogo.PNG">
 
-    <!-- Preconnect & Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;800&display=swap" rel="stylesheet">
     
-    <!-- External Libraries -->
     <script src="https://unpkg.com/lucide@latest"></script>
 
-    <!-- CSS Moderno, Desofuscado y Escalable -->
     <style>
         :root {
             --bg-color: #030303;
@@ -320,7 +312,7 @@
         /* Features Section */
         .section-features {
             padding: 8rem 5%;
-            max-width: 1400px; /* Ampliado para mejorar la distribución */
+            max-width: 1200px;
             margin: 0 auto;
             position: relative;
             z-index: 10;
@@ -346,25 +338,26 @@
             line-height: 1.6;
         }
 
-        /* Bento Grid: Ahora de 4 elementos para eliminar vacíos */
+        /* Bento Grid: Reducido y Centrado */
         .bento-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-bottom: 3rem;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Más pequeños */
+            gap: 1.5rem; /* Menor espacio entre ellos */
+            margin-bottom: 4rem;
         }
 
         .bento-card {
             background: var(--surface);
             border: 1px solid var(--border-subtle);
             border-radius: 24px;
-            padding: 3rem 2rem;
+            padding: 2.5rem 1.8rem; /* Padding reducido */
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             transition: var(--transition);
             display: flex;
             flex-direction: column;
-            align-items: flex-start;
+            align-items: center; /* Todo centrado */
+            text-align: center; /* Texto centrado */
             height: 100%;
         }
 
@@ -372,6 +365,7 @@
             background: rgba(255, 255, 255, 0.03);
             border-color: rgba(255, 255, 255, 0.2);
             transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
         .feature-icon {
@@ -387,10 +381,10 @@
         .icon-blue { background: rgba(77, 166, 255, 0.1); color: var(--accent-blue); }
         .icon-red { background: rgba(255, 77, 77, 0.1); color: var(--accent); }
         .icon-green { background: rgba(77, 255, 77, 0.1); color: var(--success); }
-        .icon-purple { background: rgba(179, 102, 255, 0.1); color: var(--accent-purple); } /* Nuevo color */
+        .icon-purple { background: rgba(179, 102, 255, 0.1); color: var(--accent-purple); }
 
         .bento-card h3 {
-            font-size: 1.4rem;
+            font-size: 1.3rem; /* Ligeramente más pequeño */
             font-weight: 800;
             margin-bottom: 1rem;
         }
@@ -416,7 +410,7 @@
             justify-content: space-between;
             gap: 2rem;
             text-align: left;
-            max-width: 1000px;
+            max-width: 900px;
             margin: 0 auto;
         }
 
@@ -658,25 +652,25 @@
             box-shadow: 0 0 20px rgba(255, 255, 255, 0.15);
         }
 
-        /* Footer Mejorado */
+        /* Footer Optimizado y Totalmente Centrado */
         footer {
             width: 100%;
-            padding: 3rem 5% 1.5rem;
+            padding: 4rem 5% 2rem;
             border-top: 1px solid rgba(255, 255, 255, 0.06);
-            background: rgba(0, 0, 0, 0.6);
+            background: rgba(0, 0, 0, 0.8);
             flex-shrink: 0;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 2rem;
+            text-align: center; /* Todo el texto centrado por defecto */
+            gap: 2.5rem;
         }
 
         .footer-inner {
             width: 100%;
             max-width: 1200px;
             display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
+            flex-direction: column; /* Apilado para garantizar el centrado */
             align-items: center;
             gap: 2rem;
         }
@@ -684,11 +678,12 @@
         .footer-brand {
             display: flex;
             flex-direction: column;
+            align-items: center;
             gap: 0.5rem;
         }
 
         .footer-logo {
-            font-size: 1.4rem;
+            font-size: 1.6rem;
             font-weight: 800;
             letter-spacing: -1px;
         }
@@ -698,12 +693,13 @@
         }
 
         .footer-studio {
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             color: rgba(255, 255, 255, 0.4);
         }
 
         .footer-links {
             display: flex;
+            justify-content: center;
             gap: 1.5rem;
             flex-wrap: wrap;
         }
@@ -712,7 +708,7 @@
             background: none;
             border: none;
             color: var(--text-muted);
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             font-family: 'Sora', sans-serif;
             cursor: pointer;
             transition: color 0.2s;
@@ -723,14 +719,15 @@
             color: var(--primary);
         }
 
-        /* Nuevas Redes Sociales */
+        /* Redes Sociales Oficiales */
         .footer-socials {
             display: flex;
             align-items: center;
-            gap: 1.2rem;
+            justify-content: center;
+            gap: 1.5rem;
             background: rgba(255, 255, 255, 0.03);
-            padding: 0.8rem 1.5rem;
-            border-radius: 30px;
+            padding: 1rem 2rem;
+            border-radius: 40px;
             border: 1px solid var(--border-subtle);
         }
 
@@ -744,15 +741,15 @@
 
         .footer-socials a:hover {
             color: var(--primary);
-            transform: translateY(-2px);
+            transform: translateY(-3px);
         }
 
         .footer-socials span {
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             font-weight: 600;
             color: var(--text-muted);
             margin-left: 0.5rem;
-            padding-left: 1rem;
+            padding-left: 1.5rem;
             border-left: 1px solid var(--border-subtle);
         }
 
@@ -760,9 +757,9 @@
             width: 100%;
             max-width: 1200px;
             text-align: center;
-            padding-top: 1.5rem;
+            padding-top: 2rem;
             border-top: 1px solid rgba(255, 255, 255, 0.05);
-            font-size: 0.75rem;
+            font-size: 0.8rem;
             color: rgba(255, 255, 255, 0.2);
             font-weight: 300;
         }
@@ -933,22 +930,7 @@
             color: var(--primary);
         }
 
-        /* Media Queries (Mobile First approach enhancements) */
-        @media (max-width: 900px) {
-            .footer-inner {
-                flex-direction: column;
-                text-align: center;
-            }
-            .footer-brand {
-                align-items: center;
-            }
-            .footer-socials {
-                justify-content: center;
-                width: 100%;
-                max-width: 350px;
-            }
-        }
-
+        /* Media Queries Móvil y Responsivo */
         @media (max-width: 768px) {
             .hero {
                 background: linear-gradient(to bottom, rgba(3, 3, 3, 0.5) 0%, rgba(3, 3, 3, 0.95) 100%), url('HomeInterrahubMovil.PNG') no-repeat center center;
@@ -961,17 +943,19 @@
             .btn-massive { width: 100%; justify-content: center; }
             .btn-plus { width: 100%; justify-content: center; text-align: center; }
             
-            .bento-grid { grid-template-columns: 1fr; }
+            /* En móvil forzamos 1 columna para mantener los cuadrados bien formados */
+            .bento-grid { grid-template-columns: 1fr; gap: 1.2rem; }
             
             .tutorial-inline-box {
                 flex-direction: column;
-                align-items: flex-start;
+                align-items: center;
+                text-align: center;
                 gap: 1.5rem;
-                padding: 1.5rem;
+                padding: 2rem 1.5rem;
             }
 
             .tutorial-inline-content {
-                align-items: flex-start;
+                align-items: center;
                 gap: 1rem;
                 flex-direction: column;
             }
@@ -983,12 +967,27 @@
 
             .plus-container { padding: 3rem 1.5rem; }
             .vision-container { gap: 3rem; }
-            .vision-item { flex-direction: column; gap: 1rem; }
+            .vision-item { flex-direction: column; align-items: center; text-align: center; gap: 1rem; }
             
             .footer-links {
                 flex-direction: column;
                 gap: 1rem;
-                align-items: center;
+            }
+
+            .footer-socials {
+                flex-direction: column;
+                width: 100%;
+                border-radius: 20px;
+                padding: 1.5rem;
+            }
+
+            .footer-socials span {
+                border-left: none;
+                border-top: 1px solid var(--border-subtle);
+                padding-left: 0;
+                padding-top: 1rem;
+                margin-left: 0;
+                width: 100%;
             }
 
             #cookie-banner {
@@ -1060,32 +1059,28 @@
             </div>
             
             <div class="bento-grid">
-                <!-- Tarjeta 1 -->
                 <article class="bento-card">
                     <div class="feature-icon icon-blue"><i data-lucide="map"></i></div>
                     <h3>Ruta Inteligente</h3>
                     <p>Organiza el viaje día a día. Detalla trenes, vuelos, check-ins de hotel y actividades. Todo accesible en la nube para cualquier miembro de tu equipo, sin importar dónde esté.</p>
                 </article>
                 
-                <!-- Tarjeta 2 -->
                 <article class="bento-card">
                     <div class="feature-icon icon-red"><i data-lucide="calculator"></i></div>
                     <h3>Motor Financiero</h3>
-                    <p>Registra quién paga cada cena o billete. Nuestro algoritmo liquida las deudas cruzadas de forma automática para que sepáis exactamente quién debe dinero a quién. Cuentas claras.</p>
+                    <p>Registra quién paga cada cena o billete. Nuestro algoritmo liquida las deudas cruzadas de forma automática para que sepáis exactamente quién debe dinero a quién.</p>
                 </article>
 
-                <!-- Tarjeta 3 -->
                 <article class="bento-card">
                     <div class="feature-icon icon-green"><i data-lucide="cloud-sun"></i></div>
                     <h3>Ubicación y Clima</h3>
                     <p>Visualiza el mapa dinámico de tu ruta generado automáticamente y recibe previsiones meteorológicas satelitales de las ciudades exactas en las que estaréis cada día.</p>
                 </article>
 
-                <!-- Tarjeta 4 (NUEVA: Entretenimiento y Recursos) -->
                 <article class="bento-card">
                     <div class="feature-icon icon-purple"><i data-lucide="gamepad-2"></i></div>
-                    <h3>Entretenimiento y Recuerdos</h3>
-                    <p>Mata el aburrimiento en trenes infinitos. Compite con tus amigos, culturízate con trivial sobre los destinos que vas a visitar y genera recuerdos interactivos para que tu Interrail sea inolvidable.</p>
+                    <h3>Entretenimiento</h3>
+                    <p>Mata el aburrimiento en trenes. Compite con tus amigos, culturízate sobre los destinos que vas a visitar y genera recuerdos interactivos para hacer tu viaje inolvidable.</p>
                 </article>
             </div>
 
@@ -1153,7 +1148,6 @@
         </section>
     </main>
 
-    <!-- Footer Optimizado con Redes Sociales -->
     <footer>
         <div class="footer-inner">
             <div class="footer-brand">
@@ -1169,13 +1163,21 @@
 
             <div class="footer-socials">
                 <a href="https://instagram.com/interrahub" target="_blank" rel="noopener noreferrer" aria-label="Síguenos en Instagram">
-                    <i data-lucide="instagram"></i>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect width="20" height="20" x="2" y="2" rx="5" ry="5"/>
+                        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+                        <line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/>
+                    </svg>
                 </a>
                 <a href="https://x.com/interrahub" target="_blank" rel="noopener noreferrer" aria-label="Síguenos en X (Twitter)">
-                    <i data-lucide="twitter"></i>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"/>
+                    </svg>
                 </a>
                 <a href="https://tiktok.com/@interrahub" target="_blank" rel="noopener noreferrer" aria-label="Síguenos en TikTok">
-                    <i data-lucide="music-2"></i> <!-- Icono de música como alternativa visual a TikTok en Lucide -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a5.63 5.63 0 0 1-1.04-.1z"/>
+                    </svg>
                 </a>
                 <span>@interrahub</span>
             </div>
@@ -1186,7 +1188,6 @@
         </div>
     </footer>
 
-    <!-- Modales Legales -->
     <div class="modal-overlay" id="modal-tos" role="dialog" aria-modal="true" aria-labelledby="tos-title">
         <div class="modal-box">
             <h2 id="tos-title">Términos y Condiciones de Uso</h2>
@@ -1246,7 +1247,6 @@
         </div>
     </div>
 
-    <!-- Banner Cookies -->
     <div id="cookie-banner" role="alert" aria-live="polite">
         <div class="cookie-title"><i data-lucide="cookie" style="color: var(--warning);"></i> Privacidad y Cookies</div>
         <div class="cookie-text">Utilizamos cookies técnicas y herramientas como Vercel Analytics para asegurar que el Hub funcione perfectamente y analizar el tráfico de forma privada. Más info en <a onclick="openModal('modal-privacy')" onkeydown="if(event.key === 'Enter') openModal('modal-privacy')" tabindex="0">Privacidad</a>.</div>
@@ -1254,7 +1254,6 @@
         <button class="cookie-btn cookie-reject" id="cookie-reject-btn">Rechazar no esenciales</button>
     </div>
 
-    <!-- JavaScript Moderno, Modular y Seguro -->
     <script>
         // Inicializar iconos de Lucide
         lucide.createIcons();
@@ -1312,7 +1311,6 @@
         });
     </script>
     
-    <!-- Tidio Widget Load (Async for Performance) -->
     <script src="//code.tidio.co/gfxhupr9pntygs7wjcktdwxemoht8pbu.js" async></script>
 </body>
 </html>
