@@ -43,13 +43,13 @@
             --transition: 0.8s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        /* MEJORA: -webkit-tap-highlight-color elimina el parpadeo azul al tocar en móviles */
+        /* -webkit-tap-highlight-color elimina el parpadeo azul al tocar en móviles */
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Sora', sans-serif; -webkit-tap-highlight-color: transparent; }
 
-        /* ── SIN SCROLL GLOBAL ── */
+        /* ── SCROLL HABILITADO Y ALTURA DINÁMICA (100dvh) PARA MÓVILES ── */
         html, body {
-            height: 100%;
-            overflow: hidden;
+            min-height: 100dvh;
+            overflow-x: hidden;
         }
 
         body {
@@ -58,9 +58,8 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: flex-start;
-            overflow: hidden;
             background-image: radial-gradient(circle at 50% -20%, #2a2a2a 0%, var(--bg-color) 50%);
+            background-attachment: fixed; /* Evita que el fondo se deforme al hacer scroll */
         }
 
         /* ── BETA BANNER (solo móvil) ── */
@@ -101,17 +100,15 @@
             transition: opacity 0.5s ease;
         }
 
-        /* ── MAIN LAYOUT ── */
+        /* ── MAIN LAYOUT MEJORADO ── */
         .page-wrapper {
-            flex: 1;
+            flex: 1 0 auto; /* Permite crecer y empujar el footer */
             width: 100%;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 0.8rem 1rem 0;
-            overflow: hidden;
-            min-height: 0;
+            padding: 2rem 1rem; /* Espaciado extra para cuando sube el teclado */
         }
 
         /* Botón de volver atrás premium */
@@ -123,10 +120,10 @@
             text-decoration: none;
             font-size: 0.82rem;
             font-weight: 600;
-            margin-bottom: 0.8rem;
+            margin-bottom: 1.5rem;
             transition: var(--transition);
             background: rgba(255, 255, 255, 0.02);
-            padding: 0.45rem 1rem;
+            padding: 0.55rem 1.2rem;
             border-radius: 20px;
             border: 1px solid var(--border-subtle);
         }
@@ -140,10 +137,11 @@
             position: relative;
             width: 100%;
             max-width: 400px;
-            padding: 1.2rem 2rem 1rem;
+            padding: 1.2rem 1.5rem 1rem;
             opacity: 0;
             transform: translateY(20px);
             transition: var(--transition);
+            margin: 0 auto;
         }
 
         .auth-container.visible {
@@ -151,12 +149,12 @@
             transform: translateY(0);
         }
 
-        .header-text { text-align: center; margin-bottom: 1.2rem; }
+        .header-text { text-align: center; margin-bottom: 1.8rem; }
         .header-text h1 { font-weight: 800; font-size: 2.1rem; letter-spacing: -2px; }
         .header-text h1 .dot { color: var(--accent); }
         .header-text p { color: var(--text-muted); font-weight: 300; margin-top: 0.3rem; font-size: 0.88rem; }
 
-        .forms-wrapper { position: relative; min-height: 320px; }
+        .forms-wrapper { position: relative; min-height: 360px; /* Altura ampliada para que quepan bien en móvil */ }
         .form-box {
             position: absolute; width: 100%; top: 0; left: 0;
             transition: var(--transition); opacity: 0; pointer-events: none;
@@ -165,15 +163,16 @@
         .form-box.active { opacity: 1; pointer-events: all; transform: translateX(0); }
         .form-box.slide-left { transform: translateX(-30px); }
 
-        .input-group { margin-bottom: 1.1rem; position: relative; }
+        .input-group { margin-bottom: 1.3rem; position: relative; }
         .input-group input {
             width: 100%; background: transparent; border: none;
             border-bottom: 1px solid rgba(255,255,255,0.2); color: var(--primary);
-            /* MEJORA: font-size 16px es OBLIGATORIO para evitar el zoom de iOS Safari en inputs */
-            font-size: 16px; padding: 0.65rem 0; outline: none; transition: border-color 0.3s;
+            font-size: 16px; /* Evita el zoom de iOS Safari */
+            padding: 0.8rem 0; /* Zona táctil ampliada */
+            outline: none; transition: border-color 0.3s;
         }
         .input-group label {
-            position: absolute; top: 0.65rem; left: 0;
+            position: absolute; top: 0.8rem; left: 0;
             color: var(--text-muted); font-weight: 300; pointer-events: none;
             transition: 0.3s var(--transition); font-size: 0.95rem;
         }
@@ -183,15 +182,15 @@
         }
 
         button.submit-btn {
-            width: 100%; padding: 0.8rem; background: var(--primary);
+            width: 100%; padding: 0.9rem; background: var(--primary);
             color: var(--bg-color); border: none; border-radius: 12px;
-            font-weight: 600; cursor: pointer; margin-top: 0.3rem;
-            transition: all 0.3s ease; font-size: 0.95rem;
+            font-weight: 600; cursor: pointer; margin-top: 0.5rem;
+            transition: all 0.3s ease; font-size: 1rem; /* Texto más legible en móvil */
         }
         button.submit-btn:hover { transform: scale(0.98); opacity: 0.9; }
 
         .divider {
-            display: flex; align-items: center; text-align: center; margin: 1rem 0;
+            display: flex; align-items: center; text-align: center; margin: 1.2rem 0;
             color: var(--text-muted); font-size: 0.82rem; font-weight: 300;
         }
         .divider::before, .divider::after {
@@ -200,7 +199,7 @@
         .divider span { padding: 0 10px; }
 
         .google-btn {
-            width: 100%; padding: 0.8rem; background: transparent;
+            width: 100%; padding: 0.9rem; background: transparent;
             color: var(--primary); border: 1px solid rgba(255,255,255,0.2);
             border-radius: 12px; font-weight: 600; cursor: pointer;
             display: flex; align-items: center; justify-content: center; gap: 10px;
@@ -211,7 +210,7 @@
         }
         .google-btn svg { width: 18px; height: 18px; }
 
-        .toggle-text { text-align: center; margin-top: 1rem; color: var(--text-muted); font-size: 0.85rem; padding: 10px 0; }
+        .toggle-text { text-align: center; margin-top: 1.2rem; color: var(--text-muted); font-size: 0.85rem; padding: 10px 0; }
         .toggle-text span { color: var(--primary); cursor: pointer; font-weight: 600; transition: opacity 0.3s; }
         .toggle-text span:hover { opacity: 0.7; }
 
@@ -223,17 +222,17 @@
             color: var(--text-muted);
             cursor: pointer;
             margin-top: -0.5rem;
-            margin-bottom: 0.8rem;
+            margin-bottom: 1rem;
             transition: color 0.2s;
             font-weight: 400;
             text-decoration: underline;
             text-decoration-color: rgba(255,255,255,0.15);
             text-underline-offset: 3px;
-            padding: 5px 0; /* Área táctil ampliada */
+            padding: 8px 0; /* Área táctil súper ampliada para móviles */
         }
         .forgot-link:hover { color: var(--primary); }
 
-        .message-box { margin-top: 0.7rem; text-align: center; font-size: 0.82rem; min-height: 18px; opacity: 0; transition: 0.3s; }
+        .message-box { margin-top: 0.7rem; text-align: center; font-size: 0.85rem; min-height: 18px; opacity: 0; transition: 0.3s; }
 
         /* ── PANTALLA VERIFICACIÓN EMAIL ── */
         #verify-screen {
@@ -248,430 +247,134 @@
             justify-content: center;
             padding: 2rem;
             text-align: center;
+            overflow-y: auto; /* Permite scroll en pantallas muy pequeñas */
         }
         #verify-screen.show { display: flex; }
 
-        .verify-icon {
-            font-size: 3.5rem;
-            margin-bottom: 1.2rem;
-            animation: float 3s ease-in-out infinite;
-        }
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-8px); }
-        }
-        .verify-title {
-            font-size: 1.6rem;
-            font-weight: 800;
-            letter-spacing: -1.5px;
-            margin-bottom: 0.6rem;
-        }
+        .verify-icon { font-size: 3.5rem; margin-bottom: 1.2rem; animation: float 3s ease-in-out infinite; }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+        .verify-title { font-size: 1.6rem; font-weight: 800; letter-spacing: -1.5px; margin-bottom: 0.6rem; }
         .verify-email-display {
-            font-size: 0.9rem;
-            color: var(--primary);
-            font-weight: 600;
-            background: rgba(255,255,255,0.06);
-            border: 1px solid rgba(255,255,255,0.12);
-            border-radius: 8px;
-            padding: 0.4rem 1rem;
-            display: inline-block;
-            margin-bottom: 1rem;
+            font-size: 0.9rem; color: var(--primary); font-weight: 600;
+            background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 8px; padding: 0.4rem 1rem; display: inline-block; margin-bottom: 1rem;
         }
-        .verify-desc {
-            color: var(--text-muted);
-            font-size: 0.83rem;
-            font-weight: 300;
-            line-height: 1.65;
-            max-width: 300px;
-            margin: 0 auto 0.5rem;
-        }
+        .verify-desc { color: var(--text-muted); font-size: 0.83rem; font-weight: 300; line-height: 1.65; max-width: 300px; margin: 0 auto 0.5rem; }
         .verify-spam-warning {
-            color: var(--warning);
-            font-size: 0.85rem;
-            font-weight: 600;
-            max-width: 300px;
-            margin: 0 auto 1.5rem;
-            background: rgba(255, 184, 77, 0.1);
-            padding: 8px;
-            border-radius: 8px;
-            border: 1px solid rgba(255, 184, 77, 0.3);
+            color: var(--warning); font-size: 0.85rem; font-weight: 600; max-width: 300px;
+            margin: 0 auto 1.5rem; background: rgba(255, 184, 77, 0.1); padding: 8px;
+            border-radius: 8px; border: 1px solid rgba(255, 184, 77, 0.3);
         }
         .verify-check-btn {
-            width: 100%;
-            max-width: 320px;
-            padding: 0.9rem;
-            background: var(--primary);
-            color: var(--bg-color);
-            border: none;
-            border-radius: 12px;
-            font-weight: 700;
-            font-size: 0.95rem;
-            cursor: pointer;
-            font-family: 'Sora', sans-serif;
-            transition: 0.3s;
-            margin-bottom: 0.75rem;
+            width: 100%; max-width: 320px; padding: 0.9rem; background: var(--primary);
+            color: var(--bg-color); border: none; border-radius: 12px; font-weight: 700;
+            font-size: 0.95rem; cursor: pointer; transition: 0.3s; margin-bottom: 0.75rem;
         }
         .verify-check-btn:hover { opacity: 0.9; transform: scale(0.98); }
 
         .verify-resend-btn {
-            width: 100%;
-            max-width: 320px;
-            padding: 0.75rem;
-            background: transparent;
-            color: var(--text-muted);
-            border: 1px solid rgba(255,255,255,0.12);
-            border-radius: 12px;
-            font-weight: 600;
-            font-size: 0.85rem;
-            cursor: pointer;
-            font-family: 'Sora', sans-serif;
-            transition: 0.3s;
-            margin-bottom: 0.75rem;
+            width: 100%; max-width: 320px; padding: 0.8rem; background: transparent;
+            color: var(--text-muted); border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 12px; font-weight: 600; font-size: 0.85rem; cursor: pointer;
+            transition: 0.3s; margin-bottom: 0.75rem;
         }
-        .verify-resend-btn:hover {
-            color: var(--primary);
-            border-color: rgba(255,255,255,0.3);
-            background: rgba(255,255,255,0.04);
-        }
-        .verify-resend-btn:disabled {
-            opacity: 0.4;
-            cursor: not-allowed;
-        }
+        .verify-resend-btn:hover { color: var(--primary); border-color: rgba(255,255,255,0.3); background: rgba(255,255,255,0.04); }
+        .verify-resend-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
         .verify-back-btn {
-            background: none;
-            border: none;
-            color: rgba(255,255,255,0.3);
-            font-size: 0.78rem;
-            font-family: 'Sora', sans-serif;
-            cursor: pointer;
-            transition: color 0.2s;
-            text-decoration: underline;
-            text-decoration-color: rgba(255,255,255,0.1);
-            text-underline-offset: 3px;
-            padding: 0.8rem 1rem; /* Área táctil ampliada */
+            background: none; border: none; color: rgba(255,255,255,0.3); font-size: 0.78rem;
+            cursor: pointer; transition: color 0.2s; text-decoration: underline;
+            text-decoration-color: rgba(255,255,255,0.1); text-underline-offset: 3px;
+            padding: 1rem; /* Área táctil ampliada */
         }
         .verify-back-btn:hover { color: rgba(255,255,255,0.6); }
+        .verify-msg { font-size: 0.8rem; min-height: 20px; margin-bottom: 0.8rem; opacity: 0; transition: 0.3s; }
 
-        .verify-msg {
-            font-size: 0.8rem;
-            min-height: 20px;
-            margin-bottom: 0.8rem;
-            opacity: 0;
-            transition: 0.3s;
+        /* ── MODALES (GENERALES) ── */
+        .modal-overlay, .reset-modal-overlay, .name-modal-overlay {
+            display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(6px); z-index: 2000; align-items: center;
+            justify-content: center; padding: 1rem;
         }
-
-        /* ── MODAL RESET CONTRASEÑA ── */
-        .reset-modal-overlay {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.9);
-            backdrop-filter: blur(10px); z-index: 3000;
-            display: flex; justify-content: center; align-items: center;
-            padding: 1rem;
-            opacity: 0; pointer-events: none; transition: 0.4s ease;
+        .modal-overlay.open, .reset-modal-overlay.active, .name-modal-overlay.active {
+            display: flex; animation: fadeIn 0.25s ease; pointer-events: all;
         }
-        .reset-modal-overlay.active { opacity: 1; pointer-events: all; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        .reset-modal-box {
+        .modal-box, .reset-modal-box, .name-modal-box {
             background: #141414; border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 24px; padding: 2.2rem 2rem; width: 100%; max-width: 380px;
-            transform: translateY(30px); transition: 0.4s ease;
-            text-align: center;
+            border-radius: 20px; width: 100%; max-width: 560px;
+            max-height: 90vh; /* Vital para móviles: permite scroll interno */
+            overflow-y: auto; padding: 2rem;
+            animation: slideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+            text-align: left;
         }
-        .reset-modal-overlay.active .reset-modal-box { transform: translateY(0); }
+        .reset-modal-box, .name-modal-box { max-width: 380px; text-align: center; }
+        
+        @keyframes slideUp { from { transform: translateY(40px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
-        .reset-modal-box h2 {
-            font-size: 1.35rem; font-weight: 800; margin-bottom: 0.4rem; letter-spacing: -1px;
-        }
-        .reset-modal-box p {
-            color: var(--text-muted); font-size: 0.82rem; margin-bottom: 1rem;
-            font-weight: 300; line-height: 1.6;
-        }
-        .reset-spam-warning {
-            color: var(--warning); font-size: 0.78rem; font-weight: 600;
-            margin-bottom: 1.6rem;
-        }
-        .reset-modal-box input {
-            width: 100%; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.15);
-            color: white; border-radius: 12px; padding: 0.9rem 1rem; 
-            /* MEJORA: font-size 16px previene zoom en iOS */
-            font-size: 16px; outline: none; font-family: 'Sora', sans-serif; transition: border-color 0.3s;
-            margin-bottom: 1rem;
-        }
-        .reset-modal-box input:focus { border-color: white; }
-        .reset-modal-box .reset-send-btn {
-            width: 100%; padding: 0.9rem; background: white;
-            color: #0a0a0a; border: none; border-radius: 12px; font-weight: 700;
-            font-size: 0.95rem; cursor: pointer; font-family: 'Sora', sans-serif;
-            transition: 0.3s; margin-bottom: 0.7rem;
-        }
-        .reset-modal-box .reset-send-btn:hover { opacity: 0.9; transform: scale(0.98); }
-        .reset-modal-box .reset-cancel-btn {
-            width: 100%; padding: 0.75rem; background: transparent;
-            color: var(--text-muted); border: 1px solid rgba(255,255,255,0.12);
-            border-radius: 12px; font-weight: 600; font-size: 0.85rem;
-            cursor: pointer; font-family: 'Sora', sans-serif; transition: 0.3s;
-        }
-        .reset-modal-box .reset-cancel-btn:hover {
-            color: var(--primary); border-color: rgba(255,255,255,0.3);
-            background: rgba(255,255,255,0.04);
-        }
-        .reset-msg {
-            font-size: 0.8rem; min-height: 18px; margin-bottom: 0.8rem;
-            opacity: 0; transition: 0.3s; text-align: center;
-        }
+        /* Detalles Modal Textos */
+        .modal-box h2, .reset-modal-box h2, .name-modal-box h2 { font-size: 1.25rem; font-weight: 700; margin-bottom: 1.2rem; letter-spacing: -0.5px; }
+        .modal-box p, .modal-box li, .reset-modal-box p, .name-modal-box p { font-size: 0.85rem; font-weight: 300; color: rgba(255,255,255,0.7); line-height: 1.6; margin-bottom: 0.8rem; }
+        .modal-box h3 { font-size: 0.9rem; font-weight: 600; color: rgba(255,255,255,0.9); margin: 1.2rem 0 0.4rem; }
+        .modal-box ul { padding-left: 1.2rem; }
+        .modal-box strong { color: rgba(255,255,255,0.9); font-weight: 600; }
+        .modal-box a { color: rgba(255,255,255,0.6); }
 
-        /* ── MODAL NOMBRE ── */
-        .name-modal-overlay {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.9);
-            backdrop-filter: blur(10px); z-index: 2000;
-            display: flex; justify-content: center; align-items: center;
-            opacity: 0; pointer-events: none; transition: 0.4s ease;
-        }
-        .name-modal-overlay.active { opacity: 1; pointer-events: all; }
-        .name-modal-box {
-            background: #141414; border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 24px; padding: 2.5rem; width: 100%; max-width: 400px;
-            transform: translateY(30px); transition: 0.4s ease;
-            text-align: center;
-        }
-        .name-modal-overlay.active .name-modal-box { transform: translateY(0); }
-        .name-modal-box h2 { font-size: 1.5rem; font-weight: 800; margin-bottom: 0.5rem; letter-spacing: -1px; }
-        .name-modal-box p { color: var(--text-muted); font-size: 0.85rem; margin-bottom: 2rem; font-weight: 300; line-height: 1.6; }
-        .name-modal-box input {
+        /* Modales Formularios (Reset / Name) */
+        .reset-spam-warning { color: var(--warning); font-size: 0.8rem; font-weight: 600; margin-bottom: 1.5rem; }
+        .reset-modal-box input, .name-modal-box input {
             width: 100%; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.15);
             color: white; border-radius: 12px; padding: 1rem; 
-            /* MEJORA: font-size 16px */
-            font-size: 16px; outline: none; text-align: center; font-family: 'Sora', sans-serif;
-            transition: border-color 0.3s;
+            font-size: 16px; outline: none; transition: border-color 0.3s; margin-bottom: 1rem;
         }
-        .name-modal-box input:focus { border-color: white; }
-        .name-modal-box button {
-            width: 100%; margin-top: 1rem; padding: 1rem; background: white;
-            color: #0a0a0a; border: none; border-radius: 12px; font-weight: 700;
-            font-size: 1rem; cursor: pointer; font-family: 'Sora', sans-serif;
-            transition: 0.3s;
+        .name-modal-box input { text-align: center; }
+        .reset-modal-box input:focus, .name-modal-box input:focus { border-color: white; }
+        
+        .reset-send-btn, #name-save-btn {
+            width: 100%; padding: 0.9rem; background: white; color: #0a0a0a; border: none;
+            border-radius: 12px; font-weight: 700; font-size: 0.95rem; cursor: pointer;
+            transition: 0.3s; margin-bottom: 0.7rem;
         }
-        .name-modal-box button:hover { opacity: 0.9; transform: scale(0.98); }
+        .reset-send-btn:hover, #name-save-btn:hover { opacity: 0.9; transform: scale(0.98); }
+        .reset-cancel-btn {
+            width: 100%; padding: 0.8rem; background: transparent; color: var(--text-muted);
+            border: 1px solid rgba(255,255,255,0.12); border-radius: 12px; font-weight: 600;
+            font-size: 0.85rem; cursor: pointer; transition: 0.3s;
+        }
+        .reset-cancel-btn:hover { color: var(--primary); border-color: rgba(255,255,255,0.3); background: rgba(255,255,255,0.04); }
+        .reset-msg { font-size: 0.8rem; min-height: 18px; margin-bottom: 0.8rem; opacity: 0; transition: 0.3s; text-align: center; }
+
+        .modal-close {
+            width: 100%; margin-top: 1.5rem; padding: 0.9rem; background: rgba(255,255,255,0.07);
+            border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; color: var(--primary);
+            font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: background 0.2s;
+        }
+        .modal-close:hover { background: rgba(255,255,255,0.12); }
 
         /* ── FOOTER ── */
         footer {
             width: 100%;
-            padding: 1rem 2rem 0.8rem;
+            padding: 1.5rem 2rem 1.2rem;
             border-top: 1px solid rgba(255,255,255,0.06);
-            background: rgba(0,0,0,0.4);
+            background: rgba(0,0,0,0.6);
             flex-shrink: 0;
         }
 
-        .footer-inner {
-            max-width: 600px;
-            margin: 0 auto;
-            text-align: center;
-        }
-
-        .footer-logo {
-            font-size: 1.1rem;
-            font-weight: 800;
-            letter-spacing: -1px;
-            margin-bottom: 0.7rem;
-        }
+        .footer-inner { max-width: 600px; margin: 0 auto; text-align: center; }
+        .footer-logo { font-size: 1.1rem; font-weight: 800; letter-spacing: -1px; margin-bottom: 0.8rem; }
         .footer-logo .dot { color: var(--accent); }
-
-        .footer-links {
-            display: flex;
-            justify-content: center;
-            gap: 1.2rem;
-            margin-bottom: 0.8rem;
-            flex-wrap: wrap;
-        }
+        .footer-links { display: flex; justify-content: center; gap: 1rem; margin-bottom: 1rem; flex-wrap: wrap; }
         .footer-links button {
-            background: none;
-            border: none;
-            color: var(--text-muted);
-            font-size: 0.75rem;
-            font-family: 'Sora', sans-serif;
-            cursor: pointer;
-            padding: 5px; /* Área táctil ampliada */
-            transition: color 0.2s;
-            text-decoration: underline;
-            text-underline-offset: 3px;
-            text-decoration-color: rgba(255,255,255,0.15);
+            background: none; border: none; color: var(--text-muted); font-size: 0.8rem;
+            cursor: pointer; padding: 8px; /* Área táctil ampliada */ transition: color 0.2s;
+            text-decoration: underline; text-underline-offset: 3px; text-decoration-color: rgba(255,255,255,0.15);
         }
         .footer-links button:hover { color: var(--primary); }
-
-        .footer-studio {
-            font-size: 0.7rem;
-            color: rgba(255,255,255,0.2);
-            margin-bottom: 0.4rem;
-        }
-        .footer-studio a {
-            color: rgba(255,255,255,0.35);
-            text-decoration: none;
-            transition: color 0.2s;
-        }
+        .footer-studio { font-size: 0.75rem; color: rgba(255,255,255,0.2); margin-bottom: 0.5rem; }
+        .footer-studio a { color: rgba(255,255,255,0.35); text-decoration: none; transition: color 0.2s; }
         .footer-studio a:hover { color: rgba(255,255,255,0.7); }
-
-        .footer-copy {
-            font-size: 0.67rem;
-            color: rgba(255,255,255,0.18);
-            font-weight: 300;
-        }
-
-        /* ── MODAL ── */
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.85);
-            backdrop-filter: blur(6px);
-            z-index: 800;
-            align-items: flex-end;
-            justify-content: center;
-            padding: 1rem;
-        }
-        .modal-overlay.open {
-            display: flex;
-            animation: fadeIn 0.25s ease;
-        }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-        .modal-box {
-            background: #141414;
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 20px;
-            width: 100%;
-            max-width: 560px;
-            max-height: 80vh;
-            overflow-y: auto;
-            padding: 2rem;
-            animation: slideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        @keyframes slideUp { from { transform: translateY(40px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-
-        .modal-box h2 {
-            font-size: 1.15rem;
-            font-weight: 700;
-            margin-bottom: 1.2rem;
-            letter-spacing: -0.5px;
-        }
-        .modal-box p, .modal-box li {
-            font-size: 0.82rem;
-            font-weight: 300;
-            color: rgba(255,255,255,0.65);
-            line-height: 1.75;
-            margin-bottom: 0.8rem;
-        }
-        .modal-box h3 {
-            font-size: 0.88rem;
-            font-weight: 600;
-            color: rgba(255,255,255,0.85);
-            margin: 1.2rem 0 0.4rem;
-        }
-        .modal-box ul { padding-left: 1.2rem; }
-        .modal-box strong { color: rgba(255,255,255,0.9); font-weight: 600; }
-        .modal-box a { color: rgba(255,255,255,0.6); }
-        .modal-close {
-            width: 100%;
-            margin-top: 1.5rem;
-            padding: 0.8rem;
-            background: rgba(255,255,255,0.07);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 10px;
-            color: var(--primary);
-            font-family: 'Sora', sans-serif;
-            font-size: 0.88rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-        .modal-close:hover { background: rgba(255,255,255,0.12); }
-
-        /* ── AVISO DE COOKIES (CUADRADO FLOTANTE) ── */
-        #cookie-banner {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            width: 320px;
-            background: rgba(20, 20, 20, 0.95);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 18px;
-            padding: 1.5rem;
-            display: flex;
-            flex-direction: column;
-            gap: 1.2rem;
-            z-index: 9999;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.8);
-            opacity: 0;
-            pointer-events: none;
-            transform: translateY(30px) scale(0.95);
-            transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        #cookie-banner.show {
-            opacity: 1;
-            pointer-events: all;
-            transform: translateY(0) scale(1);
-        }
-        .cookie-title {
-            font-weight: 700;
-            font-size: 1rem;
-            color: var(--primary);
-            margin-bottom: -0.5rem;
-        }
-        .cookie-text {
-            font-size: 0.8rem;
-            color: rgba(255,255,255,0.7);
-            line-height: 1.6;
-            font-weight: 300;
-        }
-        .cookie-text a {
-            color: var(--primary);
-            font-weight: 600;
-            text-decoration: underline;
-            text-decoration-color: rgba(255,255,255,0.2);
-            transition: 0.3s;
-            cursor: pointer;
-        }
-        .cookie-text a:hover { opacity: 0.8; }
-        .cookie-buttons {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-        .cookie-btn {
-            width: 100%;
-            padding: 0.8rem;
-            border-radius: 12px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-family: 'Sora', sans-serif;
-            text-align: center;
-        }
-        .cookie-accept {
-            background: var(--primary);
-            color: var(--bg-color);
-            border: none;
-        }
-        .cookie-accept:hover { transform: scale(0.97); opacity: 0.9; }
-        .cookie-reject {
-            background: transparent;
-            color: rgba(255,255,255,0.5);
-            border: 1px solid rgba(255,255,255,0.15);
-        }
-        .cookie-reject:hover {
-            background: rgba(255,255,255,0.05);
-            border-color: rgba(255,255,255,0.4);
-            color: var(--primary);
-        }
-
-        @media (max-width: 480px) {
-            #cookie-banner {
-                bottom: 20px;
-                right: 5%;
-                width: 90%;
-            }
-        }
+        .footer-copy { font-size: 0.7rem; color: rgba(255,255,255,0.18); font-weight: 300; }
 
         @keyframes spin { to { transform: rotate(360deg); } }
     </style>
@@ -818,17 +521,6 @@
         </div>
     </footer>
 
-    <div id="cookie-banner">
-        <div class="cookie-title">🍪 Privacidad en tu viaje</div>
-        <div class="cookie-text">
-            Utilizamos cookies propias y de terceros para fines analíticos y mostrarte publicidad adaptada a ti. Debes aceptarlas para garantizar el correcto funcionamiento de la plataforma. Más info en nuestra <a id="cookie-privacy-link">Política de Privacidad</a>.
-        </div>
-        <div class="cookie-buttons">
-            <button class="cookie-btn cookie-accept" id="cookie-accept-btn">Sí, acepto las cookies</button>
-            <button class="cookie-btn cookie-reject" id="cookie-reject-btn">Rechazar opciones</button>
-        </div>
-    </div>
-
     <div class="modal-overlay" id="modal-tos">
         <div class="modal-box">
             <h2>Términos de Servicio y Condiciones de Uso</h2>
@@ -897,7 +589,7 @@
     <div class="modal-overlay" id="modal-copyright">
         <div class="modal-box">
             <h2>Copyright</h2>
-            <p>© 2025 <strong>Interra-hub</strong> · Todos los derechos reservados.</p>
+            <p>© 2026 <strong>Interra-hub</strong> · Todos los derechos reservados.</p>
             <p>Esta aplicación ha sido diseñada y desarrollada íntegramente por <strong>Pipa</strong> a través de <a href="https://pipaonstudio.netlify.app/" target="_blank" rel="noopener"><strong>Pipaon Studio</strong></a>.</p>
             <p>El acceso y uso público de la aplicación está permitido. Sin embargo, <strong>la copia, reproducción, redistribución, ingeniería inversa o cualquier uso no autorizado del código fuente, diseño, estructura o contenido de esta aplicación queda expresamente prohibida</strong> y podrá ser perseguida conforme a la legislación de propiedad intelectual vigente.</p>
             <p style="font-size:0.75rem;color:rgba(255,255,255,0.3);margin-top:1rem;">¿Quieres ponerte en contacto? Habla directamente con <strong style="color:rgba(255,255,255,0.45);">Pipa</strong> → <a href="mailto:pipaonstudio@gmail.com">pipaonstudio@gmail.com</a></p>
@@ -929,37 +621,23 @@
         const nameModal = document.getElementById('name-modal');
         const verifyScreen = document.getElementById('verify-screen');
 
-        // Inicializar Iconos Lucide
         lucide.createIcons();
 
-        // ── GUARDAR PERFIL EN FIRESTORE ──
         async function saveUserProfile(user) {
             const userRef = doc(db, "usuarios", user.uid);
             const snap = await getDoc(userRef);
 
             if (snap.exists()) {
-                await setDoc(userRef, {
-                    email: user.email,
-                    lastSeen: new Date()
-                }, { merge: true });
-
+                await setDoc(userRef, { email: user.email, lastSeen: new Date() }, { merge: true });
                 const data = snap.data();
-                if (!data.nombre || data.nombre.trim() === '') {
-                    showNameModal(user);
-                }
+                if (!data.nombre || data.nombre.trim() === '') showNameModal(user);
             } else {
                 const nombre = user.displayName || '';
                 await setDoc(userRef, {
-                    uid: user.uid,
-                    email: user.email,
-                    nombre: nombre,
-                    createdAt: new Date(),
-                    lastSeen: new Date()
+                    uid: user.uid, email: user.email, nombre: nombre,
+                    createdAt: new Date(), lastSeen: new Date()
                 });
-
-                if (!nombre || nombre.trim() === '') {
-                    showNameModal(user);
-                }
+                if (!nombre || nombre.trim() === '') showNameModal(user);
             }
         }
 
@@ -976,10 +654,8 @@
             };
         }
 
-        /* 🛡️ GUARDIÁN DE SESIÓN */
         onAuthStateChanged(auth, async (user) => {
             if (user) {
-                // Si el usuario tiene email pero NO está verificado, mostrar pantalla de verificación
                 if (!user.emailVerified && user.providerData[0]?.providerId === 'password') {
                     loader.style.opacity = '0';
                     setTimeout(() => {
@@ -992,9 +668,7 @@
                 await saveUserProfile(user);
                 const snap = await getDoc(doc(db, "usuarios", user.uid));
                 const nombre = snap.exists() ? snap.data().nombre : '';
-                if (nombre && nombre.trim() !== '') {
-                    window.location.href = 'panel.html';
-                }
+                if (nombre && nombre.trim() !== '') window.location.href = 'panel.html';
             } else {
                 loader.style.opacity = '0';
                 setTimeout(() => {
@@ -1004,7 +678,6 @@
             }
         });
 
-        /* ── LÓGICA PANTALLA VERIFICACIÓN ── */
         const verifyCheckBtn = document.getElementById('verify-check-btn');
         const verifyResendBtn = document.getElementById('verify-resend-btn');
         const verifyBackBtn = document.getElementById('verify-back-btn');
@@ -1026,9 +699,7 @@
                     await saveUserProfile(auth.currentUser);
                     const snap = await getDoc(doc(db, "usuarios", auth.currentUser.uid));
                     const nombre = snap.exists() ? snap.data().nombre : '';
-                    if (nombre && nombre.trim() !== '') {
-                        window.location.href = 'panel.html';
-                    }
+                    if (nombre && nombre.trim() !== '') window.location.href = 'panel.html';
                 } else {
                     showVerifyMsg('Aún no hemos detectado la verificación. Revisa tu correo.', 'var(--accent)');
                 }
@@ -1043,7 +714,6 @@
             if (resendCooldown) return;
             try {
                 await sendEmailVerification(auth.currentUser);
-                // MEJORA: Mensaje claro avisando del SPAM
                 showVerifyMsg('✓ Correo reenviado. Revisa tu bandeja y SPAM.', 'var(--success)');
                 resendCooldown = true;
                 verifyResendBtn.disabled = true;
@@ -1070,7 +740,6 @@
             container.classList.add('visible');
         });
 
-        /* TOGGLE FORMS */
         const toReg = document.getElementById('to-reg');
         const toLog = document.getElementById('to-log');
         const loginForm = document.getElementById('login-form');
@@ -1086,7 +755,6 @@
         toReg.onclick = toggle;
         toLog.onclick = toggle;
 
-        /* LOGIN */
         loginForm.onsubmit = async (e) => {
             e.preventDefault();
             const btn = document.getElementById('login-btn');
@@ -1102,7 +770,6 @@
             }
         };
 
-        /* REGISTRO — con envío de email de verificación */
         regForm.onsubmit = async (e) => {
             e.preventDefault();
             const btn = document.getElementById('reg-btn');
@@ -1113,15 +780,10 @@
                 const cred = await createUserWithEmailAndPassword(auth, document.getElementById('reg-email').value, document.getElementById('reg-password').value);
                 await updateProfile(cred.user, { displayName: nombreIngresado });
                 await setDoc(doc(db, "usuarios", cred.user.uid), {
-                    uid: cred.user.uid,
-                    email: cred.user.email,
-                    nombre: nombreIngresado,
-                    createdAt: new Date(),
-                    lastSeen: new Date()
+                    uid: cred.user.uid, email: cred.user.email, nombre: nombreIngresado,
+                    createdAt: new Date(), lastSeen: new Date()
                 });
-                // Enviar email de verificación
                 await sendEmailVerification(cred.user);
-                // Mostrar pantalla de verificación
                 document.getElementById('verify-email-display').textContent = cred.user.email;
                 verifyScreen.classList.add('show');
             } catch (err) {
@@ -1132,7 +794,6 @@
             }
         };
 
-        /* GOOGLE AUTH */
         const handleGoogleAuth = async () => {
             try {
                 await signInWithPopup(auth, googleProvider);
@@ -1147,12 +808,10 @@
         document.getElementById('google-login-btn').addEventListener('click', handleGoogleAuth);
         document.getElementById('google-reg-btn').addEventListener('click', handleGoogleAuth);
 
-        /* ── MODAL RESET CONTRASEÑA ── */
         const resetModal = document.getElementById('reset-modal');
         const resetMsg = document.getElementById('reset-msg');
 
         document.getElementById('forgot-password-btn').addEventListener('click', () => {
-            // Pre-rellenar con el email que tenga escrito si hay alguno
             const emailVal = document.getElementById('login-email').value;
             if (emailVal) document.getElementById('reset-email-input').value = emailVal;
             resetModal.classList.add('active');
@@ -1176,7 +835,6 @@
             btn.textContent = 'Enviando...';
             try {
                 await sendPasswordResetEmail(auth, email);
-                // MEJORA: Aviso de SPAM en el mensaje de éxito de reseteo
                 resetMsg.textContent = '✓ Enlace enviado. Revisa tu bandeja y SPAM.';
                 resetMsg.style.color = 'var(--success)';
                 resetMsg.style.opacity = 1;
@@ -1195,7 +853,6 @@
             }
         });
 
-        // Cerrar reset modal al clicar fuera
         resetModal.addEventListener('click', (e) => {
             if (e.target === resetModal) {
                 resetModal.classList.remove('active');
@@ -1205,9 +862,6 @@
     </script>
 
     <script>
-        // MEJORA: La detección del OS y los bloques visuales se han eliminado completamente como pediste.
-
-        /* ── MODALES ── */
         function openModal(id) {
             document.getElementById(id).classList.add('open');
             document.body.style.overflow = 'hidden';
@@ -1225,45 +879,6 @@
         document.querySelectorAll('.modal-overlay').forEach(overlay => {
             overlay.addEventListener('click', (e) => {
                 if (e.target === overlay) closeModal(overlay.id);
-            });
-        });
-        
-        /* ── LÓGICA DE COOKIES ── */
-        document.addEventListener("DOMContentLoaded", function() {
-            const cookieBanner = document.getElementById('cookie-banner');
-            const acceptBtn = document.getElementById('cookie-accept-btn');
-            const rejectBtn = document.getElementById('cookie-reject-btn');
-            const privacyLink = document.getElementById('cookie-privacy-link');
-
-            privacyLink.addEventListener('click', (e) => {
-                e.preventDefault();
-                openModal('modal-privacy');
-            });
-
-            if (!localStorage.getItem('interrahub_cookies_consent')) {
-                setTimeout(() => {
-                    cookieBanner.classList.add('show');
-                }, 1500);
-            }
-
-            acceptBtn.addEventListener('click', () => {
-                localStorage.setItem('interrahub_cookies_consent', 'accepted');
-                cookieBanner.classList.remove('show');
-            });
-
-            rejectBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                const seguro = confirm("¿Estás seguro de que quieres rechazar las opciones?");
-                if (seguro) {
-                    const apoyar = confirm("¿Quieres mantenerla para uso publicitario para que la app pueda mantenerse?");
-                    if (apoyar) {
-                        localStorage.setItem('interrahub_cookies_consent', 'accepted');
-                        cookieBanner.classList.remove('show');
-                    } else {
-                        localStorage.setItem('interrahub_cookies_consent', 'rejected');
-                        cookieBanner.classList.remove('show');
-                    }
-                }
             });
         });
     </script>
