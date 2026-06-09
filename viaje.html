@@ -82,7 +82,7 @@
         .trip-header h1 { font-size: 3.5rem; font-weight: 800; letter-spacing: -2px; margin-bottom: 0.5rem; word-break: break-word; }
         .trip-header p { color: var(--text-muted); font-size: 1.1rem; }
 
-        /* Ajuste crucial de diseño escalable y responsive para evitar saltos */
+        /* Ajuste sofisticado de diseño escalable y responsive */
         .tabs-container {
             display: flex; 
             justify-content: flex-start; 
@@ -90,17 +90,21 @@
             border-bottom: 1px solid var(--border-subtle);
             max-width: 1000px; 
             margin: 2rem auto 0; 
-            padding: 0 5%; 
-            overflow-x: auto; /* Scroll horizontal en vez de wrap */
+            padding: 0 5% 2px; 
+            overflow-x: auto; 
             white-space: nowrap;
-            scrollbar-width: none; /* Ocultar scrollbar en Firefox */
+            scrollbar-width: none; 
+            -webkit-overflow-scrolling: touch; 
+            scroll-behavior: smooth;
+            scroll-snap-type: x mandatory;
         }
-        .tabs-container::-webkit-scrollbar { display: none; } /* Ocultar scrollbar Chrome/Safari */
+        .tabs-container::-webkit-scrollbar { display: none; } 
         
         .tab-btn {
             background: transparent; color: var(--text-muted); border: none; font-size: 1.1rem; font-weight: 600;
             padding: 1rem 0; cursor: pointer; position: relative; transition: var(--transition);
             display: flex; align-items: center; gap: 8px; flex-shrink: 0;
+            scroll-snap-align: start;
         }
         .tab-btn.active { color: var(--primary); }
         .tab-btn.active::after {
@@ -129,7 +133,7 @@
             display: flex; justify-content: space-between; align-items: center;
             padding: 0.5rem 0 1rem; border-bottom: 1px solid var(--border-subtle); margin-bottom: 1.5rem;
             position: sticky; top: 65px; z-index: 10;
-            background: rgba(3, 3, 3, 0.95); backdrop-filter: blur(5px); /* Mejor legibilidad en móvil al scrollear */
+            background: transparent; 
         }
         .day-title { font-size: 1.6rem; font-weight: 600; display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
         .day-date { font-size: 1rem; color: var(--text-muted); font-weight: 300; }
@@ -543,10 +547,15 @@
         .tour-dot.active { background: var(--primary); transform: scale(1.2); }
         .tour-nav { display: flex; justify-content: space-between; gap: 1rem; }
 
+        /* Estilo Exclusivo Compartir en Móvil */
+        .btn-share-mobile { display: none !important; }
+
         /* =========================================
            ADAPTACIONES MÓVILES (UX UI RESPONSIVE)
            ========================================= */
         @media (max-width: 768px) {
+            .btn-share-mobile { display: flex !important; }
+
             .trip-header { padding: 2rem 5% 1rem; }
             .trip-header h1 { font-size: 2.2rem; }
             .trip-header p { font-size: 0.95rem; }
@@ -588,6 +597,16 @@
             /* Optimización Toasts Móvil */
             #toast-container { bottom: 20px; right: 20px; left: 20px; }
             .toast { font-size: 0.8rem; padding: 0.8rem 1rem; }
+
+            /* Optimización Sofisticada Pestaña Entretenimiento */
+            .countdown-banner { padding: 1.5rem 1rem; }
+            .countdown-banner h3 { font-size: 1.4rem; flex-wrap: wrap; text-align: center; }
+            .timer-box { font-size: 1rem; padding: 0.8rem 1.2rem; }
+            
+            .game-card { padding: 1.5rem; }
+            .game-icon { width: 45px; height: 45px; font-size: 1.2rem; }
+            .game-info h4 { font-size: 1.15rem; }
+            .game-info p { font-size: 0.85rem; }
         }
     </style>
 </head>
@@ -607,7 +626,7 @@
         </div>
         <div>
             <button class="btn-nav btn-export" title="Descarga todo tu itinerario en un pdf para compartir" onclick="iniciarDescargaPDF()">
-                <i data-lucide="file-down"></i> <span class="nav-text-mobile" style="display:none;">Descargar Itinerario</span>
+                <i data-lucide="file-down"></i> <span class="nav-text-mobile" style="display:none;">PDF</span>
             </button>
         </div>
     </nav>
@@ -745,7 +764,7 @@
                         <button class="btn-nav btn-export" style="background: rgba(255,255,255,0.05); flex: 1; justify-content: center;" onclick="copiarCodigoViaje()">
                             <i data-lucide="copy" style="width: 16px;"></i> Copiar
                         </button>
-                        <button class="btn-nav btn-export" style="background: var(--primary); color: var(--bg-color); flex: 1; justify-content: center;" onclick="compartirViaje()">
+                        <button class="btn-nav btn-export btn-share-mobile" style="background: var(--primary); color: var(--bg-color); flex: 1; justify-content: center;" onclick="compartirViaje()">
                             <i data-lucide="share-2" style="width: 16px;"></i> Compartir 📲
                         </button>
                     </div>
@@ -2555,7 +2574,7 @@
             if (!currentTripData) return;
             const nombreViaje = currentTripData.nombre || "mi viaje";
             const codigo = currentTripData.codigoInvitacion || "---";
-            const urlPlataforma = "https://interrahub.com/registro.html"; // Asegúrate de cambiarlo si tienes otro dominio de inicio
+            const urlPlataforma = "https://interrahub.com"; // Asegúrate de cambiarlo si tienes otro dominio de inicio
 
             const textoCompartir = `🌍 ¡Únete ya a mi viaje "${nombreViaje}" en Interra-hub y organízalo junto a mí! ✈️\n\n🔑 Tu código de invitación exclusivo es: *${codigo}*\n\n👉 1. Entra en ${urlPlataforma}\n👉 2. Regístrate o inicia sesión.\n👉 3. Selecciona "Unirse a un viaje existente" y pega tu código.\n\n¡Nos vemos dentro! 🎒🗺️`;
 
