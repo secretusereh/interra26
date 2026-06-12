@@ -43,7 +43,6 @@
                 radial-gradient(circle at 90% 80%, rgba(255, 255, 255, 0.02), transparent 20%);
         }
 
-        /* Optimización táctil para botones y tarjetas */
         button, a, .trip-card, .action-btn { 
             touch-action: manipulation; 
             -webkit-tap-highlight-color: transparent;
@@ -71,66 +70,33 @@
         .user-name-container { display: flex; align-items: center; gap: 10px; }
         .user-name { font-weight: 300; color: var(--text-muted); font-size: 0.9rem; word-break: break-word; max-width: 250px; text-align: right; line-height: 1.3; }
         
-        /* ── ETIQUETAS DE MEMBRESÍA ── */
         .plan-badge {
             font-size: 0.65rem; padding: 0.3rem 0.6rem; border-radius: 20px;
             font-weight: 800; letter-spacing: 1px; transition: var(--transition);
             display: inline-flex; align-items: center; justify-content: center;
         }
-        .badge-estandar {
-            background: rgba(255,255,255,0.05); color: var(--text-muted); border: 1px solid var(--border-subtle);
-        }
-        @media (hover: hover) {
-            .badge-estandar:hover {
-                background: var(--primary); color: var(--bg-color); border-color: var(--primary); transform: scale(1.05);
-            }
-        }
+        .badge-estandar { background: rgba(255,255,255,0.05); color: var(--text-muted); border: 1px solid var(--border-subtle); }
+        @media (hover: hover) { .badge-estandar:hover { background: var(--primary); color: var(--bg-color); border-color: var(--primary); transform: scale(1.05); } }
         .badge-plus {
             background: linear-gradient(135deg, #ffd700, #ffaa00); color: #000;
             border: 1px solid #ffe600; box-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
             cursor: default; pointer-events: none;
         }
 
-        .btn-logout {
-            background: transparent; color: var(--text-muted); border: none;
-            display: flex; align-items: center; gap: 8px; cursor: pointer; transition: var(--transition);
-        }
-        @media (hover: hover) {
-            .btn-logout:hover { color: var(--accent); transform: translateX(3px); }
-        }
+        .btn-logout { background: transparent; color: var(--text-muted); border: none; display: flex; align-items: center; gap: 8px; cursor: pointer; transition: var(--transition); }
+        @media (hover: hover) { .btn-logout:hover { color: var(--accent); transform: translateX(3px); } }
 
         main { padding: 5rem 5%; max-width: 1400px; margin: 0 auto; }
         
-        /* ── BANNER PUBLICIDAD PERSONALIZADO ── */
         .ad-banner-placeholder {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-            max-width: 728px;
-            height: 90px;
-            margin: 0 auto 3rem auto;
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px dashed var(--border-subtle);
-            border-radius: 16px;
-            color: var(--text-muted);
-            text-decoration: none;
-            font-size: 0.95rem;
-            font-weight: 600;
-            transition: var(--transition);
-            text-align: center;
-            padding: 0 1rem;
+            display: flex; justify-content: center; align-items: center; width: 100%; max-width: 728px; height: 90px;
+            margin: 0 auto 3rem auto; background: rgba(255, 255, 255, 0.02); border: 1px dashed var(--border-subtle);
+            border-radius: 16px; color: var(--text-muted); text-decoration: none; font-size: 0.95rem; font-weight: 600;
+            transition: var(--transition); text-align: center; padding: 0 1rem;
         }
-        @media (hover: hover) {
-            .ad-banner-placeholder:hover {
-                border-color: var(--primary);
-                color: var(--primary);
-                background: rgba(255, 255, 255, 0.05);
-                transform: scale(0.99);
-            }
-        }
+        @media (hover: hover) { .ad-banner-placeholder:hover { border-color: var(--primary); color: var(--primary); background: rgba(255, 255, 255, 0.05); transform: scale(0.99); } }
 
-        /* ── NUEVAS PESTAÑAS PRINCIPALES (MIS VIAJES / HUB) ── */
+        /* ── PESTAÑAS PRINCIPALES ── */
         .main-tabs-container {
             display: flex; gap: 1rem; border-bottom: 1px solid var(--border-subtle); margin-bottom: 2.5rem; padding-bottom: 0.5rem; overflow-x: auto; scrollbar-width: none;
         }
@@ -150,37 +116,19 @@
         .header-section h1 { font-size: 3.5rem; font-weight: 800; letter-spacing: -2px; }
         .header-section p { color: var(--text-muted); font-size: 1.2rem; margin-top: 0.5rem; font-weight: 300; }
 
-        .trips-grid {
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 2.5rem;
-        }
+        .trips-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 2.5rem; }
 
         .trip-card {
-            background: var(--surface);
-            border: 1px solid var(--border-subtle);
-            border-radius: 24px; padding: 2.5rem;
-            position: relative; overflow: hidden;
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            min-height: 240px;
-            display: flex; flex-direction: column; justify-content: space-between;
-            transition: var(--transition);
-            opacity: 0; transform: translateY(30px);
+            background: var(--surface); border: 1px solid var(--border-subtle); border-radius: 24px; padding: 2.5rem;
+            position: relative; overflow: hidden; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            min-height: 240px; display: flex; flex-direction: column; justify-content: space-between;
+            transition: var(--transition); opacity: 0; transform: translateY(30px);
         }
+        .trip-card.visible { opacity: 1; transform: translateY(0); }
 
-        .trip-card.visible {
-            opacity: 1; transform: translateY(0);
-        }
-
-        .card-add {
-            border: 1px dashed rgba(255, 255, 255, 0.2);
-            background: transparent; cursor: pointer;
-            justify-content: center; align-items: center; text-align: center;
-        }
+        .card-add { border: 1px dashed rgba(255, 255, 255, 0.2); background: transparent; cursor: pointer; justify-content: center; align-items: center; text-align: center; }
         @media (hover: hover) {
-            .card-add:hover {
-                border-color: var(--primary); background: rgba(255, 255, 255, 0.02);
-                transform: scale(0.98);
-            }
+            .card-add:hover { border-color: var(--primary); background: rgba(255, 255, 255, 0.02); transform: scale(0.98); }
             .card-add:hover i { color: var(--primary); transform: rotate(90deg) scale(1.1); }
         }
         .card-add i { color: var(--text-muted); transition: var(--transition); margin-bottom: 1rem; }
@@ -188,8 +136,7 @@
         @media (hover: hover) {
             .trip-card.unlocked:hover {
                 border-color: rgba(255, 255, 255, 0.3); transform: translateY(-8px);
-                box-shadow: 0 20px 40px rgba(0,0,0,0.6); cursor: pointer;
-                background: var(--surface-hover);
+                box-shadow: 0 20px 40px rgba(0,0,0,0.6); cursor: pointer; background: var(--surface-hover);
             }
         }
 
@@ -197,94 +144,85 @@
         .trip-card.locked .card-content { filter: blur(8px); opacity: 0.3; pointer-events: none; }
         
         .locked-overlay {
-            position: absolute; inset: 0; background: rgba(5, 5, 5, 0.6);
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            position: absolute; inset: 0; background: rgba(5, 5, 5, 0.6); display: flex; flex-direction: column; justify-content: center; align-items: center;
             opacity: 0.9; transition: var(--transition); z-index: 10;
         }
-        @media (hover: hover) {
-            .trip-card.locked:hover .locked-overlay { opacity: 1; background: rgba(5, 5, 5, 0.8); }
-        }
+        @media (hover: hover) { .trip-card.locked:hover .locked-overlay { opacity: 1; background: rgba(5, 5, 5, 0.8); } }
 
         .btn-request {
-            background: var(--primary); color: var(--bg-color); border: none;
-            padding: 1rem 2rem; border-radius: 40px; font-weight: 600; font-size: 0.95rem;
-            cursor: pointer; margin-top: 1rem; transition: var(--transition);
-            display: flex; align-items: center; gap: 10px;
-        }
-        @media (hover: hover) {
-            .btn-request:hover:not(:disabled) { transform: scale(1.05); box-shadow: 0 0 25px rgba(255,255,255,0.3); }
+            background: var(--primary); color: var(--bg-color); border: none; padding: 1rem 2rem; border-radius: 40px; font-weight: 600; font-size: 0.95rem;
+            cursor: pointer; margin-top: 1rem; transition: var(--transition); display: flex; align-items: center; gap: 10px;
         }
         .btn-request:disabled { opacity: 0.6; cursor: default; background: transparent; border: 1px solid var(--primary); color: white; }
 
         .role-badge {
-            position: absolute; top: 1.5rem; right: 1.5rem; font-size: 0.7rem;
-            padding: 0.5rem 1rem; border-radius: 30px; font-weight: 600;
-            background: rgba(255, 255, 255, 0.05); color: var(--primary);
-            text-transform: uppercase; letter-spacing: 1.5px; border: 1px solid var(--border-subtle);
+            position: absolute; top: 1.5rem; right: 1.5rem; font-size: 0.7rem; padding: 0.5rem 1rem; border-radius: 30px; font-weight: 600;
+            background: rgba(255, 255, 255, 0.05); color: var(--primary); text-transform: uppercase; letter-spacing: 1.5px; border: 1px solid var(--border-subtle);
         }
 
-        /* ── GRUPO DE BOTONES ADMIN (BORRAR Y PUBLICAR) ── */
-        .admin-actions-group { position: absolute; bottom: 1.5rem; right: 1.5rem; display: flex; gap: 10px; z-index: 5; }
+        /* ── GRUPO DE BOTONES ADMIN ── */
+        .admin-actions-group { position: absolute; bottom: 1.5rem; right: 1.5rem; display: flex; gap: 8px; z-index: 5; }
         
-        .btn-delete-trip {
-            background: rgba(255, 77, 77, 0.1); color: var(--accent); border: none; width: 44px; height: 44px; border-radius: 12px; cursor: pointer;
+        .btn-delete-trip, .btn-publish-trip, .btn-edit-trip {
+            border: none; width: 44px; height: 44px; border-radius: 12px; cursor: pointer;
             display: flex; justify-content: center; align-items: center; transition: var(--transition);
         }
-        @media (hover: hover) { .btn-delete-trip:hover { background: var(--accent); color: white; transform: scale(1.1) rotate(5deg); } }
+        .btn-delete-trip { background: rgba(255, 77, 77, 0.1); color: var(--accent); }
+        .btn-publish-trip { background: rgba(77, 166, 255, 0.1); color: var(--accent-blue); }
+        .btn-edit-trip { background: rgba(255, 255, 255, 0.1); color: var(--primary); }
 
-        .btn-publish-trip {
-            background: rgba(77, 166, 255, 0.1); color: var(--accent-blue); border: none; width: 44px; height: 44px; border-radius: 12px; cursor: pointer;
-            display: flex; justify-content: center; align-items: center; transition: var(--transition);
+        @media (hover: hover) { 
+            .btn-delete-trip:hover { background: var(--accent); color: white; transform: scale(1.1) rotate(5deg); } 
+            .btn-publish-trip:hover { background: var(--accent-blue); color: white; transform: scale(1.1); box-shadow: 0 0 15px rgba(77,166,255,0.4); } 
+            .btn-edit-trip:hover { background: var(--primary); color: var(--bg-color); transform: scale(1.1); } 
         }
-        @media (hover: hover) { .btn-publish-trip:hover { background: var(--accent-blue); color: white; transform: scale(1.1); box-shadow: 0 0 15px rgba(77,166,255,0.4); } }
 
         .badge-public {
             position: absolute; top: 1.5rem; left: 1.5rem; font-size: 0.65rem; padding: 0.5rem 1rem; border-radius: 30px; font-weight: 800;
             background: linear-gradient(135deg, var(--accent-blue), #2a75d3); color: white; text-transform: uppercase; letter-spacing: 1.5px; box-shadow: 0 4px 15px rgba(77,166,255,0.3);
         }
 
-        /* ── MODALES ── */
+        /* ── FILTROS SOFISTICADOS HUB ── */
+        .hub-filters-advanced { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 2.5rem; flex-wrap: wrap; background: rgba(255,255,255,0.02); padding: 1.2rem 1.5rem; border-radius: 20px; border: 1px solid var(--border-subtle); }
+        .search-box { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 250px; background: rgba(255,255,255,0.04); border-radius: 12px; padding: 0.8rem 1.2rem; border: 1px solid rgba(255,255,255,0.1); transition: 0.3s; }
+        .search-box:focus-within { border-color: var(--accent-blue); background: rgba(255,255,255,0.07); }
+        .search-box input { background: transparent; border: none; color: white; font-size: 0.95rem; width: 100%; outline: none; font-family: 'Sora', sans-serif; }
+        .filter-pills { display: flex; gap: 8px; flex-wrap: wrap; }
+        .filter-pill { background: rgba(255,255,255,0.05); color: var(--text-muted); border: 1px solid transparent; padding: 0.6rem 1.2rem; border-radius: 30px; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: 0.3s; }
+        .filter-pill:hover { background: rgba(255,255,255,0.1); color: var(--primary); }
+        .filter-pill.active { background: rgba(77,166,255,0.1); color: var(--accent-blue); border-color: var(--accent-blue); }
+
+        /* ── MODALES COMPONENTES ── */
         .modal-overlay {
-            position: fixed; inset: 0; background: rgba(0, 0, 0, 0.9); backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            z-index: 1000; display: flex; justify-content: center; align-items: center;
-            opacity: 0; pointer-events: none; transition: var(--transition);
+            position: fixed; inset: 0; background: rgba(0, 0, 0, 0.9); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            z-index: 1000; display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: var(--transition);
             padding: 1rem; overflow-y: auto;
         }
         .modal-overlay.active { opacity: 1; pointer-events: all; }
 
         .modal-content {
-            background: #0d0d0d; border: 1px solid var(--border-subtle); padding: 4rem;
-            border-radius: 32px; width: 100%; max-width: 550px;
-            transform: translateY(50px) scale(0.9); transition: var(--transition);
-            position: relative; margin: auto; max-height: 90vh; overflow-y: auto;
+            background: #0d0d0d; border: 1px solid var(--border-subtle); padding: 3rem; border-radius: 32px; width: 100%; max-width: 550px;
+            transform: translateY(50px) scale(0.9); transition: var(--transition); position: relative; margin: auto; max-height: 90vh; overflow-y: auto;
         }
         .modal-overlay.active .modal-content { transform: translateY(0) scale(1); }
 
         .input-group { margin-bottom: 2rem; text-align: left; }
         .input-group label { display: block; color: var(--text-muted); font-size: 0.9rem; margin-bottom: 0.8rem; font-weight: 400; }
         .input-group input, .input-group select {
-            width: 100%; padding: 1.2rem; background: rgba(255,255,255,0.03);
-            border: 1px solid var(--border-subtle); color: white; border-radius: 16px;
-            font-size: 1rem; outline: none; transition: 0.3s;
-            -webkit-appearance: none; font-family: 'Sora', sans-serif;
+            width: 100%; padding: 1.2rem; background: rgba(255,255,255,0.03); border: 1px solid var(--border-subtle); color: white; border-radius: 16px;
+            font-size: 1rem; outline: none; transition: 0.3s; -webkit-appearance: none; font-family: 'Sora', sans-serif;
         }
         .input-group input:focus, .input-group select:focus { border-color: var(--primary); background: rgba(255,255,255,0.06); }
         .input-group select option { background: #1a1a1a; color: white; }
         
         .btn-submit {
-            width: 100%; padding: 1.3rem; background: var(--primary); border: none;
-            color: var(--bg-color); border-radius: 16px; font-weight: 800; cursor: pointer;
-            font-size: 1rem; transition: var(--transition);
-            min-height: 55px; /* Altura ideal táctil */
+            width: 100%; padding: 1.3rem; background: var(--primary); border: none; color: var(--bg-color); border-radius: 16px; font-weight: 800; cursor: pointer;
+            font-size: 1rem; transition: var(--transition); min-height: 55px;
         }
-        @media (hover: hover) {
-            .btn-submit:hover:not(:disabled) { letter-spacing: 1px; }
-        }
-        .btn-submit:active { transform: scale(0.97); } /* Efecto click/tap */
+        @media (hover: hover) { .btn-submit:hover:not(:disabled) { letter-spacing: 1px; } }
+        .btn-submit:active { transform: scale(0.97); }
         .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; }
 
-        /* ── TOGGLE SWITCH PARA PUBLICAR VIAJE ── */
         .toggle-container { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.2rem; background: rgba(255,255,255,0.02); padding: 1.2rem; border-radius: 16px; border: 1px solid var(--border-subtle); }
         .toggle-text strong { color: var(--primary); font-size: 1rem; display: block; margin-bottom: 4px; }
         .toggle-text span { font-size: 0.8rem; color: var(--text-muted); line-height: 1.4; display: block; }
@@ -295,109 +233,40 @@
         input:checked + .slider { background-color: var(--accent-blue); }
         input:checked + .slider:before { transform: translateX(26px); }
 
-        /* ── HUB FILTERS ── */
-        .hub-filters { display: flex; gap: 1rem; margin-bottom: 2.5rem; flex-wrap: wrap; background: rgba(255,255,255,0.02); padding: 1.5rem; border-radius: 20px; border: 1px solid var(--border-subtle); }
-        .hub-filter-item { flex: 1; min-width: 200px; }
-        .hub-filter-item input, .hub-filter-item select { width: 100%; padding: 1rem 1.2rem; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; color: white; font-size: 0.95rem; outline: none; font-family: 'Sora', sans-serif; }
-        .hub-filter-item input:focus, .hub-filter-item select:focus { border-color: var(--accent-blue); }
-        .hub-filter-item select option { background: #1a1a1a; }
-
-        /* ── SELECTOR DE ACCIÓN (Crear o Unirse) ── */
-        .action-selector {
-            display: flex; gap: 1.2rem; margin-bottom: 2.5rem;
-        }
-        .action-btn {
-            flex: 1; background: rgba(255,255,255,0.03); border: 1px solid var(--border-subtle);
-            color: var(--text-muted); padding: 1.5rem 1rem; border-radius: 20px;
-            cursor: pointer; transition: var(--transition); text-align: center;
-            display: flex; flex-direction: column; align-items: center; gap: 10px;
-        }
+        .action-selector { display: flex; gap: 1.2rem; margin-bottom: 2.5rem; }
+        .action-btn { flex: 1; background: rgba(255,255,255,0.03); border: 1px solid var(--border-subtle); color: var(--text-muted); padding: 1.5rem 1rem; border-radius: 20px; cursor: pointer; transition: var(--transition); text-align: center; display: flex; flex-direction: column; align-items: center; gap: 10px; }
         .action-btn span.action-label { font-weight: 700; font-size: 0.95rem; color: var(--primary); }
         .action-btn span.action-desc { font-size: 0.75rem; color: var(--text-muted); line-height: 1.4; }
-        @media (hover: hover) {
-            .action-btn:hover { border-color: var(--primary); background: rgba(255,255,255,0.06); color: var(--primary); }
-        }
-        .action-btn.active { background: rgba(255,255,255,0.08); border-color: var(--primary); color: var(--primary); }
-
-        /* ── PANEL DEL CÓDIGO DE VIAJE (tras creación) ── */
-        .trip-code-display {
-            background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.12);
-            border-radius: 20px; padding: 2rem; text-align: center; margin-bottom: 2rem;
-        }
-        .trip-code-display p.code-label {
-            font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase;
-            letter-spacing: 2px; margin-bottom: 1rem; font-weight: 600;
-        }
-        .trip-code-display .code-value {
-            font-size: 2.8rem; font-weight: 800; letter-spacing: 10px; color: var(--primary);
-            margin-bottom: 1rem; font-variant-numeric: tabular-nums;
-        }
-        .btn-copy-code {
-            background: transparent; border: 1px solid var(--border-subtle); color: var(--text-muted);
-            padding: 0.7rem 1.5rem; border-radius: 30px; font-size: 0.85rem; font-weight: 600;
-            cursor: pointer; transition: var(--transition); display: inline-flex; align-items: center; gap: 8px;
-        }
-        @media (hover: hover) {
-            .btn-copy-code:hover { border-color: var(--primary); color: var(--primary); }
-        }
-
-        /* ── INPUT CÓDIGO GRANDE ── */
-        .code-input-big {
-            width: 100%; padding: 1.5rem; background: rgba(255,255,255,0.03);
-            border: 1px solid var(--border-subtle); color: white; border-radius: 16px;
-            font-size: 2rem; font-weight: 800; letter-spacing: 8px; text-align: center;
-            text-transform: uppercase; outline: none; transition: 0.3s;
-        }
+        @media (hover: hover) { .action-btn:hover { border-color: var(--primary); background: rgba(255,255,255,0.06); color: var(--primary); } }
+        
+        .trip-code-display { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.12); border-radius: 20px; padding: 2rem; text-align: center; margin-bottom: 2rem; }
+        .trip-code-display p.code-label { font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 1rem; font-weight: 600; }
+        .trip-code-display .code-value { font-size: 2.8rem; font-weight: 800; letter-spacing: 10px; color: var(--primary); margin-bottom: 1rem; font-variant-numeric: tabular-nums; }
+        
+        .code-input-big { width: 100%; padding: 1.5rem; background: rgba(255,255,255,0.03); border: 1px solid var(--border-subtle); color: white; border-radius: 16px; font-size: 2rem; font-weight: 800; letter-spacing: 8px; text-align: center; text-transform: uppercase; outline: none; transition: 0.3s; }
         .code-input-big:focus { border-color: var(--primary); background: rgba(255,255,255,0.06); }
 
-        /* ── ESTADO SOLICITUD ENVIADA ── */
-        .join-success-box {
-            background: rgba(77, 255, 77, 0.05); border: 1px solid rgba(77, 255, 77, 0.2);
-            border-radius: 16px; padding: 1.5rem; text-align: center; margin-bottom: 1.5rem;
-            display: none;
-        }
-        .join-success-box.visible { display: block; }
-        .join-success-box p { color: var(--success); font-size: 0.9rem; line-height: 1.6; }
-
-        /* ── TOASTS ── */
         #toast-container { position: fixed; bottom: 40px; right: 40px; z-index: 20000; display: flex; flex-direction: column; gap: 15px; }
-        .toast {
-            background: rgba(15, 15, 15, 0.95); backdrop-filter: blur(10px); border: 1px solid var(--border-subtle);
-            color: white; padding: 1.2rem 2rem; border-radius: 18px; display: flex; align-items: center; gap: 15px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5); animation: slideIn 0.5s var(--transition) forwards;
-        }
+        .toast { background: rgba(15, 15, 15, 0.95); backdrop-filter: blur(10px); border: 1px solid var(--border-subtle); color: white; padding: 1.2rem 2rem; border-radius: 18px; display: flex; align-items: center; gap: 15px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); animation: slideIn 0.5s var(--transition) forwards; }
 
-        /* ── MEDIA QUERIES PARA ADAPTACIÓN MÓVIL (NUEVO) ── */
         @media (max-width: 768px) {
-            nav {
-                flex-direction: column;
-                padding: 1rem 5%;
-                gap: 1rem;
-            }
-            .user-menu {
-                justify-content: space-between;
-                width: 100%;
-                gap: 1rem;
-            }
+            nav { flex-direction: column; padding: 1rem 5%; gap: 1rem; }
+            .user-menu { justify-content: space-between; width: 100%; gap: 1rem; }
             .user-name { max-width: 150px; font-size: 0.8rem; }
             main { padding: 2.5rem 5%; }
             .header-section { margin-bottom: 2.5rem; text-align: center; }
             .header-section h1 { font-size: 2.5rem; }
-            .header-section p { font-size: 1rem; }
             
             .main-tabs-container { padding-bottom: 10px; }
             .main-tab { padding: 0.8rem 1.2rem; font-size: 1rem; }
 
-            .trips-grid {
-                grid-template-columns: 1fr; /* 1 columna en móviles */
-                gap: 1.5rem;
-            }
+            .trips-grid { grid-template-columns: 1fr; gap: 1.5rem; }
             .trip-card { padding: 1.8rem; min-height: 200px; }
             
             .modal-content { padding: 2rem 1.5rem; border-radius: 24px; }
-            h2 { font-size: 1.6rem !important; }
             
-            .hub-filters { flex-direction: column; padding: 1rem; }
+            .hub-filters-advanced { flex-direction: column; align-items: stretch; }
+            .search-box { width: 100%; }
 
             .action-selector { flex-direction: column; gap: 1rem; }
             .action-btn { padding: 1.2rem 1rem; }
@@ -405,10 +274,7 @@
             .trip-code-display .code-value { font-size: 2.2rem; letter-spacing: 6px; }
             .code-input-big { font-size: 1.6rem; padding: 1.2rem; letter-spacing: 5px; }
 
-            #toast-container {
-                bottom: 20px; left: 20px; right: 20px; 
-                align-items: center;
-            }
+            #toast-container { bottom: 20px; left: 20px; right: 20px; align-items: center; }
             .toast { width: 100%; justify-content: center; text-align: center; font-size: 0.9rem; padding: 1rem; }
         }
 
@@ -426,7 +292,7 @@
     </div>
 
     <nav>
-        <div class="logo"><i data-lucide="map-pinned"></i> Interra-hub<span style="color: var(--accent);">.</span></div>
+        <div class="logo">Interra-hub<span style="color: var(--accent);">.</span></div>
         <div class="user-menu">
             <div class="user-name-container">
                 <span class="user-name" id="display-user-name">Cargando...</span>
@@ -481,17 +347,17 @@
                 </button>
             </div>
 
-            <div class="hub-filters">
-                <div class="hub-filter-item">
-                    <input type="text" id="hub-filter-dest" placeholder="Buscar destino, ciudad o nombre..." onkeyup="renderHubTrips()">
+            <!-- FILTROS SOFISTICADOS -->
+            <div class="hub-filters-advanced">
+                <div class="search-box">
+                    <i data-lucide="search" style="color:var(--text-muted); width:18px;"></i>
+                    <input type="text" id="hub-filter-dest" placeholder="¿A dónde te gustaría ir?" onkeyup="renderHubTrips()">
                 </div>
-                <div class="hub-filter-item">
-                    <select id="hub-filter-gender" onchange="renderHubTrips()">
-                        <option value="">Todos los géneros</option>
-                        <option value="mixto">Grupos Mixtos</option>
-                        <option value="chicos">Solo Chicos</option>
-                        <option value="chicas">Solo Chicas</option>
-                    </select>
+                <div class="filter-pills">
+                    <button class="filter-pill active" onclick="setGenderFilter('', this)">Todos</button>
+                    <button class="filter-pill" onclick="setGenderFilter('mixto', this)">Mixto</button>
+                    <button class="filter-pill" onclick="setGenderFilter('chicos', this)">Chicos</button>
+                    <button class="filter-pill" onclick="setGenderFilter('chicas', this)">Chicas</button>
                 </div>
             </div>
 
@@ -707,11 +573,14 @@
         <div class="modal-content" style="max-width: 650px; padding: 2.5rem; background: #080808;">
             <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border-subtle); padding-bottom: 1.5rem;">
                 <div>
-                    <span id="public-modal-badge" class="badge-public" style="position:static; margin-bottom:10px; display:inline-block;">MIXTO</span>
                     <h2 id="public-modal-title" style="font-size: 2.2rem; font-weight: 800; line-height:1.1; margin-bottom:0.5rem;">Nombre del Viaje</h2>
-                    <p id="public-modal-meta" style="color:var(--text-muted); font-size: 0.95rem;"><i data-lucide="calendar" style="width:14px; margin-right:4px;"></i> Fechas · <i data-lucide="users" style="width:14px; margin-left:8px; margin-right:4px;"></i> X viajer@s</p>
+                    <p id="public-modal-meta" style="color:var(--text-muted); font-size: 0.95rem; display:flex; align-items:center; gap:8px;">
+                        <i data-lucide="calendar" style="width:14px;"></i> <span id="public-modal-dates">Fechas</span> 
+                        <span style="color:var(--border-subtle);">|</span> 
+                        <i data-lucide="users" style="width:14px;"></i> <span id="public-modal-size">X viajer@s</span>
+                    </p>
                 </div>
-                <button onclick="closePublicTripModal()" style="background:rgba(255,255,255,0.05); border:none; color:white; width:40px; height:40px; border-radius:12px; cursor:pointer; display:flex; align-items:center; justify-content:center;"><i data-lucide="x"></i></button>
+                <button onclick="closePublicTripModal()" style="background:rgba(255,255,255,0.05); border:none; color:white; width:40px; height:40px; border-radius:12px; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:0.3s;"><i data-lucide="x"></i></button>
             </div>
 
             <div style="background:rgba(77,166,255,0.05); border:1px solid rgba(77,166,255,0.2); border-radius:16px; padding:1.5rem; margin-bottom: 2rem;">
@@ -799,6 +668,7 @@
         let adminTripsList = []; 
         let hasPublicTrip = false; 
         let dynamicHubTrips = []; 
+        let activeHubGender = ''; // Filtro activo
 
         const STATIC_HUB_TRIPS = [
             { id: 's1', isStatic: true, publicConfig: { name: 'Eurotrip Verano 26', gender: 'mixto', size: 4, countries: 'Francia, Italia, Suiza', dates: '01/07/2026 - 15/07/2026', showDates: true, showPlans: true, showHotels: false, showTransports: true, ig: '@euro26', tk: '@euro_trip', x: '' } },
@@ -1062,6 +932,9 @@
                             <button class="btn-publish-trip" onclick="openPublishModal(event, '${trip.id}')" title="Configurar publicación en El Andén">
                                 <i data-lucide="radar"></i>
                             </button>
+                            <button class="btn-edit-trip" onclick="event.stopPropagation(); window.location.href='viaje.html?id=${trip.id}'" title="Editar este viaje">
+                                <i data-lucide="edit-2"></i>
+                            </button>
                             <button class="btn-delete-trip" onclick="confirmDeleteTrip(event, '${trip.id}', '${trip.nombre.replace(/'/g, "\\'")}')" title="Borrar viaje permanentemente">
                                 <i data-lucide="trash-2"></i>
                             </button>
@@ -1236,6 +1109,15 @@
             
             const countries = "Europa"; // Mocking geolocation extraction for now
             
+            // Calculamos solo admin o editores reales
+            let realSize = 0;
+            if(trip.miembros) {
+                Object.values(trip.miembros).forEach(rol => {
+                    if (rol === 'admin-grupo' || rol === 'editor-grupo') realSize++;
+                });
+            }
+            if(realSize === 0) realSize = 1;
+            
             const config = {
                 name: document.getElementById('pub-name').value,
                 gender: document.getElementById('pub-gender').value,
@@ -1247,7 +1129,7 @@
                 ig: document.getElementById('pub-ig').value,
                 tk: document.getElementById('pub-tk').value,
                 x: document.getElementById('pub-x').value,
-                size: trip.miembros ? Object.keys(trip.miembros).length : 1,
+                size: realSize,
                 countries: countries,
                 dates: `${trip.fechaInicio} - ${trip.fechaFin}`
             };
@@ -1265,7 +1147,14 @@
             }
         };
 
-        // ── LÓGICA DE EL ANDÉN (HUB) ──
+        // ── LÓGICA DE EL ANDÉN (HUB) Y FILTROS ──
+        window.setGenderFilter = function(val, btn) {
+            activeHubGender = val;
+            document.querySelectorAll('.filter-pill').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            renderHubTrips();
+        }
+
         window.loadHubTrips = async function() {
             const container = document.getElementById('hub-trips-container');
             container.innerHTML = '<p style="color:var(--text-muted); width:100%; text-align:center;">Cargando viajes de la comunidad...</p>';
@@ -1285,7 +1174,6 @@
 
         window.renderHubTrips = function() {
             const destFilter = document.getElementById('hub-filter-dest').value.toLowerCase();
-            const genderFilter = document.getElementById('hub-filter-gender').value;
             const container = document.getElementById('hub-trips-container');
             container.innerHTML = '';
             
@@ -1296,27 +1184,40 @@
                 const config = trip.publicConfig;
                 if(!config) return;
                 
-                if (genderFilter && config.gender !== genderFilter) return;
+                if (activeHubGender && config.gender !== activeHubGender) return;
                 if (destFilter && !(config.name.toLowerCase().includes(destFilter) || (config.countries && config.countries.toLowerCase().includes(destFilter)))) return;
                 
                 found++;
-                const size = config.size || '?';
+                const size = config.size || 1;
                 const dates = config.showDates === false ? 'Fechas Ocultas' : config.dates;
                 const countries = config.countries || 'Múltiples Destinos';
                 
-                const genderLabel = config.gender === 'chicas' ? 'SOLO CHICAS' : (config.gender === 'chicos' ? 'SOLO CHICOS' : 'GRUPO MIXTO');
-                const genderColor = config.gender === 'chicas' ? '#ff66b2' : (config.gender === 'chicos' ? 'var(--accent-blue)' : '#ffd700');
+                // Lógica elegante de renderizado de puntos de género
+                let dotsHtml = '<span style="margin-left: 8px; display: inline-flex; gap: 4px; vertical-align: middle;">';
+                const maxDots = Math.min(size, 10);
+                for(let j=0; j<maxDots; j++) {
+                    let dotColor = '#888888';
+                    if (config.gender === 'chicas') dotColor = '#ff66b2';
+                    else if (config.gender === 'chicos') dotColor = '#4da6ff';
+                    else if (config.gender === 'mixto') {
+                        dotColor = j % 2 === 0 ? '#ff66b2' : '#4da6ff';
+                    }
+                    dotsHtml += `<span style="width: 10px; height: 10px; border-radius: 50%; background-color: ${dotColor}; display: inline-block;"></span>`;
+                }
+                if(size > 10) dotsHtml += '<span style="font-size:0.7rem; color:var(--text-muted); font-weight:800; margin-left:2px;">+</span>';
+                dotsHtml += '</span>';
                 
                 const card = document.createElement('div');
                 card.className = 'trip-card visible unlocked';
                 card.style.minHeight = 'auto'; card.style.padding = '2rem';
                 card.innerHTML = `
-                    <div class="role-badge" style="background: rgba(255,255,255,0.05); color: ${genderColor}; border-color: ${genderColor}; position:static; display:inline-block; margin-bottom:1rem;">${genderLabel}</div>
                     <div class="card-content">
                         <h2 style="font-weight: 800; font-size: 1.5rem; margin-bottom: 0.8rem; line-height: 1.2;">${config.name}</h2>
                         <p style="color:var(--text-muted); font-size: 0.9rem; margin-bottom: 6px;"><i data-lucide="calendar" style="width:14px; margin-right:6px;"></i> ${dates}</p>
                         <p style="color:var(--text-muted); font-size: 0.9rem; margin-bottom: 6px;"><i data-lucide="map-pin" style="width:14px; margin-right:6px;"></i> ${countries}</p>
-                        <p style="color:var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem;"><i data-lucide="users" style="width:14px; margin-right:6px;"></i> ${size} viajer@s</p>
+                        <p style="color:var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem; display:flex; align-items:center;">
+                            <i data-lucide="users" style="width:14px; margin-right:6px;"></i> ${size} viajer@s ${dotsHtml}
+                        </p>
                         <button class="btn-submit" style="width:100%; padding: 0.8rem; font-size: 0.9rem; background:rgba(255,255,255,0.05); color:white; border:1px solid var(--border-subtle);" onclick="viewPublicTripDetails('${trip.id}')">
                             <i data-lucide="eye" style="width:16px;"></i> Ver Viaje
                         </button>
@@ -1339,11 +1240,22 @@
             
             const config = trip.publicConfig;
             document.getElementById('public-modal-title').innerText = config.name;
-            document.getElementById('public-modal-meta').innerHTML = `<i data-lucide="calendar" style="width:14px; margin-right:4px;"></i> ${config.showDates === false ? 'Fechas Privadas' : config.dates} &nbsp;·&nbsp; <i data-lucide="users" style="width:14px; margin-right:4px;"></i> ${config.size || '?'} viajer@s`;
             
-            const badge = document.getElementById('public-modal-badge');
-            badge.innerText = config.gender === 'chicas' ? 'SOLO CHICAS' : (config.gender === 'chicos' ? 'SOLO CHICOS' : 'GRUPO MIXTO');
-            badge.style.background = config.gender === 'chicas' ? 'linear-gradient(135deg, #ff66b2, #d1478e)' : (config.gender === 'chicos' ? 'linear-gradient(135deg, var(--accent-blue), #2a75d3)' : 'linear-gradient(135deg, #ffd700, #d4b100)');
+            const size = config.size || 1;
+            let dotsHtml = '<span style="margin-left: 6px; display: inline-flex; gap: 4px; vertical-align: middle;">';
+            const maxDots = Math.min(size, 10);
+            for(let j=0; j<maxDots; j++) {
+                let dotColor = '#888888';
+                if (config.gender === 'chicas') dotColor = '#ff66b2';
+                else if (config.gender === 'chicos') dotColor = '#4da6ff';
+                else if (config.gender === 'mixto') dotColor = j % 2 === 0 ? '#ff66b2' : '#4da6ff';
+                dotsHtml += `<span style="width: 10px; height: 10px; border-radius: 50%; background-color: ${dotColor}; display: inline-block;"></span>`;
+            }
+            if(size > 10) dotsHtml += '<span style="font-size:0.7rem; color:var(--text-muted); font-weight:800; margin-left:2px;">+</span>';
+            dotsHtml += '</span>';
+
+            document.getElementById('public-modal-dates').innerText = config.showDates === false ? 'Fechas Privadas' : config.dates;
+            document.getElementById('public-modal-size').innerHTML = `${size} viajer@s ${dotsHtml}`;
             
             let socialHtml = '';
             if(config.ig) socialHtml += `<a href="https://instagram.com/${config.ig.replace('@','')}" target="_blank" style="color: white; text-decoration:none;"><i data-lucide="instagram" style="width:16px; vertical-align:middle;"></i> ${config.ig}</a>`;
