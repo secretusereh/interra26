@@ -311,7 +311,6 @@
             <i data-lucide="megaphone" style="margin-right: 10px;"></i> ¿Quieres anunciarte aquí? Haz clic para solicitar información.
         </a>
 
-        <!-- PESTAÑAS PRINCIPALES -->
         <div class="main-tabs-container">
             <button class="main-tab active" id="tab-mis-viajes" onclick="switchMainTab('mis-viajes')">
                 <i data-lucide="briefcase" style="width:18px;"></i> Mis Viajes
@@ -322,7 +321,6 @@
             </button>
         </div>
 
-        <!-- VISTA: MIS VIAJES -->
         <div id="view-mis-viajes">
             <div class="header-section">
                 <h1>Mis Viajes.</h1>
@@ -337,7 +335,6 @@
             </div>
         </div>
 
-        <!-- VISTA: HUB COMUNIDAD -->
         <div id="view-hub" style="display: none;">
             <div class="header-section" style="margin-bottom: 2rem;">
                 <h1>El Andén.</h1>
@@ -347,7 +344,6 @@
                 </button>
             </div>
 
-            <!-- FILTROS SOFISTICADOS -->
             <div class="hub-filters-advanced">
                 <div class="search-box">
                     <i data-lucide="search" style="color:var(--text-muted); width:18px;"></i>
@@ -362,12 +358,10 @@
             </div>
 
             <div class="trips-grid" id="hub-trips-container">
-                <!-- Tarjetas inyectadas vía JS -->
-            </div>
+                </div>
         </div>
     </main>
 
-    <!-- MODAL PRINCIPAL CREAR/UNIRSE VIAJE -->
     <div class="modal-overlay" id="create-modal">
         <div class="modal-content" style="padding: 4rem;">
 
@@ -445,7 +439,25 @@
         </div>
     </div>
 
-    <!-- MODAL BORRAR VIAJE -->
+    <div class="modal-overlay" id="edit-trip-modal">
+        <div class="modal-content" style="padding: 4rem;">
+            <h2 style="font-size: 2rem; font-weight: 800; margin-bottom: 2.5rem; letter-spacing: -1px;">Editar Viaje</h2>
+            <form id="edit-trip-form">
+                <input type="hidden" id="edit-trip-id">
+                <div class="input-group">
+                    <label>Nombre del Viaje</label>
+                    <input type="text" id="edit-trip-name" required placeholder="Ej. Costa Amalfitana 2026">
+                </div>
+                <div class="input-group">
+                    <label>Rango de Fechas</label>
+                    <input type="text" id="edit-trip-dates" required readonly placeholder="Selecciona el periodo">
+                </div>
+                <button type="submit" class="btn-submit" id="btn-save-edit">GUARDAR CAMBIOS</button>
+                <button type="button" onclick="closeModal('edit-trip-modal')" style="background:none; border:none; color:var(--text-muted); width:100%; margin-top:1.5rem; cursor:pointer; font-size: 0.8rem; font-weight: 600; padding: 1rem 0;">CANCELAR</button>
+            </form>
+        </div>
+    </div>
+
     <div class="modal-overlay" id="delete-modal">
         <div class="modal-content" style="border-color: var(--accent); padding: 4rem;">
             <h2 style="font-size: 1.8rem; font-weight: 800; margin-bottom: 1rem; color: var(--accent); display: flex; align-items: center; gap: 10px;">
@@ -464,7 +476,6 @@
         </div>
     </div>
 
-    <!-- MODAL ACTUALIZACIONES DEL SISTEMA -->
     <div class="modal-overlay" id="update-modal" style="z-index: 1050;">
         <div class="modal-content" style="border-color: var(--accent-blue); max-width: 500px; padding: 4rem;">
             <div style="text-align: center; margin-bottom: 1.5rem;">
@@ -489,7 +500,6 @@
         </div>
     </div>
 
-    <!-- MODAL PUBLICAR VIAJE EN HUB -->
     <div class="modal-overlay" id="publish-modal">
         <div class="modal-content" style="max-width: 600px; padding: 2.5rem;">
             <h2 style="font-size: 1.8rem; font-weight: 800; display:flex; align-items:center; gap:10px;"><i data-lucide="radar" style="color:var(--accent-blue);"></i> Publicar en El Andén</h2>
@@ -506,6 +516,11 @@
                 <div class="input-group">
                     <label>Nombre Público del Grupo</label>
                     <input type="text" id="pub-name" required placeholder="Ej. Mochileros por Europa">
+                </div>
+
+                <div class="input-group">
+                    <label>Países o Ciudades a visitar</label>
+                    <input type="text" id="pub-countries" required placeholder="Ej. Francia, Italia, Praga, Berlín...">
                 </div>
                 
                 <div class="input-group">
@@ -563,12 +578,12 @@
                 </div>
 
                 <button type="submit" class="btn-submit" style="margin-top:1.5rem; background: var(--accent-blue);" id="btn-submit-publish">LANZAR AL ANDÉN</button>
+                <button type="button" class="btn-submit" style="margin-top:1rem; background: rgba(255,77,77,0.1); color: var(--accent); border: 1px solid var(--accent); display: none;" id="btn-unpublish" onclick="unpublishTrip()">RETIRAR DEL ANDÉN</button>
                 <button type="button" onclick="closePublishModal()" style="background:none; border:none; color:var(--text-muted); width:100%; margin-top:1rem; cursor:pointer; font-weight: 600; padding:1rem;">CANCELAR</button>
             </form>
         </div>
     </div>
 
-    <!-- MODAL DETALLES VIAJE COMUNIDAD -->
     <div class="modal-overlay" id="public-trip-details-modal">
         <div class="modal-content" style="max-width: 650px; padding: 2.5rem; background: #080808;">
             <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border-subtle); padding-bottom: 1.5rem;">
@@ -586,14 +601,12 @@
             <div style="background:rgba(77,166,255,0.05); border:1px solid rgba(77,166,255,0.2); border-radius:16px; padding:1.5rem; margin-bottom: 2rem;">
                 <h4 style="font-size:1rem; margin-bottom: 10px; color:var(--accent-blue); display:flex; align-items:center; gap:8px;"><i data-lucide="message-circle" style="width:18px;"></i> Contacto</h4>
                 <div id="public-modal-socials" style="display:flex; gap:15px; flex-wrap:wrap; font-size:0.95rem;">
-                    <!-- Injected via JS -->
-                </div>
+                    </div>
             </div>
 
             <h3 style="font-size:1.2rem; margin-bottom:1rem; color:var(--primary);"><i data-lucide="map" style="width:18px; margin-right:8px;"></i> Itinerario Público</h3>
             <div id="public-modal-content-area" style="background:rgba(255,255,255,0.02); border:1px solid var(--border-subtle); border-radius:16px; padding:1.5rem; max-height:300px; overflow-y:auto;">
-                <!-- Inyectado via JS -->
-            </div>
+                </div>
             
             <button class="btn-submit" style="margin-top:2rem;" onclick="closePublicTripModal()">CERRAR</button>
         </div>
@@ -663,17 +676,17 @@
         let currentUserPlan = 'ESTANDAR'; 
         const SUPERADMIN_EMAIL = "tu_correo@gmail.com"; 
 
-        // Variables de Hub
+        // Variables de Hub y Edición
         let todosLosViajesCache = []; 
         let adminTripsList = []; 
         let hasPublicTrip = false; 
         let dynamicHubTrips = []; 
-        let activeHubGender = ''; // Filtro activo
+        let activeHubGender = ''; 
 
         const STATIC_HUB_TRIPS = [
             { id: 's1', isStatic: true, publicConfig: { name: 'Eurotrip Verano 26', gender: 'mixto', size: 4, countries: 'Francia, Italia, Suiza', dates: '01/07/2026 - 15/07/2026', showDates: true, showPlans: true, showHotels: false, showTransports: true, ig: '@euro26', tk: '@euro_trip', x: '' } },
-            { id: 's2', isStatic: true, publicConfig: { name: 'Chicas a Berlín y Praga', gender: 'chicas', size: 3, countries: 'Alemania, Chequia', dates: '10/08/2026 - 18/08/2026', showDates: false, showPlans: true, showHotels: false, showTransports: false, ig: '@lasviajeras', tk: '', x: '' } },
-            { id: 's3', isStatic: true, publicConfig: { name: 'Ruta del Este', gender: 'chicos', size: 5, countries: 'Hungría, Austria, Eslovaquia', dates: '05/09/2026 - 20/09/2026', showDates: true, showPlans: true, showHotels: true, showTransports: true, ig: '@rutaeste', tk: '@rutaeste', x: '@rutaeste_x' } },
+            { id: 's2', isStatic: true, publicConfig: { name: 'Chicas a Berlín y Praga', gender: 'chicas', size: 3, countries: 'Berlín, Praga, Viena', dates: '10/08/2026 - 18/08/2026', showDates: false, showPlans: true, showHotels: false, showTransports: false, ig: '@lasviajeras', tk: '', x: '' } },
+            { id: 's3', isStatic: true, publicConfig: { name: 'Ruta del Este', gender: 'chicos', size: 5, countries: 'Budapest, Viena, Bratislava', dates: '05/09/2026 - 20/09/2026', showDates: true, showPlans: true, showHotels: true, showTransports: true, ig: '@rutaeste', tk: '@rutaeste', x: '@rutaeste_x' } },
             { id: 's4', isStatic: true, publicConfig: { name: 'Mochileros Sur', gender: 'mixto', size: 2, countries: 'Italia, Grecia', dates: '12/07/2026 - 28/07/2026', showDates: true, showPlans: false, showHotels: false, showTransports: true, ig: '', tk: '', x: '' } },
             { id: 's5', isStatic: true, publicConfig: { name: 'Fiesta y Nieve', gender: 'mixto', size: 6, countries: 'Suiza, Francia, Andorra', dates: '15/12/2026 - 22/12/2026', showDates: true, showPlans: true, showHotels: true, showTransports: false, ig: '@nieveparty', tk: '', x: '' } }
         ];
@@ -713,9 +726,13 @@
             return code;
         }
 
-        // ── FLATPICKR ──
+        // ── FLATPICKR INSTANCIAS ──
         const rangePicker = flatpickr("#trip-range", { 
             mode: "range", minDate: "today", dateFormat: "d/m/Y", locale: "es", disableMobile: "true"
+        });
+        
+        const editRangePicker = flatpickr("#edit-trip-dates", { 
+            mode: "range", dateFormat: "d/m/Y", locale: "es", disableMobile: "true"
         });
 
         // ── NAVEGACIÓN TABS PRINCIPALES (MIS VIAJES / HUB) ──
@@ -927,12 +944,13 @@
 
                     const isTripPublicHtml = trip.isPublic ? `<span class="badge-public"><i data-lucide="globe" style="width:12px; margin-right:4px;"></i> PÚBLICO</span>` : '';
 
+                    // BOTON EDITAR AHORA ABRE MODAL, NO NAVEGA
                     const adminBtnsHtml = (rolAqui === 'admin-grupo' || isGod) ? `
                         <div class="admin-actions-group">
                             <button class="btn-publish-trip" onclick="openPublishModal(event, '${trip.id}')" title="Configurar publicación en El Andén">
                                 <i data-lucide="radar"></i>
                             </button>
-                            <button class="btn-edit-trip" onclick="event.stopPropagation(); window.location.href='viaje.html?id=${trip.id}'" title="Editar este viaje">
+                            <button class="btn-edit-trip" onclick="openEditTripModal(event, '${trip.id}', '${trip.nombre.replace(/'/g, "\\'")}', '${trip.fechaInicio}', '${trip.fechaFin}')" title="Editar nombre y fechas">
                                 <i data-lucide="edit-2"></i>
                             </button>
                             <button class="btn-delete-trip" onclick="confirmDeleteTrip(event, '${trip.id}', '${trip.nombre.replace(/'/g, "\\'")}')" title="Borrar viaje permanentemente">
@@ -968,6 +986,54 @@
                 console.error(error); showToast("Error al sincronizar viajes", "error");
             }
         }
+
+        // ── EDICIÓN DE VIAJE (SOLO METADATOS DESDE EL PANEL) ──
+        window.openEditTripModal = function(e, id, name, startDate, endDate) {
+            if(e) e.stopPropagation();
+            document.getElementById('edit-trip-id').value = id;
+            document.getElementById('edit-trip-name').value = name;
+            
+            // Convert dd/mm/yyyy to real dates for flatpickr
+            try {
+                const parseDate = (dStr) => {
+                    const [d, m, y] = dStr.split('/');
+                    return new Date(`${y}-${m}-${d}T12:00:00`);
+                };
+                editRangePicker.setDate([parseDate(startDate), parseDate(endDate)]);
+            } catch(err) { console.error("Error parseando fechas para el modal", err); }
+            
+            document.getElementById('edit-trip-modal').classList.add('active');
+        }
+
+        document.getElementById('edit-trip-form').onsubmit = async (e) => {
+            e.preventDefault();
+            const tId = document.getElementById('edit-trip-id').value;
+            const name = document.getElementById('edit-trip-name').value;
+            const dates = editRangePicker.selectedDates;
+            
+            if (dates.length < 2) return showToast("Debes elegir un rango de fechas", "error");
+
+            const btn = document.getElementById('btn-save-edit');
+            btn.innerText = "GUARDANDO..."; btn.disabled = true;
+
+            const format = (d) => d.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
+            
+            try {
+                await updateDoc(doc(db, "viajes", tId), {
+                    nombre: name,
+                    fechaInicio: format(dates[0]),
+                    fechaFin: format(dates[1])
+                });
+                showToast("Viaje actualizado correctamente", "success");
+                closeModal('edit-trip-modal');
+                loadTrips();
+            } catch (err) {
+                console.error(err);
+                showToast("Error al actualizar el viaje", "error");
+            } finally {
+                btn.innerText = "GUARDAR CAMBIOS"; btn.disabled = false;
+            }
+        };
 
         // ── BORRADO DE VIAJES ──
         let tripToDeleteId = null;
@@ -1085,7 +1151,16 @@
             }
             
             document.getElementById('pub-name').value = (trip.publicConfig && trip.publicConfig.name) ? trip.publicConfig.name : trip.nombre;
+            
+            // Check si ya es publico para mostrar boton de "Retirar"
+            if(trip.isPublic) {
+                document.getElementById('btn-unpublish').style.display = 'block';
+            } else {
+                document.getElementById('btn-unpublish').style.display = 'none';
+            }
+
             if(trip.publicConfig) {
+                document.getElementById('pub-countries').value = trip.publicConfig.countries || '';
                 document.getElementById('pub-gender').value = trip.publicConfig.gender || 'mixto';
                 document.getElementById('pub-show-dates').checked = trip.publicConfig.showDates !== false;
                 document.getElementById('pub-show-names').checked = trip.publicConfig.showNames === true;
@@ -1095,9 +1170,30 @@
                 document.getElementById('pub-ig').value = trip.publicConfig.ig || '';
                 document.getElementById('pub-tk').value = trip.publicConfig.tk || '';
                 document.getElementById('pub-x').value = trip.publicConfig.x || '';
+            } else {
+                document.getElementById('pub-countries').value = '';
             }
             return true;
         }
+
+        // Lógica de "Retirar del Andén" (Unpublish)
+        window.unpublishTrip = async function() {
+            const tId = document.getElementById('pub-trip-id').value;
+            const btn = document.getElementById('btn-unpublish');
+            btn.innerText = "RETIRANDO..."; btn.disabled = true;
+            try {
+                await updateDoc(doc(db, "viajes", tId), { isPublic: false });
+                showToast("El viaje ha sido retirado de la comunidad.", "info");
+                closePublishModal();
+                loadTrips();
+                if(document.getElementById('tab-hub').classList.contains('active')) loadHubTrips();
+            } catch (e) {
+                console.error(e);
+                showToast("Error al retirar el viaje.", "error");
+            } finally {
+                btn.innerText = "RETIRAR DEL ANDÉN"; btn.disabled = false;
+            }
+        };
 
         document.getElementById('publish-form').onsubmit = async (e) => {
             e.preventDefault();
@@ -1107,7 +1203,8 @@
             const tId = document.getElementById('pub-trip-id').value;
             const trip = todosLosViajesCache.find(t => t.id === tId);
             
-            const countries = "Europa"; // Mocking geolocation extraction for now
+            // Países ahora son recogidos del Input del Usuario
+            const countries = document.getElementById('pub-countries').value;
             
             // Calculamos solo admin o editores reales
             let realSize = 0;
@@ -1120,6 +1217,7 @@
             
             const config = {
                 name: document.getElementById('pub-name').value,
+                countries: countries,
                 gender: document.getElementById('pub-gender').value,
                 showDates: document.getElementById('pub-show-dates').checked,
                 showNames: document.getElementById('pub-show-names').checked,
@@ -1130,7 +1228,6 @@
                 tk: document.getElementById('pub-tk').value,
                 x: document.getElementById('pub-x').value,
                 size: realSize,
-                countries: countries,
                 dates: `${trip.fechaInicio} - ${trip.fechaFin}`
             };
             
@@ -1190,7 +1287,7 @@
                 found++;
                 const size = config.size || 1;
                 const dates = config.showDates === false ? 'Fechas Ocultas' : config.dates;
-                const countries = config.countries || 'Múltiples Destinos';
+                const countries = config.countries || 'Destinos no especificados';
                 
                 // Lógica elegante de renderizado de puntos de género
                 let dotsHtml = '<span style="margin-left: 8px; display: inline-flex; gap: 4px; vertical-align: middle;">';
