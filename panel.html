@@ -130,6 +130,22 @@
             }
         }
 
+        /* ── NUEVAS PESTAÑAS PRINCIPALES (MIS VIAJES / HUB) ── */
+        .main-tabs-container {
+            display: flex; gap: 1rem; border-bottom: 1px solid var(--border-subtle); margin-bottom: 2.5rem; padding-bottom: 0.5rem; overflow-x: auto; scrollbar-width: none;
+        }
+        .main-tabs-container::-webkit-scrollbar { display: none; }
+        .main-tab {
+            background: transparent; color: var(--text-muted); border: none; font-size: 1.1rem;
+            font-weight: 600; cursor: pointer; padding: 0.8rem 1.5rem; border-radius: 12px;
+            transition: var(--transition); display: flex; align-items: center; gap: 10px; white-space: nowrap;
+        }
+        .main-tab.active { background: rgba(255,255,255,0.08); color: var(--primary); border-bottom: 2px solid var(--primary); border-radius: 12px 12px 0 0; }
+        @media (hover: hover) { .main-tab:hover:not(.active) { color: var(--primary); background: rgba(255,255,255,0.03); } }
+        
+        .badge-plus-small { font-size: 0.65rem; background: rgba(255,255,255,0.1); padding: 3px 8px; border-radius: 20px; font-weight: 800; letter-spacing: 0.5px; margin-left: 5px; }
+        .main-tab.unlocked .badge-plus-small { background: linear-gradient(135deg, #ffd700, #ffaa00); color: #000; box-shadow: 0 0 8px rgba(255, 215, 0, 0.4); }
+
         .header-section { margin-bottom: 4rem; animation: fadeDown 1s ease; }
         .header-section h1 { font-size: 3.5rem; font-weight: 800; letter-spacing: -2px; }
         .header-section p { color: var(--text-muted); font-size: 1.2rem; margin-top: 0.5rem; font-weight: 300; }
@@ -207,30 +223,24 @@
             text-transform: uppercase; letter-spacing: 1.5px; border: 1px solid var(--border-subtle);
         }
 
-        /* ── BOTÓN DE ELIMINAR VIAJE ── */
+        /* ── GRUPO DE BOTONES ADMIN (BORRAR Y PUBLICAR) ── */
+        .admin-actions-group { position: absolute; bottom: 1.5rem; right: 1.5rem; display: flex; gap: 10px; z-index: 5; }
+        
         .btn-delete-trip {
-            position: absolute;
-            bottom: 1.5rem;
-            right: 1.5rem;
-            background: rgba(255, 77, 77, 0.1);
-            color: var(--accent);
-            border: none;
-            width: 44px; /* Mayor tamaño para táctil */
-            height: 44px;
-            border-radius: 12px;
-            cursor: pointer;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transition: var(--transition);
-            z-index: 5;
+            background: rgba(255, 77, 77, 0.1); color: var(--accent); border: none; width: 44px; height: 44px; border-radius: 12px; cursor: pointer;
+            display: flex; justify-content: center; align-items: center; transition: var(--transition);
         }
-        @media (hover: hover) {
-            .btn-delete-trip:hover {
-                background: var(--accent);
-                color: white;
-                transform: scale(1.1) rotate(5deg);
-            }
+        @media (hover: hover) { .btn-delete-trip:hover { background: var(--accent); color: white; transform: scale(1.1) rotate(5deg); } }
+
+        .btn-publish-trip {
+            background: rgba(77, 166, 255, 0.1); color: var(--accent-blue); border: none; width: 44px; height: 44px; border-radius: 12px; cursor: pointer;
+            display: flex; justify-content: center; align-items: center; transition: var(--transition);
+        }
+        @media (hover: hover) { .btn-publish-trip:hover { background: var(--accent-blue); color: white; transform: scale(1.1); box-shadow: 0 0 15px rgba(77,166,255,0.4); } }
+
+        .badge-public {
+            position: absolute; top: 1.5rem; left: 1.5rem; font-size: 0.65rem; padding: 0.5rem 1rem; border-radius: 30px; font-weight: 800;
+            background: linear-gradient(135deg, var(--accent-blue), #2a75d3); color: white; text-transform: uppercase; letter-spacing: 1.5px; box-shadow: 0 4px 15px rgba(77,166,255,0.3);
         }
 
         /* ── MODALES ── */
@@ -247,19 +257,20 @@
             background: #0d0d0d; border: 1px solid var(--border-subtle); padding: 4rem;
             border-radius: 32px; width: 100%; max-width: 550px;
             transform: translateY(50px) scale(0.9); transition: var(--transition);
-            position: relative; margin: auto;
+            position: relative; margin: auto; max-height: 90vh; overflow-y: auto;
         }
         .modal-overlay.active .modal-content { transform: translateY(0) scale(1); }
 
         .input-group { margin-bottom: 2rem; text-align: left; }
         .input-group label { display: block; color: var(--text-muted); font-size: 0.9rem; margin-bottom: 0.8rem; font-weight: 400; }
-        .input-group input {
+        .input-group input, .input-group select {
             width: 100%; padding: 1.2rem; background: rgba(255,255,255,0.03);
             border: 1px solid var(--border-subtle); color: white; border-radius: 16px;
             font-size: 1rem; outline: none; transition: 0.3s;
-            -webkit-appearance: none; /* Elimina estilos por defecto iOS */
+            -webkit-appearance: none; font-family: 'Sora', sans-serif;
         }
-        .input-group input:focus { border-color: var(--primary); background: rgba(255,255,255,0.06); }
+        .input-group input:focus, .input-group select:focus { border-color: var(--primary); background: rgba(255,255,255,0.06); }
+        .input-group select option { background: #1a1a1a; color: white; }
         
         .btn-submit {
             width: 100%; padding: 1.3rem; background: var(--primary); border: none;
@@ -272,6 +283,24 @@
         }
         .btn-submit:active { transform: scale(0.97); } /* Efecto click/tap */
         .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; }
+
+        /* ── TOGGLE SWITCH PARA PUBLICAR VIAJE ── */
+        .toggle-container { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.2rem; background: rgba(255,255,255,0.02); padding: 1.2rem; border-radius: 16px; border: 1px solid var(--border-subtle); }
+        .toggle-text strong { color: var(--primary); font-size: 1rem; display: block; margin-bottom: 4px; }
+        .toggle-text span { font-size: 0.8rem; color: var(--text-muted); line-height: 1.4; display: block; }
+        .toggle-switch { position: relative; width: 54px; height: 28px; flex-shrink: 0; }
+        .toggle-switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(255,255,255,0.1); transition: .4s; border-radius: 34px; }
+        .slider:before { position: absolute; content: ""; height: 20px; width: 20px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; }
+        input:checked + .slider { background-color: var(--accent-blue); }
+        input:checked + .slider:before { transform: translateX(26px); }
+
+        /* ── HUB FILTERS ── */
+        .hub-filters { display: flex; gap: 1rem; margin-bottom: 2.5rem; flex-wrap: wrap; background: rgba(255,255,255,0.02); padding: 1.5rem; border-radius: 20px; border: 1px solid var(--border-subtle); }
+        .hub-filter-item { flex: 1; min-width: 200px; }
+        .hub-filter-item input, .hub-filter-item select { width: 100%; padding: 1rem 1.2rem; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; color: white; font-size: 0.95rem; outline: none; font-family: 'Sora', sans-serif; }
+        .hub-filter-item input:focus, .hub-filter-item select:focus { border-color: var(--accent-blue); }
+        .hub-filter-item select option { background: #1a1a1a; }
 
         /* ── SELECTOR DE ACCIÓN (Crear o Unirse) ── */
         .action-selector {
@@ -356,6 +385,9 @@
             .header-section h1 { font-size: 2.5rem; }
             .header-section p { font-size: 1rem; }
             
+            .main-tabs-container { padding-bottom: 10px; }
+            .main-tab { padding: 0.8rem 1.2rem; font-size: 1rem; }
+
             .trips-grid {
                 grid-template-columns: 1fr; /* 1 columna en móviles */
                 gap: 1.5rem;
@@ -365,6 +397,8 @@
             .modal-content { padding: 2rem 1.5rem; border-radius: 24px; }
             h2 { font-size: 1.6rem !important; }
             
+            .hub-filters { flex-direction: column; padding: 1rem; }
+
             .action-selector { flex-direction: column; gap: 1rem; }
             .action-btn { padding: 1.2rem 1rem; }
             
@@ -411,21 +445,65 @@
             <i data-lucide="megaphone" style="margin-right: 10px;"></i> ¿Quieres anunciarte aquí? Haz clic para solicitar información.
         </a>
 
-        <div class="header-section">
-            <h1>Mis Viajes.</h1>
-            <p>Panel de viajes disponibles.</p>
+        <!-- PESTAÑAS PRINCIPALES -->
+        <div class="main-tabs-container">
+            <button class="main-tab active" id="tab-mis-viajes" onclick="switchMainTab('mis-viajes')">
+                <i data-lucide="briefcase" style="width:18px;"></i> Mis Viajes
+            </button>
+            <button class="main-tab" id="tab-hub" onclick="switchMainTab('hub')">
+                <i data-lucide="globe" style="width:18px;"></i> El Andén (Comunidad)
+                <span class="badge-plus-small" id="hub-plus-badge">PRÓXIMAMENTE</span>
+            </button>
         </div>
 
-        <div class="trips-grid" id="trips-container">
-            <div class="trip-card card-add" id="btn-open-modal" style="opacity: 1; transform: none;">
-                <i data-lucide="plus-circle" style="width: 60px; height: 60px;"></i>
-                <h3 style="font-weight: 600; font-size: 1.2rem;">Nueva Aventura</h3>
+        <!-- VISTA: MIS VIAJES -->
+        <div id="view-mis-viajes">
+            <div class="header-section">
+                <h1>Mis Viajes.</h1>
+                <p>Panel de viajes disponibles.</p>
+            </div>
+
+            <div class="trips-grid" id="trips-container">
+                <div class="trip-card card-add" id="btn-open-modal" style="opacity: 1; transform: none;">
+                    <i data-lucide="plus-circle" style="width: 60px; height: 60px;"></i>
+                    <h3 style="font-weight: 600; font-size: 1.2rem;">Nueva Aventura</h3>
+                </div>
+            </div>
+        </div>
+
+        <!-- VISTA: HUB COMUNIDAD -->
+        <div id="view-hub" style="display: none;">
+            <div class="header-section" style="margin-bottom: 2rem;">
+                <h1>El Andén.</h1>
+                <p>Conecta con otros mochileros, descubre con quién coincides y comparte tu ruta al mundo.</p>
+                <button class="btn-submit" style="width: auto; padding: 0.8rem 2rem; margin-top: 1.5rem; display:inline-flex; align-items:center; gap:8px;" onclick="openPublishModal(null, null)">
+                    <i data-lucide="radar" style="width:18px;"></i> Publicar mi viaje
+                </button>
+            </div>
+
+            <div class="hub-filters">
+                <div class="hub-filter-item">
+                    <input type="text" id="hub-filter-dest" placeholder="Buscar destino, ciudad o nombre..." onkeyup="renderHubTrips()">
+                </div>
+                <div class="hub-filter-item">
+                    <select id="hub-filter-gender" onchange="renderHubTrips()">
+                        <option value="">Todos los géneros</option>
+                        <option value="mixto">Grupos Mixtos</option>
+                        <option value="chicos">Solo Chicos</option>
+                        <option value="chicas">Solo Chicas</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="trips-grid" id="hub-trips-container">
+                <!-- Tarjetas inyectadas vía JS -->
             </div>
         </div>
     </main>
 
+    <!-- MODAL PRINCIPAL CREAR/UNIRSE VIAJE -->
     <div class="modal-overlay" id="create-modal">
-        <div class="modal-content">
+        <div class="modal-content" style="padding: 4rem;">
 
             <div id="step-choose">
                 <h2 style="font-size: 2rem; font-weight: 800; margin-bottom: 0.5rem; letter-spacing: -1px;">Nueva Aventura</h2>
@@ -442,7 +520,7 @@
                         <span class="action-desc">Tengo un código de invitación y quiero apuntarme</span>
                     </button>
                 </div>
-                <button type="button" onclick="closeModal()" style="background:none; border:none; color:var(--text-muted); width:100%; cursor:pointer; font-size: 0.8rem; font-weight: 600; padding: 1rem 0;">CANCELAR</button>
+                <button type="button" onclick="closeModal('create-modal')" style="background:none; border:none; color:var(--text-muted); width:100%; cursor:pointer; font-size: 0.8rem; font-weight: 600; padding: 1rem 0;">CANCELAR</button>
             </div>
 
             <div id="step-create" style="display: none;">
@@ -501,8 +579,9 @@
         </div>
     </div>
 
+    <!-- MODAL BORRAR VIAJE -->
     <div class="modal-overlay" id="delete-modal">
-        <div class="modal-content" style="border-color: var(--accent);">
+        <div class="modal-content" style="border-color: var(--accent); padding: 4rem;">
             <h2 style="font-size: 1.8rem; font-weight: 800; margin-bottom: 1rem; color: var(--accent); display: flex; align-items: center; gap: 10px;">
                 <i data-lucide="alert-triangle"></i> ¡Peligro!
             </h2>
@@ -519,8 +598,9 @@
         </div>
     </div>
 
+    <!-- MODAL ACTUALIZACIONES DEL SISTEMA -->
     <div class="modal-overlay" id="update-modal" style="z-index: 1050;">
-        <div class="modal-content" style="border-color: var(--accent-blue); max-width: 500px;">
+        <div class="modal-content" style="border-color: var(--accent-blue); max-width: 500px; padding: 4rem;">
             <div style="text-align: center; margin-bottom: 1.5rem;">
                 <i data-lucide="bell-ring" style="width: 48px; height: 48px; color: var(--accent-blue); margin-bottom: 1rem; animation: bellRing 2s ease infinite;"></i>
                 <h2 style="font-size: 1.8rem; font-weight: 800; color: var(--primary);">¡Nueva Actualización!</h2>
@@ -543,54 +623,148 @@
         </div>
     </div>
 
+    <!-- MODAL PUBLICAR VIAJE EN HUB -->
+    <div class="modal-overlay" id="publish-modal">
+        <div class="modal-content" style="max-width: 600px; padding: 2.5rem;">
+            <h2 style="font-size: 1.8rem; font-weight: 800; display:flex; align-items:center; gap:10px;"><i data-lucide="radar" style="color:var(--accent-blue);"></i> Publicar en El Andén</h2>
+            <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom: 1.5rem; margin-top:0.5rem; line-height: 1.5;">
+                Haz que tu viaje sea visible para la comunidad. ⚠️ <strong>Precaución:</strong> No compartas información personal sensible. Elige qué quieres hacer público.
+            </p>
+            
+            <form id="publish-form">
+                <div class="input-group" id="publish-trip-select-group" style="display:none;">
+                    <label>Selecciona el viaje a publicar</label>
+                    <select id="pub-trip-id" required></select>
+                </div>
+
+                <div class="input-group">
+                    <label>Nombre Público del Grupo</label>
+                    <input type="text" id="pub-name" required placeholder="Ej. Mochileros por Europa">
+                </div>
+                
+                <div class="input-group">
+                    <label>Género del Grupo</label>
+                    <select id="pub-gender" required>
+                        <option value="mixto">Grupo Mixto</option>
+                        <option value="chicos">Solo Chicos</option>
+                        <option value="chicas">Solo Chicas</option>
+                    </select>
+                </div>
+
+                <h3 style="font-size:1.1rem; margin-top:2rem; margin-bottom:1rem; color:var(--primary); border-bottom: 1px solid var(--border-subtle); padding-bottom: 0.5rem;">¿Qué quieres compartir?</h3>
+                
+                <div class="toggle-container">
+                    <div class="toggle-text"><strong>Fechas Exactas</strong><span>Muestra los días exactos del viaje</span></div>
+                    <label class="toggle-switch"><input type="checkbox" id="pub-show-dates" checked><span class="slider"></span></label>
+                </div>
+                <div class="toggle-container">
+                    <div class="toggle-text"><strong>Nombres Reales</strong><span>Muestra el nombre de los participantes</span></div>
+                    <label class="toggle-switch"><input type="checkbox" id="pub-show-names"><span class="slider"></span></label>
+                </div>
+                <div class="toggle-container">
+                    <div class="toggle-text"><strong>Planes y Actividades</strong><span>Comparte qué vais a hacer</span></div>
+                    <label class="toggle-switch"><input type="checkbox" id="pub-show-plans" checked><span class="slider"></span></label>
+                </div>
+                <div class="toggle-container">
+                    <div class="toggle-text"><strong>Trayectos (Transporte)</strong><span>Muestra cómo os movéis de ciudad en ciudad</span></div>
+                    <label class="toggle-switch"><input type="checkbox" id="pub-show-transports" checked><span class="slider"></span></label>
+                </div>
+                <div class="toggle-container" style="border-color: rgba(255,77,77,0.3);">
+                    <div class="toggle-text"><strong>Hoteles y Alojamientos</strong><span style="color: var(--accent);">Precaución de privacidad. Muestra dónde dormís.</span></div>
+                    <label class="toggle-switch"><input type="checkbox" id="pub-show-hotels"><span class="slider"></span></label>
+                </div>
+
+                <h3 style="font-size:1.1rem; margin-top:2rem; margin-bottom:1rem; color:var(--primary); border-bottom: 1px solid var(--border-subtle); padding-bottom: 0.5rem;">Redes Sociales de Contacto (Opcional)</h3>
+                <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:1rem;">Sirve para que otras personas de la comunidad puedan contactaros.</p>
+                
+                <div class="input-group">
+                    <div style="position:relative; display:flex; align-items:center;">
+                        <i data-lucide="instagram" style="position:absolute; left:1rem; color:var(--text-muted);"></i>
+                        <input type="text" id="pub-ig" placeholder="Usuario de Instagram (Ej. @grupo)" style="padding-left:3rem;">
+                    </div>
+                </div>
+                <div class="input-group">
+                    <div style="position:relative; display:flex; align-items:center;">
+                        <span style="position:absolute; left:1rem; color:var(--text-muted); font-weight:bold; font-size:1.2rem;">♪</span>
+                        <input type="text" id="pub-tk" placeholder="Usuario de TikTok (Ej. @grupo)" style="padding-left:3rem;">
+                    </div>
+                </div>
+                <div class="input-group">
+                    <div style="position:relative; display:flex; align-items:center;">
+                        <i data-lucide="twitter" style="position:absolute; left:1rem; color:var(--text-muted);"></i>
+                        <input type="text" id="pub-x" placeholder="Usuario de X/Twitter (Ej. @grupo)" style="padding-left:3rem;">
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-submit" style="margin-top:1.5rem; background: var(--accent-blue);" id="btn-submit-publish">LANZAR AL ANDÉN</button>
+                <button type="button" onclick="closePublishModal()" style="background:none; border:none; color:var(--text-muted); width:100%; margin-top:1rem; cursor:pointer; font-weight: 600; padding:1rem;">CANCELAR</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL DETALLES VIAJE COMUNIDAD -->
+    <div class="modal-overlay" id="public-trip-details-modal">
+        <div class="modal-content" style="max-width: 650px; padding: 2.5rem; background: #080808;">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border-subtle); padding-bottom: 1.5rem;">
+                <div>
+                    <span id="public-modal-badge" class="badge-public" style="position:static; margin-bottom:10px; display:inline-block;">MIXTO</span>
+                    <h2 id="public-modal-title" style="font-size: 2.2rem; font-weight: 800; line-height:1.1; margin-bottom:0.5rem;">Nombre del Viaje</h2>
+                    <p id="public-modal-meta" style="color:var(--text-muted); font-size: 0.95rem;"><i data-lucide="calendar" style="width:14px; margin-right:4px;"></i> Fechas · <i data-lucide="users" style="width:14px; margin-left:8px; margin-right:4px;"></i> X viajer@s</p>
+                </div>
+                <button onclick="closePublicTripModal()" style="background:rgba(255,255,255,0.05); border:none; color:white; width:40px; height:40px; border-radius:12px; cursor:pointer; display:flex; align-items:center; justify-content:center;"><i data-lucide="x"></i></button>
+            </div>
+
+            <div style="background:rgba(77,166,255,0.05); border:1px solid rgba(77,166,255,0.2); border-radius:16px; padding:1.5rem; margin-bottom: 2rem;">
+                <h4 style="font-size:1rem; margin-bottom: 10px; color:var(--accent-blue); display:flex; align-items:center; gap:8px;"><i data-lucide="message-circle" style="width:18px;"></i> Contacto</h4>
+                <div id="public-modal-socials" style="display:flex; gap:15px; flex-wrap:wrap; font-size:0.95rem;">
+                    <!-- Injected via JS -->
+                </div>
+            </div>
+
+            <h3 style="font-size:1.2rem; margin-bottom:1rem; color:var(--primary);"><i data-lucide="map" style="width:18px; margin-right:8px;"></i> Itinerario Público</h3>
+            <div id="public-modal-content-area" style="background:rgba(255,255,255,0.02); border:1px solid var(--border-subtle); border-radius:16px; padding:1.5rem; max-height:300px; overflow-y:auto;">
+                <!-- Inyectado via JS -->
+            </div>
+            
+            <button class="btn-submit" style="margin-top:2rem;" onclick="closePublicTripModal()">CERRAR</button>
+        </div>
+    </div>
+
     <div id="toast-container"></div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, getDocs, doc, setDoc, getDoc, deleteDoc, query, where } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, getDocs, doc, setDoc, getDoc, deleteDoc, query, where, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
-        // ── SISTEMA DE ACTUALIZACIONES - PLANTILLA PARA ADMIN ──
-        // Instrucciones: 
-        // 1. Para activar un aviso, cambia 'active: true'.
-        // 2. IMPORTANTE: Cada vez que lances un update, cambia el valor de 'version' (ej: de "v1.0" a "v1.1"). 
-        // Así el sistema sabrá que es nuevo y se lo mostrará a los usuarios de nuevo.
+        // ── SISTEMA DE ACTUALIZACIONES (MANTENIDO) ──
         const UPDATE_CONFIG = {
-            active: false, // <-- CAMBIAR A TRUE PARA MOSTRAR EL POPUP
-            version: "v2.5.0", // <-- CAMBIAR EN CADA NUEVA ACTUALIZACIÓN
+            active: false, 
+            version: "v2.5.0", 
             features: [
                 "Menus desplegables en Equipo y Configuración para que el usuario pueda ver todo lo disponible.",
                 "Sección de entretenimiento puesta en funcionamiento con 3 juegos y una cuenta atras para tu viaje.",
                 "Juego ¿Dónde es? creado, en proximas actualizaciones Wordle Viajeros.",
                 "La sección Finance solo disponible ahora para Editores o Administradores de cada viaje."
-                
             ],
             fixes: [
                 "Sistema de meteorologia arreglado y mejorado.",
                 "Cambio de sitio de Configuración del Viaje.",
                 "Notas Globales del Viaje ahora si funcionan."
-
             ]
         };
 
-        // Comprueba si se debe mostrar el popup de actualización
         function checkAndShowUpdateNotification() {
             if (UPDATE_CONFIG.active) {
                 const lastSeenVersion = localStorage.getItem('lastSeenUpdateVersion');
                 if (lastSeenVersion !== UPDATE_CONFIG.version) {
-                    // Llenar la plantilla con la info
                     document.getElementById('update-version-badge').innerText = `Versión ${UPDATE_CONFIG.version}`;
-                    
                     const featuresList = document.getElementById('update-features-list');
                     featuresList.innerHTML = UPDATE_CONFIG.features.map(f => `<li style="margin-bottom: 6px;">${f}</li>`).join('');
-                    
                     const fixesList = document.getElementById('update-fixes-list');
                     fixesList.innerHTML = UPDATE_CONFIG.fixes.map(f => `<li style="margin-bottom: 6px;">${f}</li>`).join('');
 
-                    // Mostrar modal (con ligero retraso para efecto visual)
-                    setTimeout(() => {
-                        document.getElementById('update-modal').classList.add('active');
-                    }, 500);
+                    setTimeout(() => { document.getElementById('update-modal').classList.add('active'); }, 500);
                 }
             }
         }
@@ -599,7 +773,6 @@
             localStorage.setItem('lastSeenUpdateVersion', UPDATE_CONFIG.version);
             document.getElementById('update-modal').classList.remove('active');
         }
-
 
         // ── FIREBASE CONFIG (INTACTO) ──
         const firebaseConfig = {
@@ -621,6 +794,20 @@
         let currentUserPlan = 'ESTANDAR'; 
         const SUPERADMIN_EMAIL = "tu_correo@gmail.com"; 
 
+        // Variables de Hub
+        let todosLosViajesCache = []; 
+        let adminTripsList = []; 
+        let hasPublicTrip = false; 
+        let dynamicHubTrips = []; 
+
+        const STATIC_HUB_TRIPS = [
+            { id: 's1', isStatic: true, publicConfig: { name: 'Eurotrip Verano 26', gender: 'mixto', size: 4, countries: 'Francia, Italia, Suiza', dates: '01/07/2026 - 15/07/2026', showDates: true, showPlans: true, showHotels: false, showTransports: true, ig: '@euro26', tk: '@euro_trip', x: '' } },
+            { id: 's2', isStatic: true, publicConfig: { name: 'Chicas a Berlín y Praga', gender: 'chicas', size: 3, countries: 'Alemania, Chequia', dates: '10/08/2026 - 18/08/2026', showDates: false, showPlans: true, showHotels: false, showTransports: false, ig: '@lasviajeras', tk: '', x: '' } },
+            { id: 's3', isStatic: true, publicConfig: { name: 'Ruta del Este', gender: 'chicos', size: 5, countries: 'Hungría, Austria, Eslovaquia', dates: '05/09/2026 - 20/09/2026', showDates: true, showPlans: true, showHotels: true, showTransports: true, ig: '@rutaeste', tk: '@rutaeste', x: '@rutaeste_x' } },
+            { id: 's4', isStatic: true, publicConfig: { name: 'Mochileros Sur', gender: 'mixto', size: 2, countries: 'Italia, Grecia', dates: '12/07/2026 - 28/07/2026', showDates: true, showPlans: false, showHotels: false, showTransports: true, ig: '', tk: '', x: '' } },
+            { id: 's5', isStatic: true, publicConfig: { name: 'Fiesta y Nieve', gender: 'mixto', size: 6, countries: 'Suiza, Francia, Andorra', dates: '15/12/2026 - 22/12/2026', showDates: true, showPlans: true, showHotels: true, showTransports: false, ig: '@nieveparty', tk: '', x: '' } }
+        ];
+
         // ── TOASTS ──
         function showToast(message, type = 'success') {
             const container = document.getElementById('toast-container');
@@ -641,18 +828,14 @@
         function generateTripCode() {
             const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
             let code = '';
-            for (let i = 0; i < 5; i++) {
-                code += chars.charAt(Math.floor(Math.random() * chars.length));
-            }
+            for (let i = 0; i < 5; i++) code += chars.charAt(Math.floor(Math.random() * chars.length));
             return code;
         }
 
         async function generateUniqueCode() {
-            let code;
-            let attempts = 0;
+            let code; let attempts = 0;
             do {
-                code = generateTripCode();
-                attempts++;
+                code = generateTripCode(); attempts++;
                 const q = query(collection(db, "viajes"), where("codigoInvitacion", "==", code));
                 const snap = await getDocs(q);
                 if (snap.empty) break;
@@ -662,14 +845,27 @@
 
         // ── FLATPICKR ──
         const rangePicker = flatpickr("#trip-range", { 
-            mode: "range", 
-            minDate: "today", 
-            dateFormat: "d/m/Y", 
-            locale: "es",
-            disableMobile: "true"
+            mode: "range", minDate: "today", dateFormat: "d/m/Y", locale: "es", disableMobile: "true"
         });
 
-        // ── NAVEGACIÓN DE PASOS DEL MODAL ──
+        // ── NAVEGACIÓN TABS PRINCIPALES (MIS VIAJES / HUB) ──
+        window.switchMainTab = function(tabId) {
+            if (tabId === 'hub' && currentUserPlan !== 'PLUS') {
+                showToast("La Comunidad El Andén es una función exclusiva para usuarios PLUS.", "premium");
+                return;
+            }
+            
+            document.getElementById('tab-mis-viajes').classList.remove('active');
+            document.getElementById('tab-hub').classList.remove('active');
+            document.getElementById(`tab-${tabId}`).classList.add('active');
+            
+            document.getElementById('view-mis-viajes').style.display = tabId === 'mis-viajes' ? 'block' : 'none';
+            document.getElementById('view-hub').style.display = tabId === 'hub' ? 'block' : 'none';
+            
+            if (tabId === 'hub') loadHubTrips();
+        }
+
+        // ── NAVEGACIÓN DE PASOS DEL MODAL (Crear Viaje) ──
         window.goToStep = function(step) {
             if (step === 'create') {
                 const isGod = currentUser.email === SUPERADMIN_EMAIL;
@@ -694,38 +890,25 @@
                 document.getElementById('join-form-inner').style.display = 'block';
             }
             else if (step === 'code') document.getElementById('step-code').style.display = 'block';
-
             lucide.createIcons();
         }
 
-        window.closeModal = function() {
-            document.getElementById('create-modal').classList.remove('active');
-        }
-
-        window.closeModalAndRefresh = function() {
-            closeModal();
-            loadTrips();
-        }
+        window.closeModal = function(id) { document.getElementById(id).classList.remove('active'); }
+        window.closeModalAndRefresh = function() { closeModal('create-modal'); loadTrips(); }
 
         window.copyTripCode = function() {
             if (generatedTripCode) {
-                navigator.clipboard.writeText(generatedTripCode).then(() => {
-                    showToast("Código copiado al portapapeles");
-                });
+                navigator.clipboard.writeText(generatedTripCode).then(() => showToast("Código copiado al portapapeles"));
             }
         }
 
         // ── UNIRSE A UN VIAJE POR CÓDIGO ──
         window.joinByCode = async function() {
             const codeRaw = document.getElementById('join-code-input').value.trim().toUpperCase();
-            if (codeRaw.length !== 5) {
-                showToast("El código debe tener exactamente 5 caracteres", "error");
-                return;
-            }
+            if (codeRaw.length !== 5) return showToast("El código debe tener exactamente 5 caracteres", "error");
 
             const btn = document.getElementById('btn-join-submit');
-            btn.innerText = "Buscando...";
-            btn.disabled = true;
+            btn.innerText = "Buscando..."; btn.disabled = true;
 
             try {
                 const q = query(collection(db, "viajes"), where("codigoInvitacion", "==", codeRaw));
@@ -733,9 +916,7 @@
 
                 if (snap.empty) {
                     showToast("No se encontró ningún viaje con ese código", "error");
-                    btn.innerText = "ENVIAR SOLICITUD";
-                    btn.disabled = false;
-                    return;
+                    btn.innerText = "ENVIAR SOLICITUD"; btn.disabled = false; return;
                 }
 
                 const tripDoc = snap.docs[0];
@@ -744,34 +925,24 @@
 
                 if (tripData.miembros && tripData.miembros[currentUser.uid]) {
                     showToast("¡Ya eres miembro de este viaje!", "error");
-                    btn.innerText = "ENVIAR SOLICITUD";
-                    btn.disabled = false;
-                    return;
+                    btn.innerText = "ENVIAR SOLICITUD"; btn.disabled = false; return;
                 }
 
                 if (tripData.solicitudes && tripData.solicitudes[currentUser.uid]) {
                     showToast("Ya tienes una solicitud pendiente en este viaje", "error");
-                    btn.innerText = "ENVIAR SOLICITUD";
-                    btn.disabled = false;
-                    return;
+                    btn.innerText = "ENVIAR SOLICITUD"; btn.disabled = false; return;
                 }
 
                 const tripRef = doc(db, "viajes", tripId);
-                await setDoc(tripRef, {
-                    solicitudes: {
-                        [currentUser.uid]: currentUser.email
-                    }
-                }, { merge: true });
+                await setDoc(tripRef, { solicitudes: { [currentUser.uid]: currentUser.email } }, { merge: true });
 
                 document.getElementById('join-form-inner').style.display = 'none';
                 document.getElementById('join-success-box').classList.add('visible');
                 showToast(`Solicitud enviada para "${tripData.nombre}"`);
 
             } catch (error) {
-                console.error(error);
-                showToast("Error al procesar la solicitud", "error");
-                btn.innerText = "ENVIAR SOLICITUD";
-                btn.disabled = false;
+                console.error(error); showToast("Error al procesar la solicitud", "error");
+                btn.innerText = "ENVIAR SOLICITUD"; btn.disabled = false;
             }
         }
 
@@ -781,16 +952,8 @@
             const snap = await getDoc(userRef);
             
             if (!snap.exists()) {
-                await setDoc(userRef, {
-                    uid: user.uid,
-                    email: user.email,
-                    nombre: user.displayName || '',
-                    plan: 'ESTANDAR',
-                    createdAt: new Date(),
-                    lastSeen: new Date()
-                });
-                const initSnap = await getDoc(userRef);
-                return initSnap.data();
+                await setDoc(userRef, { uid: user.uid, email: user.email, nombre: user.displayName || '', plan: 'ESTANDAR', createdAt: new Date(), lastSeen: new Date() });
+                const initSnap = await getDoc(userRef); return initSnap.data();
             } else {
                 await setDoc(userRef, { lastSeen: new Date(), email: user.email }, { merge: true });
                 return snap.data();
@@ -803,33 +966,31 @@
             const badgeLink = document.getElementById('plan-badge-link');
             const favicon = document.getElementById('dynamic-favicon');
             
+            const hubTab = document.getElementById('tab-hub');
+            const hubBadge = document.getElementById('hub-plus-badge');
+
             currentUserPlan = userData.plan === 'PLUS' ? 'PLUS' : 'ESTANDAR';
 
             if (currentUserPlan === 'PLUS') {
-                badge.textContent = 'PLUS';
-                badge.className = 'plan-badge badge-plus';
-                badge.style.display = 'inline-flex';
-                badgeLink.href = '#'; 
-                badgeLink.title = 'Tu cuenta posee ventajas exclusivas de Interra-hub PLUS';
-                badgeLink.style.cursor = 'default';
-                
+                badge.textContent = 'PLUS'; badge.className = 'plan-badge badge-plus'; badge.style.display = 'inline-flex';
+                badgeLink.href = '#'; badgeLink.title = 'Tu cuenta posee ventajas exclusivas de Interra-hub PLUS'; badgeLink.style.cursor = 'default';
                 favicon.href = 'interrahubplus.png';
+                
+                hubTab.classList.add('unlocked');
+                hubBadge.innerText = 'PLUS';
 
                 if (!userData.hasSeenPlusWelcome) {
-                    setTimeout(() => {
-                        showToast("¡Bienvenido a Interra-hub PLUS! Tu cuenta ahora es PLUS.", "premium");
-                    }, 1500);
-                    const userRef = doc(db, "usuarios", userRefPath);
-                    await setDoc(userRef, { hasSeenPlusWelcome: true }, { merge: true });
+                    setTimeout(() => showToast("¡Bienvenido a Interra-hub PLUS! Tu cuenta ahora es PLUS.", "premium"), 1500);
+                    if(userRefPath) await setDoc(doc(db, "usuarios", userRefPath), { hasSeenPlusWelcome: true }, { merge: true });
                 }
 
             } else {
-                badge.textContent = 'ESTÁNDAR';
-                badge.className = 'plan-badge badge-estandar';
-                badge.style.display = 'inline-flex';
-                badgeLink.href = 'interrahubplus.html';
-                badgeLink.title = 'Convierte tu cuenta en PLUS para obtener ventajas ilimitadas';
+                badge.textContent = 'ESTÁNDAR'; badge.className = 'plan-badge badge-estandar'; badge.style.display = 'inline-flex';
+                badgeLink.href = 'interrahubplus.html'; badgeLink.title = 'Convierte tu cuenta en PLUS para obtener ventajas ilimitadas';
                 favicon.href = 'interrahublogo.PNG';
+                
+                hubTab.classList.remove('unlocked');
+                hubBadge.innerText = 'PRÓXIMAMENTE';
             }
         }
 
@@ -840,13 +1001,12 @@
                 const userData = await ensureUserProfile(user);
                 
                 document.getElementById('display-user-name').innerText = userData.nombre || user.email;
-                
                 await checkMembershipUI(userData, user.uid);
                 
                 document.getElementById('page-loader').style.opacity = '0';
                 setTimeout(() => {
                     document.getElementById('page-loader').style.display = 'none';
-                    checkAndShowUpdateNotification(); // Dispara la notificación después de cargar si aplica
+                    checkAndShowUpdateNotification();
                 }, 800);
                 
                 loadTrips();
@@ -858,23 +1018,21 @@
         async function loadTrips() {
             const container = document.getElementById('trips-container');
             const addBtn = container.querySelector('.card-add');
-            container.innerHTML = '';
-            container.appendChild(addBtn);
+            container.innerHTML = ''; container.appendChild(addBtn);
             
             adminTripsCount = 0;
+            adminTripsList = [];
+            hasPublicTrip = false;
+            todosLosViajesCache = [];
 
             try {
                 const querySnapshot = await getDocs(collection(db, "viajes"));
-                let todosLosViajes = [];
-
+                
                 querySnapshot.forEach(d => {
-                    const trip = { id: d.id, ...d.data() };
-                    todosLosViajes.push(trip);
-                    const rol = trip.miembros ? trip.miembros[currentUser.uid] : null;
-                    if (rol === 'admin-grupo') adminTripsCount++;
+                    todosLosViajesCache.push({ id: d.id, ...d.data() });
                 });
 
-                todosLosViajes.forEach((trip, i) => {
+                todosLosViajesCache.forEach((trip, i) => {
                     let rolAqui = trip.miembros ? trip.miembros[currentUser.uid] : null;
                     const isGod = currentUser.email === SUPERADMIN_EMAIL;
 
@@ -883,25 +1041,38 @@
 
                     if (!tieneAcceso && !solicitado) return;
 
+                    if (rolAqui === 'admin-grupo') {
+                        adminTripsCount++;
+                        adminTripsList.push(trip);
+                    }
+                    if (tieneAcceso && trip.isPublic) hasPublicTrip = true;
+
                     const card = document.createElement('div');
                     card.className = `trip-card ${tieneAcceso ? 'unlocked' : 'locked'}`;
-                    
                     setTimeout(() => card.classList.add('visible'), i * 150);
 
                     let badgeContent = '';
                     if (isGod) badgeContent = `<span class="role-badge" style="background:var(--accent); border-color:var(--accent);">NIVEL DIOS</span>`;
                     else if (rolAqui) badgeContent = `<span class="role-badge">${rolAqui.replace('-', ' ')}</span>`;
 
-                    const deleteBtnHtml = (rolAqui === 'admin-grupo' || isGod) ? `
-                        <button class="btn-delete-trip" onclick="confirmDeleteTrip(event, '${trip.id}', '${trip.nombre.replace(/'/g, "\\'")}')" title="Borrar viaje permanentemente">
-                            <i data-lucide="trash-2"></i>
-                        </button>
+                    const isTripPublicHtml = trip.isPublic ? `<span class="badge-public"><i data-lucide="globe" style="width:12px; margin-right:4px;"></i> PÚBLICO</span>` : '';
+
+                    const adminBtnsHtml = (rolAqui === 'admin-grupo' || isGod) ? `
+                        <div class="admin-actions-group">
+                            <button class="btn-publish-trip" onclick="openPublishModal(event, '${trip.id}')" title="Configurar publicación en El Andén">
+                                <i data-lucide="radar"></i>
+                            </button>
+                            <button class="btn-delete-trip" onclick="confirmDeleteTrip(event, '${trip.id}', '${trip.nombre.replace(/'/g, "\\'")}')" title="Borrar viaje permanentemente">
+                                <i data-lucide="trash-2"></i>
+                            </button>
+                        </div>
                     ` : '';
 
                     card.innerHTML = `
                         ${badgeContent}
-                        ${deleteBtnHtml}
-                        <div class="card-content">
+                        ${isTripPublicHtml}
+                        ${adminBtnsHtml}
+                        <div class="card-content" style="${trip.isPublic ? 'margin-top:2rem;' : ''}">
                             <h2 style="font-weight: 800; font-size: 1.8rem; margin-bottom: 0.5rem; padding-right: 30px; word-break: break-word; overflow-wrap: anywhere; line-height: 1.2;">${trip.nombre}</h2>
                             <p style="color:var(--text-muted); font-size: 0.9rem;"><i data-lucide="calendar" style="width:14px; vertical-align:middle; margin-right:5px;"></i> ${trip.fechaInicio} - ${trip.fechaFin}</p>
                         </div>
@@ -916,23 +1087,17 @@
                         ` : ''}
                     `;
 
-                    if (tieneAcceso) {
-                        card.onclick = () => {
-                            window.location.href = `viaje.html?id=${trip.id}`;
-                        }
-                    }
+                    if (tieneAcceso) card.onclick = () => window.location.href = `viaje.html?id=${trip.id}`;
                     container.appendChild(card);
                 });
                 lucide.createIcons();
             } catch (error) {
-                console.error(error);
-                showToast("Error al sincronizar viajes", "error");
+                console.error(error); showToast("Error al sincronizar viajes", "error");
             }
         }
 
         // ── BORRADO DE VIAJES ──
         let tripToDeleteId = null;
-
         window.confirmDeleteTrip = (event, tripId, tripName) => {
             event.stopPropagation();
             tripToDeleteId = tripId;
@@ -948,52 +1113,37 @@
 
         document.getElementById('btn-confirm-delete').onclick = async () => {
             const input = document.getElementById('delete-confirm-input').value;
-            if (input !== 'ELIMINAR') {
-                showToast("Debes escribir ELIMINAR en mayúsculas para confirmar", "error");
-                return;
-            }
+            if (input !== 'ELIMINAR') return showToast("Debes escribir ELIMINAR en mayúsculas para confirmar", "error");
 
             if (tripToDeleteId) {
                 const btn = document.getElementById('btn-confirm-delete');
                 try {
-                    btn.innerText = "BORRANDO DATOS...";
-                    btn.disabled = true;
-
+                    btn.innerText = "BORRANDO DATOS..."; btn.disabled = true;
                     await deleteDoc(doc(db, "viajes", tripToDeleteId));
-                    
                     showToast("Viaje borrado de la nube permanentemente", "success");
-                    closeDeleteModal();
-                    loadTrips();
+                    closeDeleteModal(); loadTrips();
                 } catch (error) {
-                    console.error("Error borrando el viaje:", error);
-                    showToast("Error de permisos al intentar borrar", "error");
+                    console.error("Error borrando el viaje:", error); showToast("Error de permisos al intentar borrar", "error");
                 } finally {
-                    btn.innerText = "BORRAR VIAJE";
-                    btn.disabled = false;
+                    btn.innerText = "BORRAR VIAJE"; btn.disabled = false;
                 }
             }
         };
 
-        // ── ABRIR MODAL PRINCIPAL ──
-        const modal = document.getElementById('create-modal');
-        
+        // ── ABRIR MODAL PRINCIPAL CREAR/UNIRSE ──
         document.getElementById('btn-open-modal').onclick = () => {
             goToStep('choose');
-            modal.classList.add('active');
+            document.getElementById('create-modal').classList.add('active');
         };
 
         // ── CREACIÓN DE VIAJE ──
         document.getElementById('create-trip-form').onsubmit = async (e) => {
             e.preventDefault();
             const dates = rangePicker.selectedDates;
-            if (dates.length < 2) {
-                showToast("Debes elegir un rango de fechas", "error");
-                return;
-            }
+            if (dates.length < 2) return showToast("Debes elegir un rango de fechas", "error");
 
             const btn = document.getElementById('btn-create-submit');
-            btn.innerText = "CREANDO...";
-            btn.disabled = true;
+            btn.innerText = "CREANDO..."; btn.disabled = true;
 
             const format = (d) => d.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
             
@@ -1009,7 +1159,8 @@
                     eventos: [],
                     solicitudes: {},
                     codigoInvitacion: codigoInvitacion,
-                    creadoEn: new Date()
+                    creadoEn: new Date(),
+                    isPublic: false
                 });
 
                 document.getElementById('create-trip-form').reset();
@@ -1017,13 +1168,218 @@
                 goToStep('code');
                 lucide.createIcons();
             } catch (error) {
-                console.error(error);
-                showToast("Error al crear el viaje", "error");
+                console.error(error); showToast("Error al crear el viaje", "error");
             } finally {
-                btn.innerText = "CREAR RUTA";
-                btn.disabled = false;
+                btn.innerText = "CREAR RUTA"; btn.disabled = false;
             }
         };
+
+        // ── LÓGICA DE PUBLICAR EN HUB (EL ANDÉN) ──
+        window.openPublishModal = function(event, tripId) {
+            if(event) event.stopPropagation();
+            
+            const selectGroup = document.getElementById('publish-trip-select-group');
+            const selectEl = document.getElementById('pub-trip-id');
+            
+            if (!tripId) {
+                if (adminTripsList.length === 0) {
+                    showToast("No tienes viajes creados o no eres Administrador de ninguno.", "error");
+                    return;
+                }
+                selectGroup.style.display = 'block';
+                selectEl.innerHTML = '';
+                adminTripsList.forEach(t => selectEl.innerHTML += `<option value="${t.id}">${t.nombre}</option>`);
+                tripId = adminTripsList[0].id;
+                
+                selectEl.onchange = () => { populatePublishModal(selectEl.value); };
+            } else {
+                selectGroup.style.display = 'none';
+                selectEl.innerHTML = `<option value="${tripId}" selected></option>`;
+            }
+            
+            if(!populatePublishModal(tripId)) return; 
+            document.getElementById('publish-modal').classList.add('active');
+        }
+
+        window.closePublishModal = () => document.getElementById('publish-modal').classList.remove('active');
+
+        function populatePublishModal(tripId) {
+            const trip = todosLosViajesCache.find(t => t.id === tripId);
+            if (!trip || !trip.eventos || trip.eventos.length === 0) {
+                showToast("Añade al menos un plan o alojamiento a tu itinerario antes de hacerlo público.", "error");
+                closePublishModal();
+                return false;
+            }
+            
+            document.getElementById('pub-name').value = (trip.publicConfig && trip.publicConfig.name) ? trip.publicConfig.name : trip.nombre;
+            if(trip.publicConfig) {
+                document.getElementById('pub-gender').value = trip.publicConfig.gender || 'mixto';
+                document.getElementById('pub-show-dates').checked = trip.publicConfig.showDates !== false;
+                document.getElementById('pub-show-names').checked = trip.publicConfig.showNames === true;
+                document.getElementById('pub-show-plans').checked = trip.publicConfig.showPlans !== false;
+                document.getElementById('pub-show-transports').checked = trip.publicConfig.showTransports !== false;
+                document.getElementById('pub-show-hotels').checked = trip.publicConfig.showHotels === true;
+                document.getElementById('pub-ig').value = trip.publicConfig.ig || '';
+                document.getElementById('pub-tk').value = trip.publicConfig.tk || '';
+                document.getElementById('pub-x').value = trip.publicConfig.x || '';
+            }
+            return true;
+        }
+
+        document.getElementById('publish-form').onsubmit = async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('btn-submit-publish');
+            btn.innerText = "LANZANDO AL ANDÉN..."; btn.disabled = true;
+            
+            const tId = document.getElementById('pub-trip-id').value;
+            const trip = todosLosViajesCache.find(t => t.id === tId);
+            
+            const countries = "Europa"; // Mocking geolocation extraction for now
+            
+            const config = {
+                name: document.getElementById('pub-name').value,
+                gender: document.getElementById('pub-gender').value,
+                showDates: document.getElementById('pub-show-dates').checked,
+                showNames: document.getElementById('pub-show-names').checked,
+                showPlans: document.getElementById('pub-show-plans').checked,
+                showTransports: document.getElementById('pub-show-transports').checked,
+                showHotels: document.getElementById('pub-show-hotels').checked,
+                ig: document.getElementById('pub-ig').value,
+                tk: document.getElementById('pub-tk').value,
+                x: document.getElementById('pub-x').value,
+                size: trip.miembros ? Object.keys(trip.miembros).length : 1,
+                countries: countries,
+                dates: `${trip.fechaInicio} - ${trip.fechaFin}`
+            };
+            
+            try {
+                await setDoc(doc(db, "viajes", tId), { isPublic: true, publicConfig: config }, { merge: true });
+                showToast("¡Tu viaje ahora es visible en El Andén!", "success");
+                closePublishModal();
+                loadTrips(); 
+                if(document.getElementById('tab-hub').classList.contains('active')) loadHubTrips();
+            } catch(err) {
+                showToast("Error al publicar en la base de datos.", "error");
+            } finally {
+                btn.innerText = "LANZAR AL ANDÉN"; btn.disabled = false;
+            }
+        };
+
+        // ── LÓGICA DE EL ANDÉN (HUB) ──
+        window.loadHubTrips = async function() {
+            const container = document.getElementById('hub-trips-container');
+            container.innerHTML = '<p style="color:var(--text-muted); width:100%; text-align:center;">Cargando viajes de la comunidad...</p>';
+            
+            dynamicHubTrips = [];
+            try {
+                const q = query(collection(db, "viajes"), where("isPublic", "==", true));
+                const snap = await getDocs(q);
+                snap.forEach(d => {
+                    const data = d.data();
+                    if(data.publicConfig) dynamicHubTrips.push({ id: d.id, eventos: data.eventos || [], ...data });
+                });
+            } catch(e) { console.error("Error cargando hub", e); }
+            
+            window.renderHubTrips();
+        }
+
+        window.renderHubTrips = function() {
+            const destFilter = document.getElementById('hub-filter-dest').value.toLowerCase();
+            const genderFilter = document.getElementById('hub-filter-gender').value;
+            const container = document.getElementById('hub-trips-container');
+            container.innerHTML = '';
+            
+            const allTrips = [...STATIC_HUB_TRIPS, ...dynamicHubTrips];
+            let found = 0;
+
+            allTrips.forEach(trip => {
+                const config = trip.publicConfig;
+                if(!config) return;
+                
+                if (genderFilter && config.gender !== genderFilter) return;
+                if (destFilter && !(config.name.toLowerCase().includes(destFilter) || (config.countries && config.countries.toLowerCase().includes(destFilter)))) return;
+                
+                found++;
+                const size = config.size || '?';
+                const dates = config.showDates === false ? 'Fechas Ocultas' : config.dates;
+                const countries = config.countries || 'Múltiples Destinos';
+                
+                const genderLabel = config.gender === 'chicas' ? 'SOLO CHICAS' : (config.gender === 'chicos' ? 'SOLO CHICOS' : 'GRUPO MIXTO');
+                const genderColor = config.gender === 'chicas' ? '#ff66b2' : (config.gender === 'chicos' ? 'var(--accent-blue)' : '#ffd700');
+                
+                const card = document.createElement('div');
+                card.className = 'trip-card visible unlocked';
+                card.style.minHeight = 'auto'; card.style.padding = '2rem';
+                card.innerHTML = `
+                    <div class="role-badge" style="background: rgba(255,255,255,0.05); color: ${genderColor}; border-color: ${genderColor}; position:static; display:inline-block; margin-bottom:1rem;">${genderLabel}</div>
+                    <div class="card-content">
+                        <h2 style="font-weight: 800; font-size: 1.5rem; margin-bottom: 0.8rem; line-height: 1.2;">${config.name}</h2>
+                        <p style="color:var(--text-muted); font-size: 0.9rem; margin-bottom: 6px;"><i data-lucide="calendar" style="width:14px; margin-right:6px;"></i> ${dates}</p>
+                        <p style="color:var(--text-muted); font-size: 0.9rem; margin-bottom: 6px;"><i data-lucide="map-pin" style="width:14px; margin-right:6px;"></i> ${countries}</p>
+                        <p style="color:var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem;"><i data-lucide="users" style="width:14px; margin-right:6px;"></i> ${size} viajer@s</p>
+                        <button class="btn-submit" style="width:100%; padding: 0.8rem; font-size: 0.9rem; background:rgba(255,255,255,0.05); color:white; border:1px solid var(--border-subtle);" onclick="viewPublicTripDetails('${trip.id}')">
+                            <i data-lucide="eye" style="width:16px;"></i> Ver Viaje
+                        </button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+            if(found === 0) container.innerHTML = '<p style="color:var(--text-muted); width:100%; text-align:center;">No hay viajes que coincidan con los filtros.</p>';
+            lucide.createIcons();
+        }
+
+        window.viewPublicTripDetails = function(id) {
+            if (!hasPublicTrip) {
+                showToast("Debes publicar un viaje en El Andén para ver los detalles profundos de los demás.", "error");
+                return;
+            }
+            
+            let trip = STATIC_HUB_TRIPS.find(t => t.id === id) || dynamicHubTrips.find(t => t.id === id);
+            if(!trip || !trip.publicConfig) return;
+            
+            const config = trip.publicConfig;
+            document.getElementById('public-modal-title').innerText = config.name;
+            document.getElementById('public-modal-meta').innerHTML = `<i data-lucide="calendar" style="width:14px; margin-right:4px;"></i> ${config.showDates === false ? 'Fechas Privadas' : config.dates} &nbsp;·&nbsp; <i data-lucide="users" style="width:14px; margin-right:4px;"></i> ${config.size || '?'} viajer@s`;
+            
+            const badge = document.getElementById('public-modal-badge');
+            badge.innerText = config.gender === 'chicas' ? 'SOLO CHICAS' : (config.gender === 'chicos' ? 'SOLO CHICOS' : 'GRUPO MIXTO');
+            badge.style.background = config.gender === 'chicas' ? 'linear-gradient(135deg, #ff66b2, #d1478e)' : (config.gender === 'chicos' ? 'linear-gradient(135deg, var(--accent-blue), #2a75d3)' : 'linear-gradient(135deg, #ffd700, #d4b100)');
+            
+            let socialHtml = '';
+            if(config.ig) socialHtml += `<a href="https://instagram.com/${config.ig.replace('@','')}" target="_blank" style="color: white; text-decoration:none;"><i data-lucide="instagram" style="width:16px; vertical-align:middle;"></i> ${config.ig}</a>`;
+            if(config.tk) socialHtml += `<span style="color: white;"><strong style="font-size:1.1rem; vertical-align:middle;">♪</strong> ${config.tk}</span>`;
+            if(config.x) socialHtml += `<a href="https://twitter.com/${config.x.replace('@','')}" target="_blank" style="color: white; text-decoration:none;"><i data-lucide="twitter" style="width:16px; vertical-align:middle;"></i> ${config.x}</a>`;
+            document.getElementById('public-modal-socials').innerHTML = socialHtml || '<span style="color:var(--text-muted); font-size:0.85rem;">No han compartido redes sociales.</span>';
+            
+            let detailsHtml = '';
+            if(trip.isStatic) {
+                detailsHtml = `<p style="color:var(--text-muted); font-style:italic;">Este es un viaje de ejemplo de la comunidad para demostrar la funcionalidad. Los viajes reales mostrarán su itinerario real aquí.</p>`;
+            } else {
+                if(config.showPlans || config.showHotels || config.showTransports) {
+                    detailsHtml += `<ul style="padding-left:15px; color:var(--primary); line-height:1.8; font-size:0.95rem;">`;
+                    if(trip.eventos && trip.eventos.length > 0) {
+                        let eventsShown = 0;
+                        trip.eventos.sort((a, b) => new Date(a.dateKey) - new Date(b.dateKey)).forEach(ev => {
+                            if (ev.type === 'plan' && config.showPlans) { detailsHtml += `<li><i data-lucide="map-pin" style="width:14px; color:var(--accent);"></i> ${ev.title}</li>`; eventsShown++; }
+                            if (ev.type === 'transport' && config.showTransports) { detailsHtml += `<li><i data-lucide="train" style="width:14px; color:var(--accent-blue);"></i> ${ev.title}</li>`; eventsShown++; }
+                            if (ev.type === 'hotel' && config.showHotels) { detailsHtml += `<li><i data-lucide="bed" style="width:14px; color:var(--success);"></i> ${ev.title}</li>`; eventsShown++; }
+                        });
+                        if(eventsShown === 0) detailsHtml += `<li>El itinerario está vacío o todos sus eventos están ocultos.</li>`;
+                    } else {
+                        detailsHtml += `<li>No han añadido planes al itinerario todavía.</li>`;
+                    }
+                    detailsHtml += `</ul>`;
+                } else {
+                    detailsHtml += `<div style="text-align:center; padding:2rem 0; color:var(--text-muted);"><i data-lucide="lock" style="width:32px; height:32px; margin-bottom:10px; opacity:0.5;"></i><br>Este grupo ha decidido mantener su itinerario en privado.</div>`;
+                }
+            }
+            
+            document.getElementById('public-modal-content-area').innerHTML = detailsHtml;
+            document.getElementById('public-trip-details-modal').classList.add('active');
+            lucide.createIcons();
+        }
+
+        window.closePublicTripModal = () => document.getElementById('public-trip-details-modal').classList.remove('active');
 
         document.getElementById('btn-logout').onclick = () => signOut(auth);
         lucide.createIcons();
