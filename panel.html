@@ -182,15 +182,39 @@
             background: linear-gradient(135deg, var(--accent-blue), #2a75d3); color: white; text-transform: uppercase; letter-spacing: 1.5px; box-shadow: 0 4px 15px rgba(77,166,255,0.3);
         }
 
-        /* ── FILTROS SOFISTICADOS HUB ── */
-        .hub-filters-advanced { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 2.5rem; flex-wrap: wrap; background: rgba(255,255,255,0.02); padding: 1.2rem 1.5rem; border-radius: 20px; border: 1px solid var(--border-subtle); }
-        .search-box { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 250px; background: rgba(255,255,255,0.04); border-radius: 12px; padding: 0.8rem 1.2rem; border: 1px solid rgba(255,255,255,0.1); transition: 0.3s; }
-        .search-box:focus-within { border-color: var(--accent-blue); background: rgba(255,255,255,0.07); }
-        .search-box input { background: transparent; border: none; color: white; font-size: 0.95rem; width: 100%; outline: none; font-family: 'Sora', sans-serif; }
-        .filter-pills { display: flex; gap: 8px; flex-wrap: wrap; }
-        .filter-pill { background: rgba(255,255,255,0.05); color: var(--text-muted); border: 1px solid transparent; padding: 0.6rem 1.2rem; border-radius: 30px; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: 0.3s; }
-        .filter-pill:hover { background: rgba(255,255,255,0.1); color: var(--primary); }
-        .filter-pill.active { background: rgba(77,166,255,0.1); color: var(--accent-blue); border-color: var(--accent-blue); }
+        /* ── FILTROS SOFISTICADOS HUB (TIPO BOOKING SUPERPUESTO) ── */
+        .hub-filters-advanced { 
+            background: rgba(15, 15, 15, 0.95); 
+            backdrop-filter: blur(20px); 
+            border: 1px solid var(--border-subtle); 
+            padding: 2rem; 
+            border-radius: 24px; 
+            margin-bottom: 3rem; 
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            display: flex; 
+            flex-direction: column; 
+            gap: 1.5rem;
+        }
+        
+        .filter-row { display: flex; gap: 1.5rem; flex-wrap: wrap; align-items: flex-end; }
+        
+        .filter-group { flex: 1; min-width: 250px; }
+        .filter-group label { display: block; color: var(--text-muted); font-size: 0.85rem; font-weight: 600; margin-bottom: 0.8rem; text-transform: uppercase; letter-spacing: 1px; }
+        
+        .search-box { 
+            display: flex; align-items: center; gap: 12px; background: rgba(255,255,255,0.03); 
+            border-radius: 16px; padding: 1rem 1.5rem; border: 1px solid rgba(255,255,255,0.1); transition: 0.3s; 
+        }
+        .search-box:focus-within { border-color: var(--accent-blue); background: rgba(255,255,255,0.06); box-shadow: 0 0 15px rgba(77,166,255,0.2); }
+        .search-box input { background: transparent; border: none; color: white; font-size: 1rem; width: 100%; outline: none; font-family: 'Sora', sans-serif; }
+        
+        .filter-pills { display: flex; gap: 10px; flex-wrap: wrap; }
+        .filter-pill { 
+            background: rgba(255,255,255,0.03); color: var(--text-muted); border: 1px solid rgba(255,255,255,0.1); 
+            padding: 1rem 1.5rem; border-radius: 16px; font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: 0.3s; flex: 1; text-align: center;
+        }
+        .filter-pill:hover { background: rgba(255,255,255,0.08); color: var(--primary); }
+        .filter-pill.active { background: rgba(77,166,255,0.15); color: var(--accent-blue); border-color: var(--accent-blue); box-shadow: 0 4px 15px rgba(77,166,255,0.2); }
 
         /* ── MODALES COMPONENTES ── */
         .modal-overlay {
@@ -205,6 +229,9 @@
             transform: translateY(50px) scale(0.9); transition: var(--transition); position: relative; margin: auto; max-height: 90vh; overflow-y: auto;
         }
         .modal-overlay.active .modal-content { transform: translateY(0) scale(1); }
+
+        /* Modificadores para Modal Ancho de Publicación */
+        .modal-content.wide-modal { max-width: 750px; padding: 3.5rem; }
 
         .input-group { margin-bottom: 2rem; text-align: left; }
         .input-group label { display: block; color: var(--text-muted); font-size: 0.9rem; margin-bottom: 0.8rem; font-weight: 400; }
@@ -246,6 +273,40 @@
         .code-input-big { width: 100%; padding: 1.5rem; background: rgba(255,255,255,0.03); border: 1px solid var(--border-subtle); color: white; border-radius: 16px; font-size: 2rem; font-weight: 800; letter-spacing: 8px; text-align: center; text-transform: uppercase; outline: none; transition: 0.3s; }
         .code-input-big:focus { border-color: var(--primary); background: rgba(255,255,255,0.06); }
 
+        /* ── REDES SOCIALES MULTIUSUARIO EN PUBLICACIÓN ── */
+        .social-user-row { display: flex; gap: 10px; margin-bottom: 10px; align-items: center; background: rgba(255,255,255,0.02); padding: 10px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); }
+        .social-user-row select { width: auto; padding: 0.8rem; font-size: 0.9rem; border-radius: 10px; }
+        .social-user-row input { flex: 1; padding: 0.8rem; font-size: 0.9rem; border-radius: 10px; }
+        .btn-remove-social { background: rgba(255,77,77,0.1); color: var(--accent); border: none; width: 40px; height: 40px; border-radius: 10px; cursor: pointer; display: flex; justify-content: center; align-items: center; }
+
+        /* ── ITINERARIO PÚBLICO (NUEVO DISEÑO DIVERTIDO Y CRONOLÓGICO) ── */
+        .public-timeline { position: relative; padding-left: 30px; margin-top: 2rem; }
+        .public-timeline::before { content: ''; position: absolute; left: 14px; top: 0; bottom: 0; width: 2px; background: var(--border-subtle); }
+        
+        .timeline-site { margin-bottom: 3rem; position: relative; }
+        .site-marker { position: absolute; left: -37px; top: 0; width: 24px; height: 24px; background: var(--accent-blue); border: 4px solid #080808; border-radius: 50%; box-shadow: 0 0 10px rgba(77,166,255,0.5); z-index: 2; }
+        
+        .site-header { margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 10px; }
+        .site-name { font-size: 1.6rem; font-weight: 800; color: var(--primary); line-height: 1.1; margin: 0; }
+        .site-dates { font-size: 0.9rem; color: var(--text-muted); font-weight: 600; background: rgba(255,255,255,0.05); padding: 4px 10px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); }
+        
+        .site-content-grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
+        @media (min-width: 600px) { .site-content-grid { grid-template-columns: 1fr 1fr; } }
+        
+        .site-box { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 1.2rem; }
+        .site-box h4 { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1rem; display: flex; align-items: center; gap: 8px; }
+        .site-box.box-hotel h4 { color: var(--success); }
+        .site-box.box-plans h4 { color: var(--accent); }
+        
+        .item-row { display: flex; gap: 10px; margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px dashed rgba(255,255,255,0.05); align-items: flex-start; }
+        .item-row:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+        .item-time { font-size: 0.8rem; color: var(--text-muted); font-weight: 800; min-width: 45px; padding-top: 2px; }
+        .item-title { font-size: 0.95rem; color: var(--primary); line-height: 1.4; word-break: break-word; }
+        
+        .timeline-transport { position: relative; margin: 2rem 0; padding: 1.5rem; background: rgba(77,166,255,0.05); border: 1px dashed rgba(77,166,255,0.3); border-radius: 16px; display: flex; align-items: center; gap: 15px; margin-left: -20px; }
+        .transport-icon { width: 40px; height: 40px; background: var(--accent-blue); color: #080808; border-radius: 12px; display: flex; justify-content: center; align-items: center; flex-shrink: 0; }
+
+        /* ── TOASTS ── */
         #toast-container { position: fixed; bottom: 40px; right: 40px; z-index: 20000; display: flex; flex-direction: column; gap: 15px; }
         .toast { background: rgba(15, 15, 15, 0.95); backdrop-filter: blur(10px); border: 1px solid var(--border-subtle); color: white; padding: 1.2rem 2rem; border-radius: 18px; display: flex; align-items: center; gap: 15px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); animation: slideIn 0.5s var(--transition) forwards; }
 
@@ -263,16 +324,24 @@
             .trips-grid { grid-template-columns: 1fr; gap: 1.5rem; }
             .trip-card { padding: 1.8rem; min-height: 200px; }
             
-            .modal-content { padding: 2rem 1.5rem; border-radius: 24px; }
+            .modal-content, .modal-content.wide-modal { padding: 2rem 1.5rem; border-radius: 24px; }
             
-            .hub-filters-advanced { flex-direction: column; align-items: stretch; }
+            .hub-filters-advanced { padding: 1.5rem; border-radius: 20px; }
+            .filter-row { flex-direction: column; gap: 1rem; align-items: stretch; }
+            .filter-group { min-width: 100%; }
             .search-box { width: 100%; }
+            .filter-pills { justify-content: center; }
 
             .action-selector { flex-direction: column; gap: 1rem; }
             .action-btn { padding: 1.2rem 1rem; }
             
             .trip-code-display .code-value { font-size: 2.2rem; letter-spacing: 6px; }
             .code-input-big { font-size: 1.6rem; padding: 1.2rem; letter-spacing: 5px; }
+
+            .public-timeline { padding-left: 20px; }
+            .public-timeline::before { left: 4px; }
+            .site-marker { left: -27px; width: 20px; height: 20px; }
+            .timeline-transport { margin-left: -10px; padding: 1rem; }
 
             #toast-container { bottom: 20px; left: 20px; right: 20px; align-items: center; }
             .toast { width: 100%; justify-content: center; text-align: center; font-size: 0.9rem; padding: 1rem; }
@@ -311,6 +380,7 @@
             <i data-lucide="megaphone" style="margin-right: 10px;"></i> ¿Quieres anunciarte aquí? Haz clic para solicitar información.
         </a>
 
+        <!-- PESTAÑAS PRINCIPALES -->
         <div class="main-tabs-container">
             <button class="main-tab active" id="tab-mis-viajes" onclick="switchMainTab('mis-viajes')">
                 <i data-lucide="briefcase" style="width:18px;"></i> Mis Viajes
@@ -321,6 +391,7 @@
             </button>
         </div>
 
+        <!-- VISTA: MIS VIAJES -->
         <div id="view-mis-viajes">
             <div class="header-section">
                 <h1>Mis Viajes.</h1>
@@ -335,6 +406,7 @@
             </div>
         </div>
 
+        <!-- VISTA: HUB COMUNIDAD -->
         <div id="view-hub" style="display: none;">
             <div class="header-section" style="margin-bottom: 2rem;">
                 <h1>El Andén.</h1>
@@ -344,24 +416,35 @@
                 </button>
             </div>
 
+            <!-- FILTROS SOFISTICADOS -->
             <div class="hub-filters-advanced">
-                <div class="search-box">
-                    <i data-lucide="search" style="color:var(--text-muted); width:18px;"></i>
-                    <input type="text" id="hub-filter-dest" placeholder="¿A dónde te gustaría ir?" onkeyup="renderHubTrips()">
-                </div>
-                <div class="filter-pills">
-                    <button class="filter-pill active" onclick="setGenderFilter('', this)">Todos</button>
-                    <button class="filter-pill" onclick="setGenderFilter('mixto', this)">Mixto</button>
-                    <button class="filter-pill" onclick="setGenderFilter('chicos', this)">Chicos</button>
-                    <button class="filter-pill" onclick="setGenderFilter('chicas', this)">Chicas</button>
+                <div class="filter-row" style="width: 100%;">
+                    <div class="filter-group" style="flex: 2;">
+                        <label>Destino o Nombre</label>
+                        <div class="search-box">
+                            <i data-lucide="search" style="color:var(--text-muted); width:18px;"></i>
+                            <input type="text" id="hub-filter-dest" placeholder="¿A dónde te gustaría ir?" onkeyup="renderHubTrips()">
+                        </div>
+                    </div>
+                    <div class="filter-group">
+                        <label>Tipo de Grupo</label>
+                        <div class="filter-pills">
+                            <button class="filter-pill active" onclick="setGenderFilter('', this)">Todos</button>
+                            <button class="filter-pill" onclick="setGenderFilter('mixto', this)">Mixtos</button>
+                            <button class="filter-pill" onclick="setGenderFilter('chicos', this)">Chicos</button>
+                            <button class="filter-pill" onclick="setGenderFilter('chicas', this)">Chicas</button>
+                        </div>
+                    </div>
                 </div>
             </div>
 
             <div class="trips-grid" id="hub-trips-container">
-                </div>
+                <!-- Tarjetas inyectadas vía JS -->
+            </div>
         </div>
     </main>
 
+    <!-- MODAL PRINCIPAL CREAR/UNIRSE VIAJE -->
     <div class="modal-overlay" id="create-modal">
         <div class="modal-content" style="padding: 4rem;">
 
@@ -439,6 +522,7 @@
         </div>
     </div>
 
+    <!-- MODAL EDITAR VIAJE (SOLO METADATOS) -->
     <div class="modal-overlay" id="edit-trip-modal">
         <div class="modal-content" style="padding: 4rem;">
             <h2 style="font-size: 2rem; font-weight: 800; margin-bottom: 2.5rem; letter-spacing: -1px;">Editar Viaje</h2>
@@ -449,8 +533,9 @@
                     <input type="text" id="edit-trip-name" required placeholder="Ej. Costa Amalfitana 2026">
                 </div>
                 <div class="input-group">
-                    <label>Rango de Fechas</label>
+                    <label>Rango de Fechas Base</label>
                     <input type="text" id="edit-trip-dates" required readonly placeholder="Selecciona el periodo">
+                    <p style="color:var(--text-muted); font-size:0.75rem; margin-top:8px;">Modificar esto no moverá los eventos ya guardados en el itinerario.</p>
                 </div>
                 <button type="submit" class="btn-submit" id="btn-save-edit">GUARDAR CAMBIOS</button>
                 <button type="button" onclick="closeModal('edit-trip-modal')" style="background:none; border:none; color:var(--text-muted); width:100%; margin-top:1.5rem; cursor:pointer; font-size: 0.8rem; font-weight: 600; padding: 1rem 0;">CANCELAR</button>
@@ -458,6 +543,7 @@
         </div>
     </div>
 
+    <!-- MODAL BORRAR VIAJE DEFINITIVAMENTE -->
     <div class="modal-overlay" id="delete-modal">
         <div class="modal-content" style="border-color: var(--accent); padding: 4rem;">
             <h2 style="font-size: 1.8rem; font-weight: 800; margin-bottom: 1rem; color: var(--accent); display: flex; align-items: center; gap: 10px;">
@@ -476,6 +562,7 @@
         </div>
     </div>
 
+    <!-- MODAL ACTUALIZACIONES DEL SISTEMA -->
     <div class="modal-overlay" id="update-modal" style="z-index: 1050;">
         <div class="modal-content" style="border-color: var(--accent-blue); max-width: 500px; padding: 4rem;">
             <div style="text-align: center; margin-bottom: 1.5rem;">
@@ -500,92 +587,84 @@
         </div>
     </div>
 
+    <!-- MODAL PUBLICAR VIAJE EN HUB WIDE -->
     <div class="modal-overlay" id="publish-modal">
-        <div class="modal-content" style="max-width: 600px; padding: 2.5rem;">
+        <div class="modal-content wide-modal">
             <h2 style="font-size: 1.8rem; font-weight: 800; display:flex; align-items:center; gap:10px;"><i data-lucide="radar" style="color:var(--accent-blue);"></i> Publicar en El Andén</h2>
             <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom: 1.5rem; margin-top:0.5rem; line-height: 1.5;">
-                Haz que tu viaje sea visible para la comunidad. ⚠️ <strong>Precaución:</strong> No compartas información personal sensible. Elige qué quieres hacer público.
+                Haz que tu viaje sea visible para la comunidad. ⚠️ <strong>Precaución:</strong> Configura qué información quieres mostrar.
             </p>
             
             <form id="publish-form">
-                <div class="input-group" id="publish-trip-select-group" style="display:none;">
-                    <label>Selecciona el viaje a publicar</label>
-                    <select id="pub-trip-id" required></select>
-                </div>
-
-                <div class="input-group">
-                    <label>Nombre Público del Grupo</label>
-                    <input type="text" id="pub-name" required placeholder="Ej. Mochileros por Europa">
-                </div>
-
-                <div class="input-group">
-                    <label>Países o Ciudades a visitar</label>
-                    <input type="text" id="pub-countries" required placeholder="Ej. Francia, Italia, Praga, Berlín...">
-                </div>
-                
-                <div class="input-group">
-                    <label>Género del Grupo</label>
-                    <select id="pub-gender" required>
-                        <option value="mixto">Grupo Mixto</option>
-                        <option value="chicos">Solo Chicos</option>
-                        <option value="chicas">Solo Chicas</option>
-                    </select>
-                </div>
-
-                <h3 style="font-size:1.1rem; margin-top:2rem; margin-bottom:1rem; color:var(--primary); border-bottom: 1px solid var(--border-subtle); padding-bottom: 0.5rem;">¿Qué quieres compartir?</h3>
-                
-                <div class="toggle-container">
-                    <div class="toggle-text"><strong>Fechas Exactas</strong><span>Muestra los días exactos del viaje</span></div>
-                    <label class="toggle-switch"><input type="checkbox" id="pub-show-dates" checked><span class="slider"></span></label>
-                </div>
-                <div class="toggle-container">
-                    <div class="toggle-text"><strong>Nombres Reales</strong><span>Muestra el nombre de los participantes</span></div>
-                    <label class="toggle-switch"><input type="checkbox" id="pub-show-names"><span class="slider"></span></label>
-                </div>
-                <div class="toggle-container">
-                    <div class="toggle-text"><strong>Planes y Actividades</strong><span>Comparte qué vais a hacer</span></div>
-                    <label class="toggle-switch"><input type="checkbox" id="pub-show-plans" checked><span class="slider"></span></label>
-                </div>
-                <div class="toggle-container">
-                    <div class="toggle-text"><strong>Trayectos (Transporte)</strong><span>Muestra cómo os movéis de ciudad en ciudad</span></div>
-                    <label class="toggle-switch"><input type="checkbox" id="pub-show-transports" checked><span class="slider"></span></label>
-                </div>
-                <div class="toggle-container" style="border-color: rgba(255,77,77,0.3);">
-                    <div class="toggle-text"><strong>Hoteles y Alojamientos</strong><span style="color: var(--accent);">Precaución de privacidad. Muestra dónde dormís.</span></div>
-                    <label class="toggle-switch"><input type="checkbox" id="pub-show-hotels"><span class="slider"></span></label>
-                </div>
-
-                <h3 style="font-size:1.1rem; margin-top:2rem; margin-bottom:1rem; color:var(--primary); border-bottom: 1px solid var(--border-subtle); padding-bottom: 0.5rem;">Redes Sociales de Contacto (Opcional)</h3>
-                <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:1rem;">Sirve para que otras personas de la comunidad puedan contactaros.</p>
-                
-                <div class="input-group">
-                    <div style="position:relative; display:flex; align-items:center;">
-                        <i data-lucide="instagram" style="position:absolute; left:1rem; color:var(--text-muted);"></i>
-                        <input type="text" id="pub-ig" placeholder="Usuario de Instagram (Ej. @grupo)" style="padding-left:3rem;">
+                <div style="display: grid; grid-template-columns: 1fr; gap: 1rem;">
+                    
+                    <div class="input-group" id="publish-trip-select-group" style="display:none; margin-bottom: 1rem;">
+                        <label>Selecciona el viaje a publicar</label>
+                        <select id="pub-trip-id" required></select>
                     </div>
-                </div>
-                <div class="input-group">
-                    <div style="position:relative; display:flex; align-items:center;">
-                        <span style="position:absolute; left:1rem; color:var(--text-muted); font-weight:bold; font-size:1.2rem;">♪</span>
-                        <input type="text" id="pub-tk" placeholder="Usuario de TikTok (Ej. @grupo)" style="padding-left:3rem;">
-                    </div>
-                </div>
-                <div class="input-group">
-                    <div style="position:relative; display:flex; align-items:center;">
-                        <i data-lucide="twitter" style="position:absolute; left:1rem; color:var(--text-muted);"></i>
-                        <input type="text" id="pub-x" placeholder="Usuario de X/Twitter (Ej. @grupo)" style="padding-left:3rem;">
-                    </div>
-                </div>
 
-                <button type="submit" class="btn-submit" style="margin-top:1.5rem; background: var(--accent-blue);" id="btn-submit-publish">LANZAR AL ANDÉN</button>
-                <button type="button" class="btn-submit" style="margin-top:1rem; background: rgba(255,77,77,0.1); color: var(--accent); border: 1px solid var(--accent); display: none;" id="btn-unpublish" onclick="unpublishTrip()">RETIRAR DEL ANDÉN</button>
-                <button type="button" onclick="closePublishModal()" style="background:none; border:none; color:var(--text-muted); width:100%; margin-top:1rem; cursor:pointer; font-weight: 600; padding:1rem;">CANCELAR</button>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-bottom: 1rem;">
+                        <div class="input-group" style="margin-bottom: 0;">
+                            <label>Nombre Público del Grupo</label>
+                            <input type="text" id="pub-name" required placeholder="Ej. Mochileros por Europa">
+                        </div>
+                        <div class="input-group" style="margin-bottom: 0;">
+                            <label>Género del Grupo</label>
+                            <select id="pub-gender" required>
+                                <option value="mixto">Grupo Mixto</option>
+                                <option value="chicos">Solo Chicos</option>
+                                <option value="chicas">Solo Chicas</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="input-group" style="margin-bottom: 1rem;">
+                        <label>Países o Capitales a visitar (Obligatorio)</label>
+                        <input type="text" id="pub-countries" required placeholder="Ej. Francia, Roma, Berlín, Praga...">
+                    </div>
+
+                    <h3 style="font-size:1.1rem; margin-top:1rem; margin-bottom:1rem; color:var(--primary); border-bottom: 1px solid var(--border-subtle); padding-bottom: 0.5rem;">Configuración de Privacidad</h3>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+                        <div class="toggle-container" style="margin-bottom:0;">
+                            <div class="toggle-text"><strong>Fechas Exactas</strong><span>Muestra los días del viaje</span></div>
+                            <label class="toggle-switch"><input type="checkbox" id="pub-show-dates" checked><span class="slider"></span></label>
+                        </div>
+                        <div class="toggle-container" style="margin-bottom:0;">
+                            <div class="toggle-text"><strong>Planes</strong><span>Muestra qué vais a hacer</span></div>
+                            <label class="toggle-switch"><input type="checkbox" id="pub-show-plans" checked><span class="slider"></span></label>
+                        </div>
+                        <div class="toggle-container" style="margin-bottom:0;">
+                            <div class="toggle-text"><strong>Trayectos</strong><span>Muestra cómo os movéis</span></div>
+                            <label class="toggle-switch"><input type="checkbox" id="pub-show-transports" checked><span class="slider"></span></label>
+                        </div>
+                        <div class="toggle-container" style="margin-bottom:0; border-color: rgba(255,77,77,0.3);">
+                            <div class="toggle-text"><strong>Alojamientos</strong><span style="color: var(--accent);">Muestra dónde dormís</span></div>
+                            <label class="toggle-switch"><input type="checkbox" id="pub-show-hotels"><span class="slider"></span></label>
+                        </div>
+                    </div>
+
+                    <h3 style="font-size:1.1rem; margin-top:1.5rem; margin-bottom:1rem; color:var(--primary); border-bottom: 1px solid var(--border-subtle); padding-bottom: 0.5rem; display:flex; justify-content:space-between; align-items:center;">
+                        Redes Sociales (Viajer@s)
+                        <button type="button" onclick="addSocialUserRow()" style="background:rgba(255,255,255,0.05); color:white; border:1px solid var(--border-subtle); padding:5px 10px; border-radius:8px; font-size:0.8rem; cursor:pointer;">+ Añadir</button>
+                    </h3>
+                    <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:1rem; margin-top:-0.5rem;">Añade los perfiles de los miembros que quieran ser contactados.</p>
+                    
+                    <div id="social-users-container">
+                        <!-- Filas inyectadas JS -->
+                    </div>
+
+                    <button type="submit" class="btn-submit" style="margin-top:1.5rem; background: var(--accent-blue);" id="btn-submit-publish">LANZAR AL ANDÉN</button>
+                    <button type="button" class="btn-submit" style="margin-top:1rem; background: rgba(255,77,77,0.1); color: var(--accent); border: 1px solid var(--accent); display: none;" id="btn-unpublish" onclick="unpublishTrip()">RETIRAR DEL ANDÉN</button>
+                    <button type="button" onclick="closePublishModal()" style="background:none; border:none; color:var(--text-muted); width:100%; margin-top:1rem; cursor:pointer; font-weight: 600; padding:1rem;">CANCELAR</button>
+                </div>
             </form>
         </div>
     </div>
 
+    <!-- MODAL DETALLES VIAJE COMUNIDAD WIDE -->
     <div class="modal-overlay" id="public-trip-details-modal">
-        <div class="modal-content" style="max-width: 650px; padding: 2.5rem; background: #080808;">
+        <div class="modal-content wide-modal" style="background: #080808;">
             <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border-subtle); padding-bottom: 1.5rem;">
                 <div>
                     <h2 id="public-modal-title" style="font-size: 2.2rem; font-weight: 800; line-height:1.1; margin-bottom:0.5rem;">Nombre del Viaje</h2>
@@ -598,17 +677,19 @@
                 <button onclick="closePublicTripModal()" style="background:rgba(255,255,255,0.05); border:none; color:white; width:40px; height:40px; border-radius:12px; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:0.3s;"><i data-lucide="x"></i></button>
             </div>
 
-            <div style="background:rgba(77,166,255,0.05); border:1px solid rgba(77,166,255,0.2); border-radius:16px; padding:1.5rem; margin-bottom: 2rem;">
-                <h4 style="font-size:1rem; margin-bottom: 10px; color:var(--accent-blue); display:flex; align-items:center; gap:8px;"><i data-lucide="message-circle" style="width:18px;"></i> Contacto</h4>
-                <div id="public-modal-socials" style="display:flex; gap:15px; flex-wrap:wrap; font-size:0.95rem;">
-                    </div>
+            <div style="background:rgba(77,166,255,0.05); border:1px solid rgba(77,166,255,0.2); border-radius:16px; padding:1.5rem; margin-bottom: 2.5rem;">
+                <h4 style="font-size:1rem; margin-bottom: 15px; color:var(--accent-blue); display:flex; align-items:center; gap:8px;"><i data-lucide="message-circle" style="width:18px;"></i> Contacta con los viajer@s</h4>
+                <div id="public-modal-socials" style="display:flex; gap:10px; flex-wrap:wrap;">
+                    <!-- Injected via JS -->
+                </div>
             </div>
 
-            <h3 style="font-size:1.2rem; margin-bottom:1rem; color:var(--primary);"><i data-lucide="map" style="width:18px; margin-right:8px;"></i> Itinerario Público</h3>
-            <div id="public-modal-content-area" style="background:rgba(255,255,255,0.02); border:1px solid var(--border-subtle); border-radius:16px; padding:1.5rem; max-height:300px; overflow-y:auto;">
-                </div>
+            <h3 style="font-size:1.4rem; margin-bottom:1.5rem; color:var(--primary); font-weight:800;">Itinerario Público</h3>
+            <div id="public-modal-content-area">
+                <!-- Inyectado via JS - NUEVO DISEÑO -->
+            </div>
             
-            <button class="btn-submit" style="margin-top:2rem;" onclick="closePublicTripModal()">CERRAR</button>
+            <button class="btn-submit" style="margin-top:3rem;" onclick="closePublicTripModal()">CERRAR VISOR</button>
         </div>
     </div>
 
@@ -619,7 +700,7 @@
         import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
         import { getFirestore, collection, addDoc, getDocs, doc, setDoc, getDoc, deleteDoc, query, where, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
-        // ── SISTEMA DE ACTUALIZACIONES (MANTENIDO) ──
+        // ── SISTEMA DE ACTUALIZACIONES ──
         const UPDATE_CONFIG = {
             active: false, 
             version: "v2.5.0", 
@@ -656,7 +737,7 @@
             document.getElementById('update-modal').classList.remove('active');
         }
 
-        // ── FIREBASE CONFIG (INTACTO) ──
+        // ── FIREBASE CONFIG ──
         const firebaseConfig = {
             apiKey: "AIzaSyDRkUJnDLzknFz3KOnPEm4UFsgf6R4z1Uk",
             authDomain: "interra26-22ecd.firebaseapp.com",
@@ -684,11 +765,11 @@
         let activeHubGender = ''; 
 
         const STATIC_HUB_TRIPS = [
-            { id: 's1', isStatic: true, publicConfig: { name: 'Eurotrip Verano 26', gender: 'mixto', size: 4, countries: 'Francia, Italia, Suiza', dates: '01/07/2026 - 15/07/2026', showDates: true, showPlans: true, showHotels: false, showTransports: true, ig: '@euro26', tk: '@euro_trip', x: '' } },
-            { id: 's2', isStatic: true, publicConfig: { name: 'Chicas a Berlín y Praga', gender: 'chicas', size: 3, countries: 'Berlín, Praga, Viena', dates: '10/08/2026 - 18/08/2026', showDates: false, showPlans: true, showHotels: false, showTransports: false, ig: '@lasviajeras', tk: '', x: '' } },
-            { id: 's3', isStatic: true, publicConfig: { name: 'Ruta del Este', gender: 'chicos', size: 5, countries: 'Budapest, Viena, Bratislava', dates: '05/09/2026 - 20/09/2026', showDates: true, showPlans: true, showHotels: true, showTransports: true, ig: '@rutaeste', tk: '@rutaeste', x: '@rutaeste_x' } },
-            { id: 's4', isStatic: true, publicConfig: { name: 'Mochileros Sur', gender: 'mixto', size: 2, countries: 'Italia, Grecia', dates: '12/07/2026 - 28/07/2026', showDates: true, showPlans: false, showHotels: false, showTransports: true, ig: '', tk: '', x: '' } },
-            { id: 's5', isStatic: true, publicConfig: { name: 'Fiesta y Nieve', gender: 'mixto', size: 6, countries: 'Suiza, Francia, Andorra', dates: '15/12/2026 - 22/12/2026', showDates: true, showPlans: true, showHotels: true, showTransports: false, ig: '@nieveparty', tk: '', x: '' } }
+            { id: 's1', isStatic: true, publicConfig: { name: 'Eurotrip Verano 26', gender: 'mixto', size: 4, countries: 'Francia, Italia, Suiza', dates: '01/07/2026 - 15/07/2026', showDates: true, showPlans: true, showHotels: false, showTransports: true, socialUsers: [{plat:'ig', user:'@euro26'}, {plat:'tk', user:'@euro_trip'}] } },
+            { id: 's2', isStatic: true, publicConfig: { name: 'Chicas a Berlín y Praga', gender: 'chicas', size: 3, countries: 'Berlín, Praga, Viena', dates: '10/08/2026 - 18/08/2026', showDates: false, showPlans: true, showHotels: false, showTransports: false, socialUsers: [{plat:'ig', user:'@lasviajeras'}] } },
+            { id: 's3', isStatic: true, publicConfig: { name: 'Ruta del Este', gender: 'chicos', size: 5, countries: 'Budapest, Viena, Bratislava', dates: '05/09/2026 - 20/09/2026', showDates: true, showPlans: true, showHotels: true, showTransports: true, socialUsers: [{plat:'ig', user:'@rutaeste'}, {plat:'x', user:'@rutaeste_x'}] } },
+            { id: 's4', isStatic: true, publicConfig: { name: 'Mochileros Sur', gender: 'mixto', size: 2, countries: 'Italia, Grecia', dates: '12/07/2026 - 28/07/2026', showDates: true, showPlans: false, showHotels: false, showTransports: true, socialUsers: [] } },
+            { id: 's5', isStatic: true, publicConfig: { name: 'Fiesta y Nieve', gender: 'mixto', size: 6, countries: 'Suiza, Francia, Andorra', dates: '15/12/2026 - 22/12/2026', showDates: true, showPlans: true, showHotels: true, showTransports: false, socialUsers: [{plat:'ig', user:'@nieveparty'}] } }
         ];
 
         // ── TOASTS ──
@@ -993,7 +1074,6 @@
             document.getElementById('edit-trip-id').value = id;
             document.getElementById('edit-trip-name').value = name;
             
-            // Convert dd/mm/yyyy to real dates for flatpickr
             try {
                 const parseDate = (dStr) => {
                     const [d, m, y] = dStr.split('/');
@@ -1152,12 +1232,13 @@
             
             document.getElementById('pub-name').value = (trip.publicConfig && trip.publicConfig.name) ? trip.publicConfig.name : trip.nombre;
             
-            // Check si ya es publico para mostrar boton de "Retirar"
             if(trip.isPublic) {
                 document.getElementById('btn-unpublish').style.display = 'block';
             } else {
                 document.getElementById('btn-unpublish').style.display = 'none';
             }
+            
+            document.getElementById('social-users-container').innerHTML = '';
 
             if(trip.publicConfig) {
                 document.getElementById('pub-countries').value = trip.publicConfig.countries || '';
@@ -1167,16 +1248,40 @@
                 document.getElementById('pub-show-plans').checked = trip.publicConfig.showPlans !== false;
                 document.getElementById('pub-show-transports').checked = trip.publicConfig.showTransports !== false;
                 document.getElementById('pub-show-hotels').checked = trip.publicConfig.showHotels === true;
-                document.getElementById('pub-ig').value = trip.publicConfig.ig || '';
-                document.getElementById('pub-tk').value = trip.publicConfig.tk || '';
-                document.getElementById('pub-x').value = trip.publicConfig.x || '';
+                
+                if(trip.publicConfig.socialUsers && trip.publicConfig.socialUsers.length > 0) {
+                    trip.publicConfig.socialUsers.forEach(s => addSocialUserRow(s.plat, s.user));
+                } else {
+                    addSocialUserRow();
+                }
             } else {
                 document.getElementById('pub-countries').value = '';
+                addSocialUserRow();
             }
+            lucide.createIcons();
             return true;
         }
 
-        // Lógica de "Retirar del Andén" (Unpublish)
+        window.addSocialUserRow = function(plat = 'ig', user = '') {
+            const container = document.getElementById('social-users-container');
+            const row = document.createElement('div');
+            row.className = 'social-user-row';
+            
+            row.innerHTML = `
+                <select class="social-plat-select">
+                    <option value="ig" ${plat === 'ig' ? 'selected' : ''}>Instagram</option>
+                    <option value="tk" ${plat === 'tk' ? 'selected' : ''}>TikTok</option>
+                    <option value="x" ${plat === 'x' ? 'selected' : ''}>X (Twitter)</option>
+                </select>
+                <input type="text" class="social-user-input" placeholder="Usuario (ej. @juan)" value="${user}">
+                <button type="button" class="btn-remove-social" onclick="this.parentElement.remove()">
+                    <i data-lucide="x" style="width:16px;"></i>
+                </button>
+            `;
+            container.appendChild(row);
+            lucide.createIcons();
+        }
+
         window.unpublishTrip = async function() {
             const tId = document.getElementById('pub-trip-id').value;
             const btn = document.getElementById('btn-unpublish');
@@ -1203,7 +1308,6 @@
             const tId = document.getElementById('pub-trip-id').value;
             const trip = todosLosViajesCache.find(t => t.id === tId);
             
-            // Países ahora son recogidos del Input del Usuario
             const countries = document.getElementById('pub-countries').value;
             
             // Calculamos solo admin o editores reales
@@ -1215,6 +1319,17 @@
             }
             if(realSize === 0) realSize = 1;
             
+            // Recoger redes sociales
+            let socialUsers = [];
+            document.querySelectorAll('.social-user-row').forEach(row => {
+                const plat = row.querySelector('.social-plat-select').value;
+                let user = row.querySelector('.social-user-input').value.trim();
+                if(user) {
+                    if(!user.startsWith('@')) user = '@' + user;
+                    socialUsers.push({plat, user});
+                }
+            });
+            
             const config = {
                 name: document.getElementById('pub-name').value,
                 countries: countries,
@@ -1224,9 +1339,7 @@
                 showPlans: document.getElementById('pub-show-plans').checked,
                 showTransports: document.getElementById('pub-show-transports').checked,
                 showHotels: document.getElementById('pub-show-hotels').checked,
-                ig: document.getElementById('pub-ig').value,
-                tk: document.getElementById('pub-tk').value,
-                x: document.getElementById('pub-x').value,
+                socialUsers: socialUsers,
                 size: realSize,
                 dates: `${trip.fechaInicio} - ${trip.fechaFin}`
             };
@@ -1289,7 +1402,6 @@
                 const dates = config.showDates === false ? 'Fechas Ocultas' : config.dates;
                 const countries = config.countries || 'Destinos no especificados';
                 
-                // Lógica elegante de renderizado de puntos de género
                 let dotsHtml = '<span style="margin-left: 8px; display: inline-flex; gap: 4px; vertical-align: middle;">';
                 const maxDots = Math.min(size, 10);
                 for(let j=0; j<maxDots; j++) {
@@ -1326,6 +1438,7 @@
             lucide.createIcons();
         }
 
+        // ── DISEÑO NUEVO Y DIVERTIDO DEL ITINERARIO PÚBLICO ──
         window.viewPublicTripDetails = function(id) {
             if (!hasPublicTrip) {
                 showToast("Debes publicar un viaje en El Andén para ver los detalles profundos de los demás.", "error");
@@ -1354,30 +1467,120 @@
             document.getElementById('public-modal-dates').innerText = config.showDates === false ? 'Fechas Privadas' : config.dates;
             document.getElementById('public-modal-size').innerHTML = `${size} viajer@s ${dotsHtml}`;
             
+            // REDES SOCIALES MULTIUSUARIO CON BOTONES DIRECTOS
             let socialHtml = '';
-            if(config.ig) socialHtml += `<a href="https://instagram.com/${config.ig.replace('@','')}" target="_blank" style="color: white; text-decoration:none;"><i data-lucide="instagram" style="width:16px; vertical-align:middle;"></i> ${config.ig}</a>`;
-            if(config.tk) socialHtml += `<span style="color: white;"><strong style="font-size:1.1rem; vertical-align:middle;">♪</strong> ${config.tk}</span>`;
-            if(config.x) socialHtml += `<a href="https://twitter.com/${config.x.replace('@','')}" target="_blank" style="color: white; text-decoration:none;"><i data-lucide="twitter" style="width:16px; vertical-align:middle;"></i> ${config.x}</a>`;
+            if(config.socialUsers && config.socialUsers.length > 0) {
+                config.socialUsers.forEach(s => {
+                    let icon = '', url = '', color = '', bg = '';
+                    let cleanUser = s.user.replace('@', '');
+                    if(s.plat === 'ig') { icon = 'instagram'; url = `https://instagram.com/${cleanUser}`; color = '#E1306C'; bg = 'rgba(225,48,108,0.1)'; }
+                    if(s.plat === 'tk') { icon = 'music'; url = `https://tiktok.com/@${cleanUser}`; color = '#00f2fe'; bg = 'rgba(0,242,254,0.1)'; }
+                    if(s.plat === 'x') { icon = 'twitter'; url = `https://twitter.com/${cleanUser}`; color = '#1DA1F2'; bg = 'rgba(29,161,242,0.1)'; }
+                    
+                    socialHtml += `
+                        <a href="${url}" target="_blank" style="display:inline-flex; align-items:center; gap:8px; background:${bg}; color:${color}; border:1px solid ${color}; padding:6px 12px; border-radius:20px; font-weight:600; text-decoration:none; font-size:0.85rem; transition:0.3s;">
+                            <i data-lucide="${icon}" style="width:14px;"></i> ${s.user}
+                        </a>
+                    `;
+                });
+            }
             document.getElementById('public-modal-socials').innerHTML = socialHtml || '<span style="color:var(--text-muted); font-size:0.85rem;">No han compartido redes sociales.</span>';
             
+            // RENDERIZADO DEL ITINERARIO POR CIUDADES Y TRAYECTOS
             let detailsHtml = '';
             if(trip.isStatic) {
-                detailsHtml = `<p style="color:var(--text-muted); font-style:italic;">Este es un viaje de ejemplo de la comunidad para demostrar la funcionalidad. Los viajes reales mostrarán su itinerario real aquí.</p>`;
+                detailsHtml = `<p style="color:var(--text-muted); font-style:italic;">Este es un viaje de ejemplo de la comunidad. Los viajes reales mostrarán su línea de tiempo cronológica aquí.</p>`;
             } else {
                 if(config.showPlans || config.showHotels || config.showTransports) {
-                    detailsHtml += `<ul style="padding-left:15px; color:var(--primary); line-height:1.8; font-size:0.95rem;">`;
+                    
                     if(trip.eventos && trip.eventos.length > 0) {
-                        let eventsShown = 0;
-                        trip.eventos.sort((a, b) => new Date(a.dateKey) - new Date(b.dateKey)).forEach(ev => {
-                            if (ev.type === 'plan' && config.showPlans) { detailsHtml += `<li><i data-lucide="map-pin" style="width:14px; color:var(--accent);"></i> ${ev.title}</li>`; eventsShown++; }
-                            if (ev.type === 'transport' && config.showTransports) { detailsHtml += `<li><i data-lucide="train" style="width:14px; color:var(--accent-blue);"></i> ${ev.title}</li>`; eventsShown++; }
-                            if (ev.type === 'hotel' && config.showHotels) { detailsHtml += `<li><i data-lucide="bed" style="width:14px; color:var(--success);"></i> ${ev.title}</li>`; eventsShown++; }
+                        
+                        // Ordenamos eventos cronológicamente
+                        let sortedEvents = trip.eventos.sort((a, b) => new Date(a.dateKey) - new Date(b.dateKey));
+                        
+                        // Agrupación compleja: Agrupar eventos consecutivos en el mismo destino.
+                        // Usamos un heurístico: Si es un hotel o plan, buscamos la palabra clave (ej. ciudad) o lo agrupamos por días.
+                        // Para simplificar y hacerlo MUY diferente: Agruparemos por Fecha.
+                        
+                        let groupedByDate = {};
+                        sortedEvents.forEach(ev => {
+                            if(!groupedByDate[ev.dateKey]) groupedByDate[ev.dateKey] = { hotels: [], plans: [], transports: [] };
+                            if(ev.type === 'hotel') groupedByDate[ev.dateKey].hotels.push(ev);
+                            if(ev.type === 'plan') groupedByDate[ev.dateKey].plans.push(ev);
+                            if(ev.type === 'transport') groupedByDate[ev.dateKey].transports.push(ev);
                         });
-                        if(eventsShown === 0) detailsHtml += `<li>El itinerario está vacío o todos sus eventos están ocultos.</li>`;
+
+                        detailsHtml += `<div class="public-timeline">`;
+                        
+                        Object.keys(groupedByDate).forEach(dateKey => {
+                            const dateData = groupedByDate[dateKey];
+                            const dateObj = new Date(dateKey);
+                            const dateStr = dateObj.toLocaleDateString('es-ES', { weekday: 'short', day: 'numeric', month: 'short' });
+                            
+                            // Extraemos el "Nombre del Sitio" (idealmente del hotel de ese día, si no, del primer plan)
+                            let siteName = 'Explorando';
+                            if(dateData.hotels.length > 0) siteName = dateData.hotels[0].title.split(',')[0];
+                            else if (dateData.plans.length > 0) siteName = dateData.plans[0].title.split(',')[0];
+
+                            // Si hay transportes ese día y decidieron mostrarlos, los ponemos ANTES del bloque de la ciudad (simulando que viajan a ella)
+                            if (config.showTransports && dateData.transports.length > 0) {
+                                dateData.transports.forEach(tr => {
+                                    detailsHtml += `
+                                        <div class="timeline-transport">
+                                            <div class="transport-icon"><i data-lucide="train" style="width:20px;"></i></div>
+                                            <div>
+                                                <div style="font-weight:800; color:var(--accent-blue); font-size:1rem;">${tr.time || '--:--'} · ${tr.title}</div>
+                                            </div>
+                                        </div>
+                                    `;
+                                });
+                            }
+
+                            // Renderizamos el bloque de la ciudad si hay hoteles o planes y quieren mostrarlos
+                            const hasValidHotels = config.showHotels && dateData.hotels.length > 0;
+                            const hasValidPlans = config.showPlans && dateData.plans.length > 0;
+
+                            if (hasValidHotels || hasValidPlans) {
+                                detailsHtml += `
+                                    <div class="timeline-site">
+                                        <div class="site-marker"></div>
+                                        <div class="site-header">
+                                            <h3 class="site-name">${siteName}</h3>
+                                            <div class="site-dates">${config.showDates ? dateStr : 'Día del viaje'}</div>
+                                        </div>
+                                        
+                                        <div class="site-content-grid">
+                                            ${hasValidHotels ? `
+                                            <div class="site-box box-hotel">
+                                                <h4><i data-lucide="bed" style="width:16px;"></i> Alojamiento</h4>
+                                                ${dateData.hotels.map(h => `
+                                                    <div class="item-row">
+                                                        <div class="item-title">${h.title}</div>
+                                                    </div>
+                                                `).join('')}
+                                            </div>` : ''}
+
+                                            ${hasValidPlans ? `
+                                            <div class="site-box box-plans">
+                                                <h4><i data-lucide="map-pin" style="width:16px;"></i> Planes</h4>
+                                                ${dateData.plans.map(p => `
+                                                    <div class="item-row">
+                                                        <div class="item-time">${p.time || '--:--'}</div>
+                                                        <div class="item-title">${p.title}</div>
+                                                    </div>
+                                                `).join('')}
+                                            </div>` : ''}
+                                        </div>
+                                    </div>
+                                `;
+                            }
+                        });
+                        
+                        detailsHtml += `</div>`;
+                        
                     } else {
-                        detailsHtml += `<li>No han añadido planes al itinerario todavía.</li>`;
+                        detailsHtml += `<div style="text-align:center; color:var(--text-muted);">El itinerario está vacío o todos sus eventos están ocultos.</div>`;
                     }
-                    detailsHtml += `</ul>`;
                 } else {
                     detailsHtml += `<div style="text-align:center; padding:2rem 0; color:var(--text-muted);"><i data-lucide="lock" style="width:32px; height:32px; margin-bottom:10px; opacity:0.5;"></i><br>Este grupo ha decidido mantener su itinerario en privado.</div>`;
                 }
