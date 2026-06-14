@@ -114,7 +114,7 @@
 
         .header-section { margin-bottom: 4rem; animation: fadeDown 1s ease; }
         .header-section h1 { font-size: 3.5rem; font-weight: 800; letter-spacing: -2px; }
-        .header-section p { color: var(--text-muted); font-size: 1.2rem; margin-top: 0.5rem; font-weight: 300; line-height: 1.5; }
+        .header-section p { color: var(--text-muted); font-size: 1.2rem; margin-top: 0.5rem; font-weight: 300; }
 
         .trips-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 2.5rem; }
 
@@ -182,6 +182,36 @@
             background: linear-gradient(135deg, var(--accent-blue), #2a75d3); color: white; text-transform: uppercase; letter-spacing: 1.5px; box-shadow: 0 4px 15px rgba(77,166,255,0.3);
         }
 
+        /* ── BÚSQUEDA SOFISTICADA HUB ── */
+        .hub-filters-advanced { 
+            background: rgba(15, 15, 15, 0.95); 
+            backdrop-filter: blur(20px); 
+            border: 1px solid var(--border-subtle); 
+            padding: 1.5rem; 
+            border-radius: 20px; 
+            margin-bottom: 3rem; 
+            display: flex; 
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+        
+        .search-box { 
+            display: flex; align-items: center; gap: 12px; background: rgba(255,255,255,0.03); 
+            border-radius: 16px; padding: 1rem 1.5rem; border: 1px solid rgba(255,255,255,0.1); transition: 0.3s; flex: 1; min-width: 250px;
+        }
+        .search-box:focus-within { border-color: var(--accent-blue); background: rgba(255,255,255,0.06); box-shadow: 0 0 15px rgba(77,166,255,0.2); }
+        .search-box input { background: transparent; border: none; color: white; font-size: 1rem; width: 100%; outline: none; font-family: 'Sora', sans-serif; }
+        
+        .filter-pills { display: flex; gap: 10px; flex-wrap: wrap; }
+        .filter-pill { 
+            background: rgba(255,255,255,0.03); color: var(--text-muted); border: 1px solid rgba(255,255,255,0.1); 
+            padding: 0.8rem 1.5rem; border-radius: 16px; font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: 0.3s; text-align: center;
+        }
+        .filter-pill:hover { background: rgba(255,255,255,0.08); color: var(--primary); }
+        .filter-pill.active { background: rgba(77,166,255,0.15); color: var(--accent-blue); border-color: var(--accent-blue); box-shadow: 0 4px 15px rgba(77,166,255,0.2); }
+
         /* ── MODALES COMPONENTES ── */
         .modal-overlay {
             position: fixed; inset: 0; background: rgba(0, 0, 0, 0.9); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
@@ -195,7 +225,6 @@
             transform: translateY(50px) scale(0.9); transition: var(--transition); position: relative; margin: auto; max-height: 90vh; overflow-y: auto;
         }
         .modal-overlay.active .modal-content { transform: translateY(0) scale(1); }
-
         .modal-content.wide-modal { max-width: 750px; padding: 3.5rem; }
 
         .input-group { margin-bottom: 2rem; text-align: left; }
@@ -243,23 +272,28 @@
         .social-user-row input { flex: 1; padding: 0.8rem; font-size: 0.9rem; border-radius: 10px; }
         .btn-remove-social { background: rgba(255,77,77,0.1); color: var(--accent); border: none; width: 40px; height: 40px; border-radius: 10px; cursor: pointer; display: flex; justify-content: center; align-items: center; }
 
-        /* ── ITINERARIO PÚBLICO (DISEÑO EXTENDIDO) ── */
-        .public-timeline { position: relative; padding-left: 30px; margin-top: 1rem; }
-        .public-timeline::before { content: ''; position: absolute; left: 14px; top: 0; bottom: 0; width: 2px; background: var(--border-subtle); }
-        
+        /* ── ITINERARIO PÚBLICO (GRÁFICO Y RESUMIDO) ── */
+        .graphic-timeline { display: flex; flex-direction: column; gap: 15px; position: relative; padding: 1rem 0; }
+        .graphic-step { background: linear-gradient(135deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01)); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 1.5rem; position: relative; z-index: 2; display: flex; flex-direction: column; gap: 12px; transition: 0.3s; }
+        .graphic-step:hover { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.2); transform: translateY(-3px); }
+        .graphic-step-connector { width: 4px; height: 25px; background: rgba(255,255,255,0.1); margin: 0 auto; border-radius: 2px; }
+        .graphic-step-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 12px; flex-wrap: wrap; gap: 10px; }
+        .graphic-step-city { font-size: 1.4rem; font-weight: 800; color: var(--primary); display: flex; align-items: center; gap: 8px; }
+        .graphic-step-dates { font-size: 0.85rem; color: var(--accent-blue); font-weight: 700; background: rgba(77,166,255,0.1); padding: 6px 14px; border-radius: 20px; }
+        .graphic-step-details { display: flex; gap: 10px; flex-wrap: wrap; }
+        .graphic-badge { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); background: rgba(0,0,0,0.4); padding: 10px 14px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); }
+        .graphic-badge.hotel i { color: var(--success); }
+        .graphic-badge.plan i { color: var(--accent); }
+
+        /* ── ITINERARIO PÚBLICO (EXTENDIDO) ── */
+        .public-timeline-ext { position: relative; padding-left: 30px; margin-top: 1rem; }
+        .public-timeline-ext::before { content: ''; position: absolute; left: 14px; top: 0; bottom: 0; width: 2px; background: var(--border-subtle); }
         .timeline-site { margin-bottom: 3rem; position: relative; }
         .site-marker { position: absolute; left: -37px; top: 0; width: 24px; height: 24px; background: var(--accent-blue); border: 4px solid #080808; border-radius: 50%; box-shadow: 0 0 10px rgba(77,166,255,0.5); z-index: 2; }
-        
         .site-content-grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
         @media (min-width: 600px) { .site-content-grid { grid-template-columns: 1fr 1fr; } }
-        
         .site-box { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 1.2rem; }
-        .site-box h4 { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1rem; display: flex; align-items: center; gap: 8px; }
-        .site-box.box-hotel h4 { color: var(--success); }
-        .site-box.box-plans h4 { color: var(--accent); }
-        
         .timeline-transport { position: relative; margin: 2rem 0; padding: 1.5rem; background: rgba(77,166,255,0.05); border: 1px dashed rgba(77,166,255,0.3); border-radius: 16px; display: flex; align-items: center; gap: 15px; margin-left: -20px; }
-        .transport-icon { width: 40px; height: 40px; background: var(--accent-blue); color: #080808; border-radius: 12px; display: flex; justify-content: center; align-items: center; flex-shrink: 0; }
 
         /* ── TOASTS ── */
         #toast-container { position: fixed; bottom: 40px; right: 40px; z-index: 20000; display: flex; flex-direction: column; gap: 15px; }
@@ -281,14 +315,18 @@
             
             .modal-content, .modal-content.wide-modal { padding: 2rem 1.5rem; border-radius: 24px; }
             
+            .hub-filters-advanced { padding: 1.5rem; border-radius: 20px; flex-direction: column; align-items: stretch; }
+            .search-box { width: 100%; }
+            .filter-pills { justify-content: center; }
+
             .action-selector { flex-direction: column; gap: 1rem; }
             .action-btn { padding: 1.2rem 1rem; }
             
             .trip-code-display .code-value { font-size: 2.2rem; letter-spacing: 6px; }
             .code-input-big { font-size: 1.6rem; padding: 1.2rem; letter-spacing: 5px; }
 
-            .public-timeline { padding-left: 20px; }
-            .public-timeline::before { left: 4px; }
+            .public-timeline-ext { padding-left: 20px; }
+            .public-timeline-ext::before { left: 4px; }
             .site-marker { left: -27px; width: 20px; height: 20px; }
             .timeline-transport { margin-left: -10px; padding: 1rem; }
 
@@ -329,7 +367,6 @@
             <i data-lucide="megaphone" style="margin-right: 10px;"></i> ¿Quieres anunciarte aquí? Haz clic para solicitar información.
         </a>
 
-        <!-- PESTAÑAS PRINCIPALES -->
         <div class="main-tabs-container">
             <button class="main-tab active" id="tab-mis-viajes" onclick="switchMainTab('mis-viajes')">
                 <i data-lucide="briefcase" style="width:18px;"></i> Mis Viajes
@@ -340,7 +377,6 @@
             </button>
         </div>
 
-        <!-- VISTA: MIS VIAJES -->
         <div id="view-mis-viajes">
             <div class="header-section">
                 <h1>Mis Viajes.</h1>
@@ -355,7 +391,6 @@
             </div>
         </div>
 
-        <!-- VISTA: HUB COMUNIDAD -->
         <div id="view-hub" style="display: none;">
             <div class="header-section" style="margin-bottom: 2rem;">
                 <h1>El Andén.</h1>
@@ -365,13 +400,24 @@
                 </button>
             </div>
 
-            <div class="trips-grid" id="hub-trips-container">
-                <!-- Tarjetas inyectadas vía JS -->
+            <div class="hub-filters-advanced">
+                <div class="search-box">
+                    <i data-lucide="search" style="color:var(--text-muted); width:18px;"></i>
+                    <input type="text" id="hub-filter-dest" placeholder="Busca un destino o nombre del grupo..." onkeyup="renderHubTrips()">
+                </div>
+                <div class="filter-pills">
+                    <button class="filter-pill active" onclick="setGenderFilter('', this)">Todos</button>
+                    <button class="filter-pill" onclick="setGenderFilter('mixto', this)">Mixtos</button>
+                    <button class="filter-pill" onclick="setGenderFilter('chicos', this)">Chicos</button>
+                    <button class="filter-pill" onclick="setGenderFilter('chicas', this)">Chicas</button>
+                </div>
             </div>
+
+            <div class="trips-grid" id="hub-trips-container">
+                </div>
         </div>
     </main>
 
-    <!-- MODAL PRINCIPAL CREAR/UNIRSE VIAJE -->
     <div class="modal-overlay" id="create-modal">
         <div class="modal-content" style="padding: 4rem;">
             <div id="step-choose">
@@ -442,12 +488,11 @@
                 <p style="color: var(--text-muted); font-size: 0.8rem; text-align: center; margin-bottom: 2rem; line-height: 1.6;">
                     También puedes encontrar este código en la pestaña <strong style="color:white;">Equipo y Accesos</strong> dentro del viaje en cualquier momento.
                 </p>
-                <button type="button" class="btn-submit" onclick="closeModalAndRefresh()">IR A MIS VIAJES</button>
+                <button type="button" class="btn-submit" onclick="closeModalAndRefresh('create-modal')">IR A MIS VIAJES</button>
             </div>
         </div>
     </div>
 
-    <!-- MODAL EDITAR VIAJE (SOLO METADATOS) -->
     <div class="modal-overlay" id="edit-trip-modal">
         <div class="modal-content" style="padding: 4rem;">
             <h2 style="font-size: 2rem; font-weight: 800; margin-bottom: 2.5rem; letter-spacing: -1px;">Editar Viaje</h2>
@@ -468,7 +513,6 @@
         </div>
     </div>
 
-    <!-- MODAL BORRAR VIAJE DEFINITIVAMENTE -->
     <div class="modal-overlay" id="delete-modal">
         <div class="modal-content" style="border-color: var(--accent); padding: 4rem;">
             <h2 style="font-size: 1.8rem; font-weight: 800; margin-bottom: 1rem; color: var(--accent); display: flex; align-items: center; gap: 10px;">
@@ -483,11 +527,10 @@
                 <input type="text" id="delete-confirm-input" placeholder="ELIMINAR" autocomplete="off" style="text-align: center; font-weight: bold; letter-spacing: 2px;">
             </div>
             <button type="button" class="btn-submit" id="btn-confirm-delete" style="background: var(--accent); color: white;">BORRAR VIAJE</button>
-            <button type="button" onclick="closeDeleteModal()" style="background:none; border:none; color:var(--text-muted); width:100%; margin-top:1.5rem; cursor:pointer; font-size: 0.8rem; font-weight: 600; padding: 1rem 0;">CANCELAR Y VOLVER</button>
+            <button type="button" onclick="closeModal('delete-modal')" style="background:none; border:none; color:var(--text-muted); width:100%; margin-top:1.5rem; cursor:pointer; font-size: 0.8rem; font-weight: 600; padding: 1rem 0;">CANCELAR Y VOLVER</button>
         </div>
     </div>
 
-    <!-- MODAL ACTUALIZACIONES DEL SISTEMA -->
     <div class="modal-overlay" id="update-modal" style="z-index: 1050;">
         <div class="modal-content" style="border-color: var(--accent-blue); max-width: 500px; padding: 4rem;">
             <div style="text-align: center; margin-bottom: 1.5rem;">
@@ -512,7 +555,6 @@
         </div>
     </div>
 
-    <!-- MODAL PUBLICAR VIAJE EN HUB WIDE -->
     <div class="modal-overlay" id="publish-modal">
         <div class="modal-content wide-modal">
             <h2 style="font-size: 1.8rem; font-weight: 800; display:flex; align-items:center; gap:10px;"><i data-lucide="radar" style="color:var(--accent-blue);"></i> Publicar en El Andén</h2>
@@ -576,37 +618,34 @@
                     <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:1rem; margin-top:-0.5rem;">Añade los perfiles de los miembros que quieran ser contactados.</p>
                     
                     <div id="social-users-container">
-                        <!-- Filas inyectadas JS -->
-                    </div>
+                        </div>
 
                     <button type="submit" class="btn-submit" style="margin-top:1.5rem; background: var(--accent-blue);" id="btn-submit-publish">LANZAR AL ANDÉN</button>
                     <button type="button" class="btn-submit" style="margin-top:1rem; background: rgba(255,77,77,0.1); color: var(--accent); border: 1px solid var(--accent); display: none;" id="btn-unpublish" onclick="unpublishTrip()">RETIRAR DEL ANDÉN</button>
-                    <button type="button" onclick="closePublishModal()" style="background:none; border:none; color:var(--text-muted); width:100%; margin-top:1rem; cursor:pointer; font-weight: 600; padding:1rem;">CANCELAR</button>
+                    <button type="button" onclick="closeModal('publish-modal')" style="background:none; border:none; color:var(--text-muted); width:100%; margin-top:1rem; cursor:pointer; font-weight: 600; padding:1rem;">CANCELAR</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- MODAL DETALLES VIAJE COMUNIDAD WIDE -->
     <div class="modal-overlay" id="public-trip-details-modal">
         <div class="modal-content wide-modal" style="background: #080808;">
             <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border-subtle); padding-bottom: 1.5rem; flex-wrap: wrap; gap: 15px;">
                 <div>
-                    <h2 id="public-modal-title" style="font-size: 2.2rem; font-weight: 800; line-height:1.1; margin-bottom:0.5rem; word-break: break-word;">Nombre del Viaje</h2>
-                    <p id="public-modal-meta" style="color:var(--text-muted); font-size: 0.95rem; display:flex; align-items:center; gap:8px;">
-                        <i data-lucide="calendar" style="width:14px;"></i> <span id="public-modal-dates">Fechas</span> 
+                    <h2 id="public-modal-title" style="font-size: 2.2rem; font-weight: 800; line-height:1.2; margin-bottom:0.8rem; word-break: break-word;">Nombre del Viaje</h2>
+                    <p id="public-modal-meta" style="color:var(--text-muted); font-size: 0.95rem; display:flex; align-items:center; flex-wrap:wrap; gap:8px;">
+                        <span style="display:flex; align-items:center; gap:6px;"><i data-lucide="calendar" style="width:14px;"></i> <span id="public-modal-dates">Fechas</span></span>
                         <span style="color:var(--border-subtle);">|</span> 
-                        <i data-lucide="users" style="width:14px;"></i> <span id="public-modal-size">X viajer@s</span>
+                        <span style="display:flex; align-items:center; gap:6px;"><i data-lucide="users" style="width:14px;"></i> <span id="public-modal-size">X viajer@s</span></span>
                     </p>
                 </div>
-                <button onclick="closePublicTripModal()" style="background:rgba(255,255,255,0.05); border:none; color:white; width:40px; height:40px; border-radius:12px; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:0.3s;"><i data-lucide="x"></i></button>
+                <button onclick="closeModal('public-trip-details-modal')" style="background:rgba(255,255,255,0.05); border:none; color:white; width:40px; height:40px; border-radius:12px; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:0.3s;"><i data-lucide="x"></i></button>
             </div>
 
             <div style="background:rgba(77,166,255,0.05); border:1px solid rgba(77,166,255,0.2); border-radius:16px; padding:1.5rem; margin-bottom: 2.5rem;">
                 <h4 style="font-size:1rem; margin-bottom: 15px; color:var(--accent-blue); display:flex; align-items:center; gap:8px;"><i data-lucide="message-circle" style="width:18px;"></i> Contacta con los viajer@s</h4>
                 <div id="public-modal-socials" style="display:flex; gap:10px; flex-wrap:wrap;">
-                    <!-- Injected via JS -->
-                </div>
+                    </div>
             </div>
 
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem; flex-wrap: wrap; gap: 15px;">
@@ -618,10 +657,9 @@
             </div>
             
             <div id="public-modal-content-area">
-                <!-- Inyectado via JS -->
-            </div>
+                </div>
             
-            <button class="btn-submit" style="margin-top:3rem;" onclick="closePublicTripModal()">CERRAR VISOR</button>
+            <button class="btn-submit" style="margin-top:3rem;" onclick="closeModal('public-trip-details-modal')">CERRAR VISOR</button>
         </div>
     </div>
 
@@ -694,6 +732,7 @@
         let adminTripsList = []; 
         let hasPublicTrip = false; 
         let dynamicHubTrips = []; 
+        let activeHubGender = ''; 
 
         const STATIC_HUB_TRIPS = [
             { id: 's1', isStatic: true, publicConfig: { name: 'Eurotrip Verano 26', gender: 'mixto', size: 4, countries: 'Francia, Italia, Suiza', dates: '01/07/2026 - 15/07/2026', showDates: true, showPlans: true, showHotels: false, showTransports: true, socialUsers: [{plat:'ig', user:'@euro26'}, {plat:'tk', user:'@euro_trip'}] } },
@@ -703,13 +742,13 @@
             { id: 's5', isStatic: true, publicConfig: { name: 'Fiesta y Nieve', gender: 'mixto', size: 6, countries: 'Suiza, Francia, Andorra', dates: '15/12/2026 - 22/12/2026', showDates: true, showPlans: true, showHotels: true, showTransports: false, socialUsers: [{plat:'ig', user:'@nieveparty'}] } }
         ];
 
-        // ── TOASTS ──
+        // ── TOASTS Y MODALES GENÉRICOS ──
         function showToast(message, type = 'success') {
             const container = document.getElementById('toast-container');
             const toast = document.createElement('div');
             toast.className = 'toast';
-            const icon = type === 'success' ? 'check-circle' : (type === 'premium' ? 'crown' : 'alert-circle');
-            const color = type === 'success' ? 'var(--success)' : (type === 'premium' ? '#ffd700' : 'var(--accent)');
+            const icon = type === 'success' ? 'check-circle' : (type === 'premium' ? 'crown' : (type === 'info' ? 'info' : 'alert-circle'));
+            const color = type === 'success' ? 'var(--success)' : (type === 'premium' ? '#ffd700' : (type === 'info' ? 'var(--accent-blue)' : 'var(--accent)'));
             toast.innerHTML = `<i data-lucide="${icon}" style="color: ${color}"></i> <span>${message}</span>`;
             container.appendChild(toast);
             lucide.createIcons();
@@ -718,6 +757,9 @@
                 setTimeout(() => toast.remove(), 500);
             }, 4000);
         }
+
+        window.closeModal = function(id) { document.getElementById(id).classList.remove('active'); }
+        window.closeModalAndRefresh = function(id) { closeModal(id); loadTrips(); }
 
         // ── GENERADOR DE CÓDIGO ÚNICO ──
         function generateTripCode() {
@@ -742,7 +784,6 @@
         const rangePicker = flatpickr("#trip-range", { 
             mode: "range", minDate: "today", dateFormat: "d/m/Y", locale: "es", disableMobile: "true"
         });
-        
         const editRangePicker = flatpickr("#edit-trip-dates", { 
             mode: "range", dateFormat: "d/m/Y", locale: "es", disableMobile: "true"
         });
@@ -753,14 +794,11 @@
                 showToast("La Comunidad El Andén es una función exclusiva para usuarios PLUS.", "premium");
                 return;
             }
-            
             document.getElementById('tab-mis-viajes').classList.remove('active');
             document.getElementById('tab-hub').classList.remove('active');
             document.getElementById(`tab-${tabId}`).classList.add('active');
-            
             document.getElementById('view-mis-viajes').style.display = tabId === 'mis-viajes' ? 'block' : 'none';
             document.getElementById('view-hub').style.display = tabId === 'hub' ? 'block' : 'none';
-            
             if (tabId === 'hub') loadHubTrips();
         }
 
@@ -791,9 +829,6 @@
             else if (step === 'code') document.getElementById('step-code').style.display = 'block';
             lucide.createIcons();
         }
-
-        window.closeModal = function(id) { document.getElementById(id).classList.remove('active'); }
-        window.closeModalAndRefresh = function() { closeModal('create-modal'); loadTrips(); }
 
         window.copyTripCode = function() {
             if (generatedTripCode) {
@@ -849,7 +884,6 @@
         async function ensureUserProfile(user) {
             const userRef = doc(db, "usuarios", user.uid);
             const snap = await getDoc(userRef);
-            
             if (!snap.exists()) {
                 await setDoc(userRef, { uid: user.uid, email: user.email, nombre: user.displayName || '', plan: 'ESTANDAR', createdAt: new Date(), lastSeen: new Date() });
                 const initSnap = await getDoc(userRef); return initSnap.data();
@@ -864,7 +898,6 @@
             const badge = document.getElementById('plan-badge');
             const badgeLink = document.getElementById('plan-badge-link');
             const favicon = document.getElementById('dynamic-favicon');
-            
             const hubTab = document.getElementById('tab-hub');
             const hubBadge = document.getElementById('hub-plus-badge');
 
@@ -874,22 +907,16 @@
                 badge.textContent = 'PLUS'; badge.className = 'plan-badge badge-plus'; badge.style.display = 'inline-flex';
                 badgeLink.href = '#'; badgeLink.title = 'Tu cuenta posee ventajas exclusivas de Interra-hub PLUS'; badgeLink.style.cursor = 'default';
                 favicon.href = 'interrahubplus.png';
-                
-                hubTab.classList.add('unlocked');
-                hubBadge.innerText = 'PLUS';
-
+                hubTab.classList.add('unlocked'); hubBadge.innerText = 'PLUS';
                 if (!userData.hasSeenPlusWelcome) {
                     setTimeout(() => showToast("¡Bienvenido a Interra-hub PLUS! Tu cuenta ahora es PLUS.", "premium"), 1500);
                     if(userRefPath) await setDoc(doc(db, "usuarios", userRefPath), { hasSeenPlusWelcome: true }, { merge: true });
                 }
-
             } else {
                 badge.textContent = 'ESTÁNDAR'; badge.className = 'plan-badge badge-estandar'; badge.style.display = 'inline-flex';
                 badgeLink.href = 'interrahubplus.html'; badgeLink.title = 'Convierte tu cuenta en PLUS para obtener ventajas ilimitadas';
                 favicon.href = 'interrahublogo.PNG';
-                
-                hubTab.classList.remove('unlocked');
-                hubBadge.innerText = 'PRÓXIMAMENTE';
+                hubTab.classList.remove('unlocked'); hubBadge.innerText = 'PRÓXIMAMENTE';
             }
         }
 
@@ -919,22 +946,16 @@
             const addBtn = container.querySelector('.card-add');
             container.innerHTML = ''; container.appendChild(addBtn);
             
-            adminTripsCount = 0;
-            adminTripsList = [];
-            hasPublicTrip = false;
-            todosLosViajesCache = [];
+            adminTripsCount = 0; adminTripsList = [];
+            hasPublicTrip = false; todosLosViajesCache = [];
 
             try {
                 const querySnapshot = await getDocs(collection(db, "viajes"));
-                
-                querySnapshot.forEach(d => {
-                    todosLosViajesCache.push({ id: d.id, ...d.data() });
-                });
+                querySnapshot.forEach(d => { todosLosViajesCache.push({ id: d.id, ...d.data() }); });
 
                 todosLosViajesCache.forEach((trip, i) => {
                     let rolAqui = trip.miembros ? trip.miembros[currentUser.uid] : null;
                     const isGod = currentUser.email === SUPERADMIN_EMAIL;
-
                     const tieneAcceso = rolAqui || isGod;
                     const solicitado = trip.solicitudes && trip.solicitudes[currentUser.uid];
 
@@ -993,9 +1014,7 @@
                     container.appendChild(card);
                 });
                 lucide.createIcons();
-            } catch (error) {
-                console.error(error); showToast("Error al sincronizar viajes", "error");
-            }
+            } catch (error) { console.error(error); showToast("Error al sincronizar viajes", "error"); }
         }
 
         // ── EDICIÓN DE VIAJE (SOLO METADATOS DESDE EL PANEL) ──
@@ -1003,15 +1022,10 @@
             if(e) e.stopPropagation();
             document.getElementById('edit-trip-id').value = id;
             document.getElementById('edit-trip-name').value = name;
-            
             try {
-                const parseDate = (dStr) => {
-                    const [d, m, y] = dStr.split('/');
-                    return new Date(`${y}-${m}-${d}T12:00:00`);
-                };
+                const parseDate = (dStr) => { const [d, m, y] = dStr.split('/'); return new Date(`${y}-${m}-${d}T12:00:00`); };
                 editRangePicker.setDate([parseDate(startDate), parseDate(endDate)]);
             } catch(err) { console.error("Error parseando fechas para el modal", err); }
-            
             document.getElementById('edit-trip-modal').classList.add('active');
         }
 
@@ -1022,27 +1036,17 @@
             const dates = editRangePicker.selectedDates;
             
             if (dates.length < 2) return showToast("Debes elegir un rango de fechas", "error");
-
             const btn = document.getElementById('btn-save-edit');
             btn.innerText = "GUARDANDO..."; btn.disabled = true;
 
             const format = (d) => d.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
             
             try {
-                await updateDoc(doc(db, "viajes", tId), {
-                    nombre: name,
-                    fechaInicio: format(dates[0]),
-                    fechaFin: format(dates[1])
-                });
+                await updateDoc(doc(db, "viajes", tId), { nombre: name, fechaInicio: format(dates[0]), fechaFin: format(dates[1]) });
                 showToast("Viaje actualizado correctamente", "success");
-                closeModal('edit-trip-modal');
-                loadTrips();
-            } catch (err) {
-                console.error(err);
-                showToast("Error al actualizar el viaje", "error");
-            } finally {
-                btn.innerText = "GUARDAR CAMBIOS"; btn.disabled = false;
-            }
+                closeModal('edit-trip-modal'); loadTrips();
+            } catch (err) { console.error(err); showToast("Error al actualizar el viaje", "error"); } 
+            finally { btn.innerText = "GUARDAR CAMBIOS"; btn.disabled = false; }
         };
 
         // ── BORRADO DE VIAJES ──
@@ -1055,34 +1059,24 @@
             document.getElementById('delete-modal').classList.add('active');
         };
 
-        window.closeDeleteModal = () => {
-            tripToDeleteId = null;
-            document.getElementById('delete-modal').classList.remove('active');
-        };
-
         document.getElementById('btn-confirm-delete').onclick = async () => {
             const input = document.getElementById('delete-confirm-input').value;
             if (input !== 'ELIMINAR') return showToast("Debes escribir ELIMINAR en mayúsculas para confirmar", "error");
-
             if (tripToDeleteId) {
                 const btn = document.getElementById('btn-confirm-delete');
                 try {
                     btn.innerText = "BORRANDO DATOS..."; btn.disabled = true;
                     await deleteDoc(doc(db, "viajes", tripToDeleteId));
                     showToast("Viaje borrado de la nube permanentemente", "success");
-                    closeDeleteModal(); loadTrips();
-                } catch (error) {
-                    console.error("Error borrando el viaje:", error); showToast("Error de permisos al intentar borrar", "error");
-                } finally {
-                    btn.innerText = "BORRAR VIAJE"; btn.disabled = false;
-                }
+                    closeModal('delete-modal'); loadTrips();
+                } catch (error) { console.error("Error borrando el viaje:", error); showToast("Error de permisos al intentar borrar", "error"); } 
+                finally { btn.innerText = "BORRAR VIAJE"; btn.disabled = false; }
             }
         };
 
         // ── ABRIR MODAL PRINCIPAL CREAR/UNIRSE ──
         document.getElementById('btn-open-modal').onclick = () => {
-            goToStep('choose');
-            document.getElementById('create-modal').classList.add('active');
+            goToStep('choose'); document.getElementById('create-modal').classList.add('active');
         };
 
         // ── CREACIÓN DE VIAJE ──
@@ -1090,7 +1084,6 @@
             e.preventDefault();
             const dates = rangePicker.selectedDates;
             if (dates.length < 2) return showToast("Debes elegir un rango de fechas", "error");
-
             const btn = document.getElementById('btn-create-submit');
             btn.innerText = "CREANDO..."; btn.disabled = true;
 
@@ -1099,28 +1092,17 @@
             try {
                 const codigoInvitacion = await generateUniqueCode();
                 generatedTripCode = codigoInvitacion;
-
                 await addDoc(collection(db, "viajes"), {
                     nombre: document.getElementById('trip-name').value,
-                    fechaInicio: format(dates[0]),
-                    fechaFin: format(dates[1]),
+                    fechaInicio: format(dates[0]), fechaFin: format(dates[1]),
                     miembros: { [currentUser.uid]: "admin-grupo" },
-                    eventos: [],
-                    solicitudes: {},
-                    codigoInvitacion: codigoInvitacion,
-                    creadoEn: new Date(),
-                    isPublic: false
+                    eventos: [], solicitudes: {}, codigoInvitacion: codigoInvitacion, creadoEn: new Date(), isPublic: false
                 });
-
                 document.getElementById('create-trip-form').reset();
                 document.getElementById('generated-code-display').innerText = codigoInvitacion;
-                goToStep('code');
-                lucide.createIcons();
-            } catch (error) {
-                console.error(error); showToast("Error al crear el viaje", "error");
-            } finally {
-                btn.innerText = "CREAR RUTA"; btn.disabled = false;
-            }
+                goToStep('code'); lucide.createIcons();
+            } catch (error) { console.error(error); showToast("Error al crear el viaje", "error"); } 
+            finally { btn.innerText = "CREAR RUTA"; btn.disabled = false; }
         };
 
         // ── LÓGICA DE PUBLICAR EN HUB (EL ANDÉN) ──
@@ -1132,44 +1114,31 @@
             
             if (!tripId) {
                 if (adminTripsList.length === 0) {
-                    showToast("No tienes viajes creados o no eres Administrador de ninguno.", "error");
-                    return;
+                    showToast("No tienes viajes creados o no eres Administrador de ninguno.", "error"); return;
                 }
-                selectGroup.style.display = 'block';
-                selectEl.innerHTML = '';
+                selectGroup.style.display = 'block'; selectEl.innerHTML = '';
                 adminTripsList.forEach(t => selectEl.innerHTML += `<option value="${t.id}">${t.nombre}</option>`);
                 tripId = adminTripsList[0].id;
-                
                 selectEl.onchange = () => { populatePublishModal(selectEl.value); };
             } else {
-                selectGroup.style.display = 'none';
-                selectEl.innerHTML = `<option value="${tripId}" selected></option>`;
+                selectGroup.style.display = 'none'; selectEl.innerHTML = `<option value="${tripId}" selected></option>`;
             }
-            
             if(!populatePublishModal(tripId)) return; 
             document.getElementById('publish-modal').classList.add('active');
         }
-
-        window.closePublishModal = () => document.getElementById('publish-modal').classList.remove('active');
 
         function populatePublishModal(tripId) {
             const trip = todosLosViajesCache.find(t => t.id === tripId);
             if (!trip || !trip.eventos || trip.eventos.length === 0) {
                 showToast("Añade al menos un plan o alojamiento a tu itinerario antes de hacerlo público.", "error");
-                closePublishModal();
-                return false;
+                closeModal('publish-modal'); return false;
             }
-            
             document.getElementById('pub-name').value = (trip.publicConfig && trip.publicConfig.name) ? trip.publicConfig.name : trip.nombre;
             
-            if(trip.isPublic) {
-                document.getElementById('btn-unpublish').style.display = 'block';
-            } else {
-                document.getElementById('btn-unpublish').style.display = 'none';
-            }
+            if(trip.isPublic) { document.getElementById('btn-unpublish').style.display = 'block'; } 
+            else { document.getElementById('btn-unpublish').style.display = 'none'; }
             
             document.getElementById('social-users-container').innerHTML = '';
-
             if(trip.publicConfig) {
                 document.getElementById('pub-countries').value = trip.publicConfig.countries || '';
                 document.getElementById('pub-gender').value = trip.publicConfig.gender || 'mixto';
@@ -1181,22 +1150,17 @@
                 
                 if(trip.publicConfig.socialUsers && trip.publicConfig.socialUsers.length > 0) {
                     trip.publicConfig.socialUsers.forEach(s => addSocialUserRow(s.plat, s.user));
-                } else {
-                    addSocialUserRow();
-                }
+                } else { addSocialUserRow(); }
             } else {
-                document.getElementById('pub-countries').value = '';
-                addSocialUserRow();
+                document.getElementById('pub-countries').value = ''; addSocialUserRow();
             }
-            lucide.createIcons();
-            return true;
+            lucide.createIcons(); return true;
         }
 
         window.addSocialUserRow = function(plat = 'ig', user = '') {
             const container = document.getElementById('social-users-container');
             const row = document.createElement('div');
             row.className = 'social-user-row';
-            
             row.innerHTML = `
                 <select class="social-plat-select">
                     <option value="ig" ${plat === 'ig' ? 'selected' : ''}>Instagram</option>
@@ -1204,12 +1168,9 @@
                     <option value="x" ${plat === 'x' ? 'selected' : ''}>X (Twitter)</option>
                 </select>
                 <input type="text" class="social-user-input" placeholder="Usuario (ej. @juan)" value="${user}">
-                <button type="button" class="btn-remove-social" onclick="this.parentElement.remove()">
-                    <i data-lucide="x" style="width:16px;"></i>
-                </button>
+                <button type="button" class="btn-remove-social" onclick="this.parentElement.remove()"><i data-lucide="x" style="width:16px;"></i></button>
             `;
-            container.appendChild(row);
-            lucide.createIcons();
+            container.appendChild(row); lucide.createIcons();
         }
 
         window.unpublishTrip = async function() {
@@ -1219,15 +1180,10 @@
             try {
                 await updateDoc(doc(db, "viajes", tId), { isPublic: false });
                 showToast("El viaje ha sido retirado de la comunidad.", "info");
-                closePublishModal();
-                loadTrips();
+                closeModal('publish-modal'); loadTrips();
                 if(document.getElementById('tab-hub').classList.contains('active')) loadHubTrips();
-            } catch (e) {
-                console.error(e);
-                showToast("Error al retirar el viaje.", "error");
-            } finally {
-                btn.innerText = "RETIRAR DEL ANDÉN"; btn.disabled = false;
-            }
+            } catch (e) { console.error(e); showToast("Error al retirar el viaje.", "error"); } 
+            finally { btn.innerText = "RETIRAR DEL ANDÉN"; btn.disabled = false; }
         };
 
         document.getElementById('publish-form').onsubmit = async (e) => {
@@ -1237,7 +1193,6 @@
             
             const tId = document.getElementById('pub-trip-id').value;
             const trip = todosLosViajesCache.find(t => t.id === tId);
-            
             const countries = document.getElementById('pub-countries').value;
             
             // Calculamos solo admin o editores reales
@@ -1249,7 +1204,6 @@
             }
             if(realSize === 0) realSize = 1;
             
-            // Recoger redes sociales
             let socialUsers = [];
             document.querySelectorAll('.social-user-row').forEach(row => {
                 const plat = row.querySelector('.social-plat-select').value;
@@ -1261,33 +1215,29 @@
             });
             
             const config = {
-                name: document.getElementById('pub-name').value,
-                countries: countries,
-                gender: document.getElementById('pub-gender').value,
-                showDates: document.getElementById('pub-show-dates').checked,
-                showNames: document.getElementById('pub-show-names').checked,
-                showPlans: document.getElementById('pub-show-plans').checked,
-                showTransports: document.getElementById('pub-show-transports').checked,
-                showHotels: document.getElementById('pub-show-hotels').checked,
-                socialUsers: socialUsers,
-                size: realSize,
+                name: document.getElementById('pub-name').value, countries: countries, gender: document.getElementById('pub-gender').value,
+                showDates: document.getElementById('pub-show-dates').checked, showNames: document.getElementById('pub-show-names').checked,
+                showPlans: document.getElementById('pub-show-plans').checked, showTransports: document.getElementById('pub-show-transports').checked,
+                showHotels: document.getElementById('pub-show-hotels').checked, socialUsers: socialUsers, size: realSize,
                 dates: `${trip.fechaInicio} - ${trip.fechaFin}`
             };
             
             try {
                 await setDoc(doc(db, "viajes", tId), { isPublic: true, publicConfig: config }, { merge: true });
                 showToast("¡Tu viaje ahora es visible en El Andén!", "success");
-                closePublishModal();
-                loadTrips(); 
+                closeModal('publish-modal'); loadTrips(); 
                 if(document.getElementById('tab-hub').classList.contains('active')) loadHubTrips();
-            } catch(err) {
-                showToast("Error al publicar en la base de datos.", "error");
-            } finally {
-                btn.innerText = "LANZAR AL ANDÉN"; btn.disabled = false;
-            }
+            } catch(err) { showToast("Error al publicar en la base de datos.", "error"); } 
+            finally { btn.innerText = "LANZAR AL ANDÉN"; btn.disabled = false; }
         };
 
         // ── LÓGICA DE EL ANDÉN (HUB) Y FILTROS ──
+        window.setGenderFilter = function(val, btn) {
+            activeHubGender = val;
+            document.querySelectorAll('.filter-pill').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active'); renderHubTrips();
+        }
+
         window.loadHubTrips = async function() {
             const container = document.getElementById('hub-trips-container');
             container.innerHTML = '<p style="color:var(--text-muted); width:100%; text-align:center;">Cargando viajes de la comunidad...</p>';
@@ -1301,7 +1251,6 @@
                     if(data.publicConfig) dynamicHubTrips.push({ id: d.id, eventos: data.eventos || [], ...data });
                 });
             } catch(e) { console.error("Error cargando hub", e); }
-            
             window.renderHubTrips();
         }
 
@@ -1318,6 +1267,7 @@
                 const config = trip.publicConfig;
                 if(!config) return;
                 
+                if (activeHubGender && config.gender !== activeHubGender) return;
                 if (destFilter && !(config.name.toLowerCase().includes(destFilter) || (config.countries && config.countries.toLowerCase().includes(destFilter)))) return;
                 
                 found++;
@@ -1331,9 +1281,7 @@
                     let dotColor = '#888888';
                     if (config.gender === 'chicas') dotColor = '#ff66b2';
                     else if (config.gender === 'chicos') dotColor = '#4da6ff';
-                    else if (config.gender === 'mixto') {
-                        dotColor = j % 2 === 0 ? '#ff66b2' : '#4da6ff';
-                    }
+                    else if (config.gender === 'mixto') { dotColor = j % 2 === 0 ? '#ff66b2' : '#4da6ff'; }
                     dotsHtml += `<span style="width: 10px; height: 10px; border-radius: 50%; background-color: ${dotColor}; display: inline-block;"></span>`;
                 }
                 if(size > 10) dotsHtml += '<span style="font-size:0.7rem; color:var(--text-muted); font-weight:800; margin-left:2px;">+</span>';
@@ -1344,14 +1292,14 @@
                 card.style.minHeight = 'auto'; card.style.padding = '2rem';
                 card.innerHTML = `
                     <div class="card-content">
-                        <h2 style="font-weight: 800; font-size: 1.5rem; margin-bottom: 0.8rem; line-height: 1.2;">${config.name}</h2>
+                        <h2 style="font-weight: 800; font-size: 1.5rem; margin-bottom: 0.8rem; line-height: 1.3; word-break: break-word;">${config.name}</h2>
                         <p style="color:var(--text-muted); font-size: 0.9rem; margin-bottom: 6px;"><i data-lucide="calendar" style="width:14px; margin-right:6px;"></i> ${dates}</p>
                         <p style="color:var(--text-muted); font-size: 0.9rem; margin-bottom: 6px; line-height: 1.4;"><i data-lucide="map-pin" style="width:14px; margin-right:6px;"></i> ${countries}</p>
                         <p style="color:var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem; display:flex; align-items:center;">
                             <i data-lucide="users" style="width:14px; margin-right:6px;"></i> ${size} viajer@s ${dotsHtml}
                         </p>
                         <button class="btn-submit" style="width:100%; padding: 0.8rem; font-size: 0.9rem; background:rgba(255,255,255,0.05); color:white; border:1px solid var(--border-subtle); display:flex; justify-content:center; align-items:center; gap:8px;" onclick="viewPublicTripDetails('${trip.id}')">
-                            <i data-lucide="eye" style="width:16px;"></i> Ver Viaje
+                            <i data-lucide="eye" style="width:16px;"></i> <span>Ver Viaje</span>
                         </button>
                     </div>
                 `;
@@ -1366,10 +1314,7 @@
         window.currentPublicTripExtendidaHtml = '';
 
         window.viewPublicTripDetails = function(id) {
-            if (!hasPublicTrip) {
-                showToast("Debes publicar un viaje en El Andén para ver los detalles profundos de los demás.", "error");
-                return;
-            }
+            if (!hasPublicTrip) { showToast("Debes publicar un viaje en El Andén para ver los detalles de los demás.", "error"); return; }
             
             let trip = STATIC_HUB_TRIPS.find(t => t.id === id) || dynamicHubTrips.find(t => t.id === id);
             if(!trip || !trip.publicConfig) return;
@@ -1404,7 +1349,7 @@
                     if(s.plat === 'x') { icon = 'twitter'; url = `https://twitter.com/${cleanUser}`; color = '#1DA1F2'; bg = 'rgba(29,161,242,0.1)'; }
                     
                     socialHtml += `
-                        <a href="${url}" target="_blank" style="display:inline-flex; align-items:center; gap:8px; background:${bg}; color:${color}; border:1px solid ${color}; padding:6px 12px; border-radius:20px; font-weight:600; text-decoration:none; font-size:0.85rem; transition:0.3s;">
+                        <a href="${url}" target="_blank" style="display:inline-flex; align-items:center; gap:8px; background:${bg}; color:${color}; border:1px solid ${color}; padding:6px 12px; border-radius:20px; font-weight:600; text-decoration:none; font-size:0.85rem; transition:0.3s; margin-bottom: 5px;">
                             <i data-lucide="${icon}" style="width:14px;"></i> ${s.user}
                         </a>
                     `;
@@ -1412,19 +1357,74 @@
             }
             document.getElementById('public-modal-socials').innerHTML = socialHtml || '<span style="color:var(--text-muted); font-size:0.85rem;">No han compartido redes sociales.</span>';
             
-            // RENDERIZADO DEL ITINERARIO (RESUMIDA Y EXTENDIDA)
             window.currentPublicTripResumidaHtml = '';
             window.currentPublicTripExtendidaHtml = '';
 
             if(trip.isStatic) {
-                window.currentPublicTripResumidaHtml = `<p style="color:var(--text-muted); font-style:italic;">Viaje de ejemplo estático. Los reales generarán su línea de tiempo aquí.</p>`;
+                window.currentPublicTripResumidaHtml = `<p style="color:var(--text-muted); font-style:italic;">Viaje de ejemplo estático de la comunidad. Los viajes reales generan su línea de tiempo mágica aquí.</p>`;
                 window.currentPublicTripExtendidaHtml = window.currentPublicTripResumidaHtml;
             } else {
                 if(config.showPlans || config.showHotels || config.showTransports) {
-                    
                     if(trip.eventos && trip.eventos.length > 0) {
                         let sortedEvents = trip.eventos.sort((a, b) => new Date(a.dateKey) - new Date(b.dateKey));
                         
+                        // Heurística de Destinos agrupados cronológicamente
+                        let journeySteps = [];
+                        let currentStep = null;
+                        
+                        sortedEvents.forEach(ev => {
+                            let siteName = 'Desconocido';
+                            if (ev.title) {
+                                let parts = ev.title.split(',');
+                                siteName = parts.length > 1 ? parts[parts.length - 1].trim() : parts[0].trim();
+                            }
+                            if (ev.type === 'transport') return;
+
+                            if (!currentStep || currentStep.city !== siteName) {
+                                if (currentStep) journeySteps.push(currentStep);
+                                currentStep = { city: siteName, startDate: ev.dateKey, endDate: ev.dateKey, hotels: new Set(), plans: 0 };
+                            }
+                            currentStep.endDate = ev.dateKey;
+                            if (ev.type === 'hotel') currentStep.hotels.add(ev.title.split(',')[0].trim());
+                            if (ev.type === 'plan') currentStep.plans++;
+                        });
+                        if (currentStep) journeySteps.push(currentStep);
+
+                        // GENERAR VISTA RESUMIDA MUY GRÁFICA
+                        let resHtml = `<div class="graphic-timeline">`;
+                        if (journeySteps.length === 0) resHtml += `<div style="text-align:center; color:var(--text-muted);">Sin destinos registrados.</div>`;
+                        journeySteps.forEach((step, index) => {
+                            let dateStr = "";
+                            if (step.startDate === step.endDate) {
+                                dateStr = new Date(step.startDate).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' });
+                            } else {
+                                dateStr = `${new Date(step.startDate).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })} - ${new Date(step.endDate).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })}`;
+                            }
+                            let hotelStr = step.hotels.size > 0 ? Array.from(step.hotels).join(' / ') : 'Alojamiento oculto';
+                            if (!config.showHotels) hotelStr = 'Privado';
+                            let planStr = step.plans > 0 ? `${step.plans} planes` : 'Sin planes';
+                            if (!config.showPlans) planStr = 'Privado';
+
+                            resHtml += `
+                                <div class="graphic-step">
+                                    <div class="graphic-step-header">
+                                        <div class="graphic-step-city"><i data-lucide="map-pin" style="color:var(--accent);"></i> ${step.city}</div>
+                                        <div class="graphic-step-dates">${config.showDates ? dateStr : 'Fechas privadas'}</div>
+                                    </div>
+                                    <div class="graphic-step-details">
+                                        <div class="graphic-badge hotel"><i data-lucide="bed" style="width:16px;"></i> ${hotelStr}</div>
+                                        <div class="graphic-badge plan"><i data-lucide="compass" style="width:16px;"></i> ${planStr}</div>
+                                    </div>
+                                </div>
+                            `;
+                            if (index < journeySteps.length - 1) {
+                                resHtml += `<div class="graphic-step-connector"></div>`;
+                            }
+                        });
+                        resHtml += `</div>`;
+                        window.currentPublicTripResumidaHtml = resHtml;
+
+                        // GENERAR VISTA EXTENDIDA
                         let groupedByDate = {};
                         sortedEvents.forEach(ev => {
                             if(!groupedByDate[ev.dateKey]) groupedByDate[ev.dateKey] = { hotels: [], plans: [], transports: [] };
@@ -1433,36 +1433,7 @@
                             if(ev.type === 'transport') groupedByDate[ev.dateKey].transports.push(ev);
                         });
 
-                        // GENERAR VISTA RESUMIDA
-                        let resHtml = `<div class="public-timeline">`;
-                        Object.keys(groupedByDate).forEach(dateKey => {
-                            const data = groupedByDate[dateKey];
-                            const dateStr = new Date(dateKey).toLocaleDateString('es-ES', { weekday: 'short', day: 'numeric', month: 'short' });
-                            
-                            let sleepStr = 'Sin especificar';
-                            if (data.hotels.length > 0) sleepStr = data.hotels.map(h => h.title.split(',')[0]).join(' / ');
-                            
-                            let planCount = data.plans.length;
-
-                            if (config.showHotels || config.showPlans) {
-                                resHtml += `
-                                    <div class="timeline-site" style="margin-bottom: 1.5rem;">
-                                        <div class="site-marker" style="width: 14px; height: 14px; left: -22px; top: 4px; border-width: 3px;"></div>
-                                        <div style="font-weight: 800; font-size: 1.05rem; color: var(--primary); margin-bottom: 6px;">${config.showDates ? dateStr : 'Día del viaje'}</div>
-                                        <div style="font-size: 0.9rem; color: var(--text-muted); display:flex; align-items:center; flex-wrap:wrap; gap:10px;">
-                                            <span style="display:flex; align-items:center; gap:4px; color:${config.showHotels ? 'var(--success)' : 'inherit'}"><i data-lucide="bed" style="width:14px;"></i> ${config.showHotels ? sleepStr : 'Oculto'}</span>
-                                            <span style="color:var(--border-subtle);">|</span>
-                                            <span style="display:flex; align-items:center; gap:4px; color:${config.showPlans ? 'var(--accent)' : 'inherit'}"><i data-lucide="map-pin" style="width:14px;"></i> ${config.showPlans ? planCount + ' planes' : 'Oculto'}</span>
-                                        </div>
-                                    </div>
-                                `;
-                            }
-                        });
-                        resHtml += `</div>`;
-                        window.currentPublicTripResumidaHtml = resHtml;
-
-                        // GENERAR VISTA EXTENDIDA
-                        let extHtml = `<div class="public-timeline">`;
+                        let extHtml = `<div class="public-timeline-ext">`;
                         let lastSite = '';
                         Object.keys(groupedByDate).forEach(dateKey => {
                             const dateData = groupedByDate[dateKey];
@@ -1484,8 +1455,8 @@
                             if (config.showTransports && dateData.transports.length > 0) {
                                 dateData.transports.forEach(tr => {
                                     extHtml += `
-                                        <div class="timeline-transport" style="margin: 1rem 0; padding: 1rem; background: rgba(77,166,255,0.05); border: 1px dashed rgba(77,166,255,0.3); border-radius: 12px; display: flex; align-items: center; gap: 10px; margin-left: -20px;">
-                                            <div style="width: 32px; height: 32px; background: var(--accent-blue); color: #080808; border-radius: 8px; display: flex; justify-content: center; align-items: center; flex-shrink: 0;"><i data-lucide="train" style="width:16px;"></i></div>
+                                        <div class="timeline-transport">
+                                            <div class="transport-icon"><i data-lucide="train" style="width:16px;"></i></div>
                                             <div>
                                                 <div style="font-weight:800; color:var(--accent-blue); font-size:0.95rem;">${tr.time || '--:--'} · ${tr.title}</div>
                                             </div>
@@ -1499,24 +1470,24 @@
 
                             if (hasValidHotels || hasValidPlans) {
                                 extHtml += `
-                                    <div class="timeline-site" style="margin-bottom: 2rem;">
+                                    <div class="timeline-site">
                                         <div class="site-marker" style="width: 14px; height: 14px; left: -22px; top: 4px; border-width: 3px;"></div>
                                         <div style="font-weight: 700; color: var(--text-muted); margin-bottom: 10px; font-size: 0.9rem;">${config.showDates ? dateStr : 'Día del viaje'}</div>
                                         
-                                        <div class="site-content-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                                        <div class="site-content-grid">
                                             ${hasValidHotels ? `
-                                            <div class="site-box box-hotel" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 1rem;">
-                                                <h4 style="font-size: 0.8rem; color: var(--success); text-transform: uppercase; margin-bottom: 8px; display:flex; align-items:center; gap:6px;"><i data-lucide="bed" style="width:14px;"></i> Alojamiento</h4>
-                                                ${dateData.hotels.map(h => `<div style="font-size: 0.9rem; color: var(--primary); line-height:1.4; margin-bottom:4px;">${h.title}</div>`).join('')}
+                                            <div class="site-box box-hotel">
+                                                <h4><i data-lucide="bed" style="width:14px;"></i> Alojamiento</h4>
+                                                ${dateData.hotels.map(h => `<div style="font-size: 0.9rem; color: var(--primary); line-height:1.4; margin-bottom:4px; word-break: break-word;">${h.title}</div>`).join('')}
                                             </div>` : ''}
 
                                             ${hasValidPlans ? `
-                                            <div class="site-box box-plans" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 1rem;">
-                                                <h4 style="font-size: 0.8rem; color: var(--accent); text-transform: uppercase; margin-bottom: 8px; display:flex; align-items:center; gap:6px;"><i data-lucide="map-pin" style="width:14px;"></i> Planes</h4>
+                                            <div class="site-box box-plans">
+                                                <h4><i data-lucide="map-pin" style="width:14px;"></i> Planes</h4>
                                                 ${dateData.plans.map(p => `
                                                     <div style="display: flex; gap: 8px; margin-bottom: 8px; align-items: flex-start; border-bottom: 1px dashed rgba(255,255,255,0.05); padding-bottom: 8px;">
                                                         <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 800; padding-top: 2px; min-width: 40px;">${p.time || '--:--'}</div>
-                                                        <div style="font-size: 0.9rem; color: var(--primary); line-height: 1.4;">${p.title}</div>
+                                                        <div style="font-size: 0.9rem; color: var(--primary); line-height: 1.4; word-break: break-word;">${p.title}</div>
                                                     </div>
                                                 `).join('')}
                                             </div>` : ''}
@@ -1538,7 +1509,6 @@
                 }
             }
             
-            // Set initial state to resumida
             toggleItineraryView('resumida');
             document.getElementById('public-trip-details-modal').classList.add('active');
         }
@@ -1549,22 +1519,16 @@
             const contentArea = document.getElementById('public-modal-content-area');
 
             if(viewType === 'resumida') {
-                btnRes.style.background = 'var(--accent-blue)';
-                btnRes.style.color = '#000';
-                btnExt.style.background = 'transparent';
-                btnExt.style.color = 'var(--text-muted)';
+                btnRes.style.background = 'var(--accent-blue)'; btnRes.style.color = '#000';
+                btnExt.style.background = 'transparent'; btnExt.style.color = 'var(--text-muted)';
                 contentArea.innerHTML = window.currentPublicTripResumidaHtml;
             } else {
-                btnExt.style.background = 'var(--accent-blue)';
-                btnExt.style.color = '#000';
-                btnRes.style.background = 'transparent';
-                btnRes.style.color = 'var(--text-muted)';
+                btnExt.style.background = 'var(--accent-blue)'; btnExt.style.color = '#000';
+                btnRes.style.background = 'transparent'; btnRes.style.color = 'var(--text-muted)';
                 contentArea.innerHTML = window.currentPublicTripExtendidaHtml;
             }
             lucide.createIcons();
         }
-
-        window.closePublicTripModal = () => document.getElementById('public-trip-details-modal').classList.remove('active');
 
         document.getElementById('btn-logout').onclick = () => signOut(auth);
         lucide.createIcons();
