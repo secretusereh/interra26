@@ -114,7 +114,7 @@
 
         .header-section { margin-bottom: 4rem; animation: fadeDown 1s ease; }
         .header-section h1 { font-size: 3.5rem; font-weight: 800; letter-spacing: -2px; }
-        .header-section p { color: var(--text-muted); font-size: 1.2rem; margin-top: 0.5rem; font-weight: 300; }
+        .header-section p { color: var(--text-muted); font-size: 1.2rem; margin-top: 0.5rem; font-weight: 300; line-height: 1.5; }
 
         .trips-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 2.5rem; }
 
@@ -182,40 +182,6 @@
             background: linear-gradient(135deg, var(--accent-blue), #2a75d3); color: white; text-transform: uppercase; letter-spacing: 1.5px; box-shadow: 0 4px 15px rgba(77,166,255,0.3);
         }
 
-        /* ── FILTROS SOFISTICADOS HUB (TIPO BOOKING SUPERPUESTO) ── */
-        .hub-filters-advanced { 
-            background: rgba(15, 15, 15, 0.95); 
-            backdrop-filter: blur(20px); 
-            border: 1px solid var(--border-subtle); 
-            padding: 2rem; 
-            border-radius: 24px; 
-            margin-bottom: 3rem; 
-            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
-            display: flex; 
-            flex-direction: column; 
-            gap: 1.5rem;
-        }
-        
-        .filter-row { display: flex; gap: 1.5rem; flex-wrap: wrap; align-items: flex-end; }
-        
-        .filter-group { flex: 1; min-width: 250px; }
-        .filter-group label { display: block; color: var(--text-muted); font-size: 0.85rem; font-weight: 600; margin-bottom: 0.8rem; text-transform: uppercase; letter-spacing: 1px; }
-        
-        .search-box { 
-            display: flex; align-items: center; gap: 12px; background: rgba(255,255,255,0.03); 
-            border-radius: 16px; padding: 1rem 1.5rem; border: 1px solid rgba(255,255,255,0.1); transition: 0.3s; 
-        }
-        .search-box:focus-within { border-color: var(--accent-blue); background: rgba(255,255,255,0.06); box-shadow: 0 0 15px rgba(77,166,255,0.2); }
-        .search-box input { background: transparent; border: none; color: white; font-size: 1rem; width: 100%; outline: none; font-family: 'Sora', sans-serif; }
-        
-        .filter-pills { display: flex; gap: 10px; flex-wrap: wrap; }
-        .filter-pill { 
-            background: rgba(255,255,255,0.03); color: var(--text-muted); border: 1px solid rgba(255,255,255,0.1); 
-            padding: 1rem 1.5rem; border-radius: 16px; font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: 0.3s; flex: 1; text-align: center;
-        }
-        .filter-pill:hover { background: rgba(255,255,255,0.08); color: var(--primary); }
-        .filter-pill.active { background: rgba(77,166,255,0.15); color: var(--accent-blue); border-color: var(--accent-blue); box-shadow: 0 4px 15px rgba(77,166,255,0.2); }
-
         /* ── MODALES COMPONENTES ── */
         .modal-overlay {
             position: fixed; inset: 0; background: rgba(0, 0, 0, 0.9); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
@@ -230,7 +196,6 @@
         }
         .modal-overlay.active .modal-content { transform: translateY(0) scale(1); }
 
-        /* Modificadores para Modal Ancho de Publicación */
         .modal-content.wide-modal { max-width: 750px; padding: 3.5rem; }
 
         .input-group { margin-bottom: 2rem; text-align: left; }
@@ -273,22 +238,17 @@
         .code-input-big { width: 100%; padding: 1.5rem; background: rgba(255,255,255,0.03); border: 1px solid var(--border-subtle); color: white; border-radius: 16px; font-size: 2rem; font-weight: 800; letter-spacing: 8px; text-align: center; text-transform: uppercase; outline: none; transition: 0.3s; }
         .code-input-big:focus { border-color: var(--primary); background: rgba(255,255,255,0.06); }
 
-        /* ── REDES SOCIALES MULTIUSUARIO EN PUBLICACIÓN ── */
         .social-user-row { display: flex; gap: 10px; margin-bottom: 10px; align-items: center; background: rgba(255,255,255,0.02); padding: 10px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); }
         .social-user-row select { width: auto; padding: 0.8rem; font-size: 0.9rem; border-radius: 10px; }
         .social-user-row input { flex: 1; padding: 0.8rem; font-size: 0.9rem; border-radius: 10px; }
         .btn-remove-social { background: rgba(255,77,77,0.1); color: var(--accent); border: none; width: 40px; height: 40px; border-radius: 10px; cursor: pointer; display: flex; justify-content: center; align-items: center; }
 
-        /* ── ITINERARIO PÚBLICO (NUEVO DISEÑO DIVERTIDO Y CRONOLÓGICO) ── */
-        .public-timeline { position: relative; padding-left: 30px; margin-top: 2rem; }
+        /* ── ITINERARIO PÚBLICO (DISEÑO EXTENDIDO) ── */
+        .public-timeline { position: relative; padding-left: 30px; margin-top: 1rem; }
         .public-timeline::before { content: ''; position: absolute; left: 14px; top: 0; bottom: 0; width: 2px; background: var(--border-subtle); }
         
         .timeline-site { margin-bottom: 3rem; position: relative; }
         .site-marker { position: absolute; left: -37px; top: 0; width: 24px; height: 24px; background: var(--accent-blue); border: 4px solid #080808; border-radius: 50%; box-shadow: 0 0 10px rgba(77,166,255,0.5); z-index: 2; }
-        
-        .site-header { margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 10px; }
-        .site-name { font-size: 1.6rem; font-weight: 800; color: var(--primary); line-height: 1.1; margin: 0; }
-        .site-dates { font-size: 0.9rem; color: var(--text-muted); font-weight: 600; background: rgba(255,255,255,0.05); padding: 4px 10px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); }
         
         .site-content-grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
         @media (min-width: 600px) { .site-content-grid { grid-template-columns: 1fr 1fr; } }
@@ -297,11 +257,6 @@
         .site-box h4 { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1rem; display: flex; align-items: center; gap: 8px; }
         .site-box.box-hotel h4 { color: var(--success); }
         .site-box.box-plans h4 { color: var(--accent); }
-        
-        .item-row { display: flex; gap: 10px; margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px dashed rgba(255,255,255,0.05); align-items: flex-start; }
-        .item-row:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
-        .item-time { font-size: 0.8rem; color: var(--text-muted); font-weight: 800; min-width: 45px; padding-top: 2px; }
-        .item-title { font-size: 0.95rem; color: var(--primary); line-height: 1.4; word-break: break-word; }
         
         .timeline-transport { position: relative; margin: 2rem 0; padding: 1.5rem; background: rgba(77,166,255,0.05); border: 1px dashed rgba(77,166,255,0.3); border-radius: 16px; display: flex; align-items: center; gap: 15px; margin-left: -20px; }
         .transport-icon { width: 40px; height: 40px; background: var(--accent-blue); color: #080808; border-radius: 12px; display: flex; justify-content: center; align-items: center; flex-shrink: 0; }
@@ -326,12 +281,6 @@
             
             .modal-content, .modal-content.wide-modal { padding: 2rem 1.5rem; border-radius: 24px; }
             
-            .hub-filters-advanced { padding: 1.5rem; border-radius: 20px; }
-            .filter-row { flex-direction: column; gap: 1rem; align-items: stretch; }
-            .filter-group { min-width: 100%; }
-            .search-box { width: 100%; }
-            .filter-pills { justify-content: center; }
-
             .action-selector { flex-direction: column; gap: 1rem; }
             .action-btn { padding: 1.2rem 1rem; }
             
@@ -416,28 +365,6 @@
                 </button>
             </div>
 
-            <!-- FILTROS SOFISTICADOS -->
-            <div class="hub-filters-advanced">
-                <div class="filter-row" style="width: 100%;">
-                    <div class="filter-group" style="flex: 2;">
-                        <label>Destino o Nombre</label>
-                        <div class="search-box">
-                            <i data-lucide="search" style="color:var(--text-muted); width:18px;"></i>
-                            <input type="text" id="hub-filter-dest" placeholder="¿A dónde te gustaría ir?" onkeyup="renderHubTrips()">
-                        </div>
-                    </div>
-                    <div class="filter-group">
-                        <label>Tipo de Grupo</label>
-                        <div class="filter-pills">
-                            <button class="filter-pill active" onclick="setGenderFilter('', this)">Todos</button>
-                            <button class="filter-pill" onclick="setGenderFilter('mixto', this)">Mixtos</button>
-                            <button class="filter-pill" onclick="setGenderFilter('chicos', this)">Chicos</button>
-                            <button class="filter-pill" onclick="setGenderFilter('chicas', this)">Chicas</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
             <div class="trips-grid" id="hub-trips-container">
                 <!-- Tarjetas inyectadas vía JS -->
             </div>
@@ -447,7 +374,6 @@
     <!-- MODAL PRINCIPAL CREAR/UNIRSE VIAJE -->
     <div class="modal-overlay" id="create-modal">
         <div class="modal-content" style="padding: 4rem;">
-
             <div id="step-choose">
                 <h2 style="font-size: 2rem; font-weight: 800; margin-bottom: 0.5rem; letter-spacing: -1px;">Nueva Aventura</h2>
                 <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 2.5rem; font-weight: 300;">¿Qué quieres hacer?</p>
@@ -518,7 +444,6 @@
                 </p>
                 <button type="button" class="btn-submit" onclick="closeModalAndRefresh()">IR A MIS VIAJES</button>
             </div>
-
         </div>
     </div>
 
@@ -665,9 +590,9 @@
     <!-- MODAL DETALLES VIAJE COMUNIDAD WIDE -->
     <div class="modal-overlay" id="public-trip-details-modal">
         <div class="modal-content wide-modal" style="background: #080808;">
-            <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border-subtle); padding-bottom: 1.5rem;">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border-subtle); padding-bottom: 1.5rem; flex-wrap: wrap; gap: 15px;">
                 <div>
-                    <h2 id="public-modal-title" style="font-size: 2.2rem; font-weight: 800; line-height:1.1; margin-bottom:0.5rem;">Nombre del Viaje</h2>
+                    <h2 id="public-modal-title" style="font-size: 2.2rem; font-weight: 800; line-height:1.1; margin-bottom:0.5rem; word-break: break-word;">Nombre del Viaje</h2>
                     <p id="public-modal-meta" style="color:var(--text-muted); font-size: 0.95rem; display:flex; align-items:center; gap:8px;">
                         <i data-lucide="calendar" style="width:14px;"></i> <span id="public-modal-dates">Fechas</span> 
                         <span style="color:var(--border-subtle);">|</span> 
@@ -684,9 +609,16 @@
                 </div>
             </div>
 
-            <h3 style="font-size:1.4rem; margin-bottom:1.5rem; color:var(--primary); font-weight:800;">Itinerario Público</h3>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem; flex-wrap: wrap; gap: 15px;">
+                <h3 style="font-size:1.4rem; margin:0; color:var(--primary); font-weight:800;">Itinerario Público</h3>
+                <div style="display:flex; gap:8px; background: rgba(255,255,255,0.05); padding:4px; border-radius: 20px;">
+                    <button id="btn-view-resumida" onclick="toggleItineraryView('resumida')" style="background: var(--accent-blue); color:#000; border:none; padding:6px 16px; border-radius:16px; font-size:0.85rem; font-weight:700; cursor:pointer; transition: 0.3s;">Resumida</button>
+                    <button id="btn-view-extendida" onclick="toggleItineraryView('extendida')" style="background: transparent; color:var(--text-muted); border:none; padding:6px 16px; border-radius:16px; font-size:0.85rem; font-weight:700; cursor:pointer; transition: 0.3s;">Extendida</button>
+                </div>
+            </div>
+            
             <div id="public-modal-content-area">
-                <!-- Inyectado via JS - NUEVO DISEÑO -->
+                <!-- Inyectado via JS -->
             </div>
             
             <button class="btn-submit" style="margin-top:3rem;" onclick="closePublicTripModal()">CERRAR VISOR</button>
@@ -762,7 +694,6 @@
         let adminTripsList = []; 
         let hasPublicTrip = false; 
         let dynamicHubTrips = []; 
-        let activeHubGender = ''; 
 
         const STATIC_HUB_TRIPS = [
             { id: 's1', isStatic: true, publicConfig: { name: 'Eurotrip Verano 26', gender: 'mixto', size: 4, countries: 'Francia, Italia, Suiza', dates: '01/07/2026 - 15/07/2026', showDates: true, showPlans: true, showHotels: false, showTransports: true, socialUsers: [{plat:'ig', user:'@euro26'}, {plat:'tk', user:'@euro_trip'}] } },
@@ -1025,7 +956,6 @@
 
                     const isTripPublicHtml = trip.isPublic ? `<span class="badge-public"><i data-lucide="globe" style="width:12px; margin-right:4px;"></i> PÚBLICO</span>` : '';
 
-                    // BOTON EDITAR AHORA ABRE MODAL, NO NAVEGA
                     const adminBtnsHtml = (rolAqui === 'admin-grupo' || isGod) ? `
                         <div class="admin-actions-group">
                             <button class="btn-publish-trip" onclick="openPublishModal(event, '${trip.id}')" title="Configurar publicación en El Andén">
@@ -1358,13 +1288,6 @@
         };
 
         // ── LÓGICA DE EL ANDÉN (HUB) Y FILTROS ──
-        window.setGenderFilter = function(val, btn) {
-            activeHubGender = val;
-            document.querySelectorAll('.filter-pill').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            renderHubTrips();
-        }
-
         window.loadHubTrips = async function() {
             const container = document.getElementById('hub-trips-container');
             container.innerHTML = '<p style="color:var(--text-muted); width:100%; text-align:center;">Cargando viajes de la comunidad...</p>';
@@ -1383,8 +1306,9 @@
         }
 
         window.renderHubTrips = function() {
-            const destFilter = document.getElementById('hub-filter-dest').value.toLowerCase();
+            const destFilter = document.getElementById('hub-filter-dest') ? document.getElementById('hub-filter-dest').value.toLowerCase() : '';
             const container = document.getElementById('hub-trips-container');
+            if(!container) return;
             container.innerHTML = '';
             
             const allTrips = [...STATIC_HUB_TRIPS, ...dynamicHubTrips];
@@ -1394,7 +1318,6 @@
                 const config = trip.publicConfig;
                 if(!config) return;
                 
-                if (activeHubGender && config.gender !== activeHubGender) return;
                 if (destFilter && !(config.name.toLowerCase().includes(destFilter) || (config.countries && config.countries.toLowerCase().includes(destFilter)))) return;
                 
                 found++;
@@ -1423,22 +1346,25 @@
                     <div class="card-content">
                         <h2 style="font-weight: 800; font-size: 1.5rem; margin-bottom: 0.8rem; line-height: 1.2;">${config.name}</h2>
                         <p style="color:var(--text-muted); font-size: 0.9rem; margin-bottom: 6px;"><i data-lucide="calendar" style="width:14px; margin-right:6px;"></i> ${dates}</p>
-                        <p style="color:var(--text-muted); font-size: 0.9rem; margin-bottom: 6px;"><i data-lucide="map-pin" style="width:14px; margin-right:6px;"></i> ${countries}</p>
+                        <p style="color:var(--text-muted); font-size: 0.9rem; margin-bottom: 6px; line-height: 1.4;"><i data-lucide="map-pin" style="width:14px; margin-right:6px;"></i> ${countries}</p>
                         <p style="color:var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem; display:flex; align-items:center;">
                             <i data-lucide="users" style="width:14px; margin-right:6px;"></i> ${size} viajer@s ${dotsHtml}
                         </p>
-                        <button class="btn-submit" style="width:100%; padding: 0.8rem; font-size: 0.9rem; background:rgba(255,255,255,0.05); color:white; border:1px solid var(--border-subtle);" onclick="viewPublicTripDetails('${trip.id}')">
+                        <button class="btn-submit" style="width:100%; padding: 0.8rem; font-size: 0.9rem; background:rgba(255,255,255,0.05); color:white; border:1px solid var(--border-subtle); display:flex; justify-content:center; align-items:center; gap:8px;" onclick="viewPublicTripDetails('${trip.id}')">
                             <i data-lucide="eye" style="width:16px;"></i> Ver Viaje
                         </button>
                     </div>
                 `;
                 container.appendChild(card);
             });
-            if(found === 0) container.innerHTML = '<p style="color:var(--text-muted); width:100%; text-align:center;">No hay viajes que coincidan con los filtros.</p>';
+            if(found === 0) container.innerHTML = '<p style="color:var(--text-muted); width:100%; text-align:center;">No hay viajes que coincidan con la búsqueda.</p>';
             lucide.createIcons();
         }
 
         // ── DISEÑO NUEVO Y DIVERTIDO DEL ITINERARIO PÚBLICO ──
+        window.currentPublicTripResumidaHtml = '';
+        window.currentPublicTripExtendidaHtml = '';
+
         window.viewPublicTripDetails = function(id) {
             if (!hasPublicTrip) {
                 showToast("Debes publicar un viaje en El Andén para ver los detalles profundos de los demás.", "error");
@@ -1486,21 +1412,18 @@
             }
             document.getElementById('public-modal-socials').innerHTML = socialHtml || '<span style="color:var(--text-muted); font-size:0.85rem;">No han compartido redes sociales.</span>';
             
-            // RENDERIZADO DEL ITINERARIO POR CIUDADES Y TRAYECTOS
-            let detailsHtml = '';
+            // RENDERIZADO DEL ITINERARIO (RESUMIDA Y EXTENDIDA)
+            window.currentPublicTripResumidaHtml = '';
+            window.currentPublicTripExtendidaHtml = '';
+
             if(trip.isStatic) {
-                detailsHtml = `<p style="color:var(--text-muted); font-style:italic;">Este es un viaje de ejemplo de la comunidad. Los viajes reales mostrarán su línea de tiempo cronológica aquí.</p>`;
+                window.currentPublicTripResumidaHtml = `<p style="color:var(--text-muted); font-style:italic;">Viaje de ejemplo estático. Los reales generarán su línea de tiempo aquí.</p>`;
+                window.currentPublicTripExtendidaHtml = window.currentPublicTripResumidaHtml;
             } else {
                 if(config.showPlans || config.showHotels || config.showTransports) {
                     
                     if(trip.eventos && trip.eventos.length > 0) {
-                        
-                        // Ordenamos eventos cronológicamente
                         let sortedEvents = trip.eventos.sort((a, b) => new Date(a.dateKey) - new Date(b.dateKey));
-                        
-                        // Agrupación compleja: Agrupar eventos consecutivos en el mismo destino.
-                        // Usamos un heurístico: Si es un hotel o plan, buscamos la palabra clave (ej. ciudad) o lo agrupamos por días.
-                        // Para simplificar y hacerlo MUY diferente: Agruparemos por Fecha.
                         
                         let groupedByDate = {};
                         sortedEvents.forEach(ev => {
@@ -1510,63 +1433,90 @@
                             if(ev.type === 'transport') groupedByDate[ev.dateKey].transports.push(ev);
                         });
 
-                        detailsHtml += `<div class="public-timeline">`;
-                        
+                        // GENERAR VISTA RESUMIDA
+                        let resHtml = `<div class="public-timeline">`;
+                        Object.keys(groupedByDate).forEach(dateKey => {
+                            const data = groupedByDate[dateKey];
+                            const dateStr = new Date(dateKey).toLocaleDateString('es-ES', { weekday: 'short', day: 'numeric', month: 'short' });
+                            
+                            let sleepStr = 'Sin especificar';
+                            if (data.hotels.length > 0) sleepStr = data.hotels.map(h => h.title.split(',')[0]).join(' / ');
+                            
+                            let planCount = data.plans.length;
+
+                            if (config.showHotels || config.showPlans) {
+                                resHtml += `
+                                    <div class="timeline-site" style="margin-bottom: 1.5rem;">
+                                        <div class="site-marker" style="width: 14px; height: 14px; left: -22px; top: 4px; border-width: 3px;"></div>
+                                        <div style="font-weight: 800; font-size: 1.05rem; color: var(--primary); margin-bottom: 6px;">${config.showDates ? dateStr : 'Día del viaje'}</div>
+                                        <div style="font-size: 0.9rem; color: var(--text-muted); display:flex; align-items:center; flex-wrap:wrap; gap:10px;">
+                                            <span style="display:flex; align-items:center; gap:4px; color:${config.showHotels ? 'var(--success)' : 'inherit'}"><i data-lucide="bed" style="width:14px;"></i> ${config.showHotels ? sleepStr : 'Oculto'}</span>
+                                            <span style="color:var(--border-subtle);">|</span>
+                                            <span style="display:flex; align-items:center; gap:4px; color:${config.showPlans ? 'var(--accent)' : 'inherit'}"><i data-lucide="map-pin" style="width:14px;"></i> ${config.showPlans ? planCount + ' planes' : 'Oculto'}</span>
+                                        </div>
+                                    </div>
+                                `;
+                            }
+                        });
+                        resHtml += `</div>`;
+                        window.currentPublicTripResumidaHtml = resHtml;
+
+                        // GENERAR VISTA EXTENDIDA
+                        let extHtml = `<div class="public-timeline">`;
+                        let lastSite = '';
                         Object.keys(groupedByDate).forEach(dateKey => {
                             const dateData = groupedByDate[dateKey];
-                            const dateObj = new Date(dateKey);
-                            const dateStr = dateObj.toLocaleDateString('es-ES', { weekday: 'short', day: 'numeric', month: 'short' });
+                            const dateStr = new Date(dateKey).toLocaleDateString('es-ES', { weekday: 'short', day: 'numeric', month: 'short' });
                             
-                            // Extraemos el "Nombre del Sitio" (idealmente del hotel de ese día, si no, del primer plan)
-                            let siteName = 'Explorando';
-                            if(dateData.hotels.length > 0) siteName = dateData.hotels[0].title.split(',')[0];
-                            else if (dateData.plans.length > 0) siteName = dateData.plans[0].title.split(',')[0];
+                            let currentSite = 'En ruta';
+                            if(dateData.hotels.length > 0) currentSite = dateData.hotels[0].title.split(',')[0];
+                            else if (dateData.plans.length > 0) currentSite = dateData.plans[0].title.split(',')[0];
 
-                            // Si hay transportes ese día y decidieron mostrarlos, los ponemos ANTES del bloque de la ciudad (simulando que viajan a ella)
+                            if (currentSite !== lastSite && currentSite !== 'En ruta') {
+                                extHtml += `
+                                    <div style="margin: 2rem 0 1.5rem -10px; background: rgba(255,255,255,0.05); padding: 8px 16px; border-radius: 12px; display: inline-block; font-weight: 800; color: var(--primary); font-size: 1.2rem; line-height: 1.2;">
+                                        📍 ${currentSite}
+                                    </div>
+                                `;
+                                lastSite = currentSite;
+                            }
+
                             if (config.showTransports && dateData.transports.length > 0) {
                                 dateData.transports.forEach(tr => {
-                                    detailsHtml += `
-                                        <div class="timeline-transport">
-                                            <div class="transport-icon"><i data-lucide="train" style="width:20px;"></i></div>
+                                    extHtml += `
+                                        <div class="timeline-transport" style="margin: 1rem 0; padding: 1rem; background: rgba(77,166,255,0.05); border: 1px dashed rgba(77,166,255,0.3); border-radius: 12px; display: flex; align-items: center; gap: 10px; margin-left: -20px;">
+                                            <div style="width: 32px; height: 32px; background: var(--accent-blue); color: #080808; border-radius: 8px; display: flex; justify-content: center; align-items: center; flex-shrink: 0;"><i data-lucide="train" style="width:16px;"></i></div>
                                             <div>
-                                                <div style="font-weight:800; color:var(--accent-blue); font-size:1rem;">${tr.time || '--:--'} · ${tr.title}</div>
+                                                <div style="font-weight:800; color:var(--accent-blue); font-size:0.95rem;">${tr.time || '--:--'} · ${tr.title}</div>
                                             </div>
                                         </div>
                                     `;
                                 });
                             }
 
-                            // Renderizamos el bloque de la ciudad si hay hoteles o planes y quieren mostrarlos
                             const hasValidHotels = config.showHotels && dateData.hotels.length > 0;
                             const hasValidPlans = config.showPlans && dateData.plans.length > 0;
 
                             if (hasValidHotels || hasValidPlans) {
-                                detailsHtml += `
-                                    <div class="timeline-site">
-                                        <div class="site-marker"></div>
-                                        <div class="site-header">
-                                            <h3 class="site-name">${siteName}</h3>
-                                            <div class="site-dates">${config.showDates ? dateStr : 'Día del viaje'}</div>
-                                        </div>
+                                extHtml += `
+                                    <div class="timeline-site" style="margin-bottom: 2rem;">
+                                        <div class="site-marker" style="width: 14px; height: 14px; left: -22px; top: 4px; border-width: 3px;"></div>
+                                        <div style="font-weight: 700; color: var(--text-muted); margin-bottom: 10px; font-size: 0.9rem;">${config.showDates ? dateStr : 'Día del viaje'}</div>
                                         
-                                        <div class="site-content-grid">
+                                        <div class="site-content-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
                                             ${hasValidHotels ? `
-                                            <div class="site-box box-hotel">
-                                                <h4><i data-lucide="bed" style="width:16px;"></i> Alojamiento</h4>
-                                                ${dateData.hotels.map(h => `
-                                                    <div class="item-row">
-                                                        <div class="item-title">${h.title}</div>
-                                                    </div>
-                                                `).join('')}
+                                            <div class="site-box box-hotel" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 1rem;">
+                                                <h4 style="font-size: 0.8rem; color: var(--success); text-transform: uppercase; margin-bottom: 8px; display:flex; align-items:center; gap:6px;"><i data-lucide="bed" style="width:14px;"></i> Alojamiento</h4>
+                                                ${dateData.hotels.map(h => `<div style="font-size: 0.9rem; color: var(--primary); line-height:1.4; margin-bottom:4px;">${h.title}</div>`).join('')}
                                             </div>` : ''}
 
                                             ${hasValidPlans ? `
-                                            <div class="site-box box-plans">
-                                                <h4><i data-lucide="map-pin" style="width:16px;"></i> Planes</h4>
+                                            <div class="site-box box-plans" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 1rem;">
+                                                <h4 style="font-size: 0.8rem; color: var(--accent); text-transform: uppercase; margin-bottom: 8px; display:flex; align-items:center; gap:6px;"><i data-lucide="map-pin" style="width:14px;"></i> Planes</h4>
                                                 ${dateData.plans.map(p => `
-                                                    <div class="item-row">
-                                                        <div class="item-time">${p.time || '--:--'}</div>
-                                                        <div class="item-title">${p.title}</div>
+                                                    <div style="display: flex; gap: 8px; margin-bottom: 8px; align-items: flex-start; border-bottom: 1px dashed rgba(255,255,255,0.05); padding-bottom: 8px;">
+                                                        <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 800; padding-top: 2px; min-width: 40px;">${p.time || '--:--'}</div>
+                                                        <div style="font-size: 0.9rem; color: var(--primary); line-height: 1.4;">${p.title}</div>
                                                     </div>
                                                 `).join('')}
                                             </div>` : ''}
@@ -1575,19 +1525,42 @@
                                 `;
                             }
                         });
-                        
-                        detailsHtml += `</div>`;
+                        extHtml += `</div>`;
+                        window.currentPublicTripExtendidaHtml = extHtml;
                         
                     } else {
-                        detailsHtml += `<div style="text-align:center; color:var(--text-muted);">El itinerario está vacío o todos sus eventos están ocultos.</div>`;
+                        window.currentPublicTripResumidaHtml = `<div style="text-align:center; color:var(--text-muted); padding: 2rem;">El itinerario está vacío o todos sus eventos están ocultos.</div>`;
+                        window.currentPublicTripExtendidaHtml = window.currentPublicTripResumidaHtml;
                     }
                 } else {
-                    detailsHtml += `<div style="text-align:center; padding:2rem 0; color:var(--text-muted);"><i data-lucide="lock" style="width:32px; height:32px; margin-bottom:10px; opacity:0.5;"></i><br>Este grupo ha decidido mantener su itinerario en privado.</div>`;
+                    window.currentPublicTripResumidaHtml = `<div style="text-align:center; padding:2rem 0; color:var(--text-muted);"><i data-lucide="lock" style="width:32px; height:32px; margin-bottom:10px; opacity:0.5;"></i><br>Este grupo ha mantenido su itinerario en privado.</div>`;
+                    window.currentPublicTripExtendidaHtml = window.currentPublicTripResumidaHtml;
                 }
             }
             
-            document.getElementById('public-modal-content-area').innerHTML = detailsHtml;
+            // Set initial state to resumida
+            toggleItineraryView('resumida');
             document.getElementById('public-trip-details-modal').classList.add('active');
+        }
+
+        window.toggleItineraryView = function(viewType) {
+            const btnRes = document.getElementById('btn-view-resumida');
+            const btnExt = document.getElementById('btn-view-extendida');
+            const contentArea = document.getElementById('public-modal-content-area');
+
+            if(viewType === 'resumida') {
+                btnRes.style.background = 'var(--accent-blue)';
+                btnRes.style.color = '#000';
+                btnExt.style.background = 'transparent';
+                btnExt.style.color = 'var(--text-muted)';
+                contentArea.innerHTML = window.currentPublicTripResumidaHtml;
+            } else {
+                btnExt.style.background = 'var(--accent-blue)';
+                btnExt.style.color = '#000';
+                btnRes.style.background = 'transparent';
+                btnRes.style.color = 'var(--text-muted)';
+                contentArea.innerHTML = window.currentPublicTripExtendidaHtml;
+            }
             lucide.createIcons();
         }
 
