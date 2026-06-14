@@ -182,36 +182,6 @@
             background: linear-gradient(135deg, var(--accent-blue), #2a75d3); color: white; text-transform: uppercase; letter-spacing: 1.5px; box-shadow: 0 4px 15px rgba(77,166,255,0.3);
         }
 
-        /* ── BÚSQUEDA SOFISTICADA HUB ── */
-        .hub-filters-advanced { 
-            background: rgba(15, 15, 15, 0.95); 
-            backdrop-filter: blur(20px); 
-            border: 1px solid var(--border-subtle); 
-            padding: 1.5rem; 
-            border-radius: 20px; 
-            margin-bottom: 3rem; 
-            display: flex; 
-            align-items: center;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 1.5rem;
-        }
-        
-        .search-box { 
-            display: flex; align-items: center; gap: 12px; background: rgba(255,255,255,0.03); 
-            border-radius: 16px; padding: 1rem 1.5rem; border: 1px solid rgba(255,255,255,0.1); transition: 0.3s; flex: 1; min-width: 250px;
-        }
-        .search-box:focus-within { border-color: var(--accent-blue); background: rgba(255,255,255,0.06); box-shadow: 0 0 15px rgba(77,166,255,0.2); }
-        .search-box input { background: transparent; border: none; color: white; font-size: 1rem; width: 100%; outline: none; font-family: 'Sora', sans-serif; }
-        
-        .filter-pills { display: flex; gap: 10px; flex-wrap: wrap; }
-        .filter-pill { 
-            background: rgba(255,255,255,0.03); color: var(--text-muted); border: 1px solid rgba(255,255,255,0.1); 
-            padding: 0.8rem 1.5rem; border-radius: 16px; font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: 0.3s; text-align: center;
-        }
-        .filter-pill:hover { background: rgba(255,255,255,0.08); color: var(--primary); }
-        .filter-pill.active { background: rgba(77,166,255,0.15); color: var(--accent-blue); border-color: var(--accent-blue); box-shadow: 0 4px 15px rgba(77,166,255,0.2); }
-
         /* ── MODALES COMPONENTES ── */
         .modal-overlay {
             position: fixed; inset: 0; background: rgba(0, 0, 0, 0.9); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
@@ -224,7 +194,6 @@
             background: #0d0d0d; border: 1px solid var(--border-subtle); padding: 3rem; border-radius: 32px; width: 100%; max-width: 550px;
             transform: translateY(50px) scale(0.9); transition: var(--transition); position: relative; margin: auto; max-height: 90vh; overflow-y: auto;
         }
-        .modal-overlay.active .modal-content { transform: translateY(0) scale(1); }
         .modal-content.wide-modal { max-width: 750px; padding: 3.5rem; }
 
         .input-group { margin-bottom: 2rem; text-align: left; }
@@ -272,18 +241,36 @@
         .social-user-row input { flex: 1; padding: 0.8rem; font-size: 0.9rem; border-radius: 10px; }
         .btn-remove-social { background: rgba(255,77,77,0.1); color: var(--accent); border: none; width: 40px; height: 40px; border-radius: 10px; cursor: pointer; display: flex; justify-content: center; align-items: center; }
 
-        /* ── ITINERARIO PÚBLICO (GRÁFICO Y RESUMIDO) ── */
-        .graphic-timeline { display: flex; flex-direction: column; gap: 15px; position: relative; padding: 1rem 0; }
-        .graphic-step { background: linear-gradient(135deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01)); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 1.5rem; position: relative; z-index: 2; display: flex; flex-direction: column; gap: 12px; transition: 0.3s; }
-        .graphic-step:hover { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.2); transform: translateY(-3px); }
-        .graphic-step-connector { width: 4px; height: 25px; background: rgba(255,255,255,0.1); margin: 0 auto; border-radius: 2px; }
-        .graphic-step-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 12px; flex-wrap: wrap; gap: 10px; }
-        .graphic-step-city { font-size: 1.4rem; font-weight: 800; color: var(--primary); display: flex; align-items: center; gap: 8px; }
-        .graphic-step-dates { font-size: 0.85rem; color: var(--accent-blue); font-weight: 700; background: rgba(77,166,255,0.1); padding: 6px 14px; border-radius: 20px; }
-        .graphic-step-details { display: flex; gap: 10px; flex-wrap: wrap; }
-        .graphic-badge { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); background: rgba(0,0,0,0.4); padding: 10px 14px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); }
-        .graphic-badge.hotel i { color: var(--success); }
-        .graphic-badge.plan i { color: var(--accent); }
+        /* ── EL ANDÉN: ESTILOS PREMIUM ── */
+        .hub-header-actions { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-subtle); padding-bottom: 1.5rem; margin-bottom: 2rem; }
+
+        /* ── ITINERARIO PÚBLICO RESUMIDO (VERSIÓN ULTRA PRO) ── */
+        .premium-timeline { display: flex; flex-direction: column; gap: 0; position: relative; padding: 1rem 0; margin-left: 15px; border-left: 2px dashed rgba(255,255,255,0.1); }
+        .premium-step { position: relative; padding-left: 35px; margin-bottom: 2.5rem; transition: var(--transition); }
+        .premium-step:last-child { margin-bottom: 0; }
+        .premium-step:hover { transform: translateX(5px); }
+
+        .premium-step-marker { position: absolute; left: -11px; top: 0; width: 20px; height: 20px; background: var(--bg-color); border: 4px solid var(--accent-blue); border-radius: 50%; box-shadow: 0 0 15px rgba(77,166,255,0.4); z-index: 2; transition: var(--transition); }
+        .premium-step:hover .premium-step-marker { background: var(--accent-blue); border-color: white; transform: scale(1.2); }
+
+        .premium-step-card { background: linear-gradient(145deg, rgba(20,20,20,0.8), rgba(10,10,10,0.9)); border: 1px solid rgba(255,255,255,0.05); border-radius: 20px; padding: 1.8rem; box-shadow: 0 10px 30px rgba(0,0,0,0.3); backdrop-filter: blur(10px); }
+        .premium-step-card header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.2rem; flex-wrap: wrap; gap: 10px; }
+        .premium-step-city { font-size: 1.5rem; font-weight: 800; color: var(--primary); letter-spacing: -0.5px; display: flex; align-items: center; gap: 10px; }
+        .premium-step-dates { font-size: 0.85rem; font-weight: 700; color: var(--bg-color); background: var(--primary); padding: 4px 12px; border-radius: 20px; letter-spacing: 0.5px; }
+
+        .premium-step-metrics { display: flex; gap: 1rem; flex-wrap: wrap; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 1.2rem; }
+        .metric-pill { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; font-weight: 600; color: var(--text-muted); background: rgba(0,0,0,0.5); padding: 8px 16px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.03); }
+        .metric-pill.hotel { color: #e0e0e0; border-color: rgba(77,255,77,0.1); }
+        .metric-pill.hotel i { color: var(--success); }
+        .metric-pill.plans { color: #e0e0e0; border-color: rgba(255,77,77,0.1); }
+        .metric-pill.plans i { color: var(--accent); }
+
+        /* UI BOTÓN RETIRAR DE EL ANDÉN */
+        .unpublish-banner { background: rgba(255,77,77,0.05); border: 1px solid rgba(255,77,77,0.2); border-radius: 16px; padding: 1.5rem; margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+        .unpublish-info h4 { color: var(--accent); font-size: 1.1rem; font-weight: 800; margin-bottom: 4px; display: flex; align-items: center; gap: 8px; }
+        .unpublish-info p { color: var(--text-muted); font-size: 0.85rem; }
+        .btn-danger-outline { background: transparent; color: var(--accent); border: 2px solid var(--accent); padding: 0.8rem 1.5rem; border-radius: 12px; font-weight: 800; cursor: pointer; transition: var(--transition); }
+        .btn-danger-outline:hover { background: var(--accent); color: white; box-shadow: 0 0 20px rgba(255,77,77,0.4); }
 
         /* ── ITINERARIO PÚBLICO (EXTENDIDO) ── */
         .public-timeline-ext { position: relative; padding-left: 30px; margin-top: 1rem; }
@@ -315,10 +302,6 @@
             
             .modal-content, .modal-content.wide-modal { padding: 2rem 1.5rem; border-radius: 24px; }
             
-            .hub-filters-advanced { padding: 1.5rem; border-radius: 20px; flex-direction: column; align-items: stretch; }
-            .search-box { width: 100%; }
-            .filter-pills { justify-content: center; }
-
             .action-selector { flex-direction: column; gap: 1rem; }
             .action-btn { padding: 1.2rem 1rem; }
             
@@ -391,30 +374,22 @@
             </div>
         </div>
 
+        <!-- VISTA EL ANDÉN SIN FILTROS -->
         <div id="view-hub" style="display: none;">
             <div class="header-section" style="margin-bottom: 2rem;">
                 <h1>El Andén.</h1>
                 <p>Conecta con otros mochileros, descubre con quién coincides y comparte tu ruta al mundo.</p>
-                <button class="btn-submit" style="width: auto; padding: 0.8rem 2rem; margin-top: 1.5rem; display:inline-flex; align-items:center; gap:8px;" onclick="openPublishModal(null, null)">
-                    <i data-lucide="radar" style="width:18px;"></i> Publicar mi viaje
-                </button>
-            </div>
-
-            <div class="hub-filters-advanced">
-                <div class="search-box">
-                    <i data-lucide="search" style="color:var(--text-muted); width:18px;"></i>
-                    <input type="text" id="hub-filter-dest" placeholder="Busca un destino o nombre del grupo..." onkeyup="renderHubTrips()">
-                </div>
-                <div class="filter-pills">
-                    <button class="filter-pill active" onclick="setGenderFilter('', this)">Todos</button>
-                    <button class="filter-pill" onclick="setGenderFilter('mixto', this)">Mixtos</button>
-                    <button class="filter-pill" onclick="setGenderFilter('chicos', this)">Chicos</button>
-                    <button class="filter-pill" onclick="setGenderFilter('chicas', this)">Chicas</button>
+                
+                <div class="hub-header-actions" style="margin-top: 2rem;">
+                    <p style="color:var(--text-muted); font-size:0.9rem; font-weight:600;"><i data-lucide="compass"></i> Viajes de la comunidad</p>
+                    <button class="btn-submit" style="width: auto; padding: 0.8rem 2rem; min-height: 45px; display:inline-flex; align-items:center; gap:8px; border-radius: 12px;" onclick="openPublishModal(null, null)">
+                        <i data-lucide="radar" style="width:18px;"></i> Lanzar Viaje
+                    </button>
                 </div>
             </div>
 
-            <div class="trips-grid" id="hub-trips-container">
-                </div>
+            <!-- Contenedor limpio, sin la barra de filtros -->
+            <div class="trips-grid" id="hub-trips-container"></div>
         </div>
     </main>
 
@@ -458,8 +433,8 @@
                 <h2 style="font-size: 2rem; font-weight: 800; margin-bottom: 0.5rem; letter-spacing: -1px;">Unirse a un viaje</h2>
                 <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 2.5rem; font-weight: 300;">Introduce el código de 5 caracteres que te ha compartido el organizador.</p>
                 
-                <div class="join-success-box" id="join-success-box">
-                    <p>✅ <strong>Solicitud enviada correctamente.</strong><br>El organizador del viaje recibirá tu petición y te asignará un rol. Vuelve más tarde para comprobar si tienes acceso.</p>
+                <div class="join-success-box" id="join-success-box" style="display: none; background: rgba(77,255,77,0.1); border: 1px solid var(--success); padding: 1.5rem; border-radius: 16px; margin-bottom: 2rem;">
+                    <p style="color: var(--primary); font-size: 0.95rem; line-height: 1.5;">✅ <strong>Solicitud enviada correctamente.</strong><br>El organizador del viaje recibirá tu petición y te asignará un rol. Vuelve más tarde para comprobar si tienes acceso.</p>
                 </div>
 
                 <div id="join-form-inner">
@@ -481,7 +456,7 @@
                 <div class="trip-code-display">
                     <p class="code-label">Código del viaje</p>
                     <div class="code-value" id="generated-code-display">-----</div>
-                    <button class="btn-copy-code" onclick="copyTripCode()">
+                    <button class="btn-copy-code" onclick="copyTripCode()" style="background: rgba(255,255,255,0.1); border:none; color:white; padding: 10px 20px; border-radius: 20px; cursor:pointer; display:inline-flex; align-items:center; gap:8px;">
                         <i data-lucide="copy" style="width: 14px;"></i> Copiar código
                     </button>
                 </div>
@@ -562,9 +537,20 @@
                 Haz que tu viaje sea visible para la comunidad. ⚠️ <strong>Precaución:</strong> Configura qué información quieres mostrar.
             </p>
             
+            <!-- MODAL PUBLICAR MEJORADO -->
             <form id="publish-form">
                 <div style="display: grid; grid-template-columns: 1fr; gap: 1rem;">
                     
+                    <div id="unpublish-zone" style="display: none;">
+                        <div class="unpublish-banner">
+                            <div class="unpublish-info">
+                                <h4><i data-lucide="globe"></i> Viaje Público Actualmente</h4>
+                                <p>Este viaje es visible para la comunidad. Puedes retirarlo en cualquier momento.</p>
+                            </div>
+                            <button type="button" class="btn-danger-outline" id="btn-unpublish" onclick="unpublishTrip()">RETIRAR VIAJE</button>
+                        </div>
+                    </div>
+
                     <div class="input-group" id="publish-trip-select-group" style="display:none; margin-bottom: 1rem;">
                         <label>Selecciona el viaje a publicar</label>
                         <select id="pub-trip-id" required></select>
@@ -601,9 +587,9 @@
                             <div class="toggle-text"><strong>Planes</strong><span>Muestra qué vais a hacer</span></div>
                             <label class="toggle-switch"><input type="checkbox" id="pub-show-plans" checked><span class="slider"></span></label>
                         </div>
-                        <div class="toggle-container" style="margin-bottom:0;">
-                            <div class="toggle-text"><strong>Trayectos</strong><span>Muestra cómo os movéis</span></div>
-                            <label class="toggle-switch"><input type="checkbox" id="pub-show-transports" checked><span class="slider"></span></label>
+                        <div class="toggle-container" style="margin-bottom:0; opacity: 0.5; pointer-events: none;" title="Retirado en esta versión">
+                            <div class="toggle-text"><strong>Trayectos</strong><span>(Oculto por defecto)</span></div>
+                            <label class="toggle-switch"><input type="checkbox" id="pub-show-transports"><span class="slider"></span></label>
                         </div>
                         <div class="toggle-container" style="margin-bottom:0; border-color: rgba(255,77,77,0.3);">
                             <div class="toggle-text"><strong>Alojamientos</strong><span style="color: var(--accent);">Muestra dónde dormís</span></div>
@@ -613,15 +599,12 @@
 
                     <h3 style="font-size:1.1rem; margin-top:1.5rem; margin-bottom:1rem; color:var(--primary); border-bottom: 1px solid var(--border-subtle); padding-bottom: 0.5rem; display:flex; justify-content:space-between; align-items:center;">
                         Redes Sociales (Viajer@s)
-                        <button type="button" onclick="addSocialUserRow()" style="background:rgba(255,255,255,0.05); color:white; border:1px solid var(--border-subtle); padding:5px 10px; border-radius:8px; font-size:0.8rem; cursor:pointer;">+ Añadir</button>
+                        <button type="button" onclick="addSocialUserRow()" style="background:rgba(255,255,255,0.05); color:white; border:1px solid var(--border-subtle); padding:5px 10px; border-radius:8px; font-size:0.8rem; cursor:pointer; transition: 0.3s;">+ Añadir Perfil</button>
                     </h3>
-                    <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:1rem; margin-top:-0.5rem;">Añade los perfiles de los miembros que quieran ser contactados.</p>
                     
-                    <div id="social-users-container">
-                        </div>
+                    <div id="social-users-container"></div>
 
-                    <button type="submit" class="btn-submit" style="margin-top:1.5rem; background: var(--accent-blue);" id="btn-submit-publish">LANZAR AL ANDÉN</button>
-                    <button type="button" class="btn-submit" style="margin-top:1rem; background: rgba(255,77,77,0.1); color: var(--accent); border: 1px solid var(--accent); display: none;" id="btn-unpublish" onclick="unpublishTrip()">RETIRAR DEL ANDÉN</button>
+                    <button type="submit" class="btn-submit" style="margin-top:1.5rem; background: var(--accent-blue);" id="btn-submit-publish">ACTUALIZAR / LANZAR AL ANDÉN</button>
                     <button type="button" onclick="closeModal('publish-modal')" style="background:none; border:none; color:var(--text-muted); width:100%; margin-top:1rem; cursor:pointer; font-weight: 600; padding:1rem;">CANCELAR</button>
                 </div>
             </form>
@@ -732,7 +715,6 @@
         let adminTripsList = []; 
         let hasPublicTrip = false; 
         let dynamicHubTrips = []; 
-        let activeHubGender = ''; 
 
         const STATIC_HUB_TRIPS = [
             { id: 's1', isStatic: true, publicConfig: { name: 'Eurotrip Verano 26', gender: 'mixto', size: 4, countries: 'Francia, Italia, Suiza', dates: '01/07/2026 - 15/07/2026', showDates: true, showPlans: true, showHotels: false, showTransports: true, socialUsers: [{plat:'ig', user:'@euro26'}, {plat:'tk', user:'@euro_trip'}] } },
@@ -823,7 +805,7 @@
             else if (step === 'join') {
                 document.getElementById('step-join').style.display = 'block';
                 document.getElementById('join-code-input').value = '';
-                document.getElementById('join-success-box').classList.remove('visible');
+                document.getElementById('join-success-box').style.display = 'none';
                 document.getElementById('join-form-inner').style.display = 'block';
             }
             else if (step === 'code') document.getElementById('step-code').style.display = 'block';
@@ -871,7 +853,7 @@
                 await setDoc(tripRef, { solicitudes: { [currentUser.uid]: currentUser.email } }, { merge: true });
 
                 document.getElementById('join-form-inner').style.display = 'none';
-                document.getElementById('join-success-box').classList.add('visible');
+                document.getElementById('join-success-box').style.display = 'block';
                 showToast(`Solicitud enviada para "${tripData.nombre}"`);
 
             } catch (error) {
@@ -1127,25 +1109,32 @@
             document.getElementById('publish-modal').classList.add('active');
         }
 
+        // ── LÓGICA DE PUBLICACIÓN Y RETIRADA ROBUSTA ──
         function populatePublishModal(tripId) {
             const trip = todosLosViajesCache.find(t => t.id === tripId);
             if (!trip || !trip.eventos || trip.eventos.length === 0) {
                 showToast("Añade al menos un plan o alojamiento a tu itinerario antes de hacerlo público.", "error");
                 closeModal('publish-modal'); return false;
             }
+            
             document.getElementById('pub-name').value = (trip.publicConfig && trip.publicConfig.name) ? trip.publicConfig.name : trip.nombre;
             
-            if(trip.isPublic) { document.getElementById('btn-unpublish').style.display = 'block'; } 
-            else { document.getElementById('btn-unpublish').style.display = 'none'; }
+            // Lógica de UI para retirar
+            const unpublishZone = document.getElementById('unpublish-zone');
+            if(trip.isPublic) {
+                unpublishZone.style.display = 'block';
+                document.getElementById('btn-submit-publish').innerText = "ACTUALIZAR DATOS PÚBLICOS";
+            } else {
+                unpublishZone.style.display = 'none';
+                document.getElementById('btn-submit-publish').innerText = "LANZAR AL ANDÉN";
+            }
             
             document.getElementById('social-users-container').innerHTML = '';
             if(trip.publicConfig) {
                 document.getElementById('pub-countries').value = trip.publicConfig.countries || '';
                 document.getElementById('pub-gender').value = trip.publicConfig.gender || 'mixto';
                 document.getElementById('pub-show-dates').checked = trip.publicConfig.showDates !== false;
-                document.getElementById('pub-show-names').checked = trip.publicConfig.showNames === true;
                 document.getElementById('pub-show-plans').checked = trip.publicConfig.showPlans !== false;
-                document.getElementById('pub-show-transports').checked = trip.publicConfig.showTransports !== false;
                 document.getElementById('pub-show-hotels').checked = trip.publicConfig.showHotels === true;
                 
                 if(trip.publicConfig.socialUsers && trip.publicConfig.socialUsers.length > 0) {
@@ -1176,20 +1165,26 @@
         window.unpublishTrip = async function() {
             const tId = document.getElementById('pub-trip-id').value;
             const btn = document.getElementById('btn-unpublish');
-            btn.innerText = "RETIRANDO..."; btn.disabled = true;
+            btn.innerText = "PROCESANDO..."; btn.disabled = true;
             try {
+                // Borramos el flag isPublic a false, manteniendo los datos base por si quiere republicar luego
                 await updateDoc(doc(db, "viajes", tId), { isPublic: false });
-                showToast("El viaje ha sido retirado de la comunidad.", "info");
-                closeModal('publish-modal'); loadTrips();
+                showToast("Tu viaje ha sido retirado de El Andén. Ya es privado.", "info");
+                closeModal('publish-modal'); 
+                loadTrips();
                 if(document.getElementById('tab-hub').classList.contains('active')) loadHubTrips();
-            } catch (e) { console.error(e); showToast("Error al retirar el viaje.", "error"); } 
-            finally { btn.innerText = "RETIRAR DEL ANDÉN"; btn.disabled = false; }
+            } catch (e) { 
+                console.error(e); 
+                showToast("Error de conexión al retirar el viaje.", "error"); 
+            } finally { 
+                btn.innerText = "RETIRAR VIAJE"; btn.disabled = false; 
+            }
         };
 
         document.getElementById('publish-form').onsubmit = async (e) => {
             e.preventDefault();
             const btn = document.getElementById('btn-submit-publish');
-            btn.innerText = "LANZANDO AL ANDÉN..."; btn.disabled = true;
+            btn.innerText = "PROCESANDO..."; btn.disabled = true;
             
             const tId = document.getElementById('pub-trip-id').value;
             const trip = todosLosViajesCache.find(t => t.id === tId);
@@ -1216,8 +1211,9 @@
             
             const config = {
                 name: document.getElementById('pub-name').value, countries: countries, gender: document.getElementById('pub-gender').value,
-                showDates: document.getElementById('pub-show-dates').checked, showNames: document.getElementById('pub-show-names').checked,
-                showPlans: document.getElementById('pub-show-plans').checked, showTransports: document.getElementById('pub-show-transports').checked,
+                showDates: document.getElementById('pub-show-dates').checked, 
+                showPlans: document.getElementById('pub-show-plans').checked, 
+                showTransports: document.getElementById('pub-show-transports').checked,
                 showHotels: document.getElementById('pub-show-hotels').checked, socialUsers: socialUsers, size: realSize,
                 dates: `${trip.fechaInicio} - ${trip.fechaFin}`
             };
@@ -1228,16 +1224,10 @@
                 closeModal('publish-modal'); loadTrips(); 
                 if(document.getElementById('tab-hub').classList.contains('active')) loadHubTrips();
             } catch(err) { showToast("Error al publicar en la base de datos.", "error"); } 
-            finally { btn.innerText = "LANZAR AL ANDÉN"; btn.disabled = false; }
+            finally { btn.innerText = "ACTUALIZAR / LANZAR AL ANDÉN"; btn.disabled = false; }
         };
 
-        // ── LÓGICA DE EL ANDÉN (HUB) Y FILTROS ──
-        window.setGenderFilter = function(val, btn) {
-            activeHubGender = val;
-            document.querySelectorAll('.filter-pill').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active'); renderHubTrips();
-        }
-
+        // ── LÓGICA DE EL ANDÉN (HUB) SIN FILTROS ──
         window.loadHubTrips = async function() {
             const container = document.getElementById('hub-trips-container');
             container.innerHTML = '<p style="color:var(--text-muted); width:100%; text-align:center;">Cargando viajes de la comunidad...</p>';
@@ -1255,36 +1245,33 @@
         }
 
         window.renderHubTrips = function() {
-            const destFilter = document.getElementById('hub-filter-dest') ? document.getElementById('hub-filter-dest').value.toLowerCase() : '';
             const container = document.getElementById('hub-trips-container');
             if(!container) return;
             container.innerHTML = '';
             
+            // Renderizamos todos los viajes públicos
             const allTrips = [...STATIC_HUB_TRIPS, ...dynamicHubTrips];
-            let found = 0;
+            
+            if(allTrips.length === 0) {
+                container.innerHTML = '<p style="color:var(--text-muted); width:100%; text-align:center;">El Andén está vacío en este momento.</p>';
+                return;
+            }
 
             allTrips.forEach(trip => {
                 const config = trip.publicConfig;
                 if(!config) return;
                 
-                if (activeHubGender && config.gender !== activeHubGender) return;
-                if (destFilter && !(config.name.toLowerCase().includes(destFilter) || (config.countries && config.countries.toLowerCase().includes(destFilter)))) return;
-                
-                found++;
                 const size = config.size || 1;
                 const dates = config.showDates === false ? 'Fechas Ocultas' : config.dates;
-                const countries = config.countries || 'Destinos no especificados';
+                const countries = config.countries || 'Misterio';
                 
                 let dotsHtml = '<span style="margin-left: 8px; display: inline-flex; gap: 4px; vertical-align: middle;">';
-                const maxDots = Math.min(size, 10);
+                const maxDots = Math.min(size, 8); // Limitado a 8 visualmente por limpieza
                 for(let j=0; j<maxDots; j++) {
-                    let dotColor = '#888888';
-                    if (config.gender === 'chicas') dotColor = '#ff66b2';
-                    else if (config.gender === 'chicos') dotColor = '#4da6ff';
-                    else if (config.gender === 'mixto') { dotColor = j % 2 === 0 ? '#ff66b2' : '#4da6ff'; }
+                    let dotColor = config.gender === 'chicas' ? '#ff66b2' : (config.gender === 'chicos' ? '#4da6ff' : (j % 2 === 0 ? '#ff66b2' : '#4da6ff'));
                     dotsHtml += `<span style="width: 10px; height: 10px; border-radius: 50%; background-color: ${dotColor}; display: inline-block;"></span>`;
                 }
-                if(size > 10) dotsHtml += '<span style="font-size:0.7rem; color:var(--text-muted); font-weight:800; margin-left:2px;">+</span>';
+                if(size > 8) dotsHtml += '<span style="font-size:0.7rem; color:var(--text-muted); font-weight:800; margin-left:2px;">+</span>';
                 dotsHtml += '</span>';
                 
                 const card = document.createElement('div');
@@ -1298,14 +1285,13 @@
                         <p style="color:var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem; display:flex; align-items:center;">
                             <i data-lucide="users" style="width:14px; margin-right:6px;"></i> ${size} viajer@s ${dotsHtml}
                         </p>
-                        <button class="btn-submit" style="width:100%; padding: 0.8rem; font-size: 0.9rem; background:rgba(255,255,255,0.05); color:white; border:1px solid var(--border-subtle); display:flex; justify-content:center; align-items:center; gap:8px;" onclick="viewPublicTripDetails('${trip.id}')">
-                            <i data-lucide="eye" style="width:16px;"></i> <span>Ver Viaje</span>
+                        <button class="btn-submit" style="width:100%; padding: 0.8rem; font-size: 0.95rem; background:var(--surface-hover); color:var(--primary); border:1px solid rgba(255,255,255,0.1); display:flex; justify-content:center; align-items:center; gap:8px; transition:0.3s;" onmouseover="this.style.background='var(--primary)'; this.style.color='var(--bg-color)'" onmouseout="this.style.background='var(--surface-hover)'; this.style.color='var(--primary)'" onclick="viewPublicTripDetails('${trip.id}')">
+                            <i data-lucide="eye" style="width:16px;"></i> <span>Ver Itinerario</span>
                         </button>
                     </div>
                 `;
                 container.appendChild(card);
             });
-            if(found === 0) container.innerHTML = '<p style="color:var(--text-muted); width:100%; text-align:center;">No hay viajes que coincidan con la búsqueda.</p>';
             lucide.createIcons();
         }
 
@@ -1368,60 +1354,89 @@
                     if(trip.eventos && trip.eventos.length > 0) {
                         let sortedEvents = trip.eventos.sort((a, b) => new Date(a.dateKey) - new Date(b.dateKey));
                         
-                        // Heurística de Destinos agrupados cronológicamente
+                        // MOTOR HEURÍSTICO ULTRA PRECISO DE AGRUPACIÓN (RESUMIDA)
                         let journeySteps = [];
                         let currentStep = null;
                         
                         sortedEvents.forEach(ev => {
-                            let siteName = 'Desconocido';
+                            if (ev.type === 'transport') return; // Ignoramos transportes en la vista resumida
+                            
+                            let siteName = 'Ubicación Secreta';
                             if (ev.title) {
                                 let parts = ev.title.split(',');
                                 siteName = parts.length > 1 ? parts[parts.length - 1].trim() : parts[0].trim();
                             }
-                            if (ev.type === 'transport') return;
 
                             if (!currentStep || currentStep.city !== siteName) {
                                 if (currentStep) journeySteps.push(currentStep);
-                                currentStep = { city: siteName, startDate: ev.dateKey, endDate: ev.dateKey, hotels: new Set(), plans: 0 };
+                                currentStep = { 
+                                    city: siteName, 
+                                    startDate: ev.dateKey, 
+                                    endDate: ev.dateKey, 
+                                    hotels: new Set(), 
+                                    plansCount: 0 
+                                };
                             }
+                            
+                            // Actualizamos fechas y métricas del paso actual
                             currentStep.endDate = ev.dateKey;
                             if (ev.type === 'hotel') currentStep.hotels.add(ev.title.split(',')[0].trim());
-                            if (ev.type === 'plan') currentStep.plans++;
+                            if (ev.type === 'plan') currentStep.plansCount++;
                         });
                         if (currentStep) journeySteps.push(currentStep);
 
-                        // GENERAR VISTA RESUMIDA MUY GRÁFICA
-                        let resHtml = `<div class="graphic-timeline">`;
-                        if (journeySteps.length === 0) resHtml += `<div style="text-align:center; color:var(--text-muted);">Sin destinos registrados.</div>`;
-                        journeySteps.forEach((step, index) => {
-                            let dateStr = "";
-                            if (step.startDate === step.endDate) {
-                                dateStr = new Date(step.startDate).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' });
-                            } else {
-                                dateStr = `${new Date(step.startDate).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })} - ${new Date(step.endDate).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })}`;
-                            }
-                            let hotelStr = step.hotels.size > 0 ? Array.from(step.hotels).join(' / ') : 'Alojamiento oculto';
-                            if (!config.showHotels) hotelStr = 'Privado';
-                            let planStr = step.plans > 0 ? `${step.plans} planes` : 'Sin planes';
-                            if (!config.showPlans) planStr = 'Privado';
-
-                            resHtml += `
-                                <div class="graphic-step">
-                                    <div class="graphic-step-header">
-                                        <div class="graphic-step-city"><i data-lucide="map-pin" style="color:var(--accent);"></i> ${step.city}</div>
-                                        <div class="graphic-step-dates">${config.showDates ? dateStr : 'Fechas privadas'}</div>
+                        // RENDERIZADO DEL TIMELINE PREMIUM RESUMIDO
+                        let resHtml = `<div class="premium-timeline">`;
+                        
+                        if (journeySteps.length === 0) {
+                            resHtml = `<div style="text-align:center; padding: 3rem 0; color:var(--text-muted); background: rgba(255,255,255,0.02); border-radius: 20px; border: 1px dashed var(--border-subtle);"><i data-lucide="map" style="width:40px; height:40px; opacity:0.5; margin-bottom:15px;"></i><br>Aún no hay destinos registrados en el mapa.</div>`;
+                        } else {
+                            journeySteps.forEach(step => {
+                                // 1. Parseo de Fechas
+                                let dateStr = "";
+                                const sDate = new Date(step.startDate);
+                                const eDate = new Date(step.endDate);
+                                
+                                if (step.startDate === step.endDate) {
+                                    dateStr = sDate.toLocaleDateString('es-ES', { day: '2-digit', month: 'short' });
+                                } else {
+                                    dateStr = `${sDate.toLocaleDateString('es-ES', { day: '2-digit', month: 'short' })} - ${eDate.toLocaleDateString('es-ES', { day: '2-digit', month: 'short' })}`;
+                                }
+                                
+                                // 2. Lógica de Privacidad y Textos
+                                let finalDateStr = config.showDates ? dateStr : 'Privado';
+                                let hotelName = config.showHotels ? (step.hotels.size > 0 ? Array.from(step.hotels).join(' / ') : 'Aún por definir') : 'Privado';
+                                let plansText = config.showPlans ? (step.plansCount === 1 ? '1 Plan agendado' : `${step.plansCount} Planes agendados`) : 'Actividades en Privado';
+                                
+                                // 3. Construcción del componente
+                                resHtml += `
+                                    <div class="premium-step">
+                                        <div class="premium-step-marker"></div>
+                                        <div class="premium-step-card">
+                                            <header>
+                                                <div class="premium-step-city">
+                                                    <i data-lucide="map-pin" style="color:var(--accent-blue);"></i> 
+                                                    ${step.city}
+                                                </div>
+                                                <div class="premium-step-dates">${finalDateStr}</div>
+                                            </header>
+                                            
+                                            <div class="premium-step-metrics">
+                                                <div class="metric-pill hotel">
+                                                    <i data-lucide="bed" style="width: 16px;"></i>
+                                                    <span>${hotelName}</span>
+                                                </div>
+                                                <div class="metric-pill plans">
+                                                    <i data-lucide="compass" style="width: 16px;"></i>
+                                                    <span>${plansText}</span>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="graphic-step-details">
-                                        <div class="graphic-badge hotel"><i data-lucide="bed" style="width:16px;"></i> ${hotelStr}</div>
-                                        <div class="graphic-badge plan"><i data-lucide="compass" style="width:16px;"></i> ${planStr}</div>
-                                    </div>
-                                </div>
-                            `;
-                            if (index < journeySteps.length - 1) {
-                                resHtml += `<div class="graphic-step-connector"></div>`;
-                            }
-                        });
-                        resHtml += `</div>`;
+                                `;
+                            });
+                            resHtml += `</div>`;
+                        }
                         window.currentPublicTripResumidaHtml = resHtml;
 
                         // GENERAR VISTA EXTENDIDA
