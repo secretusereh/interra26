@@ -529,10 +529,15 @@
 
     <div class="modal-overlay" id="publish-modal">
         <div class="modal-content wide-modal">
-            <h2 style="font-size: 1.8rem; font-weight: 800; display:flex; align-items:center; gap:10px;"><i data-lucide="radar" style="color:var(--accent-blue);"></i> Publicar en la Comunidad</h2>
-            <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom: 1.5rem; margin-top:0.5rem; line-height: 1.5;">
-                Haz que tu viaje sea visible para todos. ⚠️ <strong>Precaución:</strong> Configura qué información quieres mostrar.
-            </p>
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom: 1.5rem;">
+                <div>
+                    <h2 id="publish-modal-title" style="font-size: 1.8rem; font-weight: 800; display:flex; align-items:center; gap:10px;"><i data-lucide="radar" style="color:var(--accent-blue);"></i> Publicar en la Comunidad</h2>
+                    <p style="color:var(--text-muted); font-size:0.9rem; margin-top:0.5rem; line-height: 1.5;">
+                        Haz que tu viaje sea visible para todos. ⚠️ <strong>Precaución:</strong> Configura qué información quieres mostrar.
+                    </p>
+                </div>
+                <button type="button" onclick="closeModal('publish-modal')" style="background:rgba(255,255,255,0.05); border:none; color:white; width:40px; height:40px; border-radius:12px; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:0.3s; flex-shrink: 0;"><i data-lucide="x"></i></button>
+            </div>
             
             <form id="publish-form">
                 <div style="display: grid; grid-template-columns: 1fr; gap: 1rem;">
@@ -593,8 +598,6 @@
                         </div>
 
                     <button type="submit" class="btn-submit" style="margin-top:1.5rem; background: var(--accent-blue);" id="btn-submit-publish">LANZAR A LA COMUNIDAD</button>
-                    <button type="button" class="btn-submit" style="margin-top:1rem; background: rgba(255,77,77,0.1); color: var(--accent); border: 1px solid var(--accent); display: none;" id="btn-unpublish" onclick="unpublishTrip()">RETIRAR DE LA COMUNIDAD</button>
-                    <button type="button" onclick="closeModal('publish-modal')" style="background:none; border:none; color:var(--text-muted); width:100%; margin-top:1rem; cursor:pointer; font-weight: 600; padding:1rem;">CANCELAR</button>
                 </div>
             </form>
         </div>
@@ -713,18 +716,27 @@
 
         // ── MAPA Y NORMALIZADOR DE CIUDADES AVANZADO ──
         const cityNeighborhoodMap = {
-            "el raval": "Barcelona", "gracia": "Barcelona", "eixample": "Barcelona", "barceloneta": "Barcelona", "sants": "Barcelona", "poblenou": "Barcelona",
-            "deusto": "Bilbao", "casco viejo": "Bilbao", "indautxu": "Bilbao", "abando": "Bilbao",
-            "malasana": "Madrid", "malasaña": "Madrid", "chueca": "Madrid", "chamberi": "Madrid", "retiro": "Madrid", "lavapies": "Madrid", "sol": "Madrid", "la latina": "Madrid",
-            "triana": "Sevilla", "macarena": "Sevilla", "santa cruz": "Sevilla", "nervion": "Sevilla",
-            "ruzafa": "Valencia", "benimaclet": "Valencia", "el carmen": "Valencia", "cabanyal": "Valencia",
-            "montmartre": "París", "le marais": "París", "latin quarter": "París", "bastille": "París",
-            "trastevere": "Roma", "testaccio": "Roma", "prati": "Roma", "monti": "Roma",
-            "camden": "Londres", "soho": "Londres", "covent garden": "Londres", "shoreditch": "Londres",
-            "brooklyn": "Nueva York", "manhattan": "Nueva York", "queens": "Nueva York", "bronx": "Nueva York",
-            "alfama": "Lisboa", "bairro alto": "Lisboa", "chiado": "Lisboa", "belem": "Lisboa",
-            "mestre": "Venecia", "san marco": "Venecia", "rialto": "Venecia"
+            "plantage middenlaan": "Ámsterdam", "plantage": "Ámsterdam", "jordaan": "Ámsterdam", "de pijp": "Ámsterdam", "amsterdam": "Ámsterdam", "holanda": "Ámsterdam",
+            "el raval": "Barcelona", "gracia": "Barcelona", "eixample": "Barcelona", "barceloneta": "Barcelona", "sants": "Barcelona", "poblenou": "Barcelona", "barcelona": "Barcelona",
+            "deusto": "Bilbao", "casco viejo": "Bilbao", "indautxu": "Bilbao", "abando": "Bilbao", "bilbao": "Bilbao",
+            "malasana": "Madrid", "malasaña": "Madrid", "chueca": "Madrid", "chamberi": "Madrid", "retiro": "Madrid", "lavapies": "Madrid", "sol": "Madrid", "la latina": "Madrid", "madrid": "Madrid",
+            "triana": "Sevilla", "macarena": "Sevilla", "santa cruz": "Sevilla", "nervion": "Sevilla", "sevilla": "Sevilla",
+            "ruzafa": "Valencia", "benimaclet": "Valencia", "el carmen": "Valencia", "cabanyal": "Valencia", "valencia": "Valencia",
+            "montmartre": "París", "le marais": "París", "latin quarter": "París", "bastille": "París", "paris": "París", "parís": "París",
+            "trastevere": "Roma", "testaccio": "Roma", "prati": "Roma", "monti": "Roma", "roma": "Roma",
+            "camden": "Londres", "soho": "Londres", "covent garden": "Londres", "shoreditch": "Londres", "londres": "Londres", "london": "Londres",
+            "brooklyn": "Nueva York", "manhattan": "Nueva York", "queens": "Nueva York", "bronx": "Nueva York", "new york": "Nueva York", "nueva york": "Nueva York",
+            "alfama": "Lisboa", "bairro alto": "Lisboa", "chiado": "Lisboa", "belem": "Lisboa", "lisboa": "Lisboa", "lisbon": "Lisboa",
+            "mestre": "Venecia", "san marco": "Venecia", "rialto": "Venecia", "venecia": "Venecia", "venice": "Venecia",
+            "praga": "Praga", "prague": "Praga", "viena": "Viena", "vienna": "Viena", "budapest": "Budapest",
+            "milan": "Milán", "milán": "Milán", "florencia": "Florencia", "florence": "Florencia",
+            "atenas": "Atenas", "athens": "Atenas", "bruselas": "Bruselas", "brussels": "Bruselas",
+            "copenhague": "Copenhague", "copenhagen": "Copenhague", "estocolmo": "Estocolmo", "stockholm": "Estocolmo",
+            "oslo": "Oslo", "edimburgo": "Edimburgo", "edinburgh": "Edimburgo", "dublin": "Dublín", "dublín": "Dublín",
+            "berlin": "Berlín", "berlín": "Berlín"
         };
+
+        const majorCitiesFallback = ["Ámsterdam", "Barcelona", "Madrid", "París", "Roma", "Londres", "Berlín", "Praga", "Viena", "Budapest", "Lisboa", "Sevilla", "Valencia", "Bilbao", "Milán", "Florencia", "Venecia", "Atenas", "Bruselas", "Copenhague", "Estocolmo", "Oslo", "Edimburgo", "Dublín"];
 
         function normalizeCityName(rawName) {
             if (!rawName) return 'Desconocido';
@@ -732,10 +744,13 @@
             let lowerClean = clean.toLowerCase();
             
             for (let hood in cityNeighborhoodMap) {
-                if (lowerClean.includes(hood)) {
-                    return cityNeighborhoodMap[hood];
-                }
+                if (lowerClean.includes(hood)) return cityNeighborhoodMap[hood];
             }
+            
+            for (let city of majorCitiesFallback) {
+                if (lowerClean.includes(city.toLowerCase())) return city;
+            }
+            
             return clean;
         }
 
@@ -891,15 +906,13 @@
             const badge = document.getElementById('plan-badge');
             const badgeLink = document.getElementById('plan-badge-link');
             const favicon = document.getElementById('dynamic-favicon');
-            const hubTab = document.getElementById('tab-hub');
-
+            
             currentUserPlan = userData.plan === 'PLUS' ? 'PLUS' : 'ESTANDAR';
 
             if (currentUserPlan === 'PLUS') {
                 badge.textContent = 'PLUS'; badge.className = 'plan-badge badge-plus'; badge.style.display = 'inline-flex';
                 badgeLink.href = '#'; badgeLink.title = 'Tu cuenta posee ventajas exclusivas de Interra-hub PLUS'; badgeLink.style.cursor = 'default';
                 favicon.href = 'interrahubplus.png';
-                hubTab.classList.add('unlocked');
                 if (!userData.hasSeenPlusWelcome) {
                     setTimeout(() => showToast("¡Bienvenido a Interra-hub PLUS! Tu cuenta ahora es PLUS.", "premium"), 1500);
                     if(userRefPath) await setDoc(doc(db, "usuarios", userRefPath), { hasSeenPlusWelcome: true }, { merge: true });
@@ -908,7 +921,6 @@
                 badge.textContent = 'ESTÁNDAR'; badge.className = 'plan-badge badge-estandar'; badge.style.display = 'inline-flex';
                 badgeLink.href = 'interrahubplus.html'; badgeLink.title = 'Convierte tu cuenta en PLUS para obtener ventajas ilimitadas';
                 favicon.href = 'interrahublogo.PNG';
-                hubTab.classList.remove('unlocked');
             }
         }
 
@@ -932,6 +944,20 @@
                 window.location.href = 'registro.html';
             }
         });
+
+        // ── FUNCIÓN EXCLUSIVA PARA DESPUBLICAR DESDE LA COMUNIDAD ──
+        window.quickUnpublish = async function(e, tId) {
+            if(e) e.stopPropagation();
+            if(!confirm("¿Retirar tu viaje de la Comunidad?")) return;
+            try {
+                await updateDoc(doc(db, "viajes", tId), { isPublic: false });
+                showToast("Viaje retirado exitosamente de la Comunidad.", "info");
+                loadTrips();
+                if(document.getElementById('tab-hub').classList.contains('active')) loadHubTrips();
+            } catch(err) {
+                console.error(err); showToast("Hubo un error al despublicar tu viaje.", "error");
+            }
+        }
 
         async function loadTrips() {
             const container = document.getElementById('trips-container');
@@ -968,12 +994,11 @@
                     else if (rolAqui) badgeContent = `<span class="role-badge">${rolAqui.replace('-', ' ')}</span>`;
 
                     const isTripPublicHtml = trip.isPublic ? `<span class="badge-public" style="cursor:help;" title="Tu viaje es visible en la Comunidad"><i data-lucide="globe" style="width:12px; margin-right:4px;"></i> PÚBLICO</span>` : '';
-
                     const radarBtnStyle = trip.isPublic ? 'background: var(--accent-blue); color: white; box-shadow: 0 0 10px rgba(77,166,255,0.4);' : '';
 
                     const adminBtnsHtml = (rolAqui === 'admin-grupo' || isGod) ? `
                         <div class="admin-actions-group">
-                            <button class="btn-publish-trip" onclick="openPublishModal(event, '${trip.id}')" title="${trip.isPublic ? 'Configurar visibilidad en la Comunidad' : 'Lanzar viaje a la Comunidad'}" style="${radarBtnStyle}">
+                            <button class="btn-publish-trip" onclick="openPublishModal(event, '${trip.id}')" title="${trip.isPublic ? 'Editar configuración en la Comunidad' : 'Lanzar viaje a la Comunidad'}" style="${radarBtnStyle}">
                                 <i data-lucide="radar"></i>
                             </button>
                             <button class="btn-edit-trip" onclick="openEditTripModal(event, '${trip.id}', '${trip.nombre.replace(/'/g, "\\'")}', '${trip.fechaInicio}', '${trip.fechaFin}')" title="Editar nombre y fechas">
@@ -1099,7 +1124,7 @@
             finally { btn.innerText = "CREAR RUTA"; btn.disabled = false; }
         };
 
-        // ── LÓGICA DE PUBLICAR EN HUB (LA COMUNIDAD) ──
+        // ── LÓGICA DE PUBLICAR / EDITAR EN LA COMUNIDAD (RADAR) ──
         window.openPublishModal = function(event, tripId) {
             if(event) event.stopPropagation();
             
@@ -1124,13 +1149,23 @@
         function populatePublishModal(tripId) {
             const trip = todosLosViajesCache.find(t => t.id === tripId);
             if (!trip || !trip.eventos || trip.eventos.length === 0) {
-                showToast("Añade al menos un plan o alojamiento a tu itinerario antes de hacerlo público.", "error");
+                showToast("Añade al menos un plan o alojamiento a tu itinerario antes de poder publicarlo.", "error");
                 closeModal('publish-modal'); return false;
             }
+            
             document.getElementById('pub-name').value = (trip.publicConfig && trip.publicConfig.name) ? trip.publicConfig.name : trip.nombre;
             
-            if(trip.isPublic) { document.getElementById('btn-unpublish').style.display = 'block'; } 
-            else { document.getElementById('btn-unpublish').style.display = 'none'; }
+            // Lógica UX: Si el viaje ya es público, el radar es de "Edición", no de "Creación"
+            const modalTitle = document.getElementById('publish-modal-title');
+            const submitBtn = document.getElementById('btn-submit-publish');
+            
+            if(trip.isPublic) {
+                modalTitle.innerHTML = `<i data-lucide="radar" style="color:var(--accent-blue);"></i> Editar Publicación`;
+                submitBtn.innerText = "GUARDAR CAMBIOS";
+            } else {
+                modalTitle.innerHTML = `<i data-lucide="radar" style="color:var(--accent-blue);"></i> Publicar en la Comunidad`;
+                submitBtn.innerText = "LANZAR A LA COMUNIDAD";
+            }
             
             document.getElementById('social-users-container').innerHTML = '';
             if(trip.publicConfig) {
@@ -1166,23 +1201,12 @@
             container.appendChild(row); lucide.createIcons();
         }
 
-        window.unpublishTrip = async function() {
-            const tId = document.getElementById('pub-trip-id').value;
-            const btn = document.getElementById('btn-unpublish');
-            btn.innerText = "RETIRANDO..."; btn.disabled = true;
-            try {
-                await updateDoc(doc(db, "viajes", tId), { isPublic: false });
-                showToast("El viaje ha sido retirado de la Comunidad.", "info");
-                closeModal('publish-modal'); loadTrips();
-                if(document.getElementById('tab-hub').classList.contains('active')) loadHubTrips();
-            } catch (e) { console.error(e); showToast("Error al retirar el viaje.", "error"); } 
-            finally { btn.innerText = "RETIRAR DE LA COMUNIDAD"; btn.disabled = false; }
-        };
-
         document.getElementById('publish-form').onsubmit = async (e) => {
             e.preventDefault();
             const btn = document.getElementById('btn-submit-publish');
-            btn.innerText = "LANZANDO A LA COMUNIDAD..."; btn.disabled = true;
+            const originalText = btn.innerText;
+            btn.innerText = "GUARDANDO..."; 
+            btn.disabled = true;
             
             const tId = document.getElementById('pub-trip-id').value;
             const trip = todosLosViajesCache.find(t => t.id === tId);
@@ -1216,11 +1240,11 @@
             
             try {
                 await setDoc(doc(db, "viajes", tId), { isPublic: true, publicConfig: config }, { merge: true });
-                showToast("¡Tu viaje ahora es visible en la Comunidad!", "success");
+                showToast(originalText === "GUARDAR CAMBIOS" ? "¡Publicación actualizada correctamente!" : "¡Tu viaje ahora es visible en la Comunidad!", "success");
                 closeModal('publish-modal'); loadTrips(); 
                 if(document.getElementById('tab-hub').classList.contains('active')) loadHubTrips();
             } catch(err) { showToast("Error al publicar en la base de datos.", "error"); } 
-            finally { btn.innerText = "LANZAR A LA COMUNIDAD"; btn.disabled = false; }
+            finally { btn.innerText = originalText; btn.disabled = false; }
         };
 
         // ── LÓGICA DE LA COMUNIDAD (HUB) Y FILTROS ──
@@ -1273,6 +1297,14 @@
                 if(size > 10) dotsHtml += '<span style="font-size:0.7rem; color:var(--text-muted); font-weight:800; margin-left:2px;">+</span>';
                 dotsHtml += '</span>';
 
+                let amIOwner = false;
+                if (currentUser && !trip.isStatic) {
+                    let theTrip = todosLosViajesCache.find(t => t.id === trip.id);
+                    if (theTrip && theTrip.miembros && (theTrip.miembros[currentUser.uid] === 'admin-grupo' || currentUser.email === SUPERADMIN_EMAIL)) {
+                        amIOwner = true;
+                    }
+                }
+                
                 const card = document.createElement('div');
                 card.className = 'trip-card visible unlocked';
                 card.style.minHeight = 'auto'; card.style.padding = '2rem';
@@ -1287,6 +1319,11 @@
                         <button class="btn-submit" style="width:100%; padding: 0.8rem; font-size: 0.9rem; background:rgba(255,255,255,0.05); color:white; border:1px solid var(--border-subtle); display:flex; justify-content:center; align-items:center; gap:8px;" onclick="viewPublicTripDetails('${trip.id}')">
                             <i data-lucide="eye" style="width:16px;"></i> <span>Ver Viaje</span>
                         </button>
+                        ${amIOwner ? `
+                        <button class="btn-submit" style="width:100%; padding: 0.8rem; font-size: 0.9rem; background:rgba(255,77,77,0.1); color:var(--accent); border:1px dashed rgba(255,77,77,0.3); display:flex; justify-content:center; align-items:center; gap:8px; margin-top: 10px; transition: 0.3s;" onclick="quickUnpublish(event, '${trip.id}')">
+                            <i data-lucide="eye-off" style="width:16px;"></i> <span>Despublicar de la Comunidad</span>
+                        </button>
+                        ` : ''}
                     </div>
                 `;
                 container.appendChild(card);
