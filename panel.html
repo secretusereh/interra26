@@ -742,46 +742,83 @@
             { id: 's5', isStatic: true, publicConfig: { name: 'Fiesta y Nieve', gender: 'mixto', size: 6, countries: 'Suiza, Francia, Andorra', dates: '15/12/2026 - 22/12/2026', showDates: true, showPlans: true, showHotels: true, showTransports: false, socialUsers: [{plat:'ig', user:'@nieveparty'}] } }
         ];
 
-        // ── MOTOR GEOGRÁFICO DEFINITIVO (NOMINATIM / OSM API) ──
+        // ── MOTOR GEOGRÁFICO EXACTO CON NOMINATIM/OSM (Como viaje.html) ──
+        const cityNeighborhoodMap = {
+            "plantage middenlaan": "Ámsterdam", "plantage": "Ámsterdam", "jordaan": "Ámsterdam", "de pijp": "Ámsterdam", "amsterdam": "Ámsterdam", "holanda": "Ámsterdam",
+            "el raval": "Barcelona", "gracia": "Barcelona", "eixample": "Barcelona", "barceloneta": "Barcelona", "sants": "Barcelona", "poblenou": "Barcelona", "barcelona": "Barcelona",
+            "deusto": "Bilbao", "casco viejo": "Bilbao", "indautxu": "Bilbao", "abando": "Bilbao", "bilbao": "Bilbao",
+            "malasana": "Madrid", "malasaña": "Madrid", "chueca": "Madrid", "chamberi": "Madrid", "retiro": "Madrid", "lavapies": "Madrid", "sol": "Madrid", "la latina": "Madrid", "madrid": "Madrid",
+            "triana": "Sevilla", "macarena": "Sevilla", "santa cruz": "Sevilla", "nervion": "Sevilla", "sevilla": "Sevilla",
+            "ruzafa": "Valencia", "benimaclet": "Valencia", "el carmen": "Valencia", "cabanyal": "Valencia", "valencia": "Valencia",
+            "montmartre": "París", "le marais": "París", "latin quarter": "París", "bastille": "París", "paris": "París", "parís": "París",
+            "trastevere": "Roma", "testaccio": "Roma", "prati": "Roma", "monti": "Roma", "roma": "Roma",
+            "camden": "Londres", "soho": "Londres", "covent garden": "Londres", "shoreditch": "Londres", "londres": "Londres", "london": "Londres",
+            "brooklyn": "Nueva York", "manhattan": "Nueva York", "queens": "Nueva York", "bronx": "Nueva York", "new york": "Nueva York", "nueva york": "Nueva York",
+            "alfama": "Lisboa", "bairro alto": "Lisboa", "chiado": "Lisboa", "belem": "Lisboa", "lisboa": "Lisboa", "lisbon": "Lisboa",
+            "mestre": "Venecia", "san marco": "Venecia", "rialto": "Venecia", "venecia": "Venecia", "venice": "Venecia",
+            "praga": "Praga", "prague": "Praga", "viena": "Viena", "vienna": "Viena", "budapest": "Budapest",
+            "milan": "Milán", "milán": "Milán", "florencia": "Florencia", "florence": "Florencia",
+            "atenas": "Atenas", "athens": "Atenas", "bruselas": "Bruselas", "brussels": "Bruselas",
+            "copenhague": "Copenhague", "copenhagen": "Copenhague", "estocolmo": "Estocolmo", "stockholm": "Estocolmo",
+            "oslo": "Oslo", "edimburgo": "Edimburgo", "edinburgh": "Edimburgo", "dublin": "Dublín", "dublín": "Dublín",
+            "berlin": "Berlín", "berlín": "Berlín"
+        };
+
+        const majorCitiesFallback = ["Ámsterdam", "Barcelona", "Madrid", "París", "Roma", "Londres", "Berlín", "Praga", "Viena", "Budapest", "Lisboa", "Sevilla", "Valencia", "Bilbao", "Milán", "Florencia", "Venecia", "Atenas", "Bruselas", "Copenhague", "Estocolmo", "Oslo", "Edimburgo", "Dublín"];
+        
         const geocodeCache = {};
         const reverseGeocodeCache = {};
 
+        function removeAccents(str) {
+            return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+        }
+
         async function getCleanCityFromQuery(ev) {
-            let query = ev.ciudad || ev.location || ev.title;
-            if (!query) return 'Desconocido';
+            if (!ev) return 'Desconocido';
             
-            // Limpieza básica previa para maximizar el acierto del satélite
+            let query = ev.ciudad || ev.location || ev.title || '';
             let cleanQuery = query.includes('->') ? query.split('->').pop().trim() : query;
             cleanQuery = cleanQuery.replace('📥 Check-in: ', '').replace('📤 Check-out: ', '').replace('🌙 Noche en: ', '');
             
-            // Si es hotel, normalmente el formato es "Nombre del Hotel, Ciudad"
-            if (ev.type === 'hotel' && cleanQuery.includes(',')) {
-                let parts = cleanQuery.split(',');
-                cleanQuery = parts[parts.length - 1].trim(); 
+            // Extracción por coma para limpieza (ej. "Visita al Muro, Berlin")
+            let partAfterComma = cleanQuery;
+            if (cleanQuery.includes(',')) {
+                partAfterComma = cleanQuery.split(',').pop().trim();
+            }
+
+            let searchStrLower = removeAccents(cleanQuery);
+            let commaStrLower = removeAccents(partAfterComma);
+
+            // 1. Filtro local ultrarrápido (Diccionario)
+            for (let hood in cityNeighborhoodMap) {
+                if (searchStrLower.includes(removeAccents(hood))) return cityNeighborhoodMap[hood];
+            }
+            for (let city of majorCitiesFallback) {
+                if (searchStrLower.includes(removeAccents(city)) || commaStrLower.includes(removeAccents(city))) return city;
             }
 
             let lat = ev.lat;
             let lon = ev.lon;
 
-            // 1. Obtener Lat/Lon si el evento no las tiene (Forward Geocoding)
+            // 2. Extracción de Coordenadas con Nominatim (Si el evento no tiene)
             if (!lat || !lon) {
-                if (geocodeCache[cleanQuery]) {
-                    lat = geocodeCache[cleanQuery].lat;
-                    lon = geocodeCache[cleanQuery].lon;
+                if (geocodeCache[partAfterComma]) {
+                    lat = geocodeCache[partAfterComma][0];
+                    lon = geocodeCache[partAfterComma][1];
                 } else {
                     try {
-                        const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(cleanQuery)}&limit=1&accept-language=es`);
+                        const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(partAfterComma)}&limit=1&accept-language=es`);
                         const data = await res.json();
                         if (data && data.length > 0) {
                             lat = parseFloat(data[0].lat);
                             lon = parseFloat(data[0].lon);
-                            geocodeCache[cleanQuery] = { lat, lon };
+                            geocodeCache[partAfterComma] = [lat, lon];
                         }
-                    } catch(e) { console.warn("Geocode error", e); }
+                    } catch(e) {} // Silenciamos para que siga sin romper la web
                 }
             }
 
-            // 2. Extraer el nombre de la ciudad EXACTO y en ESPAÑOL (Reverse Geocoding)
+            // 3. Extracción final de Ciudad usando Reverse Geocoding (Igual que viaje.html)
             if (lat && lon) {
                 const key = `${lat.toFixed(3)},${lon.toFixed(3)}`;
                 if (reverseGeocodeCache[key]) return reverseGeocodeCache[key];
@@ -795,10 +832,14 @@
                         reverseGeocodeCache[key] = city;
                         return city;
                     }
-                } catch(e) { console.warn("Reverse Geocode error", e); }
+                } catch(e) {}
             }
             
-            // Fallback si la API de satélite falla
+            // 4. Fallback final visual si las APIs fallan
+            if (partAfterComma.length > 0) {
+                return partAfterComma.charAt(0).toUpperCase() + partAfterComma.slice(1);
+            }
+            
             return cleanQuery; 
         }
 
@@ -1471,8 +1512,8 @@
                             let locKey = ev.id;
                             resolvedMap[locKey] = await getCleanCityFromQuery(ev);
                             
-                            // Ligero retraso para no bloquear la API de OSM
-                            await new Promise(r => setTimeout(r, 350));
+                            // Retraso protector antibloqueo para OpenStreetMap (OSM)
+                            await new Promise(r => setTimeout(r, 600));
                         }
 
                         // 2. ASIGNAR LAS CIUDADES YA EXTRAÍDAS EN CASTELLANO
