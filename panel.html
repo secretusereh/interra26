@@ -108,9 +108,6 @@
         }
         .main-tab.active { background: rgba(255,255,255,0.08); color: var(--primary); border-bottom: 2px solid var(--primary); border-radius: 12px 12px 0 0; }
         @media (hover: hover) { .main-tab:hover:not(.active) { color: var(--primary); background: rgba(255,255,255,0.03); } }
-        
-        .badge-plus-small { font-size: 0.65rem; background: rgba(255,255,255,0.1); padding: 3px 8px; border-radius: 20px; font-weight: 800; letter-spacing: 0.5px; margin-left: 5px; }
-        .main-tab.unlocked .badge-plus-small { background: linear-gradient(135deg, #ffd700, #ffaa00); color: #000; box-shadow: 0 0 8px rgba(255, 215, 0, 0.4); }
 
         .header-section { margin-bottom: 4rem; animation: fadeDown 1s ease; }
         .header-section h1 { font-size: 3.5rem; font-weight: 800; letter-spacing: -2px; }
@@ -354,8 +351,7 @@
                 <i data-lucide="briefcase" style="width:18px;"></i> Mis Viajes
             </button>
             <button class="main-tab" id="tab-hub" onclick="switchMainTab('hub')">
-                <i data-lucide="globe" style="width:18px;"></i> El Andén (Comunidad)
-                <span class="badge-plus-small" id="hub-plus-badge">PRÓXIMAMENTE</span>
+                <i data-lucide="globe" style="width:18px;"></i> Comunidad Interra-hub
             </button>
         </div>
 
@@ -375,7 +371,7 @@
 
         <div id="view-hub" style="display: none;">
             <div class="header-section" style="margin-bottom: 2rem;">
-                <h1>El Andén.</h1>
+                <h1>Comunidad Interra-hub.</h1>
                 <p>Conecta con otros mochileros, descubre con quién coincides y comparte tu ruta al mundo.</p>
                 <button class="btn-submit" style="width: auto; padding: 0.8rem 2rem; margin-top: 1.5rem; display:inline-flex; align-items:center; gap:8px;" onclick="openPublishModal(null, null)">
                     <i data-lucide="radar" style="width:18px;"></i> Publicar mi viaje
@@ -533,9 +529,9 @@
 
     <div class="modal-overlay" id="publish-modal">
         <div class="modal-content wide-modal">
-            <h2 style="font-size: 1.8rem; font-weight: 800; display:flex; align-items:center; gap:10px;"><i data-lucide="radar" style="color:var(--accent-blue);"></i> Publicar en El Andén</h2>
+            <h2 style="font-size: 1.8rem; font-weight: 800; display:flex; align-items:center; gap:10px;"><i data-lucide="radar" style="color:var(--accent-blue);"></i> Publicar en la Comunidad</h2>
             <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom: 1.5rem; margin-top:0.5rem; line-height: 1.5;">
-                Haz que tu viaje sea visible para la comunidad. ⚠️ <strong>Precaución:</strong> Configura qué información quieres mostrar.
+                Haz que tu viaje sea visible para todos. ⚠️ <strong>Precaución:</strong> Configura qué información quieres mostrar.
             </p>
             
             <form id="publish-form">
@@ -596,8 +592,8 @@
                     <div id="social-users-container">
                         </div>
 
-                    <button type="submit" class="btn-submit" style="margin-top:1.5rem; background: var(--accent-blue);" id="btn-submit-publish">LANZAR AL ANDÉN</button>
-                    <button type="button" class="btn-submit" style="margin-top:1rem; background: rgba(255,77,77,0.1); color: var(--accent); border: 1px solid var(--accent); display: none;" id="btn-unpublish" onclick="unpublishTrip()">RETIRAR DEL ANDÉN</button>
+                    <button type="submit" class="btn-submit" style="margin-top:1.5rem; background: var(--accent-blue);" id="btn-submit-publish">LANZAR A LA COMUNIDAD</button>
+                    <button type="button" class="btn-submit" style="margin-top:1rem; background: rgba(255,77,77,0.1); color: var(--accent); border: 1px solid var(--accent); display: none;" id="btn-unpublish" onclick="unpublishTrip()">RETIRAR DE LA COMUNIDAD</button>
                     <button type="button" onclick="closeModal('publish-modal')" style="background:none; border:none; color:var(--text-muted); width:100%; margin-top:1rem; cursor:pointer; font-weight: 600; padding:1rem;">CANCELAR</button>
                 </div>
             </form>
@@ -715,6 +711,34 @@
             { id: 's3', isStatic: true, publicConfig: { name: 'Ruta del Este', gender: 'chicos', size: 5, countries: 'Budapest, Viena, Bratislava', dates: '05/09/2026 - 20/09/2026', showDates: true, showPlans: true, showHotels: true, showTransports: true, socialUsers: [{plat:'ig', user:'@rutaeste'}, {plat:'x', user:'@rutaeste_x'}] } }
         ];
 
+        // ── MAPA Y NORMALIZADOR DE CIUDADES AVANZADO ──
+        const cityNeighborhoodMap = {
+            "el raval": "Barcelona", "gracia": "Barcelona", "eixample": "Barcelona", "barceloneta": "Barcelona", "sants": "Barcelona", "poblenou": "Barcelona",
+            "deusto": "Bilbao", "casco viejo": "Bilbao", "indautxu": "Bilbao", "abando": "Bilbao",
+            "malasana": "Madrid", "malasaña": "Madrid", "chueca": "Madrid", "chamberi": "Madrid", "retiro": "Madrid", "lavapies": "Madrid", "sol": "Madrid", "la latina": "Madrid",
+            "triana": "Sevilla", "macarena": "Sevilla", "santa cruz": "Sevilla", "nervion": "Sevilla",
+            "ruzafa": "Valencia", "benimaclet": "Valencia", "el carmen": "Valencia", "cabanyal": "Valencia",
+            "montmartre": "París", "le marais": "París", "latin quarter": "París", "bastille": "París",
+            "trastevere": "Roma", "testaccio": "Roma", "prati": "Roma", "monti": "Roma",
+            "camden": "Londres", "soho": "Londres", "covent garden": "Londres", "shoreditch": "Londres",
+            "brooklyn": "Nueva York", "manhattan": "Nueva York", "queens": "Nueva York", "bronx": "Nueva York",
+            "alfama": "Lisboa", "bairro alto": "Lisboa", "chiado": "Lisboa", "belem": "Lisboa",
+            "mestre": "Venecia", "san marco": "Venecia", "rialto": "Venecia"
+        };
+
+        function normalizeCityName(rawName) {
+            if (!rawName) return 'Desconocido';
+            let clean = rawName.trim();
+            let lowerClean = clean.toLowerCase();
+            
+            for (let hood in cityNeighborhoodMap) {
+                if (lowerClean.includes(hood)) {
+                    return cityNeighborhoodMap[hood];
+                }
+            }
+            return clean;
+        }
+
         // ── TOASTS Y MODALES GENÉRICOS ──
         function showToast(message, type = 'success') {
             const container = document.getElementById('toast-container');
@@ -763,10 +787,6 @@
 
         // ── NAVEGACIÓN TABS PRINCIPALES (MIS VIAJES / HUB) ──
         window.switchMainTab = function(tabId) {
-            if (tabId === 'hub' && currentUserPlan !== 'PLUS') {
-                showToast("La Comunidad El Andén es una función exclusiva para usuarios PLUS.", "premium");
-                return;
-            }
             document.getElementById('tab-mis-viajes').classList.remove('active');
             document.getElementById('tab-hub').classList.remove('active');
             document.getElementById(`tab-${tabId}`).classList.add('active');
@@ -872,7 +892,6 @@
             const badgeLink = document.getElementById('plan-badge-link');
             const favicon = document.getElementById('dynamic-favicon');
             const hubTab = document.getElementById('tab-hub');
-            const hubBadge = document.getElementById('hub-plus-badge');
 
             currentUserPlan = userData.plan === 'PLUS' ? 'PLUS' : 'ESTANDAR';
 
@@ -880,7 +899,7 @@
                 badge.textContent = 'PLUS'; badge.className = 'plan-badge badge-plus'; badge.style.display = 'inline-flex';
                 badgeLink.href = '#'; badgeLink.title = 'Tu cuenta posee ventajas exclusivas de Interra-hub PLUS'; badgeLink.style.cursor = 'default';
                 favicon.href = 'interrahubplus.png';
-                hubTab.classList.add('unlocked'); hubBadge.innerText = 'PLUS';
+                hubTab.classList.add('unlocked');
                 if (!userData.hasSeenPlusWelcome) {
                     setTimeout(() => showToast("¡Bienvenido a Interra-hub PLUS! Tu cuenta ahora es PLUS.", "premium"), 1500);
                     if(userRefPath) await setDoc(doc(db, "usuarios", userRefPath), { hasSeenPlusWelcome: true }, { merge: true });
@@ -889,7 +908,7 @@
                 badge.textContent = 'ESTÁNDAR'; badge.className = 'plan-badge badge-estandar'; badge.style.display = 'inline-flex';
                 badgeLink.href = 'interrahubplus.html'; badgeLink.title = 'Convierte tu cuenta en PLUS para obtener ventajas ilimitadas';
                 favicon.href = 'interrahublogo.PNG';
-                hubTab.classList.remove('unlocked'); hubBadge.innerText = 'PRÓXIMAMENTE';
+                hubTab.classList.remove('unlocked');
             }
         }
 
@@ -913,20 +932,6 @@
                 window.location.href = 'registro.html';
             }
         });
-
-        // ── FUNCION RÁPIDA PARA DESPUBLICAR VIAJE ──
-        window.quickUnpublish = async function(e, tId) {
-            if(e) e.stopPropagation();
-            if(!confirm("¿Estás seguro de que quieres retirar este viaje de El Andén? Dejará de ser público al instante.")) return;
-            try {
-                await updateDoc(doc(db, "viajes", tId), { isPublic: false });
-                showToast("Viaje retirado exitosamente de la comunidad.", "info");
-                loadTrips();
-                if(document.getElementById('tab-hub').classList.contains('active')) loadHubTrips();
-            } catch(err) {
-                console.error(err); showToast("Hubo un error al despublicar tu viaje.", "error");
-            }
-        }
 
         async function loadTrips() {
             const container = document.getElementById('trips-container');
@@ -962,19 +967,13 @@
                     if (isGod) badgeContent = `<span class="role-badge" style="background:var(--accent); border-color:var(--accent);">NIVEL DIOS</span>`;
                     else if (rolAqui) badgeContent = `<span class="role-badge">${rolAqui.replace('-', ' ')}</span>`;
 
-                    const isTripPublicHtml = trip.isPublic ? `<span class="badge-public" style="cursor:help;" title="Tu viaje es visible en El Andén"><i data-lucide="globe" style="width:12px; margin-right:4px;"></i> PÚBLICO</span>` : '';
+                    const isTripPublicHtml = trip.isPublic ? `<span class="badge-public" style="cursor:help;" title="Tu viaje es visible en la Comunidad"><i data-lucide="globe" style="width:12px; margin-right:4px;"></i> PÚBLICO</span>` : '';
 
                     const radarBtnStyle = trip.isPublic ? 'background: var(--accent-blue); color: white; box-shadow: 0 0 10px rgba(77,166,255,0.4);' : '';
-                    const quickUnpublishHtml = trip.isPublic ? `
-                        <button class="btn-publish-trip" style="background: rgba(255, 77, 77, 0.1); color: var(--accent);" onclick="quickUnpublish(event, '${trip.id}')" title="Retirar de El Andén">
-                            <i data-lucide="eye-off"></i>
-                        </button>
-                    ` : '';
 
                     const adminBtnsHtml = (rolAqui === 'admin-grupo' || isGod) ? `
                         <div class="admin-actions-group">
-                            ${quickUnpublishHtml}
-                            <button class="btn-publish-trip" onclick="openPublishModal(event, '${trip.id}')" title="${trip.isPublic ? 'Configurar visibilidad en El Andén' : 'Lanzar viaje a El Andén'}" style="${radarBtnStyle}">
+                            <button class="btn-publish-trip" onclick="openPublishModal(event, '${trip.id}')" title="${trip.isPublic ? 'Configurar visibilidad en la Comunidad' : 'Lanzar viaje a la Comunidad'}" style="${radarBtnStyle}">
                                 <i data-lucide="radar"></i>
                             </button>
                             <button class="btn-edit-trip" onclick="openEditTripModal(event, '${trip.id}', '${trip.nombre.replace(/'/g, "\\'")}', '${trip.fechaInicio}', '${trip.fechaFin}')" title="Editar nombre y fechas">
@@ -1100,7 +1099,7 @@
             finally { btn.innerText = "CREAR RUTA"; btn.disabled = false; }
         };
 
-        // ── LÓGICA DE PUBLICAR EN HUB (EL ANDÉN) ──
+        // ── LÓGICA DE PUBLICAR EN HUB (LA COMUNIDAD) ──
         window.openPublishModal = function(event, tripId) {
             if(event) event.stopPropagation();
             
@@ -1173,17 +1172,17 @@
             btn.innerText = "RETIRANDO..."; btn.disabled = true;
             try {
                 await updateDoc(doc(db, "viajes", tId), { isPublic: false });
-                showToast("El viaje ha sido retirado de la comunidad.", "info");
+                showToast("El viaje ha sido retirado de la Comunidad.", "info");
                 closeModal('publish-modal'); loadTrips();
                 if(document.getElementById('tab-hub').classList.contains('active')) loadHubTrips();
             } catch (e) { console.error(e); showToast("Error al retirar el viaje.", "error"); } 
-            finally { btn.innerText = "RETIRAR DEL ANDÉN"; btn.disabled = false; }
+            finally { btn.innerText = "RETIRAR DE LA COMUNIDAD"; btn.disabled = false; }
         };
 
         document.getElementById('publish-form').onsubmit = async (e) => {
             e.preventDefault();
             const btn = document.getElementById('btn-submit-publish');
-            btn.innerText = "LANZANDO AL ANDÉN..."; btn.disabled = true;
+            btn.innerText = "LANZANDO A LA COMUNIDAD..."; btn.disabled = true;
             
             const tId = document.getElementById('pub-trip-id').value;
             const trip = todosLosViajesCache.find(t => t.id === tId);
@@ -1217,14 +1216,14 @@
             
             try {
                 await setDoc(doc(db, "viajes", tId), { isPublic: true, publicConfig: config }, { merge: true });
-                showToast("¡Tu viaje ahora es visible en El Andén!", "success");
+                showToast("¡Tu viaje ahora es visible en la Comunidad!", "success");
                 closeModal('publish-modal'); loadTrips(); 
                 if(document.getElementById('tab-hub').classList.contains('active')) loadHubTrips();
             } catch(err) { showToast("Error al publicar en la base de datos.", "error"); } 
-            finally { btn.innerText = "LANZAR AL ANDÉN"; btn.disabled = false; }
+            finally { btn.innerText = "LANZAR A LA COMUNIDAD"; btn.disabled = false; }
         };
 
-        // ── LÓGICA DE EL ANDÉN (HUB) Y FILTROS ──
+        // ── LÓGICA DE LA COMUNIDAD (HUB) Y FILTROS ──
 
         window.loadHubTrips = async function() {
             const container = document.getElementById('hub-trips-container');
@@ -1274,14 +1273,6 @@
                 if(size > 10) dotsHtml += '<span style="font-size:0.7rem; color:var(--text-muted); font-weight:800; margin-left:2px;">+</span>';
                 dotsHtml += '</span>';
 
-                let amIOwner = false;
-                if (currentUser) {
-                    let theTrip = todosLosViajesCache.find(t => t.id === trip.id);
-                    if (theTrip && theTrip.miembros && theTrip.miembros[currentUser.uid] === 'admin-grupo') {
-                        amIOwner = true;
-                    }
-                }
-                
                 const card = document.createElement('div');
                 card.className = 'trip-card visible unlocked';
                 card.style.minHeight = 'auto'; card.style.padding = '2rem';
@@ -1296,11 +1287,6 @@
                         <button class="btn-submit" style="width:100%; padding: 0.8rem; font-size: 0.9rem; background:rgba(255,255,255,0.05); color:white; border:1px solid var(--border-subtle); display:flex; justify-content:center; align-items:center; gap:8px;" onclick="viewPublicTripDetails('${trip.id}')">
                             <i data-lucide="eye" style="width:16px;"></i> <span>Ver Viaje</span>
                         </button>
-                        ${amIOwner ? `
-                        <button class="btn-submit" style="width:100%; padding: 0.8rem; font-size: 0.9rem; background:rgba(255,77,77,0.1); color:var(--accent); border:1px dashed rgba(255,77,77,0.3); display:flex; justify-content:center; align-items:center; gap:8px; margin-top: 10px; transition: 0.3s;" onclick="quickUnpublish(event, '${trip.id}')">
-                            <i data-lucide="eye-off" style="width:16px;"></i> <span>Despublicar de El Andén</span>
-                        </button>
-                        ` : ''}
                     </div>
                 `;
                 container.appendChild(card);
@@ -1314,7 +1300,7 @@
         window.currentPublicTripExtendidaHtml = '';
 
         window.viewPublicTripDetails = function(id) {
-            if (!hasPublicTrip) { showToast("Debes publicar un viaje en El Andén para ver los detalles de los demás.", "error"); return; }
+            if (!hasPublicTrip) { showToast("Debes publicar un viaje en la Comunidad para ver los detalles de los demás.", "error"); return; }
             
             let trip = STATIC_HUB_TRIPS.find(t => t.id === id) || dynamicHubTrips.find(t => t.id === id);
             if(!trip || !trip.publicConfig) return;
@@ -1373,23 +1359,21 @@
                     if(trip.eventos && trip.eventos.length > 0) {
                         let sortedEvents = trip.eventos.sort((a, b) => new Date(a.dateKey) - new Date(b.dateKey));
                         
-                        // MOTOR INTELIGENTE DE EXTRACCIÓN DE CIUDADES (Bug Fix Principal)
+                        // MOTOR INTELIGENTE DE EXTRACCIÓN DE CIUDADES CON NORMALIZADOR
                         let dateToCity = {};
                         let lastKnownCity = 'Desconocido';
 
                         // Pasada 1: Identificar las ciudades explícitas y los hoteles.
                         sortedEvents.forEach(ev => {
-                            if (ev.ciudad) { dateToCity[ev.dateKey] = ev.ciudad; lastKnownCity = ev.ciudad; }
-                            else if (ev.location) { dateToCity[ev.dateKey] = ev.location; lastKnownCity = ev.location; }
+                            if (ev.ciudad) { dateToCity[ev.dateKey] = normalizeCityName(ev.ciudad); lastKnownCity = dateToCity[ev.dateKey]; }
+                            else if (ev.location) { dateToCity[ev.dateKey] = normalizeCityName(ev.location); lastKnownCity = dateToCity[ev.dateKey]; }
                             else if (ev.type === 'hotel' && ev.title) {
-                                // Los hoteles suelen llamarse "Nombre Hotel, Ciudad". Extraemos lo de después de la coma.
                                 let parts = ev.title.split(',');
                                 if (parts.length > 1) {
                                     let parsedCity = parts[parts.length - 1].trim();
-                                    dateToCity[ev.dateKey] = parsedCity;
-                                    lastKnownCity = parsedCity;
+                                    dateToCity[ev.dateKey] = normalizeCityName(parsedCity);
+                                    lastKnownCity = dateToCity[ev.dateKey];
                                 } else {
-                                    // Si un hotel no tiene coma, mantenemos la última ciudad conocida para ese día.
                                     if(!dateToCity[ev.dateKey]) dateToCity[ev.dateKey] = lastKnownCity;
                                 }
                             }
