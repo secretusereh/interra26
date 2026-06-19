@@ -317,6 +317,7 @@
         @keyframes spin { 100% { transform: rotate(360deg); } }
         @keyframes fadeDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes bellRing { 0%, 100% { transform: rotate(0); } 10%, 30%, 50%, 70%, 90% { transform: rotate(10deg); } 20%, 40%, 60%, 80% { transform: rotate(-10deg); } }
+        @keyframes ping { 0% { transform: scale(0.8); opacity: 1; } 100% { transform: scale(2); opacity: 0; } }
     </style>
 </head>
 <body>
@@ -543,7 +544,7 @@
                 <div style="display: grid; grid-template-columns: 1fr; gap: 1rem;">
                     
                     <div class="input-group" id="publish-trip-select-group" style="display:none; margin-bottom: 1rem;">
-                        <label>Selecciona el viaje a publicar</label>
+                        <label>Selecciona el viaje a configurar</label>
                         <select id="pub-trip-id" required></select>
                     </div>
 
@@ -714,7 +715,7 @@
             { id: 's3', isStatic: true, publicConfig: { name: 'Ruta del Este', gender: 'chicos', size: 5, countries: 'Budapest, Viena, Bratislava', dates: '05/09/2026 - 20/09/2026', showDates: true, showPlans: true, showHotels: true, showTransports: true, socialUsers: [{plat:'ig', user:'@rutaeste'}, {plat:'x', user:'@rutaeste_x'}] } }
         ];
 
-        // ── MAPA Y NORMALIZADOR DE CIUDADES AVANZADO ──
+        // ── MOTOR GEOGRÁFICO AVANZADO (DICCIONARIO + API PHOTON/KOMOOT) ──
         const cityNeighborhoodMap = {
             "plantage middenlaan": "Ámsterdam", "plantage": "Ámsterdam", "jordaan": "Ámsterdam", "de pijp": "Ámsterdam", "amsterdam": "Ámsterdam", "holanda": "Ámsterdam",
             "el raval": "Barcelona", "gracia": "Barcelona", "eixample": "Barcelona", "barceloneta": "Barcelona", "sants": "Barcelona", "poblenou": "Barcelona", "barcelona": "Barcelona",
@@ -737,21 +738,50 @@
         };
 
         const majorCitiesFallback = ["Ámsterdam", "Barcelona", "Madrid", "París", "Roma", "Londres", "Berlín", "Praga", "Viena", "Budapest", "Lisboa", "Sevilla", "Valencia", "Bilbao", "Milán", "Florencia", "Venecia", "Atenas", "Bruselas", "Copenhague", "Estocolmo", "Oslo", "Edimburgo", "Dublín"];
+        const geocodeCache = {};
 
-        function normalizeCityName(rawName) {
+        async function resolveLocationToCity(rawName) {
             if (!rawName) return 'Desconocido';
             let clean = rawName.trim();
-            let lowerClean = clean.toLowerCase();
             
+            // Intenta extraer la ciudad si está separada por coma (ej: "Plantage Middenlaan, Amsterdam")
+            let parts = clean.split(',');
+            let searchString = clean;
+            if (parts.length > 1) {
+                let lastPart = parts[parts.length - 1].trim();
+                if (lastPart.length > 2) searchString = lastPart;
+            }
+
+            let lowerClean = searchString.toLowerCase();
+
+            // 1. DICCIONARIO MASIVO LOCAL (Caché estático)
             for (let hood in cityNeighborhoodMap) {
                 if (lowerClean.includes(hood)) return cityNeighborhoodMap[hood];
             }
-            
             for (let city of majorCitiesFallback) {
                 if (lowerClean.includes(city.toLowerCase())) return city;
             }
-            
-            return clean;
+
+            // 2. CACHÉ EN MEMORIA EN TIEMPO DE EJECUCIÓN
+            if (geocodeCache[lowerClean]) return geocodeCache[lowerClean];
+
+            // 3. LLAMADA SATELITAL A LA API DE OPENSTREETMAP (Photon/Komoot)
+            try {
+                const res = await fetch(`https://photon.komoot.io/api/?q=${encodeURIComponent(searchString)}&limit=1`);
+                const data = await res.json();
+                if (data && data.features && data.features.length > 0) {
+                    let props = data.features[0].properties;
+                    let detectedCity = props.city || props.town || props.village || props.county || props.state || searchString;
+                    geocodeCache[lowerClean] = detectedCity;
+                    return detectedCity;
+                }
+            } catch(e) {
+                console.warn("Fallo en la geocodificación de", searchString, e);
+            }
+
+            // Fallback si nada funciona
+            geocodeCache[lowerClean] = searchString;
+            return searchString;
         }
 
         // ── TOASTS Y MODALES GENÉRICOS ──
@@ -1124,7 +1154,7 @@
             finally { btn.innerText = "CREAR RUTA"; btn.disabled = false; }
         };
 
-        // ── LÓGICA DE PUBLICAR / EDITAR EN LA COMUNIDAD (RADAR) ──
+        // ── LÓGICA DE PUBLICAR / EDITAR EN LA COMUNIDAD (RADAR INTELIGENTE) ──
         window.openPublishModal = function(event, tripId) {
             if(event) event.stopPropagation();
             
@@ -1155,7 +1185,7 @@
             
             document.getElementById('pub-name').value = (trip.publicConfig && trip.publicConfig.name) ? trip.publicConfig.name : trip.nombre;
             
-            // Lógica UX: Si el viaje ya es público, el radar es de "Edición", no de "Creación"
+            // INTELIGENCIA UX: Si ya es público, el radar es modo edición y el botón dice Guardar Cambios.
             const modalTitle = document.getElementById('publish-modal-title');
             const submitBtn = document.getElementById('btn-submit-publish');
             
@@ -1332,11 +1362,11 @@
             lucide.createIcons();
         }
 
-        // ── DISEÑO NUEVO, LIMPIO Y PRECISO DEL ITINERARIO PÚBLICO ──
+        // ── DISEÑO NUEVO Y MOTOR SINCERAMENTE AVANZADO DEL ITINERARIO PÚBLICO ──
         window.currentPublicTripResumidaHtml = '';
         window.currentPublicTripExtendidaHtml = '';
 
-        window.viewPublicTripDetails = function(id) {
+        window.viewPublicTripDetails = async function(id) {
             if (!hasPublicTrip) { showToast("Debes publicar un viaje en la Comunidad para ver los detalles de los demás.", "error"); return; }
             
             let trip = STATIC_HUB_TRIPS.find(t => t.id === id) || dynamicHubTrips.find(t => t.id === id);
@@ -1385,6 +1415,21 @@
             }
             document.getElementById('public-modal-socials').innerHTML = socialHtml || '<span style="color:var(--text-muted); font-size:0.85rem;">No han compartido redes sociales.</span>';
             
+            // UX LOADING: Animación Satelital del Motor Geográfico
+            const contentArea = document.getElementById('public-modal-content-area');
+            contentArea.innerHTML = `
+                <div style="text-align:center; padding: 4rem 1rem; display:flex; flex-direction:column; align-items:center; justify-content:center;">
+                    <div style="position:relative; width:80px; height:80px; margin-bottom:1.5rem;">
+                        <div style="position:absolute; inset:0; border:2px solid var(--accent-blue); border-radius:50%; animation: ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;"></div>
+                        <i data-lucide="satellite" style="width:40px; height:40px; color:var(--accent-blue); position:absolute; top:50%; left:50%; transform:translate(-50%, -50%);"></i>
+                    </div>
+                    <h3 style="color:white; font-size:1.2rem; font-weight:800; letter-spacing:1px;">MOTOR GEOGRÁFICO ACTIVADO</h3>
+                    <p style="color:var(--text-muted); font-size:0.9rem; margin-top:0.5rem;">Mapeando y normalizando ubicaciones globales...</p>
+                </div>
+            `;
+            document.getElementById('public-trip-details-modal').classList.add('active');
+            lucide.createIcons();
+
             window.currentPublicTripResumidaHtml = '';
             window.currentPublicTripExtendidaHtml = '';
 
@@ -1396,33 +1441,51 @@
                     if(trip.eventos && trip.eventos.length > 0) {
                         let sortedEvents = trip.eventos.sort((a, b) => new Date(a.dateKey) - new Date(b.dateKey));
                         
-                        // MOTOR INTELIGENTE DE EXTRACCIÓN DE CIUDADES CON NORMALIZADOR
                         let dateToCity = {};
                         let lastKnownCity = 'Desconocido';
 
-                        // Pasada 1: Identificar las ciudades explícitas y los hoteles.
+                        // 1. EXTRAER QUERIES ÚNICAS PARA NO SATURAR LA API SATELLITAL
+                        let queriesToFetch = new Set();
                         sortedEvents.forEach(ev => {
-                            if (ev.ciudad) { dateToCity[ev.dateKey] = normalizeCityName(ev.ciudad); lastKnownCity = dateToCity[ev.dateKey]; }
-                            else if (ev.location) { dateToCity[ev.dateKey] = normalizeCityName(ev.location); lastKnownCity = dateToCity[ev.dateKey]; }
-                            else if (ev.type === 'hotel' && ev.title) {
+                            let loc = ev.ciudad || ev.location;
+                            if (!loc && ev.type === 'hotel' && ev.title) {
                                 let parts = ev.title.split(',');
-                                if (parts.length > 1) {
-                                    let parsedCity = parts[parts.length - 1].trim();
-                                    dateToCity[ev.dateKey] = normalizeCityName(parsedCity);
-                                    lastKnownCity = dateToCity[ev.dateKey];
-                                } else {
-                                    if(!dateToCity[ev.dateKey]) dateToCity[ev.dateKey] = lastKnownCity;
-                                }
+                                if (parts.length > 1) loc = parts[parts.length - 1].trim();
+                            }
+                            if (loc) queriesToFetch.add(loc);
+                        });
+
+                        // 2. RESOLVER ASÍNCRONAMENTE LA GEOLOCALIZACIÓN
+                        let resolvedMap = {};
+                        for (let q of queriesToFetch) {
+                            resolvedMap[q] = await resolveLocationToCity(q);
+                        }
+
+                        // 3. ASIGNAR LAS CIUDADES YA TRADUCIDAS PERFECTAMENTE
+                        sortedEvents.forEach(ev => {
+                            let loc = ev.ciudad || ev.location;
+                            if (!loc && ev.type === 'hotel' && ev.title) {
+                                let parts = ev.title.split(',');
+                                if (parts.length > 1) loc = parts[parts.length - 1].trim();
+                            }
+                            if (loc) {
+                                dateToCity[ev.dateKey] = resolvedMap[loc];
+                                lastKnownCity = dateToCity[ev.dateKey];
+                            } else {
+                                if(!dateToCity[ev.dateKey]) dateToCity[ev.dateKey] = lastKnownCity;
                             }
                         });
 
-                        // Pasada 2: Rellenar huecos para días que solo tienen planes y dependen de la ciudad en curso.
+                        // 4. RELLENAR HUECOS POR SI ALGÚN DÍA NO TIENE LOC (depende del día anterior)
                         sortedEvents.forEach(ev => {
-                            if (!dateToCity[ev.dateKey]) dateToCity[ev.dateKey] = lastKnownCity;
-                            else lastKnownCity = dateToCity[ev.dateKey];
+                            if (!dateToCity[ev.dateKey] || dateToCity[ev.dateKey] === 'Desconocido') {
+                                dateToCity[ev.dateKey] = lastKnownCity;
+                            } else {
+                                lastKnownCity = dateToCity[ev.dateKey];
+                            }
                         });
 
-                        // Lógica Resumida: Agrupación estricta usando el Motor de Ciudades
+                        // ── CONSTRUCCIÓN VISTA RESUMIDA ──
                         let journeySteps = [];
                         let currentStep = null;
                         
@@ -1438,7 +1501,6 @@
                             currentStep.endDate = ev.dateKey;
                             
                             if (ev.type === 'hotel') {
-                                // Guardar el nombre real del hotel sin la ciudad
                                 let hName = ev.title.split(',')[0].trim();
                                 currentStep.hotels.add(hName);
                             }
@@ -1446,13 +1508,11 @@
                         });
                         if (currentStep) journeySteps.push(currentStep);
 
-                        // RENDER VISTA RESUMIDA SUPER LIMPIA
                         let resHtml = `<div class="graphic-timeline">`;
                         if (journeySteps.length === 0 || (journeySteps.length === 1 && journeySteps[0].city === 'Desconocido')) {
                             resHtml += `<div style="text-align:center; color:var(--text-muted); padding:2rem;">El itinerario no tiene destinos claros identificables.</div>`;
                         } else {
                             journeySteps.forEach((step, index) => {
-                                // Si la ciudad se quedó en Desconocido por falta de datos, la ocultamos de forma amigable
                                 let displayCity = step.city === 'Desconocido' ? 'Destino en Ruta' : step.city.toUpperCase();
                                 
                                 let dateStr = "";
@@ -1489,7 +1549,7 @@
                         resHtml += `</div>`;
                         window.currentPublicTripResumidaHtml = resHtml;
 
-                        // RENDER VISTA EXTENDIDA SIN BUCLES NI REPETICIONES DE ALOJAMIENTOS
+                        // ── CONSTRUCCIÓN VISTA EXTENDIDA ──
                         let groupedByDate = {};
                         sortedEvents.forEach(ev => {
                             if(!groupedByDate[ev.dateKey]) groupedByDate[ev.dateKey] = { hotels: [], plans: [], transports: [] };
@@ -1509,7 +1569,6 @@
                             let currentSite = dateToCity[dateKey] || 'En ruta';
                             if (currentSite !== 'Desconocido' && currentSite !== 'En ruta') currentSite = currentSite.toUpperCase();
 
-                            // Marcador Gigante de la Ciudad si cambia
                             if (currentSite !== lastSite && currentSite !== 'EN RUTA' && currentSite !== 'Desconocido') {
                                 extHtml += `
                                     <div style="margin: 2.5rem 0 1.5rem -10px; background: rgba(255,255,255,0.05); padding: 8px 16px; border-radius: 12px; display: inline-block; font-weight: 800; color: var(--primary); font-size: 1.2rem; line-height: 1.2; border: 1px solid rgba(255,255,255,0.1);">
@@ -1519,7 +1578,6 @@
                                 lastSite = currentSite;
                             }
 
-                            // Titular Limpio del Alojamiento solo si cambia o es su primera vez en la ciudad
                             if (config.showHotels && dateData.hotels.length > 0) {
                                 dateData.hotels.forEach(h => {
                                     let hotelName = h.title.split(',')[0].trim();
@@ -1597,8 +1655,8 @@
                 }
             }
             
+            // Ya cargado, se muestra la vista final
             toggleItineraryView('resumida');
-            document.getElementById('public-trip-details-modal').classList.add('active');
         }
 
         window.toggleItineraryView = function(viewType) {
