@@ -712,9 +712,7 @@
         const STATIC_HUB_TRIPS = [
             { id: 's1', isStatic: true, publicConfig: { name: 'Eurotrip Verano 26', gender: 'mixto', size: 4, countries: 'Francia, Italia, Suiza', dates: '01/07/2026 - 15/07/2026', showDates: true, showPlans: true, showHotels: false, showTransports: true, socialUsers: [{plat:'ig', user:'@euro26'}, {plat:'tk', user:'@euro_trip'}] } },
             { id: 's2', isStatic: true, publicConfig: { name: 'Chicas a Berlín y Praga', gender: 'chicas', size: 3, countries: 'Berlín, Praga, Viena', dates: '10/08/2026 - 18/08/2026', showDates: false, showPlans: true, showHotels: false, showTransports: false, socialUsers: [{plat:'ig', user:'@lasviajeras'}] } },
-            { id: 's3', isStatic: true, publicConfig: { name: 'Ruta del Este', gender: 'chicos', size: 5, countries: 'Budapest, Viena, Bratislava', dates: '05/09/2026 - 20/09/2026', showDates: true, showPlans: true, showHotels: true, showTransports: true, socialUsers: [{plat:'ig', user:'@rutaeste'}, {plat:'x', user:'@rutaeste_x'}] } },
-            { id: 's4', isStatic: true, publicConfig: { name: 'Mochileros Sur', gender: 'mixto', size: 2, countries: 'Italia, Grecia', dates: '12/07/2026 - 28/07/2026', showDates: true, showPlans: false, showHotels: false, showTransports: true, socialUsers: [] } },
-            { id: 's5', isStatic: true, publicConfig: { name: 'Fiesta y Nieve', gender: 'mixto', size: 6, countries: 'Suiza, Francia, Andorra', dates: '15/12/2026 - 22/12/2026', showDates: true, showPlans: true, showHotels: true, showTransports: false, socialUsers: [{plat:'ig', user:'@nieveparty'}] } }
+            { id: 's3', isStatic: true, publicConfig: { name: 'Ruta del Este', gender: 'chicos', size: 5, countries: 'Budapest, Viena, Bratislava', dates: '05/09/2026 - 20/09/2026', showDates: true, showPlans: true, showHotels: true, showTransports: true, socialUsers: [{plat:'ig', user:'@rutaeste'}, {plat:'x', user:'@rutaeste_x'}] } }
         ];
 
         // ── TOASTS Y MODALES GENÉRICOS ──
@@ -916,6 +914,20 @@
             }
         });
 
+        // ── FUNCION RÁPIDA PARA DESPUBLICAR VIAJE ──
+        window.quickUnpublish = async function(e, tId) {
+            if(e) e.stopPropagation();
+            if(!confirm("¿Estás seguro de que quieres retirar este viaje de El Andén? Dejará de ser público al instante.")) return;
+            try {
+                await updateDoc(doc(db, "viajes", tId), { isPublic: false });
+                showToast("Viaje retirado exitosamente de la comunidad.", "info");
+                loadTrips();
+                if(document.getElementById('tab-hub').classList.contains('active')) loadHubTrips();
+            } catch(err) {
+                console.error(err); showToast("Hubo un error al despublicar tu viaje.", "error");
+            }
+        }
+
         async function loadTrips() {
             const container = document.getElementById('trips-container');
             const addBtn = container.querySelector('.card-add');
@@ -950,11 +962,19 @@
                     if (isGod) badgeContent = `<span class="role-badge" style="background:var(--accent); border-color:var(--accent);">NIVEL DIOS</span>`;
                     else if (rolAqui) badgeContent = `<span class="role-badge">${rolAqui.replace('-', ' ')}</span>`;
 
-                    const isTripPublicHtml = trip.isPublic ? `<span class="badge-public"><i data-lucide="globe" style="width:12px; margin-right:4px;"></i> PÚBLICO</span>` : '';
+                    const isTripPublicHtml = trip.isPublic ? `<span class="badge-public" style="cursor:help;" title="Tu viaje es visible en El Andén"><i data-lucide="globe" style="width:12px; margin-right:4px;"></i> PÚBLICO</span>` : '';
+
+                    const radarBtnStyle = trip.isPublic ? 'background: var(--accent-blue); color: white; box-shadow: 0 0 10px rgba(77,166,255,0.4);' : '';
+                    const quickUnpublishHtml = trip.isPublic ? `
+                        <button class="btn-publish-trip" style="background: rgba(255, 77, 77, 0.1); color: var(--accent);" onclick="quickUnpublish(event, '${trip.id}')" title="Retirar de El Andén">
+                            <i data-lucide="eye-off"></i>
+                        </button>
+                    ` : '';
 
                     const adminBtnsHtml = (rolAqui === 'admin-grupo' || isGod) ? `
                         <div class="admin-actions-group">
-                            <button class="btn-publish-trip" onclick="openPublishModal(event, '${trip.id}')" title="Configurar publicación en El Andén">
+                            ${quickUnpublishHtml}
+                            <button class="btn-publish-trip" onclick="openPublishModal(event, '${trip.id}')" title="${trip.isPublic ? 'Configurar visibilidad en El Andén' : 'Lanzar viaje a El Andén'}" style="${radarBtnStyle}">
                                 <i data-lucide="radar"></i>
                             </button>
                             <button class="btn-edit-trip" onclick="openEditTripModal(event, '${trip.id}', '${trip.nombre.replace(/'/g, "\\'")}', '${trip.fechaInicio}', '${trip.fechaFin}')" title="Editar nombre y fechas">
@@ -1169,7 +1189,6 @@
             const trip = todosLosViajesCache.find(t => t.id === tId);
             const countries = document.getElementById('pub-countries').value;
             
-            // Calculamos solo admin o editores reales
             let realSize = 0;
             if(trip.miembros) {
                 Object.values(trip.miembros).forEach(rol => {
@@ -1254,6 +1273,14 @@
                 }
                 if(size > 10) dotsHtml += '<span style="font-size:0.7rem; color:var(--text-muted); font-weight:800; margin-left:2px;">+</span>';
                 dotsHtml += '</span>';
+
+                let amIOwner = false;
+                if (currentUser) {
+                    let theTrip = todosLosViajesCache.find(t => t.id === trip.id);
+                    if (theTrip && theTrip.miembros && theTrip.miembros[currentUser.uid] === 'admin-grupo') {
+                        amIOwner = true;
+                    }
+                }
                 
                 const card = document.createElement('div');
                 card.className = 'trip-card visible unlocked';
@@ -1269,6 +1296,11 @@
                         <button class="btn-submit" style="width:100%; padding: 0.8rem; font-size: 0.9rem; background:rgba(255,255,255,0.05); color:white; border:1px solid var(--border-subtle); display:flex; justify-content:center; align-items:center; gap:8px;" onclick="viewPublicTripDetails('${trip.id}')">
                             <i data-lucide="eye" style="width:16px;"></i> <span>Ver Viaje</span>
                         </button>
+                        ${amIOwner ? `
+                        <button class="btn-submit" style="width:100%; padding: 0.8rem; font-size: 0.9rem; background:rgba(255,77,77,0.1); color:var(--accent); border:1px dashed rgba(255,77,77,0.3); display:flex; justify-content:center; align-items:center; gap:8px; margin-top: 10px; transition: 0.3s;" onclick="quickUnpublish(event, '${trip.id}')">
+                            <i data-lucide="eye-off" style="width:16px;"></i> <span>Despublicar de El Andén</span>
+                        </button>
+                        ` : ''}
                     </div>
                 `;
                 container.appendChild(card);
@@ -1277,7 +1309,7 @@
             lucide.createIcons();
         }
 
-        // ── DISEÑO NUEVO Y LIMPIO DEL ITINERARIO PÚBLICO ──
+        // ── DISEÑO NUEVO, LIMPIO Y PRECISO DEL ITINERARIO PÚBLICO ──
         window.currentPublicTripResumidaHtml = '';
         window.currentPublicTripExtendidaHtml = '';
 
@@ -1341,66 +1373,102 @@
                     if(trip.eventos && trip.eventos.length > 0) {
                         let sortedEvents = trip.eventos.sort((a, b) => new Date(a.dateKey) - new Date(b.dateKey));
                         
-                        // Lógica Resumida: Agrupación estricta por Ciudad
+                        // MOTOR INTELIGENTE DE EXTRACCIÓN DE CIUDADES (Bug Fix Principal)
+                        let dateToCity = {};
+                        let lastKnownCity = 'Desconocido';
+
+                        // Pasada 1: Identificar las ciudades explícitas y los hoteles.
+                        sortedEvents.forEach(ev => {
+                            if (ev.ciudad) { dateToCity[ev.dateKey] = ev.ciudad; lastKnownCity = ev.ciudad; }
+                            else if (ev.location) { dateToCity[ev.dateKey] = ev.location; lastKnownCity = ev.location; }
+                            else if (ev.type === 'hotel' && ev.title) {
+                                // Los hoteles suelen llamarse "Nombre Hotel, Ciudad". Extraemos lo de después de la coma.
+                                let parts = ev.title.split(',');
+                                if (parts.length > 1) {
+                                    let parsedCity = parts[parts.length - 1].trim();
+                                    dateToCity[ev.dateKey] = parsedCity;
+                                    lastKnownCity = parsedCity;
+                                } else {
+                                    // Si un hotel no tiene coma, mantenemos la última ciudad conocida para ese día.
+                                    if(!dateToCity[ev.dateKey]) dateToCity[ev.dateKey] = lastKnownCity;
+                                }
+                            }
+                        });
+
+                        // Pasada 2: Rellenar huecos para días que solo tienen planes y dependen de la ciudad en curso.
+                        sortedEvents.forEach(ev => {
+                            if (!dateToCity[ev.dateKey]) dateToCity[ev.dateKey] = lastKnownCity;
+                            else lastKnownCity = dateToCity[ev.dateKey];
+                        });
+
+                        // Lógica Resumida: Agrupación estricta usando el Motor de Ciudades
                         let journeySteps = [];
                         let currentStep = null;
                         
                         sortedEvents.forEach(ev => {
-                            let siteName = 'Desconocido';
-                            if (ev.title) {
-                                let parts = ev.title.split(',');
-                                siteName = parts.length > 1 ? parts[parts.length - 1].trim() : parts[0].trim();
-                            }
-                            if (ev.type === 'transport') return; // Saltamos transporte para vista resumida
+                            if (ev.type === 'transport') return;
 
-                            if (!currentStep || currentStep.city !== siteName) {
+                            let evCity = dateToCity[ev.dateKey] || 'Destino';
+                            
+                            if (!currentStep || currentStep.city !== evCity) {
                                 if (currentStep) journeySteps.push(currentStep);
-                                currentStep = { city: siteName, startDate: ev.dateKey, endDate: ev.dateKey, hotels: new Set(), plans: 0 };
+                                currentStep = { city: evCity, startDate: ev.dateKey, endDate: ev.dateKey, hotels: new Set(), plans: 0 };
                             }
                             currentStep.endDate = ev.dateKey;
-                            if (ev.type === 'hotel') currentStep.hotels.add(ev.title.split(',')[0].trim());
+                            
+                            if (ev.type === 'hotel') {
+                                // Guardar el nombre real del hotel sin la ciudad
+                                let hName = ev.title.split(',')[0].trim();
+                                currentStep.hotels.add(hName);
+                            }
                             if (ev.type === 'plan') currentStep.plans++;
                         });
                         if (currentStep) journeySteps.push(currentStep);
 
                         // RENDER VISTA RESUMIDA SUPER LIMPIA
                         let resHtml = `<div class="graphic-timeline">`;
-                        if (journeySteps.length === 0) resHtml += `<div style="text-align:center; color:var(--text-muted);">Sin destinos registrados.</div>`;
-                        journeySteps.forEach((step, index) => {
-                            let dateStr = "";
-                            if (step.startDate === step.endDate) {
-                                dateStr = new Date(step.startDate).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' });
-                            } else {
-                                dateStr = `${new Date(step.startDate).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })} - ${new Date(step.endDate).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })}`;
-                            }
-                            
-                            let hotelStr = step.hotels.size > 0 ? Array.from(step.hotels).join(' / ') : 'Alojamiento en ruta';
-                            if (!config.showHotels) hotelStr = 'Alojamiento Privado';
-                            
-                            let planBadgeHtml = config.showPlans 
-                                ? `<div style="display:inline-flex; align-items:center; gap:8px; background:rgba(255,255,255,0.03); color:var(--text-muted); padding:8px 16px; border-radius:12px; font-weight:800; font-size:0.85rem; border: 1px solid rgba(255,255,255,0.08);"><span style="letter-spacing: 1px;">PLANES</span> <span style="background:var(--primary); color:var(--bg-color); padding:4px 10px; border-radius:8px; font-size:1rem;">${step.plans}</span></div>`
-                                : `<div style="display:inline-flex; align-items:center; gap:8px; background:rgba(255,255,255,0.02); color:var(--text-muted); padding:8px 16px; border-radius:12px; font-weight:800; font-size:0.85rem; border: 1px dashed rgba(255,255,255,0.1);"><span style="letter-spacing: 1px;">PLANES PRIVADOS</span> <i data-lucide="lock" style="width:14px;"></i></div>`;
+                        if (journeySteps.length === 0 || (journeySteps.length === 1 && journeySteps[0].city === 'Desconocido')) {
+                            resHtml += `<div style="text-align:center; color:var(--text-muted); padding:2rem;">El itinerario no tiene destinos claros identificables.</div>`;
+                        } else {
+                            journeySteps.forEach((step, index) => {
+                                // Si la ciudad se quedó en Desconocido por falta de datos, la ocultamos de forma amigable
+                                let displayCity = step.city === 'Desconocido' ? 'Destino en Ruta' : step.city.toUpperCase();
+                                
+                                let dateStr = "";
+                                if (step.startDate === step.endDate) {
+                                    dateStr = new Date(step.startDate).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' });
+                                } else {
+                                    dateStr = `${new Date(step.startDate).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })} - ${new Date(step.endDate).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })}`;
+                                }
+                                
+                                let hotelStr = step.hotels.size > 0 ? Array.from(step.hotels).join(' / ') : 'Alojamiento en ruta';
+                                if (!config.showHotels) hotelStr = 'Alojamiento Privado';
+                                
+                                let planBadgeHtml = config.showPlans 
+                                    ? `<div style="display:inline-flex; align-items:center; gap:8px; background:rgba(255,255,255,0.03); color:var(--text-muted); padding:8px 16px; border-radius:12px; font-weight:800; font-size:0.85rem; border: 1px solid rgba(255,255,255,0.08);"><span style="letter-spacing: 1px;">PLANES</span> <span style="background:var(--primary); color:var(--bg-color); padding:4px 10px; border-radius:8px; font-size:1rem;">${step.plans}</span></div>`
+                                    : `<div style="display:inline-flex; align-items:center; gap:8px; background:rgba(255,255,255,0.02); color:var(--text-muted); padding:8px 16px; border-radius:12px; font-weight:800; font-size:0.85rem; border: 1px dashed rgba(255,255,255,0.1);"><span style="letter-spacing: 1px;">PLANES PRIVADOS</span> <i data-lucide="lock" style="width:14px;"></i></div>`;
 
-                            resHtml += `
-                                <div class="graphic-step" style="display: flex; flex-direction: row; align-items: center; justify-content: space-between; flex-wrap: wrap; padding: 1.8rem; gap: 15px;">
-                                    <div style="display: flex; flex-direction: column; gap: 8px;">
-                                        <div class="graphic-step-city" style="font-size: 1.6rem; font-weight: 800; color: var(--primary); display: flex; align-items: center; gap: 8px;"><i data-lucide="map-pin" style="color:var(--accent); width: 24px; height: 24px;"></i> ${step.city}</div>
-                                        <div style="font-size: 0.9rem; color: var(--accent-blue); font-weight: 700; background: rgba(77,166,255,0.1); padding: 4px 12px; border-radius: 20px; display: inline-block; width: fit-content;">${config.showDates ? dateStr : 'Fechas privadas'}</div>
-                                        <div style="font-size: 0.95rem; color: var(--text-muted); display:flex; align-items:center; gap:8px; margin-top: 4px;"><i data-lucide="bed" style="width:18px; color: var(--success);"></i> ${hotelStr}</div>
+                                resHtml += `
+                                    <div class="graphic-step" style="display: flex; flex-direction: row; align-items: center; justify-content: space-between; flex-wrap: wrap; padding: 1.8rem; gap: 15px;">
+                                        <div style="display: flex; flex-direction: column; gap: 8px;">
+                                            <div class="graphic-step-city" style="font-size: 1.6rem; font-weight: 800; color: var(--primary); display: flex; align-items: center; gap: 8px;"><i data-lucide="map-pin" style="color:var(--accent); width: 24px; height: 24px;"></i> ${displayCity}</div>
+                                            <div style="font-size: 0.9rem; color: var(--accent-blue); font-weight: 700; background: rgba(77,166,255,0.1); padding: 4px 12px; border-radius: 20px; display: inline-block; width: fit-content;">${config.showDates ? dateStr : 'Fechas privadas'}</div>
+                                            <div style="font-size: 0.95rem; color: var(--text-muted); display:flex; align-items:center; gap:8px; margin-top: 4px;"><i data-lucide="bed" style="width:18px; color: var(--success);"></i> ${hotelStr}</div>
+                                        </div>
+                                        <div>
+                                            ${planBadgeHtml}
+                                        </div>
                                     </div>
-                                    <div>
-                                        ${planBadgeHtml}
-                                    </div>
-                                </div>
-                            `;
-                            if (index < journeySteps.length - 1) {
-                                resHtml += `<div class="graphic-step-connector" style="height: 35px; width: 4px; background: linear-gradient(to bottom, rgba(255,255,255,0.1), rgba(255,255,255,0.02)); margin: 0 auto; border-radius: 2px;"></div>`;
-                            }
-                        });
+                                `;
+                                if (index < journeySteps.length - 1) {
+                                    resHtml += `<div class="graphic-step-connector" style="height: 35px; width: 4px; background: linear-gradient(to bottom, rgba(255,255,255,0.1), rgba(255,255,255,0.02)); margin: 0 auto; border-radius: 2px;"></div>`;
+                                }
+                            });
+                        }
                         resHtml += `</div>`;
                         window.currentPublicTripResumidaHtml = resHtml;
 
-                        // RENDER VISTA EXTENDIDA SIN BUCLES DE ALOJAMIENTOS
+                        // RENDER VISTA EXTENDIDA SIN BUCLES NI REPETICIONES DE ALOJAMIENTOS
                         let groupedByDate = {};
                         sortedEvents.forEach(ev => {
                             if(!groupedByDate[ev.dateKey]) groupedByDate[ev.dateKey] = { hotels: [], plans: [], transports: [] };
@@ -1417,14 +1485,11 @@
                             const dateData = groupedByDate[dateKey];
                             const dateStr = new Date(dateKey).toLocaleDateString('es-ES', { weekday: 'short', day: 'numeric', month: 'short' });
                             
-                            let currentSite = 'En ruta';
-                            let allEventsDay = [...dateData.plans, ...dateData.hotels];
-                            if(allEventsDay.length > 0) {
-                                let parts = allEventsDay[0].title.split(',');
-                                currentSite = parts.length > 1 ? parts[parts.length - 1].trim() : parts[0].trim();
-                            }
+                            let currentSite = dateToCity[dateKey] || 'En ruta';
+                            if (currentSite !== 'Desconocido' && currentSite !== 'En ruta') currentSite = currentSite.toUpperCase();
 
-                            if (currentSite !== lastSite && currentSite !== 'En ruta') {
+                            // Marcador Gigante de la Ciudad si cambia
+                            if (currentSite !== lastSite && currentSite !== 'EN RUTA' && currentSite !== 'Desconocido') {
                                 extHtml += `
                                     <div style="margin: 2.5rem 0 1.5rem -10px; background: rgba(255,255,255,0.05); padding: 8px 16px; border-radius: 12px; display: inline-block; font-weight: 800; color: var(--primary); font-size: 1.2rem; line-height: 1.2; border: 1px solid rgba(255,255,255,0.1);">
                                         📍 ${currentSite}
@@ -1433,7 +1498,7 @@
                                 lastSite = currentSite;
                             }
 
-                            // Titular Gigante del Alojamiento solo si cambia
+                            // Titular Limpio del Alojamiento solo si cambia o es su primera vez en la ciudad
                             if (config.showHotels && dateData.hotels.length > 0) {
                                 dateData.hotels.forEach(h => {
                                     let hotelName = h.title.split(',')[0].trim();
