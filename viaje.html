@@ -178,6 +178,8 @@
         .event-content { flex: 1; padding-top: 2px; word-break: break-word; }
         .event-title { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.4rem; line-height: 1.3; }
         .event-desc { color: var(--text-muted); font-size: 0.9rem; line-height: 1.5; white-space: pre-wrap; margin-top: 5px;}
+        .event-desc a { color: var(--accent-blue); text-decoration: underline; transition: color 0.2s; }
+        .event-desc a:hover { color: var(--primary); }
 
         .event-actions {
             display: flex; flex-direction: column; gap: 5px; opacity: 0; transition: var(--transition);
@@ -304,26 +306,24 @@
             border-top: 1px dashed var(--border-subtle);
         }
         
-        .game-card.locked {
-            opacity: 0.6;
-            background: rgba(20, 20, 20, 0.2);
-            border-style: dashed;
-            cursor: not-allowed;
-            flex-direction: row;
-            align-items: center;
-        }
-        .game-card.locked .game-info { flex: 1; }
-        .badge-locked {
-            background: rgba(255, 255, 255, 0.05);
-            color: var(--text-muted);
+        .badge-novedad {
+            background: linear-gradient(135deg, #ff4d4d, #ff9933);
+            color: white;
             padding: 0.6rem 1rem;
             border-radius: 8px;
-            font-weight: 600;
+            font-weight: 800;
             font-size: 0.85rem;
             display: flex;
             align-items: center;
             gap: 6px;
             white-space: nowrap;
+            box-shadow: 0 4px 15px rgba(255,77,77,0.3);
+            animation: pulseNovedad 2s infinite;
+        }
+        @keyframes pulseNovedad {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
         }
 
         /* =========================================
@@ -716,6 +716,46 @@
             </div>
         </div>
 
+        <div class="games-grid-full" style="margin-top: 0; padding-top: 0; border-top: none; margin-bottom: 2rem;">
+            <div class="game-card" style="border: 1px solid var(--accent); background: linear-gradient(145deg, rgba(20,20,20,0.8), rgba(255,77,77,0.1));">
+                <div class="game-icon" style="color: var(--accent);"><i data-lucide="image"></i></div>
+                <div class="game-info">
+                    <h4>Generador de recuerdos</h4>
+                    <p>Crea el álbum definitivo de la aventura y expórtalo a alta calidad. Un baúl de fotografías espectacular.</p>
+                </div>
+                <div style="display: flex; align-items: center; gap: 10px; margin-top: auto; width: 100%;">
+                    <a href="#" id="btn-generador-recuerdos" class="btn-play" style="flex: 1;">ENTRAR AL ÁLBUM</a>
+                    <span class="badge-novedad"><i data-lucide="sparkles"></i> NOVEDAD!</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="countdown-banner" style="background: linear-gradient(135deg, #00529F 0%, #E3003F 100%); margin-bottom: 1.5rem; padding: 1.5rem;">
+            <h3 style="color: white; font-size: 1.5rem;">⚽ Especial World Cup 26</h3>
+            <p style="color: rgba(255,255,255,0.9); font-size: 0.95rem;">¡Vive la fiebre del mundial mientras recorres el mundo!</p>
+        </div>
+
+        <div class="games-grid">
+            <div class="game-card">
+                <div class="game-icon" style="color: #00529F; border-color: #00529F;"><i data-lucide="trophy"></i></div>
+                <div class="game-info">
+                    <h4>Porra del Mundial</h4>
+                    <p>Predice los resultados y compite con tu grupo de viaje por la gloria.</p>
+                </div>
+                <a href="worldcupgame1.html" class="btn-play" style="background: #00529F; color: white;">JUGAR AL PROGNOSTICS</a>
+            </div>
+
+            <div class="game-card">
+                <div class="game-icon" style="color: #E3003F; border-color: #E3003F;"><i data-lucide="dribbble"></i></div>
+                <div class="game-info">
+                    <h4>Trivial Futbolero</h4>
+                    <p>¿Cuánto sabes de los mundiales? Demuestra tu nivel respondiendo preguntas.</p>
+                </div>
+                <a href="worldcupgame2.html" class="btn-play" style="background: #E3003F; color: white;">JUGAR AL TRIVIAL</a>
+            </div>
+        </div>
+
+        <h3 style="margin-top: 3rem; margin-bottom: 1.5rem; color: var(--text-muted); font-size: 1rem; border-bottom: 1px solid var(--border-subtle); padding-bottom: 0.5rem;"><i data-lucide="gamepad-2"></i> Clásicos para el trayecto</h3>
         <div class="games-grid">
             <div class="game-card">
                 <div class="game-icon"><i data-lucide="map-pin"></i></div>
@@ -733,17 +773,6 @@
                     <p>Adivina la palabra del día relacionada con los viajes.</p>
                 </div>
                 <a href="juego2.html" class="btn-play">JUGAR</a>
-            </div>
-
-            <div class="games-grid-full">
-                <div class="game-card locked">
-                    <div class="game-icon"><i data-lucide="image"></i></div>
-                    <div class="game-info">
-                        <h4>Generador de recuerdos</h4>
-                        <p>Estamos preparando algo muy, muy top. ¡Próximamente disponible!</p>
-                    </div>
-                    <span class="badge-locked"><i data-lucide="lock"></i> PRÓXIMAMENTE</span>
-                </div>
             </div>
         </div>
     </main>
@@ -936,7 +965,7 @@
 
                 <div class="input-group" style="margin-top: 0.5rem; border-top: 1px solid var(--border-subtle); padding-top: 1rem;">
                     <label>Notas extra (Opcional)</label>
-                    <textarea id="common-notes" placeholder="Reserva #123, precio, avisos..."></textarea>
+                    <textarea id="common-notes" placeholder="Reserva #123, precio, links de avisos..."></textarea>
                 </div>
 
                 <div class="modal-actions">
@@ -1085,15 +1114,13 @@
         const urlParams = new URLSearchParams(window.location.search);
         const tripId = urlParams.get('id');
         
-        // Funcionalidad de Generador de Recuerdos bloqueada temporalmente
-        /*
+        // El botón del generador de recuerdos ahora está expuesto y activado
         if (tripId) {
             const btnRecuerdos = document.getElementById('btn-generador-recuerdos');
             if (btnRecuerdos) {
                 btnRecuerdos.href = `recuerdoviaje.html?id=${tripId}`;
             }
         }
-        */
 
         let currentTripData = null;
         let currentUserRole = null;
@@ -1131,6 +1158,40 @@
             const [d,m,y] = str.split('/'); 
             return new Date(y, m-1, d); 
         };
+
+        // Función para transformar URLs en enlaces clicables
+        function linkifyText(text) {
+            if(!text) return "";
+            const urlRegex = /(https?:\/\/[^\s]+)/g;
+            return text.replace(urlRegex, function(url) {
+                return `<a href="${url}" target="_blank">${url}</a>`;
+            });
+        }
+
+        // Sistema inteligente de Consejo Diario cada 24 horas
+        function checkAndShowDailyTip() {
+            const tips = [
+                "Revisa bien tu itinerario para asegurarte de que no haya errores de organización o solapamientos.",
+                "¡Comparte tu aventura! Invita a tus amigos para que podáis colaborar juntos en la organización.",
+                "Añade a tus familiares o seres queridos como 'Visores' para que vean tu ruta sin modificar nada.",
+                "Mantén las cuentas claras desde el primer día: registra tus gastos en la pestaña Finance sobre la marcha.",
+                "Si tienes dudas sobre el clima, asegúrate de añadir alojamientos para consultar el sistema meteorológico de tu ruta."
+            ];
+            
+            const lastTipStr = localStorage.getItem(`lastTipTime_${tripId}`);
+            const now = new Date().getTime();
+            
+            // Si no hay registro o han pasado más de 24 horas (24 * 60 * 60 * 1000 ms)
+            if (!lastTipStr || (now - parseInt(lastTipStr)) > 86400000) {
+                const randomTip = tips[Math.floor(Math.random() * tips.length)];
+                
+                setTimeout(() => {
+                    showToast(`💡 Consejo del día: ${randomTip}`, "info");
+                }, 2500); // Dar algo de margen después de cargar
+                
+                localStorage.setItem(`lastTipTime_${tripId}`, now.toString());
+            }
+        }
 
         // ── CONTROL DE SCROLL DEL BODY (Para modales perfectos) ──
         function toggleBodyScroll(lock) {
@@ -1326,6 +1387,8 @@
 
                 document.getElementById('page-loader').style.opacity = '0';
                 setTimeout(() => document.getElementById('page-loader').style.display = 'none', 500);
+                
+                checkAndShowDailyTip(); // Disparamos el consejo inteligente diario
             } else {
                 alert("El viaje no existe.");
                 window.location.href = 'panel.html';
@@ -1646,7 +1709,7 @@
                                 <div class="event-icon"><i data-lucide="${icon}"></i></div>
                                 <div class="event-content">
                                     <div class="event-title">${displayTitle}</div>
-                                    ${ev.notes ? `<div class="event-desc">${ev.notes}</div>` : ''}
+                                    ${ev.notes ? `<div class="event-desc">${linkifyText(ev.notes)}</div>` : ''}
                                 </div>
                                 ${canEdit ? `
                                 <div class="event-actions">
@@ -2339,7 +2402,7 @@
                             <div style="font-size: 22px; margin: 0 20px;">${iconoVisual}</div>
                             <div style="flex: 1;">
                                 <div style="font-weight: 700; font-size: 18px; color: #111;">${tituloVisual}</div>
-                                ${ev.notes ? `<div style="color: #666; font-size: 14px; margin-top: 6px; white-space: pre-wrap; line-height: 1.5;">${ev.notes}</div>` : ''}
+                                ${ev.notes ? `<div style="color: #666; font-size: 14px; margin-top: 6px; white-space: pre-wrap; line-height: 1.5;">${linkifyText(ev.notes)}</div>` : ''}
                             </div>
                         </div>
                     `;
@@ -2372,7 +2435,7 @@
             });
         }
 
-        // ── GESTIÓN DE ROLES Y PERFILES ──
+        // ── GESTIÓN DE ROLES Y PERFILES (AHORA CON CONTENEDOR COLAPSABLE PARA >6 USUARIOS) ──
         async function renderUsers() {
             const miembrosList = document.getElementById('members-list');
             const reqList = document.getElementById('requests-list');
@@ -2383,7 +2446,13 @@
             const isGod = user && user.email === SUPERADMIN_EMAIL;
             const soyAdminOGod = currentUserRole === "admin-grupo" || isGod;
 
-            for (const [uid, rol] of Object.entries(currentTripData.miembros || {})) {
+            const miembrosEntries = Object.entries(currentTripData.miembros || {});
+            
+            let count = 0;
+            let visibleUsersHTML = '';
+            let hiddenUsersHTML = '';
+
+            for (const [uid, rol] of miembrosEntries) {
                 const profile = userProfilesCache[uid] || await getUserProfile(uid);
                 let colorRol = rol === 'admin-grupo' ? 'var(--accent-blue)' : (rol === 'editor-grupo' ? 'var(--success)' : 'var(--text-muted)');
                 let labelRol = rol === 'admin-grupo' ? 'Admin' : rol === 'editor-grupo' ? 'Editor' : 'Visor';
@@ -2409,7 +2478,7 @@
 
                 let editProfileBtn = isMe ? `<button onclick="openProfileModal()" style="background:rgba(255,255,255,0.05); color:var(--primary); border:1px solid var(--border-subtle); border-radius:6px; padding:0.4rem 0.8rem; font-size:0.8rem; cursor:pointer; display:flex; align-items:center; gap:5px;"><i data-lucide="edit-3" style="width:14px;"></i> Editar Mi Perfil</button>` : '';
 
-                miembrosList.innerHTML += `
+                const rowHTML = `
                     <div class="user-row">
                         <div class="user-info">
                             <div class="user-avatar" style="background-color: ${profile.avatarColor};">
@@ -2427,6 +2496,27 @@
                         </div>
                     </div>
                 `;
+
+                if (count < 6) {
+                    visibleUsersHTML += rowHTML;
+                } else {
+                    hiddenUsersHTML += rowHTML;
+                }
+                count++;
+            }
+
+            if (count > 6) {
+                miembrosList.innerHTML = `
+                    ${visibleUsersHTML}
+                    <div id="hidden-users-container" style="display: none;">
+                        ${hiddenUsersHTML}
+                    </div>
+                    <button onclick="document.getElementById('hidden-users-container').style.display='block'; this.style.display='none';" style="width: 100%; margin-top: 1rem; padding: 0.8rem; background: rgba(255,255,255,0.05); border: 1px dashed var(--border-subtle); color: var(--text-muted); font-weight: 600; border-radius: 12px; cursor: pointer; transition: var(--transition);">
+                        Ver todos los usuarios (${count}) <i data-lucide="chevron-down" style="width:16px; vertical-align:middle;"></i>
+                    </button>
+                `;
+            } else {
+                miembrosList.innerHTML = visibleUsersHTML;
             }
 
             const solicitudes = currentTripData.solicitudes || {};
