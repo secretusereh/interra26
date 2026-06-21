@@ -136,7 +136,7 @@
             background-attachment: fixed;
             display: flex;
             flex-direction: column;
-            transition: transform 0.1s ease; /* Necesario para el efecto de temblor del Easter Egg */
+            transition: transform 0.1s ease;
         }
 
         ::selection {
@@ -253,9 +253,7 @@
             backdrop-filter: blur(4px);
         }
 
-        /* ==========================================================
-           MODIFICACIÓN 1: WORLD CUP VIBE EN EL BADGE
-        ========================================================== */
+        /* WORLD CUP VIBE EN EL BADGE */
         .world-cup-badge {
             background: rgba(255, 215, 0, 0.1) !important;
             color: var(--gold) !important;
@@ -372,8 +370,9 @@
             .bento-grid { grid-template-columns: repeat(2, 1fr); }
         }
 
+        /* Cambiado a 3 columnas para acomodar los 6 items perfectamente */
         @media (min-width: 1200px) {
-            .bento-grid { grid-template-columns: repeat(4, 1fr); }
+            .bento-grid { grid-template-columns: repeat(3, 1fr); }
         }
 
         .bento-card {
@@ -391,9 +390,7 @@
             height: 100%;
         }
 
-        /* ==========================================================
-           MODIFICACIÓN 2: HOVER DORADO ESTILO TROFEO PARA LAS CARDS
-        ========================================================== */
+        /* HOVER DORADO ESTILO TROFEO PARA LAS CARDS */
         .bento-card:hover {
             background: rgba(255, 215, 0, 0.02);
             border-color: rgba(255, 215, 0, 0.4);
@@ -415,6 +412,8 @@
         .icon-red { background: rgba(255, 77, 77, 0.1); color: var(--accent); }
         .icon-green { background: rgba(77, 255, 77, 0.1); color: var(--success); }
         .icon-purple { background: rgba(179, 102, 255, 0.1); color: var(--accent-purple); }
+        .icon-gold { background: rgba(255, 215, 0, 0.1); color: var(--gold); }
+        .icon-orange { background: rgba(255, 153, 51, 0.1); color: #ff9933; }
 
         .bento-card h3 {
             font-size: 1.3rem;
@@ -946,76 +945,6 @@
             color: var(--primary);
         }
 
-        /* ==========================================================
-           MODIFICACIÓN 3: EASTER EGG CSS INTERACTIVO (BALÓN)
-        ========================================================== */
-        .wc-fab {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            width: 55px;
-            height: 55px;
-            background: var(--surface-solid);
-            border: 1px solid rgba(255, 215, 0, 0.4);
-            border-radius: 50%;
-            cursor: pointer;
-            z-index: 1000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--gold);
-            box-shadow: 0 0 20px rgba(255, 215, 0, 0.15);
-            transition: var(--transition);
-            backdrop-filter: blur(10px);
-            overflow: hidden;
-        }
-
-        .wc-fab::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: radial-gradient(circle at center, rgba(255, 215, 0, 0.2) 0%, transparent 70%);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .wc-fab:hover {
-            transform: translateY(-5px) scale(1.05);
-            box-shadow: 0 10px 25px rgba(255, 215, 0, 0.4);
-            border-color: var(--gold);
-        }
-
-        .wc-fab:hover::before {
-            opacity: 1;
-        }
-
-        .wc-fab svg {
-            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            position: relative;
-            z-index: 2;
-        }
-
-        .wc-fab:hover svg {
-            transform: rotate(180deg);
-        }
-
-        .wc-projectile {
-            position: fixed;
-            z-index: 9999;
-            width: 35px;
-            height: 35px;
-            pointer-events: none;
-            color: var(--gold);
-            filter: drop-shadow(0 0 12px rgba(255, 215, 0, 0.6));
-            animation: shootBall 1.5s cubic-bezier(0.25, 1, 0.2, 1) forwards;
-        }
-
-        @keyframes shootBall {
-            0% { transform: translate(-50%, -50%) rotate(0deg) scale(0.5); opacity: 1; }
-            40% { transform: translate(var(--target-x), var(--target-y)) rotate(540deg) scale(1.5); opacity: 1; }
-            100% { transform: translate(calc(var(--target-x) * 2), calc(var(--target-y) * 2)) rotate(1080deg) scale(0.8); opacity: 0; }
-        }
-
         /* Media Queries Móvil */
         @media (max-width: 768px) {
             .hero {
@@ -1075,14 +1004,6 @@
             }
 
             .scroll-down-indicator { bottom: 20px; }
-            
-            /* Ajuste del easter egg en móvil para que no moleste */
-            .wc-fab {
-                bottom: 85px; /* Por encima de las cookies si salen */
-                right: 20px;
-                width: 45px;
-                height: 45px;
-            }
         }
 
         /* Animations */
@@ -1116,7 +1037,7 @@
 <body>
 
     <nav aria-label="Navegación principal">
-        <a href="#" class="logo" aria-label="Inicio"><img src="interrahublogoworldcupedition.png" alt="Interra-hub" style="height: 30px; width: auto;"></a>
+        <a href="#" class="logo" aria-label="Inicio"><img src="interrahublogoworldcupedition.png" alt="Interra-hub" style="height: 50px; width: auto;"></a>
         <div class="nav-actions">
             <a href="registro.html" class="btn-ghost">Ya tengo cuenta</a>
         </div>
@@ -1166,6 +1087,18 @@
                     <div class="feature-icon icon-purple"><i data-lucide="gamepad-2"></i></div>
                     <h3>Entretenimiento</h3>
                     <p>Mata el aburrimiento en trenes. Compite con tus amigos, culturízate sobre los destinos que vas a visitar y genera recuerdos interactivos para hacer tu viaje inolvidable.</p>
+                </article>
+
+                <article class="bento-card">
+                    <div class="feature-icon icon-orange"><i data-lucide="users"></i></div>
+                    <h3>Comunidad Interrahub</h3>
+                    <p>Socializa y comparte con otros. Echa un vistazo a viajes y rutas públicas de otros usuarios, coge inspiración para tus próximas paradas y conecta con viajeros de todo el mundo.</p>
+                </article>
+
+                <article class="bento-card">
+                    <div class="feature-icon icon-gold"><i data-lucide="clapperboard"></i></div>
+                    <h3>Recuerdos MUUUUY TOP</h3>
+                    <p>Sube las fotos y clips de tu viaje y nuestra IA se encargará del resto. Te generamos automáticamente una historia para Instagram y un vídeo recopilatorio espectacular para no olvidar nunca la experiencia.</p>
                 </article>
             </div>
 
@@ -1236,7 +1169,7 @@
     <footer>
         <div class="footer-inner">
             <div class="footer-brand">
-                <div class="footer-logo"><img src="interrahublogoworldcupedition.png" alt="Interra-hub" style="height: 40px; width: auto;"></div>
+                <div class="footer-logo"><img src="interrahublogoworldcupedition.png" alt="Interra-hub" style="height: 60px; width: auto;"></div>
                 <div class="footer-studio">Hecha por <strong style="color:rgba(255,255,255,0.8);">Pipa Studios</strong></div>
             </div>
             
@@ -1421,55 +1354,6 @@
                 const apoyar = confirm("¿Estás seguro? Las métricas anónimas de Vercel Analytics nos ayudan a mejorar la plataforma de cara al año que viene. ¿Deseas mantenerlas activas para apoyarnos?");
                 localStorage.setItem('interrahub_cookies', apoyar ? 'accepted' : 'rejected');
                 banner.classList.remove('show');
-            });
-        });
-
-        // =====================================================================
-        // MODIFICACIÓN 4: LÓGICA AVANZADA EASTER EGG (Widget Balón Interactivo)
-        // =====================================================================
-        document.addEventListener('DOMContentLoaded', () => {
-            const wcFab = document.createElement('div');
-            wcFab.className = 'wc-fab';
-            wcFab.title = '¡Tira a puerta!';
-            wcFab.setAttribute('aria-label', 'Disparar balón interactivo');
-            // SVG estilo Lucide respetando la estética del proyecto
-            wcFab.innerHTML = `
-                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="12" cy="12" r="10"></circle>
-                    <path d="M12 12l3.5 2M12 12l-3.5 2M12 12v-4M8.5 14l-1.5 3M15.5 14l1.5 3M12 8l-2-3M12 8l2-3"></path>
-                </svg>
-            `;
-            document.body.appendChild(wcFab);
-
-            wcFab.addEventListener('click', (e) => {
-                const rect = wcFab.getBoundingClientRect();
-                const startX = rect.left + rect.width / 2;
-                const startY = rect.top + rect.height / 2;
-
-                const projectile = document.createElement('div');
-                projectile.className = 'wc-projectile';
-                projectile.innerHTML = wcFab.innerHTML; 
-                
-                projectile.style.left = startX + 'px';
-                projectile.style.top = startY + 'px';
-
-                // Cálculo de trayectoria semi-aleatoria con matemáticas
-                const randomX = (Math.random() - 0.7) * 120; // Tendencia hacia la izquierda
-                const randomY = (Math.random() - 0.8) * 120; // Tendencia hacia arriba
-                projectile.style.setProperty('--target-x', `calc(-50vw + ${randomX}px)`);
-                projectile.style.setProperty('--target-y', `calc(-50vh + ${randomY}px)`);
-
-                document.body.appendChild(projectile);
-
-                // Efecto de cámara/shake al golpear
-                document.body.style.transform = 'translate(-2px, 3px)';
-                setTimeout(() => { document.body.style.transform = 'translate(2px, -2px)'; }, 50);
-                setTimeout(() => { document.body.style.transform = 'translate(0, 0)'; }, 100);
-
-                // Garbage collector del DOM
-                setTimeout(() => {
-                    projectile.remove();
-                }, 1500);
             });
         });
     </script>
