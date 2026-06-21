@@ -30,89 +30,290 @@
             --transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Sora', sans-serif; }
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            font-family: 'Sora', sans-serif; 
+        }
 
         body {
-            background-color: var(--bg-color); color: var(--primary); min-height: 100vh;
+            background-color: var(--bg-color); 
+            color: var(--primary); 
+            min-height: 100vh;
             background-image: radial-gradient(circle at 50% -10%, rgba(255, 255, 255, 0.05), transparent 60%);
             background-attachment: fixed;
             display: flex;
             flex-direction: column;
         }
 
+        /* =========================================
+           NAVEGACIÓN Y CARGADOR
+           ========================================= */
         nav {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 1rem 5%; background: rgba(3, 3, 3, 0.8); backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--border-subtle); position: sticky; top: 0; z-index: 100;
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            padding: 1rem 5%; 
+            background: rgba(3, 3, 3, 0.8); 
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-subtle); 
+            position: sticky; 
+            top: 0; 
+            z-index: 100;
         }
-        .btn-nav { background: transparent; color: var(--text-muted); border: none; cursor: pointer; display: flex; align-items: center; gap: 8px; font-weight: 600; transition: var(--transition); }
+
+        .btn-nav { 
+            background: transparent; 
+            color: var(--text-muted); 
+            border: none; 
+            cursor: pointer; 
+            display: flex; 
+            align-items: center; 
+            gap: 8px; 
+            font-weight: 600; 
+            transition: var(--transition); 
+        }
+
         .btn-nav:hover { color: var(--primary); }
+
         .logo { 
-            font-weight: 800; font-size: 1.3rem; display: flex; align-items: center; gap: 4px; letter-spacing: -0.5px;
-            position: absolute; left: 50%; transform: translateX(-50%);
+            font-weight: 800; 
+            font-size: 1.3rem; 
+            display: flex; 
+            align-items: center; 
+            gap: 4px; 
+            letter-spacing: -0.5px;
+            position: absolute; 
+            left: 50%; 
+            transform: translateX(-50%);
         }
 
         #page-loader {
-            position: fixed; inset: 0; background: var(--bg-color); z-index: 9999;
-            display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.5s ease;
+            position: fixed; 
+            inset: 0; 
+            background: var(--bg-color); 
+            z-index: 9999;
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
+            align-items: center; 
+            transition: opacity 0.5s ease;
         }
 
-        main { padding: 3rem 5% 1rem; max-width: 1100px; margin: 0 auto; width: 100%; flex: 1; }
+        /* =========================================
+           CONTENEDOR PRINCIPAL
+           ========================================= */
+        main { 
+            padding: 3rem 5% 1rem; 
+            max-width: 1100px; 
+            margin: 0 auto; 
+            width: 100%; 
+            flex: 1; 
+        }
         
         .header-section { text-align: center; margin-bottom: 3rem; }
-        .header-section h1 { font-size: 3.5rem; font-weight: 800; letter-spacing: -2px; margin-bottom: 0.5rem; word-break: break-word; }
+        
+        .header-section h1 { 
+            font-size: 3.5rem; 
+            font-weight: 800; 
+            letter-spacing: -2px; 
+            margin-bottom: 0.5rem; 
+            word-break: break-word; 
+        }
+        
         .header-section p { color: var(--text-muted); font-size: 1.1rem; }
 
+        /* =========================================
+           BANNERS INFORMATIVOS
+           ========================================= */
         .banner-info {
-            border-radius: 12px; padding: 1rem 1.5rem; margin-bottom: 1rem;
-            display: flex; align-items: center; gap: 12px; font-size: 0.9rem;
+            border-radius: 12px; 
+            padding: 1rem 1.5rem; 
+            margin-bottom: 1rem;
+            display: flex; 
+            align-items: center; 
+            gap: 12px; 
+            font-size: 0.9rem;
         }
-        .privacy-banner { background: rgba(77, 255, 136, 0.05); border: 1px solid rgba(77, 255, 136, 0.2); color: var(--success); }
-        .mobile-banner { background: rgba(255, 165, 0, 0.05); border: 1px solid rgba(255, 165, 0, 0.3); color: #ffb84d; display: none; }
-        .warning-banner { background: rgba(255, 77, 77, 0.05); border: 1px solid rgba(255, 77, 77, 0.3); color: #ff6b6b; padding: 1.5rem; margin-bottom: 2rem; display: none; box-shadow: 0 4px 20px rgba(255, 77, 77, 0.1); }
 
+        .privacy-banner { 
+            background: rgba(77, 255, 136, 0.05); 
+            border: 1px solid rgba(77, 255, 136, 0.2); 
+            color: var(--success); 
+        }
+
+        .mobile-banner { 
+            background: rgba(255, 165, 0, 0.05); 
+            border: 1px solid rgba(255, 165, 0, 0.3); 
+            color: #ffb84d; 
+            display: none; 
+        }
+
+        .warning-banner { 
+            background: rgba(255, 77, 77, 0.05); 
+            border: 1px solid rgba(255, 77, 77, 0.3); 
+            color: #ff6b6b; 
+            padding: 1.5rem; 
+            margin-bottom: 2rem; 
+            display: none; 
+            box-shadow: 0 4px 20px rgba(255, 77, 77, 0.1); 
+        }
+
+        /* =========================================
+           ZONA DE SUBIDA DE ARCHIVOS
+           ========================================= */
         .upload-zone {
-            background: var(--surface); border: 2px dashed var(--border-subtle);
-            border-radius: 24px; padding: 4rem 2rem; text-align: center;
-            transition: var(--transition); cursor: pointer; margin-bottom: 2rem;
-            position: relative; overflow: hidden;
+            background: var(--surface); 
+            border: 2px dashed var(--border-subtle);
+            border-radius: 24px; 
+            padding: 4rem 2rem; 
+            text-align: center;
+            transition: var(--transition); 
+            cursor: pointer; 
+            margin-bottom: 2rem;
+            position: relative; 
+            overflow: hidden;
         }
+
         .upload-zone:hover, .upload-zone.dragover {
-            border-color: var(--accent-blue); background: rgba(77, 166, 255, 0.05); transform: translateY(-5px);
+            border-color: var(--accent-blue); 
+            background: rgba(77, 166, 255, 0.05); 
+            transform: translateY(-5px);
         }
-        .upload-zone i { color: var(--text-muted); width: 64px; height: 64px; margin-bottom: 1rem; transition: var(--transition); }
+
+        .upload-zone i { 
+            color: var(--text-muted); 
+            width: 64px; 
+            height: 64px; 
+            margin-bottom: 1rem; 
+            transition: var(--transition); 
+        }
+
         .upload-zone:hover i { color: var(--accent-blue); transform: scale(1.1); }
         .upload-zone h3 { font-size: 1.5rem; font-weight: 600; margin-bottom: 0.5rem; }
         .upload-zone p { color: var(--text-muted); font-size: 0.95rem; }
         .upload-highlight { font-size: 0.95rem; margin-top: 10px; color: var(--accent-blue); font-weight: 600; }
-        #file-input { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
+        
+        #file-input { 
+            position: absolute; 
+            inset: 0; 
+            width: 100%; 
+            height: 100%; 
+            opacity: 0; 
+            cursor: pointer; 
+        }
 
+        /* =========================================
+           SECCIÓN DE OPCIONES Y BOTONES
+           ========================================= */
         .options-section {
-            background: rgba(255,255,255,0.02); border: 1px solid var(--border-subtle);
-            border-radius: 16px; padding: 1.5rem; margin-bottom: 2rem;
-            display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;
+            background: rgba(255,255,255,0.02); 
+            border: 1px solid var(--border-subtle);
+            border-radius: 16px; 
+            padding: 1.5rem; 
+            margin-bottom: 2rem;
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between; 
+            flex-wrap: wrap; 
+            gap: 1rem;
         }
-        .music-upload { position: relative; display: inline-block; overflow: hidden; }
-        .btn-secondary {
-            background: rgba(255,255,255,0.05); color: var(--primary); border: 1px solid var(--border-subtle);
-            padding: 0.8rem 1.5rem; border-radius: 12px; font-weight: 600; cursor: pointer; transition: 0.3s;
-            display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-size: 0.95rem;
-        }
-        .btn-secondary:hover { background: rgba(255,255,255,0.1); }
-        #audio-input { position: absolute; left: 0; top: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
 
+        .music-upload { position: relative; display: inline-block; overflow: hidden; }
+        
+        .btn-secondary {
+            background: rgba(255,255,255,0.05); 
+            color: var(--primary); 
+            border: 1px solid var(--border-subtle);
+            padding: 0.8rem 1.5rem; 
+            border-radius: 12px; 
+            font-weight: 600; 
+            cursor: pointer; 
+            transition: 0.3s;
+            display: inline-flex; 
+            align-items: center; 
+            justify-content: center; 
+            gap: 8px; 
+            font-size: 0.95rem;
+        }
+
+        .btn-secondary:hover { background: rgba(255,255,255,0.1); }
+        
+        #audio-input { 
+            position: absolute; 
+            left: 0; 
+            top: 0; 
+            opacity: 0; 
+            cursor: pointer; 
+            width: 100%; 
+            height: 100%; 
+        }
+
+        .btn-submit {
+            background: var(--primary); 
+            color: var(--bg-color); 
+            border: none; 
+            padding: 1rem 2rem;
+            border-radius: 12px; 
+            font-weight: 800; 
+            font-size: 1.1rem; 
+            cursor: pointer; 
+            transition: 0.3s;
+            display: inline-flex; 
+            align-items: center; 
+            justify-content: center; 
+            gap: 10px; 
+            text-decoration: none; 
+            width: 100%;
+        }
+
+        .btn-submit.instagram { 
+            background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); 
+            color: white; 
+        }
+
+        .btn-submit:hover:not(:disabled) { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.3); }
+        .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        .action-buttons { 
+            display: flex; 
+            justify-content: center; 
+            gap: 1rem; 
+            flex-wrap: wrap; 
+            margin-top: 2rem; 
+            padding-top: 2rem; 
+            border-top: 1px solid var(--border-subtle); 
+        }
+
+        /* =========================================
+           BARRA DE PROGRESO
+           ========================================= */
         .progress-section { display: none; text-align: center; padding: 3rem 0; animation: fadeIn 0.5s ease; }
         .progress-title { font-size: 1.5rem; font-weight: 800; margin-bottom: 1rem; color: var(--accent-blue); }
         .progress-bar-container { width: 100%; height: 8px; background: rgba(255,255,255,0.1); border-radius: 10px; overflow: hidden; margin-bottom: 1rem; }
         .progress-bar { height: 100%; width: 0%; background: linear-gradient(90deg, var(--accent-blue), var(--accent)); transition: width 0.3s ease; }
         .progress-text { color: var(--text-muted); font-size: 0.95rem; }
 
+        /* =========================================
+           GRILLA DE RESULTADOS
+           ========================================= */
         .result-section { display: none; text-align: center; animation: fadeIn 0.6s ease; width: 100%; }
         
         .results-grid { display: grid; grid-template-columns: 1.5fr 1fr; gap: 2rem; margin-bottom: 2rem; align-items: start; }
         @media (max-width: 900px) { .results-grid { grid-template-columns: 1fr; } }
 
-        .media-card { background: var(--surface-solid); border: 1px solid var(--border-subtle); border-radius: 16px; padding: 1rem; box-shadow: 0 20px 50px rgba(0,0,0,0.5); display: flex; flex-direction: column; gap: 1rem; }
+        .media-card { 
+            background: var(--surface-solid); 
+            border: 1px solid var(--border-subtle); 
+            border-radius: 16px; 
+            padding: 1rem; 
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5); 
+            display: flex; 
+            flex-direction: column; 
+            gap: 1rem; 
+        }
+
         .media-card h3 { font-size: 1.2rem; color: var(--primary); margin-bottom: 0.5rem; display: flex; align-items: center; justify-content: center; gap: 8px; }
 
         .video-wrapper { width: 100%; border-radius: 12px; overflow: hidden; background: #000; aspect-ratio: 16/9; }
@@ -121,18 +322,19 @@
         .collage-wrapper { width: 100%; border-radius: 12px; overflow: hidden; background: #000; aspect-ratio: 9/16; display: flex; justify-content: center; align-items: center; }
         .collage-wrapper img { width: 100%; height: 100%; object-fit: cover; }
         
-        .btn-submit {
-            background: var(--primary); color: var(--bg-color); border: none; padding: 1rem 2rem;
-            border-radius: 12px; font-weight: 800; font-size: 1.1rem; cursor: pointer; transition: 0.3s;
-            display: inline-flex; align-items: center; justify-content: center; gap: 10px; text-decoration: none; width: 100%;
+        /* =========================================
+           ANIMACIONES Y UTILIDADES
+           ========================================= */
+        .footer-teaser { 
+            text-align: center; 
+            padding: 3rem 1rem 2rem; 
+            color: var(--accent-blue); 
+            font-weight: 800; 
+            font-size: 1.2rem; 
+            letter-spacing: 2px; 
+            text-transform: uppercase; 
+            opacity: 0.8; 
         }
-        .btn-submit.instagram { background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); color: white; }
-        .btn-submit:hover:not(:disabled) { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.3); }
-        .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; }
-
-        .action-buttons { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--border-subtle); }
-
-        .footer-teaser { text-align: center; padding: 3rem 1rem 2rem; color: var(--accent-blue); font-weight: 800; font-size: 1.2rem; letter-spacing: 2px; text-transform: uppercase; opacity: 0.8; }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes spin { 100% { transform: rotate(360deg); } }
@@ -271,11 +473,14 @@
     <div id="toast-container"></div>
 
     <script type="module">
+        // Importaciones de Firebase
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
         import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
-        // Detección de móvil para mostrar aviso
+        // ==========================================
+        // CONFIGURACIÓN INICIAL Y ESTADOS GLOBALES
+        // ==========================================
         const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
         if (isMobile) {
             document.getElementById('mobile-warning').style.display = 'flex';
@@ -297,6 +502,7 @@
         const urlParams = new URLSearchParams(window.location.search);
         const tripId = urlParams.get('id');
 
+        // Variables globales
         let tripData = null;
         let selectedFiles = [];
         let audioFile = null;
@@ -304,13 +510,16 @@
         let globalVisitedCities = []; 
         let isProcessing = false;
 
+        // Ajustes de duración del vídeo
         const TIME_PER_PHOTO = 3.5; 
         const TRANSITION_TIME = 0.6; 
         const TITLE_TIME = 4.0; 
-        const MAX_PHOTOS = 100; // Límite estricto
+        const MAX_PHOTOS = 100; // Bloqueo de seguridad
 
+        // Caché para evitar saturar la API de geolocalización
         const reverseGeocodeCache = {};
 
+        // Prevención de pérdida de progreso
         window.addEventListener('beforeunload', (e) => {
             if (isProcessing || document.getElementById('result-section').style.display === 'block') {
                 e.preventDefault();
@@ -319,11 +528,15 @@
             }
         });
 
+        // ==========================================
+        // FUNCIONES DE UTILIDAD MATEMÁTICA Y GEOGRÁFICA
+        // ==========================================
         function getDistance(lat1, lon1, lat2, lon2) {
             const R = 6371; 
             const dLat = (lat2 - lat1) * Math.PI / 180;
             const dLon = (lon2 - lon1) * Math.PI / 180;
-            const a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon/2) * Math.sin(dLon/2);
+            const a = Math.sin(dLat/2) * Math.sin(dLat/2) + 
+                      Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon/2) * Math.sin(dLon/2);
             return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
         }
 
@@ -331,7 +544,9 @@
             if (!dms || dms.length < 3) return null;
             let getVal = (v) => {
                 if (typeof v === 'number') return v;
-                if (v && v.numerator !== undefined && v.denominator !== undefined) return v.denominator === 0 ? 0 : v.numerator / v.denominator;
+                if (v && v.numerator !== undefined && v.denominator !== undefined) {
+                    return v.denominator === 0 ? 0 : v.numerator / v.denominator;
+                }
                 if (v && typeof v.valueOf === 'function') return v.valueOf();
                 return parseFloat(v) || 0;
             };
@@ -340,19 +555,29 @@
             return dd;
         }
 
+        // ==========================================
+        // NAVEGACIÓN Y CARGA DE DATOS FIREBASE
+        // ==========================================
         document.getElementById('btn-volver').onclick = () => {
-            if (isProcessing) if(!confirm("Se está generando el vídeo. Si vuelves atrás, se perderá todo. ¿Seguro?")) return;
+            if (isProcessing) {
+                if(!confirm("Se está generando el vídeo. Si vuelves atrás, se perderá todo. ¿Seguro?")) return;
+            }
             if (tripId) window.location.href = `viaje.html?id=${tripId}`;
             else window.location.href = 'panel.html';
         };
 
         onAuthStateChanged(auth, async (user) => {
-            if (!user || !tripId) { window.location.href = 'panel.html'; return; }
+            if (!user || !tripId) { 
+                window.location.href = 'panel.html'; 
+                return; 
+            }
             try {
                 await loadTripData();
                 document.getElementById('page-loader').style.opacity = '0';
                 setTimeout(() => document.getElementById('page-loader').style.display = 'none', 500);
-            } catch (error) { showToast("Error al cargar datos del viaje.", "error"); }
+            } catch (error) { 
+                showToast("Error al cargar datos del viaje.", "error"); 
+            }
         });
 
         async function loadTripData() {
@@ -363,27 +588,44 @@
                     for (let uid of Object.keys(tripData.miembros)) {
                         try {
                             const userSnap = await getDoc(doc(db, "usuarios", uid));
-                            if (userSnap.exists() && userSnap.data().nombre) globalUserNames.push(userSnap.data().nombre);
-                        } catch(e) {}
+                            if (userSnap.exists() && userSnap.data().nombre) {
+                                globalUserNames.push(userSnap.data().nombre);
+                            }
+                        } catch(e) {
+                            console.error("No se pudo cargar el usuario", e);
+                        }
                     }
                 }
                 if (globalUserNames.length === 0) globalUserNames = ["Los Viajeros"];
             }
         }
 
+        // ==========================================
+        // GESTIÓN DE EVENTOS DE INTERFAZ DE USUARIO
+        // ==========================================
         const handleFiles = (filesArray) => {
             selectedFiles = filesArray.slice(0, MAX_PHOTOS);
-            if(filesArray.length > MAX_PHOTOS) showToast(`Limitado a las primeras ${MAX_PHOTOS} fotos para asegurar un buen funcionamiento.`, "error");
+            if(filesArray.length > MAX_PHOTOS) {
+                showToast(`Limitado a las primeras ${MAX_PHOTOS} fotos para asegurar la estabilidad del navegador.`, "error");
+            }
             updateFileCount();
         };
 
-        document.getElementById('file-input').addEventListener('change', (e) => handleFiles(Array.from(e.target.files)));
+        const fileInput = document.getElementById('file-input');
+        fileInput.addEventListener('change', (e) => handleFiles(Array.from(e.target.files)));
+        
         const dropZone = document.getElementById('drop-zone');
-        dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('dragover'); });
+        dropZone.addEventListener('dragover', (e) => { 
+            e.preventDefault(); 
+            dropZone.classList.add('dragover'); 
+        });
         dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
         dropZone.addEventListener('drop', (e) => {
-            e.preventDefault(); dropZone.classList.remove('dragover');
-            if (e.dataTransfer.files.length) handleFiles(Array.from(e.dataTransfer.files).filter(f => f.type.startsWith('image/')));
+            e.preventDefault(); 
+            dropZone.classList.remove('dragover');
+            if (e.dataTransfer.files.length) {
+                handleFiles(Array.from(e.dataTransfer.files).filter(f => f.type.startsWith('image/')));
+            }
         });
 
         function updateFileCount() {
@@ -401,8 +643,13 @@
             }
         });
 
+        // ==========================================
+        // FLUJO PRINCIPAL DE GENERACIÓN
+        // ==========================================
         document.getElementById('btn-generate').addEventListener('click', async () => {
             isProcessing = true;
+            
+            // Ocultar UI antigua y mostrar progreso
             document.getElementById('setup-section').style.display = 'none';
             document.getElementById('header-text').style.display = 'none';
             document.querySelectorAll('.banner-info').forEach(el => el.style.display = 'none');
@@ -411,12 +658,19 @@
             document.getElementById('progress-section').style.display = 'block';
             
             try {
+                // Paso 1: Analizar EXIF y Geocoding
                 const processedImages = await processAndClassifyImages(selectedFiles);
+                
+                // Paso 2: Crear el guión
                 const storyboard = createStoryboard(processedImages);
+                
+                // Paso 3: Generar el Collage Instantáneo
                 await generateInstagramCollage(storyboard);
+                
+                // Paso 4: Renderizar el vídeo final
                 await executeRender(storyboard);
             } catch (error) {
-                console.error(error);
+                console.error("Error General:", error);
                 showToast("Error crítico procesando: " + error.message, "error");
                 resetProcess();
             }
@@ -433,10 +687,14 @@
             if(isMobile) document.getElementById('mobile-warning').style.display = 'flex';
             document.getElementById('setup-section').style.display = 'block';
             
-            selectedFiles = []; audioFile = null; globalVisitedCities = [];
+            selectedFiles = []; 
+            audioFile = null; 
+            globalVisitedCities = [];
+            
             updateFileCount();
             document.getElementById('btn-audio-label').innerHTML = `<i data-lucide="music"></i> Seleccionar Audio`;
             lucide.createIcons();
+            
             document.getElementById('output-video').src = "";
             document.getElementById('output-collage').src = "";
         }
@@ -447,22 +705,39 @@
             document.getElementById('progress-bar').style.width = `${percent}%`;
         }
 
+        // ==========================================
+        // EXIF Y REVERSE GEOCODING API
+        // ==========================================
         async function getCleanCity(lat, lon) {
             if (!lat || !lon) return null;
             const key = `${lat.toFixed(2)},${lon.toFixed(2)}`;
             if (reverseGeocodeCache[key]) return reverseGeocodeCache[key];
+            
             try {
+                // Rate Limiting preventivo para no ser baneados por Nominatim OSM
+                await new Promise(r => setTimeout(r, 600)); 
+
                 const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&zoom=10&addressdetails=1`);
                 const data = await res.json();
+                
                 let city = data.address?.city || data.address?.town || data.address?.municipality || data.address?.village || data.name;
-                if(city) { reverseGeocodeCache[key] = city; return city; }
-            } catch(e) {}
+                
+                if(city) { 
+                    reverseGeocodeCache[key] = city; 
+                    return city; 
+                }
+            } catch(e) {
+                console.warn("Fallo al obtener ciudad por GPS", e);
+            }
             return null;
         }
 
         async function processAndClassifyImages(files) {
             let results = [];
-            let eventsByDate = {}; let eventsWithGPS = [];
+            let eventsByDate = {}; 
+            let eventsWithGPS = [];
+            
+            // Emparejar con datos del viaje si existen en Firebase
             if (tripData && tripData.eventos) {
                 tripData.eventos.forEach(e => {
                     if (e.type === 'hotel' || e.type === 'plan') {
@@ -473,17 +748,27 @@
                 });
             }
 
-            const getCleanTitle = (title) => title ? title.replace(/📥 Check-in: |📤 Check-out: |🌙 Noche en: /g, '').split(',')[0].trim() : 'Descubriendo el mundo';
+            const getCleanTitle = (title) => {
+                return title ? title.replace(/📥 Check-in: |📤 Check-out: |🌙 Noche en: /g, '').split(',')[0].trim() : 'Descubriendo el mundo';
+            };
 
             for (let i = 0; i < files.length; i++) {
-                updateProgress('Analizando fotografías...', `Motor IA leyendo EXIF: foto ${i+1} de ${files.length}`, (i/files.length)*15);
+                updateProgress('Analizando fotografías...', `Motor IA leyendo EXIF y geodatos: foto ${i+1} de ${files.length}`, (i/files.length)*15);
                 let file = files[i];
-                let fileObj = { file: file, destination: 'Descubriendo el mundo', dateKey: null, lat: null, lon: null, timestamp: null };
+                let fileObj = { 
+                    file: file, 
+                    destination: 'Descubriendo el mundo', 
+                    dateKey: null, 
+                    lat: null, 
+                    lon: null, 
+                    timestamp: null 
+                };
 
                 await new Promise((resolve) => {
                     let watchdog = setTimeout(resolve, 500); 
                     EXIF.getData(file, function() {
                         clearTimeout(watchdog);
+                        
                         let rawDate = EXIF.getTag(this, "DateTimeOriginal") || EXIF.getTag(this, "DateTime");
                         if (rawDate && typeof rawDate === 'string') {
                             let parts = rawDate.split(' ');
@@ -493,67 +778,116 @@
                                 if (!isNaN(parsedDate.getTime())) fileObj.timestamp = parsedDate.getTime();
                             }
                         } 
+                        
                         if (!fileObj.dateKey && file.lastModified) {
                             const d = new Date(file.lastModified);
                             fileObj.dateKey = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
                         }
+                        
                         if (!fileObj.timestamp) fileObj.timestamp = file.lastModified || Date.now();
 
-                        let latRaw = EXIF.getTag(this, "GPSLatitude"), latRef = EXIF.getTag(this, "GPSLatitudeRef");
-                        let lonRaw = EXIF.getTag(this, "GPSLongitude"), lonRef = EXIF.getTag(this, "GPSLongitudeRef");
-                        if (latRaw && lonRaw) { fileObj.lat = convertDMSToDD(latRaw, latRef); fileObj.lon = convertDMSToDD(lonRaw, lonRef); }
+                        let latRaw = EXIF.getTag(this, "GPSLatitude");
+                        let latRef = EXIF.getTag(this, "GPSLatitudeRef");
+                        let lonRaw = EXIF.getTag(this, "GPSLongitude");
+                        let lonRef = EXIF.getTag(this, "GPSLongitudeRef");
+                        
+                        if (latRaw && lonRaw) { 
+                            fileObj.lat = convertDMSToDD(latRaw, latRef); 
+                            fileObj.lon = convertDMSToDD(lonRaw, lonRef); 
+                        }
                         resolve();
                     });
                 });
 
-                // Descanso obligatorio de CPU para liberar Garbage Collector y evitar bloqueos en móviles
+                // Descanso para el navegador
                 await new Promise(r => setTimeout(r, 20));
 
                 let matched = false;
+                
+                // Intento 1: Emparejar por cercanía GPS estricta
                 if (fileObj.lat !== null && fileObj.lon !== null && eventsWithGPS.length > 0) {
-                    let bestEvent = null, minDistance = 100; 
+                    let bestEvent = null;
+                    let minDistance = 100; 
                     for (let ev of eventsWithGPS) {
                         let dist = getDistance(fileObj.lat, fileObj.lon, ev.lat, ev.lon);
-                        if (dist < minDistance) { minDistance = dist; bestEvent = ev; }
+                        if (dist < minDistance) { 
+                            minDistance = dist; 
+                            bestEvent = ev; 
+                        }
                     }
-                    if (bestEvent) { fileObj.destination = getCleanTitle(bestEvent.title); matched = true; }
+                    if (bestEvent) { 
+                        fileObj.destination = getCleanTitle(bestEvent.title); 
+                        matched = true; 
+                    }
                 }
 
+                // Intento 2: Emparejar por fecha
                 if (!matched && fileObj.dateKey && eventsByDate[fileObj.dateKey]) {
                     let dayEvents = eventsByDate[fileObj.dateKey];
                     let planEvent = dayEvents.find(e => e.type === 'plan') || dayEvents.find(e => e.type === 'hotel') || dayEvents[0];
-                    if (planEvent) { fileObj.destination = getCleanTitle(planEvent.title); matched = true; }
+                    if (planEvent) { 
+                        fileObj.destination = getCleanTitle(planEvent.title); 
+                        matched = true; 
+                    }
                 }
 
+                // Intento 3: Llamar a la API de OpenStreetMap para sacar la ciudad exacta
                 if (!matched && fileObj.lat !== null && fileObj.lon !== null) {
                     let cleanCity = await getCleanCity(fileObj.lat, fileObj.lon);
-                    if (cleanCity) { fileObj.destination = cleanCity; matched = true; await new Promise(r => setTimeout(r, 100)); }
+                    if (cleanCity) { 
+                        fileObj.destination = cleanCity; 
+                        matched = true; 
+                    }
                 }
 
-                if (fileObj.destination !== 'Descubriendo el mundo' && !globalVisitedCities.includes(fileObj.destination)) globalVisitedCities.push(fileObj.destination);
+                // Añadir a lista global de ciudades visitadas para los CRÉDITOS
+                if (fileObj.destination !== 'Descubriendo el mundo' && !globalVisitedCities.includes(fileObj.destination)) {
+                    globalVisitedCities.push(fileObj.destination);
+                }
+                
                 results.push(fileObj);
             }
             return results;
         }
 
+        // ==========================================
+        // STORYBOARD Y CARGA DE IMÁGENES
+        // ==========================================
         function createStoryboard(images) {
             updateProgress('Construyendo Narrativa...', 'Ordenando cronológicamente tu historia...', 20);
+            
+            // Orden cronológico
             images.sort((a, b) => a.timestamp - b.timestamp);
 
             let storyboard = [];
-            storyboard.push({ type: 'intro', title: tripData ? tripData.nombre : 'MI GRAN VIAJE', subtitle: 'Organiza tu interrail en interrahub.com', duration: TITLE_TIME });
+            
+            // 1. ESCENA DE INTRODUCCIÓN
+            storyboard.push({ 
+                type: 'intro', 
+                title: tripData ? tripData.nombre : 'MI GRAN VIAJE', 
+                subtitle: 'Organiza tu interrail en interrahub.com', 
+                duration: TITLE_TIME 
+            });
 
+            // 2. ESCENAS DE FOTOS
             images.forEach(p => {
                 storyboard.push({ 
-                    type: 'photo', originalFile: p.file, duration: TIME_PER_PHOTO,
+                    type: 'photo', 
+                    originalFile: p.file, 
+                    duration: TIME_PER_PHOTO,
                     zoomType: Math.random() > 0.5 ? 'in' : 'out', 
-                    panX: (Math.random() - 0.5) * 0.1, panY: (Math.random() - 0.5) * 0.1,
+                    panX: (Math.random() - 0.5) * 0.1, 
+                    panY: (Math.random() - 0.5) * 0.1,
                     destination: p.destination 
                 });
             });
 
+            // 3. ESCENA DE CRÉDITOS (AQUÍ ESTÁN TUS CRÉDITOS)
             let creditsDuration = Math.max(10, (globalVisitedCities.length + globalUserNames.length) * 1.8);
-            storyboard.push({ type: 'credits', duration: creditsDuration });
+            storyboard.push({ 
+                type: 'credits', 
+                duration: creditsDuration 
+            });
 
             return storyboard;
         }
@@ -563,16 +897,19 @@
                 const img = new Image();
                 const tempUrl = URL.createObjectURL(file);
                 img.onload = () => {
-                    const MAX_DIM = isMobile ? 800 : 1080; // Optimización radical: 800px para móviles, salva el 50% de RAM
-                    let w = img.width, h = img.height;
+                    const MAX_DIM = isMobile ? 800 : 1080; 
+                    let w = img.width;
+                    let h = img.height;
                     
                     if (w > MAX_DIM || h > MAX_DIM) {
                         const ratio = Math.min(MAX_DIM / w, MAX_DIM / h);
-                        w = Math.round(w * ratio); h = Math.round(h * ratio);
+                        w = Math.round(w * ratio); 
+                        h = Math.round(h * ratio);
                     }
                     
                     const cvs = document.createElement('canvas');
-                    cvs.width = w; cvs.height = h;
+                    cvs.width = w; 
+                    cvs.height = h;
                     cvs.getContext('2d').drawImage(img, 0, 0, w, h);
                     
                     cvs.toBlob((blob) => {
@@ -586,7 +923,10 @@
                         scaledImg.src = optimizedUrl;
                     }, 'image/jpeg', 0.6); 
                 };
-                img.onerror = () => { URL.revokeObjectURL(tempUrl); reject(new Error("No se pudo leer la imagen")); };
+                img.onerror = () => { 
+                    URL.revokeObjectURL(tempUrl); 
+                    reject(new Error("No se pudo leer la imagen")); 
+                };
                 img.src = tempUrl;
             });
         }
@@ -599,20 +939,31 @@
             toast.innerHTML = `${icon} <span>${message}</span>`;
             container.appendChild(toast);
             lucide.createIcons();
-            setTimeout(() => { toast.style.animation = 'slideOutToast 0.4s forwards'; setTimeout(() => toast.remove(), 400); }, 3500);
+            
+            setTimeout(() => { 
+                toast.style.animation = 'slideOutToast 0.4s forwards'; 
+                setTimeout(() => toast.remove(), 400); 
+            }, 3500);
         }
 
         function fitText(ctx, text, maxWidth, startSize) {
             let size = startSize;
-            do { ctx.font = `800 ${size}px "Sora", sans-serif`; size -= 5; } while (ctx.measureText(text).width > maxWidth && size > 20);
+            do { 
+                ctx.font = `800 ${size}px "Sora", sans-serif`; 
+                size -= 5; 
+            } while (ctx.measureText(text).width > maxWidth && size > 20);
             return size + 5; 
         }
 
+        // ==========================================
+        // GENERADOR DE COLLAGE PARA INSTAGRAM
+        // ==========================================
         async function generateInstagramCollage(storyboard) {
             updateProgress('Creando Story...', 'Diseñando un layout perfecto para Instagram...', 25);
             const canvas = document.getElementById('collage-canvas');
             const ctx = canvas.getContext('2d');
-            const W = canvas.width, H = canvas.height;
+            const W = canvas.width;
+            const H = canvas.height;
 
             const photoClips = storyboard.filter(s => s.type === 'photo');
             if(photoClips.length === 0) return;
@@ -620,6 +971,7 @@
             let selectedUrls = [];
             const numPhotos = 6;
             const step = Math.max(1, Math.floor(photoClips.length / numPhotos));
+            
             for(let i=0; i < photoClips.length && selectedUrls.length < numPhotos; i+=step) {
                 try {
                     let loaded = await loadAndScaleImage(photoClips[i].originalFile);
@@ -628,7 +980,8 @@
             }
             if(selectedUrls.length === 0) return;
 
-            ctx.fillStyle = '#111'; ctx.fillRect(0,0,W,H);
+            ctx.fillStyle = '#111'; 
+            ctx.fillRect(0,0,W,H);
             
             let bgImg = selectedUrls[0].img;
             let ratio = Math.max(W / bgImg.width, H / bgImg.height);
@@ -637,41 +990,68 @@
             ctx.filter = 'none';
 
             let gradOverlay = ctx.createLinearGradient(0, 0, 0, H);
-            gradOverlay.addColorStop(0, "rgba(0,0,0,0.2)"); gradOverlay.addColorStop(1, "rgba(0,0,0,0.85)");
-            ctx.fillStyle = gradOverlay; ctx.fillRect(0,0,W,H);
+            gradOverlay.addColorStop(0, "rgba(0,0,0,0.2)"); 
+            gradOverlay.addColorStop(1, "rgba(0,0,0,0.85)");
+            ctx.fillStyle = gradOverlay; 
+            ctx.fillRect(0,0,W,H);
 
             const polaroidStyles = [
-                { x: W/2 - 150, y: 320, rot: -6, scale: 0.65 }, { x: W/2 + 180, y: 520, rot: 8, scale: 0.7 },
-                { x: W/2 - 180, y: 820, rot: -4, scale: 0.75 }, { x: W/2 + 160, y: 1050, rot: 5, scale: 0.7 },
-                { x: W/2 - 130, y: 1350, rot: -7, scale: 0.75 }, { x: W/2 + 150, y: 1550, rot: 6, scale: 0.65 }
+                { x: W/2 - 150, y: 320, rot: -6, scale: 0.65 }, 
+                { x: W/2 + 180, y: 520, rot: 8, scale: 0.7 },
+                { x: W/2 - 180, y: 820, rot: -4, scale: 0.75 }, 
+                { x: W/2 + 160, y: 1050, rot: 5, scale: 0.7 },
+                { x: W/2 - 130, y: 1350, rot: -7, scale: 0.75 }, 
+                { x: W/2 + 150, y: 1550, rot: 6, scale: 0.65 }
             ];
 
             const drawPolaroid = (img, config) => {
-                ctx.save(); ctx.translate(config.x, config.y); ctx.rotate(config.rot * Math.PI / 180);
-                const pWidth = 750, pHeight = img.height * (pWidth / img.width);
+                ctx.save(); 
+                ctx.translate(config.x, config.y); 
+                ctx.rotate(config.rot * Math.PI / 180);
+                
+                const pWidth = 750;
+                const pHeight = img.height * (pWidth / img.width);
+                
                 ctx.scale(config.scale, config.scale);
-                ctx.shadowColor = 'rgba(0,0,0,0.6)'; ctx.shadowBlur = 40; ctx.shadowOffsetY = 20;
-                ctx.fillStyle = '#ffffff'; ctx.fillRect(-pWidth/2 - 25, -pHeight/2 - 25, pWidth + 50, pHeight + 110);
-                ctx.shadowColor = 'transparent'; ctx.drawImage(img, -pWidth/2, -pHeight/2, pWidth, pHeight);
+                ctx.shadowColor = 'rgba(0,0,0,0.6)'; 
+                ctx.shadowBlur = 40; 
+                ctx.shadowOffsetY = 20;
+                ctx.fillStyle = '#ffffff'; 
+                ctx.fillRect(-pWidth/2 - 25, -pHeight/2 - 25, pWidth + 50, pHeight + 110);
+                
+                ctx.shadowColor = 'transparent'; 
+                ctx.drawImage(img, -pWidth/2, -pHeight/2, pWidth, pHeight);
                 ctx.restore();
             };
 
-            for(let i=0; i<selectedUrls.length; i++) if(polaroidStyles[i]) drawPolaroid(selectedUrls[i].img, polaroidStyles[i]);
+            for(let i=0; i<selectedUrls.length; i++) {
+                if(polaroidStyles[i]) drawPolaroid(selectedUrls[i].img, polaroidStyles[i]);
+            }
 
             const logoImg = await new Promise((resolve) => {
-                const img = new Image(); img.onload = () => resolve(img); img.onerror = () => resolve(null);
+                const img = new Image(); 
+                img.onload = () => resolve(img); 
+                img.onerror = () => resolve(null);
                 img.src = 'interrahublogo.PNG'; 
             });
 
             ctx.save();
-            ctx.shadowColor = "rgba(0,0,0,0.7)"; ctx.shadowBlur = 25; ctx.shadowOffsetY = 10;
+            ctx.shadowColor = "rgba(0,0,0,0.7)"; 
+            ctx.shadowBlur = 25; 
+            ctx.shadowOffsetY = 10;
             ctx.fillStyle = "rgba(15, 15, 15, 0.85)";
+            
             const pillW = 600, pillH = 90, pillX = W/2 - pillW/2, pillY = 1770;
-            ctx.beginPath(); ctx.roundRect(pillX, pillY, pillW, pillH, 45); ctx.fill();
+            ctx.beginPath(); 
+            ctx.roundRect(pillX, pillY, pillW, pillH, 45); 
+            ctx.fill();
 
             if (logoImg) {
                 ctx.drawImage(logoImg, pillX + 30, pillY + (pillH - 60)/2, 60, 60);
-                ctx.font = '700 28px "Sora", sans-serif'; ctx.fillStyle = "#ffffff"; ctx.textAlign = "left"; ctx.textBaseline = "middle";
+                ctx.font = '700 28px "Sora", sans-serif'; 
+                ctx.fillStyle = "#ffffff"; 
+                ctx.textAlign = "left"; 
+                ctx.textBaseline = "middle";
                 ctx.fillText("Generado con interrahub.com", pillX + 115, pillY + pillH/2 + 2);
             }
             ctx.restore();
@@ -680,23 +1060,33 @@
             document.getElementById('output-collage').src = collageData;
             document.getElementById('btn-download-collage').href = collageData;
 
-            // Liberar imágenes del collage de memoria RAM
-            selectedUrls.forEach(obj => { obj.img.src = ''; URL.revokeObjectURL(obj.url); });
+            // Limpieza de memoria
+            selectedUrls.forEach(obj => { 
+                obj.img.src = ''; 
+                URL.revokeObjectURL(obj.url); 
+            });
 
             document.getElementById('btn-share-ig').onclick = async () => {
                 try {
                     const blob = await (await fetch(collageData)).blob();
                     const file = new File([blob], 'InterraHub_Historia.jpg', { type: 'image/jpeg' });
-                    if (navigator.share) await navigator.share({ title: 'Mi Viaje', files: [file] });
-                    else showToast("Tu navegador no soporta compartir directamente.", "error");
+                    if (navigator.share) {
+                        await navigator.share({ title: 'Mi Viaje', files: [file] });
+                    } else {
+                        showToast("Tu navegador no soporta compartir directamente.", "error");
+                    }
                 } catch(e) {}
             };
         }
 
+        // ==========================================
+        // MOTOR DE RENDERIZADO DEL VÍDEO PRINCIPAL
+        // ==========================================
         async function executeRender(storyboard) {
             const canvas = document.getElementById('render-canvas');
             const ctx = canvas.getContext('2d');
-            const W = canvas.width; const H = canvas.height;
+            const W = canvas.width; 
+            const H = canvas.height;
 
             updateProgress('Configurando Motor...', 'Inicializando renderizado en vivo y gestionando RAM', 30);
             
@@ -709,15 +1099,23 @@
             if (audioFile) {
                 try {
                     const audioBuffer = await audioCtx.decodeAudioData(await audioFile.arrayBuffer());
-                    source = audioCtx.createBufferSource(); source.buffer = audioBuffer; source.connect(dest);
+                    source = audioCtx.createBufferSource(); 
+                    source.buffer = audioBuffer; 
+                    source.connect(dest);
                     tracks.push(...dest.stream.getAudioTracks());
-                } catch(e) {}
+                } catch(e) {
+                    console.warn("Fallo al cargar audio", e);
+                }
             }
 
             const mixedStream = new MediaStream(tracks);
             let selectedMime = ['video/webm; codecs=vp9,opus', 'video/webm; codecs=vp8,opus', 'video/webm', 'video/mp4'].find(m => MediaRecorder.isTypeSupported(m)) || '';
 
-            const mediaRecorder = new MediaRecorder(mixedStream, { mimeType: selectedMime, videoBitsPerSecond: isMobile ? 5000000 : 12000000 });
+            const mediaRecorder = new MediaRecorder(mixedStream, { 
+                mimeType: selectedMime, 
+                videoBitsPerSecond: isMobile ? 5000000 : 12000000 
+            });
+            
             let chunks = [];
             mediaRecorder.ondataavailable = e => { if (e.data.size > 0) chunks.push(e.data); };
             let renderPromise = new Promise(resolve => mediaRecorder.onstop = resolve);
@@ -725,9 +1123,7 @@
             let totalDuration = storyboard.reduce((sum, clip) => sum + clip.duration, 0);
             let startTime = performance.now();
 
-            // =========================================================
-            // ARQUITECTURA "LAZY LOADING" - LA CLAVE PARA QUE NO FALLE
-            // =========================================================
+            // Lazy Loading Logic
             let currentLoadedClipIdx = -1;
 
             const loadClipImage = async (index) => {
@@ -737,7 +1133,7 @@
                     try {
                         let result = await loadAndScaleImage(clip.originalFile);
                         clip.imgEl = result.img;
-                        clip.objUrl = result.url; // Lo guardamos para poder destruirlo
+                        clip.objUrl = result.url;
                         clip.aspect = clip.imgEl.width / clip.imgEl.height;
                     } catch(e) {}
                     clip.isLoading = false;
@@ -747,14 +1143,14 @@
             const unloadClipImage = (index) => {
                 let clip = storyboard[index];
                 if(clip && clip.type === 'photo' && clip.imgEl) {
-                    clip.imgEl.src = ''; // Forzar vaciado
-                    URL.revokeObjectURL(clip.objUrl); // Eliminar de RAM
+                    clip.imgEl.src = ''; 
+                    URL.revokeObjectURL(clip.objUrl); 
                     clip.imgEl = null;
                     clip.objUrl = null;
                 }
             };
 
-            // Precargar el primer clip antes de darle a REC
+            // Precargar primera foto
             const firstPhotoIdx = storyboard.findIndex(s => s.type === 'photo');
             if(firstPhotoIdx !== -1) await loadClipImage(firstPhotoIdx);
 
@@ -765,6 +1161,7 @@
                 function renderFrame(now) {
                     let elapsed = (now - startTime) / 1000; 
 
+                    // FINALIZACIÓN DEL VÍDEO
                     if (elapsed >= totalDuration) {
                         mediaRecorder.stop();
                         if(source) { try { source.stop(); audioCtx.close(); } catch(e){} }
@@ -773,11 +1170,13 @@
                         renderPromise.then(() => {
                             const videoUrl = URL.createObjectURL(new Blob(chunks, { type: selectedMime }));
                             isProcessing = false; 
+                            
                             document.getElementById('progress-section').style.display = 'none';
                             document.getElementById('render-warning').style.display = 'none';
                             document.getElementById('result-section').style.display = 'block';
                             
                             document.getElementById('output-video').src = videoUrl;
+                            
                             const btnDownload = document.getElementById('btn-download-video');
                             btnDownload.href = videoUrl;
                             btnDownload.download = `${tripData ? tripData.nombre.replace(/\s+/g, '_') : 'Recuerdo'}_InterraHub.${selectedMime.includes('mp4') ? 'mp4' : 'webm'}`;
@@ -790,116 +1189,249 @@
 
                     updateProgress('Grabando...', `Renderizando (No cambies de pestaña): ${Math.round((elapsed/totalDuration)*100)}%`, 30 + (elapsed / totalDuration) * 69);
 
-                    let clipStart = 0, currentClip = null, clipIndex = 0;
+                    // AVERIGUAR CLIP ACTUAL
+                    let clipStart = 0;
+                    let currentClip = null;
+                    let clipIndex = 0;
+                    
                     for (let i = 0; i < storyboard.length; i++) {
                         if (elapsed >= clipStart && elapsed < clipStart + storyboard[i].duration) {
-                            currentClip = storyboard[i]; clipIndex = i; break;
+                            currentClip = storyboard[i]; 
+                            clipIndex = i; 
+                            break;
                         }
                         clipStart += storyboard[i].duration;
                     }
 
-                    // LÓGICA DE CARGA Y DESTRUCCIÓN DINÁMICA DE MEMORIA
+                    // GESTIÓN DE MEMORIA EN TIEMPO REAL
                     if (clipIndex !== currentLoadedClipIdx) {
-                        if (currentLoadedClipIdx >= 0) unloadClipImage(currentLoadedClipIdx - 1); // Liberar RAM del clip anterior
-                        loadClipImage(clipIndex + 1); // Empezar a cargar el siguiente silenciosamente
+                        if (currentLoadedClipIdx >= 0) unloadClipImage(currentLoadedClipIdx - 1); 
+                        loadClipImage(clipIndex + 1); 
                         currentLoadedClipIdx = clipIndex;
                     }
 
+                    // ==========================================
+                    // DIBUJADO DE LA ESCENA EN EL CANVAS
+                    // ==========================================
                     if (currentClip) {
                         let progress = (elapsed - clipStart) / currentClip.duration; 
+                        
+                        // Fondo por defecto
                         let grad = ctx.createLinearGradient(0, 0, W, H);
-                        grad.addColorStop(0, "#0a0a0a"); grad.addColorStop(1, "#1a1a2e");
-                        ctx.fillStyle = grad; ctx.fillRect(0, 0, W, H);
+                        grad.addColorStop(0, "#0a0a0a"); 
+                        grad.addColorStop(1, "#1a1a2e");
+                        ctx.fillStyle = grad; 
+                        ctx.fillRect(0, 0, W, H);
+
+                        // --- MÁQUINA DE ESTADOS VISUAL ---
 
                         if (currentClip.type === 'photo' && currentClip.imgEl) {
+                            // 1. ESTADO FOTO Y UBICACIÓN
+                            
                             let scale = currentClip.zoomType === 'in' ? 1 + (0.15 * progress) : 1.15 - (0.15 * progress);
-                            let dx = currentClip.panX * W * progress, dy = currentClip.panY * H * progress;
+                            let dx = currentClip.panX * W * progress;
+                            let dy = currentClip.panY * H * progress;
 
-                            ctx.save(); ctx.translate(W/2 + dx, H/2 + dy); ctx.scale(scale, scale);
-                            let imgAspect = currentClip.aspect, canvasAspect = W / H;
+                            ctx.save(); 
+                            ctx.translate(W/2 + dx, H/2 + dy); 
+                            ctx.scale(scale, scale);
+                            
+                            let imgAspect = currentClip.aspect;
+                            let canvasAspect = W / H;
 
                             if (imgAspect < canvasAspect - 0.2) { 
-                                ctx.filter = 'blur(50px) brightness(0.3)'; ctx.drawImage(currentClip.imgEl, -W/2, -H/2, W, H);
-                                ctx.filter = 'none'; let drawW = H * imgAspect; ctx.drawImage(currentClip.imgEl, -drawW/2, -H/2, drawW, H);
+                                ctx.filter = 'blur(50px) brightness(0.3)'; 
+                                ctx.drawImage(currentClip.imgEl, -W/2, -H/2, W, H);
+                                ctx.filter = 'none'; 
+                                let drawW = H * imgAspect; 
+                                ctx.drawImage(currentClip.imgEl, -drawW/2, -H/2, drawW, H);
                             } else { 
                                 let drawH = W / imgAspect;
-                                if(drawH < H) { drawH = H; let drawW = H * imgAspect; ctx.drawImage(currentClip.imgEl, -drawW/2, -H/2, drawW, H); } 
-                                else { ctx.drawImage(currentClip.imgEl, -W/2, -drawH/2, W, drawH); }
+                                if(drawH < H) { 
+                                    drawH = H; 
+                                    let drawW = H * imgAspect; 
+                                    ctx.drawImage(currentClip.imgEl, -drawW/2, -H/2, drawW, H); 
+                                } else { 
+                                    ctx.drawImage(currentClip.imgEl, -W/2, -drawH/2, W, drawH); 
+                                }
                             }
                             ctx.restore();
 
-                            ctx.fillStyle = "#000000"; ctx.fillRect(0, 0, W, 120); ctx.fillRect(0, H - 120, W, 120); 
+                            // Bandas de cine
+                            ctx.fillStyle = "#000000"; 
+                            ctx.fillRect(0, 0, W, 120); 
+                            ctx.fillRect(0, H - 120, W, 120); 
 
+                            // TÍTULO DE LA CIUDAD (EL QUE DECÍAS QUE FALTABA)
                             let locName = currentClip.destination || 'Descubriendo el mundo';
                             if (locName !== 'Descubriendo el mundo') {
                                 let isFirst = clipIndex === 0 || storyboard[clipIndex - 1].destination !== locName;
                                 let isLast = clipIndex === storyboard.length - 1 || storyboard[clipIndex + 1].destination !== locName;
-                                let slideX = W * 0.05, opacity = 1;
+                                let slideX = W * 0.05;
+                                let opacity = 1;
 
-                                if (isFirst && progress < 0.15) { opacity = progress / 0.15; slideX = (W * 0.05) - 30 + (30 * opacity); }
-                                if (isLast && progress > 0.85) opacity = (1 - progress) / 0.15; 
+                                if (isFirst && progress < 0.15) { 
+                                    opacity = progress / 0.15; 
+                                    slideX = (W * 0.05) - 30 + (30 * opacity); 
+                                }
+                                if (isLast && progress > 0.85) {
+                                    opacity = (1 - progress) / 0.15; 
+                                }
 
-                                ctx.save(); ctx.globalAlpha = opacity * 0.8; 
+                                // Fondo sombreado del texto para lectura perfecta
+                                ctx.save(); 
+                                ctx.globalAlpha = opacity * 0.8; 
                                 let textGrad = ctx.createLinearGradient(0, 0, W * 0.5, 0);
-                                textGrad.addColorStop(0, "rgba(0,0,0,0.85)"); textGrad.addColorStop(0.5, "rgba(0,0,0,0.3)"); textGrad.addColorStop(1, "rgba(0,0,0,0)");
-                                ctx.fillStyle = textGrad; ctx.fillRect(0, H - 340, W * 0.5, 220); 
+                                textGrad.addColorStop(0, "rgba(0,0,0,0.85)"); 
+                                textGrad.addColorStop(0.5, "rgba(0,0,0,0.3)"); 
+                                textGrad.addColorStop(1, "rgba(0,0,0,0)");
+                                ctx.fillStyle = textGrad; 
+                                ctx.fillRect(0, H - 340, W * 0.5, 220); 
                                 ctx.restore();
 
-                                ctx.save(); ctx.globalAlpha = opacity; ctx.textAlign = "left"; ctx.textBaseline = "middle";
-                                ctx.shadowColor = "rgba(0,0,0,0.85)"; ctx.shadowBlur = 10; ctx.shadowOffsetY = 3;
+                                // Renderizado del texto de ciudad
+                                ctx.save(); 
+                                ctx.globalAlpha = opacity; 
+                                ctx.textAlign = "left"; 
+                                ctx.textBaseline = "middle";
+                                ctx.shadowColor = "rgba(0,0,0,0.85)"; 
+                                ctx.shadowBlur = 10; 
+                                ctx.shadowOffsetY = 3;
 
-                                ctx.font = '300 24px "Poppins", sans-serif'; ctx.fillStyle = "#e0e0e0"; ctx.letterSpacing = "6px"; 
+                                ctx.font = '300 24px "Poppins", sans-serif'; 
+                                ctx.fillStyle = "#e0e0e0"; 
+                                ctx.letterSpacing = "6px"; 
                                 ctx.fillText("RECUERDA CUANDO VISITASTEIS", slideX, H - 240);
-                                ctx.font = '800 60px "Sora", sans-serif'; ctx.fillStyle = "#ffffff"; ctx.letterSpacing = "0px";
+                                
+                                ctx.font = '800 60px "Sora", sans-serif'; 
+                                ctx.fillStyle = "#ffffff"; 
+                                ctx.letterSpacing = "0px";
                                 ctx.fillText(locName.toUpperCase(), slideX, H - 170);
                                 ctx.restore();
                             }
+
                         } else if (currentClip.type === 'credits') {
-                            let startY = H + 200, listHeight = (globalVisitedCities.length * 60) + (globalUserNames.length * 60) + 600;
+                            
+                            // 2. ESTADO CRÉDITOS FINALES (EL QUE DECÍAS QUE FALTABA)
+                            
+                            let startY = H + 200;
+                            let listHeight = (globalVisitedCities.length * 60) + (globalUserNames.length * 60) + 600;
                             let currentY = startY + ((-listHeight) - startY) * progress;
 
-                            ctx.save(); ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.shadowColor = "rgba(0,0,0,0.9)"; ctx.shadowBlur = 20;
+                            ctx.save(); 
+                            ctx.textAlign = 'center'; 
+                            ctx.textBaseline = 'middle'; 
+                            ctx.shadowColor = "rgba(0,0,0,0.9)"; 
+                            ctx.shadowBlur = 20;
 
                             let yOffset = currentY;
-                            ctx.font = '800 55px "Sora", sans-serif'; ctx.fillStyle = '#ff4d4d'; ctx.letterSpacing = "4px"; ctx.fillText("DESTINOS EXPLORADOS", W/2, yOffset); yOffset += 100;
-                            ctx.font = '600 45px "Playfair Display", serif'; ctx.fillStyle = '#ffffff'; ctx.letterSpacing = "2px";
-                            if (globalVisitedCities.length === 0) { ctx.fillText("Aventura sin límites", W/2, yOffset); yOffset += 70; } 
-                            else { globalVisitedCities.forEach(city => { ctx.fillText(city, W/2, yOffset); yOffset += 70; }); }
+                            
+                            ctx.font = '800 55px "Sora", sans-serif'; 
+                            ctx.fillStyle = '#ff4d4d'; 
+                            ctx.letterSpacing = "4px"; 
+                            ctx.fillText("DESTINOS EXPLORADOS", W/2, yOffset); 
+                            yOffset += 100;
+                            
+                            ctx.font = '600 45px "Playfair Display", serif'; 
+                            ctx.fillStyle = '#ffffff'; 
+                            ctx.letterSpacing = "2px";
+                            
+                            if (globalVisitedCities.length === 0) { 
+                                ctx.fillText("Aventura sin límites", W/2, yOffset); 
+                                yOffset += 70; 
+                            } else { 
+                                globalVisitedCities.forEach(city => { 
+                                    ctx.fillText(city, W/2, yOffset); 
+                                    yOffset += 70; 
+                                }); 
+                            }
 
                             yOffset += 80;
-                            ctx.font = '800 55px "Sora", sans-serif'; ctx.fillStyle = '#4da6ff'; ctx.letterSpacing = "4px"; ctx.fillText("LOS AVENTUREROS", W/2, yOffset); yOffset += 100;
-                            ctx.font = '600 45px "Playfair Display", serif'; ctx.fillStyle = '#ffffff'; ctx.letterSpacing = "2px";
-                            globalUserNames.forEach(user => { ctx.fillText(user, W/2, yOffset); yOffset += 70; });
+                            
+                            ctx.font = '800 55px "Sora", sans-serif'; 
+                            ctx.fillStyle = '#4da6ff'; 
+                            ctx.letterSpacing = "4px"; 
+                            ctx.fillText("LOS AVENTUREROS", W/2, yOffset); 
+                            yOffset += 100;
+                            
+                            ctx.font = '600 45px "Playfair Display", serif'; 
+                            ctx.fillStyle = '#ffffff'; 
+                            ctx.letterSpacing = "2px";
+                            
+                            globalUserNames.forEach(user => { 
+                                ctx.fillText(user, W/2, yOffset); 
+                                yOffset += 70; 
+                            });
 
                             yOffset += 150;
-                            ctx.font = '800 45px "Sora", sans-serif'; ctx.fillStyle = '#ffffff'; ctx.letterSpacing = "0px"; ctx.fillText("Interra-hub.", W/2, yOffset); yOffset += 60;
-                            ctx.font = '400 25px "Sora", sans-serif'; ctx.fillStyle = '#888888'; ctx.fillText(`© ${new Date().getFullYear()} Creado automáticamente con Interra-hub`, W/2, yOffset);
+                            
+                            ctx.font = '800 45px "Sora", sans-serif'; 
+                            ctx.fillStyle = '#ffffff'; 
+                            ctx.letterSpacing = "0px"; 
+                            ctx.fillText("Interra-hub.", W/2, yOffset); 
+                            yOffset += 60;
+                            
+                            ctx.font = '400 25px "Sora", sans-serif'; 
+                            ctx.fillStyle = '#888888'; 
+                            ctx.fillText(`© ${new Date().getFullYear()} Creado automáticamente con Interra-hub`, W/2, yOffset);
+                            
                             ctx.restore();
+
                         } else if (currentClip.type === 'intro') {
+                            
+                            // 3. ESTADO INTRODUCCIÓN INICIAL
+                            
                             let scale = 1 + (0.05 * progress);
-                            ctx.save(); ctx.translate(W/2, H/2); ctx.scale(scale, scale);
-                            ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.shadowColor = "rgba(0,0,0,0.9)"; ctx.shadowBlur = 25; ctx.shadowOffsetY = 5;
-                            ctx.font = '800 40px "Sora", sans-serif'; ctx.fillStyle = '#ff4d4d'; ctx.letterSpacing = "8px"; ctx.fillText("ESTE HA SIDO TU VIAJE", 0, -80);
+                            ctx.save(); 
+                            ctx.translate(W/2, H/2); 
+                            ctx.scale(scale, scale);
+                            ctx.textAlign = 'center'; 
+                            ctx.textBaseline = 'middle'; 
+                            ctx.shadowColor = "rgba(0,0,0,0.9)"; 
+                            ctx.shadowBlur = 25; 
+                            ctx.shadowOffsetY = 5;
+                            
+                            ctx.font = '800 40px "Sora", sans-serif'; 
+                            ctx.fillStyle = '#ff4d4d'; 
+                            ctx.letterSpacing = "8px"; 
+                            ctx.fillText("ESTE HA SIDO TU VIAJE", 0, -80);
                             
                             let optimalSize = fitText(ctx, currentClip.title.toUpperCase(), W - 150, 130);
-                            ctx.font = `800 ${optimalSize}px "Sora", sans-serif`; ctx.fillStyle = '#ffffff'; ctx.letterSpacing = "0px"; ctx.fillText(currentClip.title.toUpperCase(), 0, 30);
-                            ctx.font = '400 28px "Sora", sans-serif'; ctx.fillStyle = '#4da6ff'; ctx.fillText(currentClip.subtitle, 0, 150);
+                            ctx.font = `800 ${optimalSize}px "Sora", sans-serif`; 
+                            ctx.fillStyle = '#ffffff'; 
+                            ctx.letterSpacing = "0px"; 
+                            ctx.fillText(currentClip.title.toUpperCase(), 0, 30);
+                            
+                            ctx.font = '400 28px "Sora", sans-serif'; 
+                            ctx.fillStyle = '#4da6ff'; 
+                            ctx.fillText(currentClip.subtitle, 0, 150);
+                            
                             ctx.restore();
                         }
 
+                        // TRANSCIONES ENTRE CLIPS (FADE A NEGRO)
                         let fadeFactor = 1;
-                        if (progress < TRANSITION_TIME / currentClip.duration) fadeFactor = progress / (TRANSITION_TIME / currentClip.duration);
-                        else if (progress > 1 - (TRANSITION_TIME / currentClip.duration)) fadeFactor = (1 - progress) / (TRANSITION_TIME / currentClip.duration);
+                        if (progress < TRANSITION_TIME / currentClip.duration) {
+                            fadeFactor = progress / (TRANSITION_TIME / currentClip.duration);
+                        } else if (progress > 1 - (TRANSITION_TIME / currentClip.duration)) {
+                            fadeFactor = (1 - progress) / (TRANSITION_TIME / currentClip.duration);
+                        }
                         
-                        if (fadeFactor < 1) { ctx.fillStyle = `rgba(10, 10, 15, ${1 - fadeFactor})`; ctx.fillRect(0, 0, W, H); }
+                        if (fadeFactor < 1) { 
+                            ctx.fillStyle = `rgba(10, 10, 15, ${1 - fadeFactor})`; 
+                            ctx.fillRect(0, 0, W, H); 
+                        }
                     }
 
                     requestAnimationFrame(renderFrame);
                 }
+                
+                // Disparo inicial del bucle de renderizado
                 requestAnimationFrame(renderFrame);
             });
         }
 
+        // Inicializar iconos de la UI
         lucide.createIcons();
     </script>
 </body>
