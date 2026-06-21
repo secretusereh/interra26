@@ -6,7 +6,6 @@
     <title>Recuerdo de Viaje - Interra-hub.</title>
     
     <link rel="icon" type="image/png" href="interrahublogo.PNG">
-    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Sora:wght@300;400;600;800&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
@@ -26,7 +25,6 @@
             --text-muted: #888888;
             --accent: #ff4d4d;
             --accent-blue: #4da6ff;
-            --accent-green: #4dff88;
             --success: #4dff4d;
             --border-subtle: rgba(255, 255, 255, 0.08);
             --transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
@@ -59,23 +57,19 @@
             display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.5s ease;
         }
 
-        main { padding: 3rem 5% 5rem; max-width: 1100px; margin: 0 auto; width: 100%; flex: 1; }
+        main { padding: 3rem 5% 1rem; max-width: 1100px; margin: 0 auto; width: 100%; flex: 1; }
         
         .header-section { text-align: center; margin-bottom: 3rem; }
         .header-section h1 { font-size: 3.5rem; font-weight: 800; letter-spacing: -2px; margin-bottom: 0.5rem; word-break: break-word; }
         .header-section p { color: var(--text-muted); font-size: 1.1rem; }
 
-        .privacy-banner {
-            background: rgba(77, 255, 136, 0.05); border: 1px solid rgba(77, 255, 136, 0.2);
+        .banner-info {
             border-radius: 12px; padding: 1rem 1.5rem; margin-bottom: 1rem;
-            display: flex; align-items: center; gap: 12px; color: var(--success); font-size: 0.9rem;
+            display: flex; align-items: center; gap: 12px; font-size: 0.9rem;
         }
-        .warning-banner {
-            background: rgba(255, 77, 77, 0.05); border: 1px solid rgba(255, 77, 77, 0.3);
-            border-radius: 12px; padding: 1.5rem; margin-bottom: 2rem;
-            display: flex; align-items: center; gap: 15px; color: #ff6b6b; font-size: 0.95rem; display: none;
-            box-shadow: 0 4px 20px rgba(255, 77, 77, 0.1);
-        }
+        .privacy-banner { background: rgba(77, 255, 136, 0.05); border: 1px solid rgba(77, 255, 136, 0.2); color: var(--success); }
+        .mobile-banner { background: rgba(255, 165, 0, 0.05); border: 1px solid rgba(255, 165, 0, 0.3); color: #ffb84d; display: none; }
+        .warning-banner { background: rgba(255, 77, 77, 0.05); border: 1px solid rgba(255, 77, 77, 0.3); color: #ff6b6b; padding: 1.5rem; margin-bottom: 2rem; display: none; box-shadow: 0 4px 20px rgba(255, 77, 77, 0.1); }
 
         .upload-zone {
             background: var(--surface); border: 2px dashed var(--border-subtle);
@@ -90,6 +84,7 @@
         .upload-zone:hover i { color: var(--accent-blue); transform: scale(1.1); }
         .upload-zone h3 { font-size: 1.5rem; font-weight: 600; margin-bottom: 0.5rem; }
         .upload-zone p { color: var(--text-muted); font-size: 0.95rem; }
+        .upload-highlight { font-size: 0.95rem; margin-top: 10px; color: var(--accent-blue); font-weight: 600; }
         #file-input { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
 
         .options-section {
@@ -114,69 +109,36 @@
 
         .result-section { display: none; text-align: center; animation: fadeIn 0.6s ease; width: 100%; }
         
-        /* Grid para Resultados (Video + Collage) */
-        .results-grid {
-            display: grid;
-            grid-template-columns: 1.5fr 1fr;
-            gap: 2rem;
-            margin-bottom: 2rem;
-            align-items: start;
-        }
+        .results-grid { display: grid; grid-template-columns: 1.5fr 1fr; gap: 2rem; margin-bottom: 2rem; align-items: start; }
+        @media (max-width: 900px) { .results-grid { grid-template-columns: 1fr; } }
 
-        @media (max-width: 900px) {
-            .results-grid { grid-template-columns: 1fr; }
-        }
-
-        .media-card {
-            background: var(--surface-solid);
-            border: 1px solid var(--border-subtle);
-            border-radius: 16px;
-            padding: 1rem;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-
+        .media-card { background: var(--surface-solid); border: 1px solid var(--border-subtle); border-radius: 16px; padding: 1rem; box-shadow: 0 20px 50px rgba(0,0,0,0.5); display: flex; flex-direction: column; gap: 1rem; }
         .media-card h3 { font-size: 1.2rem; color: var(--primary); margin-bottom: 0.5rem; display: flex; align-items: center; justify-content: center; gap: 8px; }
 
-        .video-wrapper {
-            width: 100%; border-radius: 12px;
-            overflow: hidden; background: #000; aspect-ratio: 16/9;
-        }
+        .video-wrapper { width: 100%; border-radius: 12px; overflow: hidden; background: #000; aspect-ratio: 16/9; }
         video { width: 100%; height: 100%; object-fit: contain; }
 
-        .collage-wrapper {
-            width: 100%; border-radius: 12px; overflow: hidden;
-            background: #000; aspect-ratio: 9/16; display: flex; justify-content: center; align-items: center;
-        }
+        .collage-wrapper { width: 100%; border-radius: 12px; overflow: hidden; background: #000; aspect-ratio: 9/16; display: flex; justify-content: center; align-items: center; }
         .collage-wrapper img { width: 100%; height: 100%; object-fit: cover; }
         
         .btn-submit {
             background: var(--primary); color: var(--bg-color); border: none; padding: 1rem 2rem;
             border-radius: 12px; font-weight: 800; font-size: 1.1rem; cursor: pointer; transition: 0.3s;
-            display: inline-flex; align-items: center; justify-content: center; gap: 10px; text-decoration: none;
-            width: 100%;
+            display: inline-flex; align-items: center; justify-content: center; gap: 10px; text-decoration: none; width: 100%;
         }
-        .btn-submit.instagram {
-            background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
-            color: white;
-        }
+        .btn-submit.instagram { background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); color: white; }
         .btn-submit:hover:not(:disabled) { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.3); }
         .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; }
 
-        .action-buttons {
-            display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; margin-top: 2rem;
-            padding-top: 2rem; border-top: 1px solid var(--border-subtle);
-        }
+        .action-buttons { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--border-subtle); }
+
+        .footer-teaser { text-align: center; padding: 3rem 1rem 2rem; color: var(--accent-blue); font-weight: 800; font-size: 1.2rem; letter-spacing: 2px; text-transform: uppercase; opacity: 0.8; }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes spin { 100% { transform: rotate(360deg); } }
         @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.6; } 100% { opacity: 1; } }
-
         .pulsing { animation: pulse 2s infinite; }
 
-        /* Canvas Ocultos */
         #render-canvas, #collage-canvas { display: none; }
         
         #toast-container { position: fixed; bottom: 30px; right: 30px; z-index: 20000; display: flex; flex-direction: column; gap: 10px; }
@@ -208,18 +170,21 @@
             <p>Convierte tus recuerdos en una película y un collage profesional automáticamente.</p>
         </div>
 
-        <div class="privacy-banner" id="privacy-banner">
+        <div class="banner-info privacy-banner" id="privacy-banner">
             <i data-lucide="shield-check" style="width: 24px; flex-shrink: 0;"></i>
-            <div>
-                <strong>Privacidad Garantizada:</strong> Tus fotografías se procesan 100% localmente en tu dispositivo.
-            </div>
+            <div><strong>Privacidad Garantizada:</strong> Tus fotografías se procesan 100% localmente en tu dispositivo.</div>
+        </div>
+
+        <div class="banner-info mobile-banner" id="mobile-warning">
+            <i data-lucide="smartphone-nfc" style="width: 24px; flex-shrink: 0;"></i>
+            <div><strong>Aviso Móvil:</strong> Hacer este proceso desde smartphones puede conllevar más dificultades que desde un ordenador debido a las restricciones de memoria.</div>
         </div>
         
-        <div class="warning-banner" id="render-warning">
+        <div class="banner-info warning-banner" id="render-warning">
             <i data-lucide="alert-triangle" style="width: 32px; flex-shrink: 0;"></i>
             <div>
                 <strong style="font-size: 1.1rem; display: block; margin-bottom: 5px;">¡ATENCIÓN! No cierres ni recargues esta página</strong>
-                Si cambias de pestaña, minimizas el navegador o recargas la página, <strong>perderás todo el progreso y el vídeo no se guardará</strong>. El motor necesita que esta ventana esté visible.
+                Si cambias de pestaña o minimizas, <strong>perderás todo el progreso y el vídeo no se guardará</strong>.
             </div>
         </div>
 
@@ -227,8 +192,9 @@
             <div class="upload-zone" id="drop-zone">
                 <i data-lucide="image-plus"></i>
                 <h3>Arrastra tus fotos aquí</h3>
-                <p>o haz clic para seleccionar (recomendado: 10 - 50 fotos)</p>
-                <p style="font-size: 0.95rem; margin-top: 10px; color: var(--accent-blue); font-weight: 600;" id="file-count">0 fotos seleccionadas</p>
+                <p>o haz clic para seleccionar. ¡Selecciona tus mejores recuerdos!</p>
+                <p style="font-size: 0.85rem; color: #ff6b6b; margin-top: 5px;">(Máximo 100 fotografías permitidas)</p>
+                <p class="upload-highlight" id="file-count">0 fotos seleccionadas</p>
                 <input type="file" id="file-input" multiple accept="image/jpeg, image/png, image/webp, image/heic">
             </div>
 
@@ -294,17 +260,26 @@
                 </button>
             </div>
         </div>
-
-        <canvas id="render-canvas" width="1920" height="1080"></canvas>
-        <canvas id="collage-canvas" width="1080" height="1920"></canvas>
     </main>
 
+    <footer class="footer-teaser">
+        Y próximamente MUCHO MÁS... 🚀
+    </footer>
+
+    <canvas id="render-canvas" width="1920" height="1080"></canvas>
+    <canvas id="collage-canvas" width="1080" height="1920"></canvas>
     <div id="toast-container"></div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
         import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+        // Detección de móvil para mostrar aviso
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        if (isMobile) {
+            document.getElementById('mobile-warning').style.display = 'flex';
+        }
 
         const firebaseConfig = {
             apiKey: "AIzaSyDRkUJnDLzknFz3KOnPEm4UFsgf6R4z1Uk",
@@ -327,15 +302,15 @@
         let audioFile = null;
         let globalUserNames = []; 
         let globalVisitedCities = []; 
-        let isProcessing = false; // Flag maestro anti-salida
+        let isProcessing = false;
 
         const TIME_PER_PHOTO = 3.5; 
         const TRANSITION_TIME = 0.6; 
         const TITLE_TIME = 4.0; 
+        const MAX_PHOTOS = 100; // Límite estricto
 
         const reverseGeocodeCache = {};
 
-        // Blindaje de seguridad: Advertencia al intentar salir si está procesando o terminó pero no guardó
         window.addEventListener('beforeunload', (e) => {
             if (isProcessing || document.getElementById('result-section').style.display === 'block') {
                 e.preventDefault();
@@ -356,24 +331,17 @@
             if (!dms || dms.length < 3) return null;
             let getVal = (v) => {
                 if (typeof v === 'number') return v;
-                if (v && v.numerator !== undefined && v.denominator !== undefined) {
-                    return v.denominator === 0 ? 0 : v.numerator / v.denominator;
-                }
+                if (v && v.numerator !== undefined && v.denominator !== undefined) return v.denominator === 0 ? 0 : v.numerator / v.denominator;
                 if (v && typeof v.valueOf === 'function') return v.valueOf();
                 return parseFloat(v) || 0;
             };
-            let deg = getVal(dms[0]);
-            let min = getVal(dms[1]);
-            let sec = getVal(dms[2]);
-            let dd = deg + (min / 60) + (sec / 3600);
-            if (ref === "S" || ref === "W") dd = dd * -1;
+            let dd = getVal(dms[0]) + (getVal(dms[1]) / 60) + (getVal(dms[2]) / 3600);
+            if (ref === "S" || ref === "W") dd *= -1;
             return dd;
         }
 
         document.getElementById('btn-volver').onclick = () => {
-            if (isProcessing) {
-                if(!confirm("Se está generando el vídeo. Si vuelves atrás, se perderá todo. ¿Estás seguro?")) return;
-            }
+            if (isProcessing) if(!confirm("Se está generando el vídeo. Si vuelves atrás, se perderá todo. ¿Seguro?")) return;
             if (tripId) window.location.href = `viaje.html?id=${tripId}`;
             else window.location.href = 'panel.html';
         };
@@ -384,10 +352,7 @@
                 await loadTripData();
                 document.getElementById('page-loader').style.opacity = '0';
                 setTimeout(() => document.getElementById('page-loader').style.display = 'none', 500);
-            } catch (error) {
-                console.error(error);
-                showToast("Error al cargar datos del viaje.", "error");
-            }
+            } catch (error) { showToast("Error al cargar datos del viaje.", "error"); }
         });
 
         async function loadTripData() {
@@ -398,9 +363,7 @@
                     for (let uid of Object.keys(tripData.miembros)) {
                         try {
                             const userSnap = await getDoc(doc(db, "usuarios", uid));
-                            if (userSnap.exists() && userSnap.data().nombre) {
-                                globalUserNames.push(userSnap.data().nombre);
-                            }
+                            if (userSnap.exists() && userSnap.data().nombre) globalUserNames.push(userSnap.data().nombre);
                         } catch(e) {}
                     }
                 }
@@ -408,31 +371,26 @@
             }
         }
 
-        const fileInput = document.getElementById('file-input');
-        const dropZone = document.getElementById('drop-zone');
-        const fileCount = document.getElementById('file-count');
-        const btnGenerate = document.getElementById('btn-generate');
-
-        fileInput.addEventListener('change', (e) => {
-            selectedFiles = Array.from(e.target.files);
+        const handleFiles = (filesArray) => {
+            selectedFiles = filesArray.slice(0, MAX_PHOTOS);
+            if(filesArray.length > MAX_PHOTOS) showToast(`Limitado a las primeras ${MAX_PHOTOS} fotos para asegurar un buen funcionamiento.`, "error");
             updateFileCount();
-        });
+        };
 
+        document.getElementById('file-input').addEventListener('change', (e) => handleFiles(Array.from(e.target.files)));
+        const dropZone = document.getElementById('drop-zone');
         dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('dragover'); });
         dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
         dropZone.addEventListener('drop', (e) => {
-            e.preventDefault();
-            dropZone.classList.remove('dragover');
-            if (e.dataTransfer.files.length) {
-                selectedFiles = Array.from(e.dataTransfer.files).filter(f => f.type.startsWith('image/'));
-                updateFileCount();
-            }
+            e.preventDefault(); dropZone.classList.remove('dragover');
+            if (e.dataTransfer.files.length) handleFiles(Array.from(e.dataTransfer.files).filter(f => f.type.startsWith('image/')));
         });
 
         function updateFileCount() {
-            fileCount.innerText = `${selectedFiles.length} fotos listas para magia`;
-            fileCount.style.color = selectedFiles.length > 0 ? 'var(--success)' : 'var(--accent-blue)';
-            btnGenerate.disabled = selectedFiles.length === 0;
+            const countEl = document.getElementById('file-count');
+            countEl.innerText = `${selectedFiles.length} fotos listas para la magia`;
+            countEl.style.color = selectedFiles.length > 0 ? 'var(--success)' : 'var(--accent-blue)';
+            document.getElementById('btn-generate').disabled = selectedFiles.length === 0;
         }
 
         document.getElementById('audio-input').addEventListener('change', (e) => {
@@ -443,11 +401,11 @@
             }
         });
 
-        btnGenerate.addEventListener('click', async () => {
+        document.getElementById('btn-generate').addEventListener('click', async () => {
             isProcessing = true;
             document.getElementById('setup-section').style.display = 'none';
             document.getElementById('header-text').style.display = 'none';
-            document.getElementById('privacy-banner').style.display = 'none';
+            document.querySelectorAll('.banner-info').forEach(el => el.style.display = 'none');
             
             document.getElementById('render-warning').style.display = 'flex';
             document.getElementById('progress-section').style.display = 'block';
@@ -455,11 +413,7 @@
             try {
                 const processedImages = await processAndClassifyImages(selectedFiles);
                 const storyboard = createStoryboard(processedImages);
-                
-                // Generamos primero el collage instantáneo de IG
                 await generateInstagramCollage(storyboard);
-
-                // Luego ejecutamos el render de vídeo intensivo
                 await executeRender(storyboard);
             } catch (error) {
                 console.error(error);
@@ -476,13 +430,13 @@
             
             document.getElementById('header-text').style.display = 'block';
             document.getElementById('privacy-banner').style.display = 'flex';
+            if(isMobile) document.getElementById('mobile-warning').style.display = 'flex';
             document.getElementById('setup-section').style.display = 'block';
             
             selectedFiles = []; audioFile = null; globalVisitedCities = [];
             updateFileCount();
             document.getElementById('btn-audio-label').innerHTML = `<i data-lucide="music"></i> Seleccionar Audio`;
             lucide.createIcons();
-            
             document.getElementById('output-video').src = "";
             document.getElementById('output-collage').src = "";
         }
@@ -497,24 +451,18 @@
             if (!lat || !lon) return null;
             const key = `${lat.toFixed(2)},${lon.toFixed(2)}`;
             if (reverseGeocodeCache[key]) return reverseGeocodeCache[key];
-            
             try {
                 const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&zoom=10&addressdetails=1`);
                 const data = await res.json();
                 let city = data.address?.city || data.address?.town || data.address?.municipality || data.address?.village || data.name;
-                if(city) {
-                    reverseGeocodeCache[key] = city;
-                    return city;
-                }
+                if(city) { reverseGeocodeCache[key] = city; return city; }
             } catch(e) {}
             return null;
         }
 
         async function processAndClassifyImages(files) {
             let results = [];
-            
-            let eventsByDate = {};
-            let eventsWithGPS = [];
+            let eventsByDate = {}; let eventsWithGPS = [];
             if (tripData && tripData.eventos) {
                 tripData.eventos.forEach(e => {
                     if (e.type === 'hotel' || e.type === 'plan') {
@@ -525,27 +473,18 @@
                 });
             }
 
-            const getCleanTitle = (title) => {
-                if(!title) return 'Descubriendo el mundo';
-                return title.replace(/📥 Check-in: |📤 Check-out: |🌙 Noche en: /g, '').split(',')[0].trim();
-            };
+            const getCleanTitle = (title) => title ? title.replace(/📥 Check-in: |📤 Check-out: |🌙 Noche en: /g, '').split(',')[0].trim() : 'Descubriendo el mundo';
 
             for (let i = 0; i < files.length; i++) {
-                updateProgress('Analizando fotografías...', `Motor IA extrayendo geodatos: foto ${i+1} de ${files.length}`, (i/files.length)*15);
+                updateProgress('Analizando fotografías...', `Motor IA leyendo EXIF: foto ${i+1} de ${files.length}`, (i/files.length)*15);
                 let file = files[i];
-                let fileObj = { 
-                    file: file, 
-                    url: null, // Optimizacion crítica: Evitamos crear ObjectURLs que generan leaks masivos de memoria
-                    destination: 'Descubriendo el mundo', 
-                    dateKey: null, lat: null, lon: null, timestamp: null 
-                };
+                let fileObj = { file: file, destination: 'Descubriendo el mundo', dateKey: null, lat: null, lon: null, timestamp: null };
 
                 await new Promise((resolve) => {
                     let watchdog = setTimeout(resolve, 500); 
                     EXIF.getData(file, function() {
                         clearTimeout(watchdog);
-                        
-                        let rawDate = EXIF.getTag(this, "DateTimeOriginal") || EXIF.getTag(this, "DateTimeDigitized") || EXIF.getTag(this, "DateTime");
+                        let rawDate = EXIF.getTag(this, "DateTimeOriginal") || EXIF.getTag(this, "DateTime");
                         if (rawDate && typeof rawDate === 'string') {
                             let parts = rawDate.split(' ');
                             if (parts.length > 0) fileObj.dateKey = parts[0].replace(/:/g, '-');
@@ -554,31 +493,25 @@
                                 if (!isNaN(parsedDate.getTime())) fileObj.timestamp = parsedDate.getTime();
                             }
                         } 
-                        
                         if (!fileObj.dateKey && file.lastModified) {
                             const d = new Date(file.lastModified);
                             fileObj.dateKey = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
                         }
-                        
                         if (!fileObj.timestamp) fileObj.timestamp = file.lastModified || Date.now();
 
-                        let latRaw = EXIF.getTag(this, "GPSLatitude");
-                        let latRef = EXIF.getTag(this, "GPSLatitudeRef");
-                        let lonRaw = EXIF.getTag(this, "GPSLongitude");
-                        let lonRef = EXIF.getTag(this, "GPSLongitudeRef");
-                        
-                        if (latRaw && lonRaw) {
-                            fileObj.lat = convertDMSToDD(latRaw, latRef);
-                            fileObj.lon = convertDMSToDD(lonRaw, lonRef);
-                        }
+                        let latRaw = EXIF.getTag(this, "GPSLatitude"), latRef = EXIF.getTag(this, "GPSLatitudeRef");
+                        let lonRaw = EXIF.getTag(this, "GPSLongitude"), lonRef = EXIF.getTag(this, "GPSLongitudeRef");
+                        if (latRaw && lonRaw) { fileObj.lat = convertDMSToDD(latRaw, latRef); fileObj.lon = convertDMSToDD(lonRaw, lonRef); }
                         resolve();
                     });
                 });
 
+                // Descanso obligatorio de CPU para liberar Garbage Collector y evitar bloqueos en móviles
+                await new Promise(r => setTimeout(r, 20));
+
                 let matched = false;
                 if (fileObj.lat !== null && fileObj.lon !== null && eventsWithGPS.length > 0) {
-                    let bestEvent = null;
-                    let minDistance = 100; 
+                    let bestEvent = null, minDistance = 100; 
                     for (let ev of eventsWithGPS) {
                         let dist = getDistance(fileObj.lat, fileObj.lon, ev.lat, ev.lon);
                         if (dist < minDistance) { minDistance = dist; bestEvent = ev; }
@@ -588,24 +521,16 @@
 
                 if (!matched && fileObj.dateKey && eventsByDate[fileObj.dateKey]) {
                     let dayEvents = eventsByDate[fileObj.dateKey];
-                    let hotelEvent = dayEvents.find(e => e.type === 'hotel' && (e.hotelType === 'hotel-night' || e.hotelType === 'hotel-checkin'));
-                    if (hotelEvent) {
-                        fileObj.destination = getCleanTitle(hotelEvent.title);
-                        matched = true;
-                    } else {
-                        let planEvent = dayEvents.find(e => e.type === 'plan') || dayEvents.find(e => e.type === 'hotel') || dayEvents[0];
-                        if (planEvent) { fileObj.destination = getCleanTitle(planEvent.title); matched = true; }
-                    }
+                    let planEvent = dayEvents.find(e => e.type === 'plan') || dayEvents.find(e => e.type === 'hotel') || dayEvents[0];
+                    if (planEvent) { fileObj.destination = getCleanTitle(planEvent.title); matched = true; }
                 }
 
                 if (!matched && fileObj.lat !== null && fileObj.lon !== null) {
                     let cleanCity = await getCleanCity(fileObj.lat, fileObj.lon);
-                    if (cleanCity) { fileObj.destination = cleanCity; matched = true; await new Promise(r => setTimeout(r, 150)); }
+                    if (cleanCity) { fileObj.destination = cleanCity; matched = true; await new Promise(r => setTimeout(r, 100)); }
                 }
 
-                if (fileObj.destination !== 'Descubriendo el mundo' && !globalVisitedCities.includes(fileObj.destination)) {
-                    globalVisitedCities.push(fileObj.destination);
-                }
+                if (fileObj.destination !== 'Descubriendo el mundo' && !globalVisitedCities.includes(fileObj.destination)) globalVisitedCities.push(fileObj.destination);
                 results.push(fileObj);
             }
             return results;
@@ -616,21 +541,13 @@
             images.sort((a, b) => a.timestamp - b.timestamp);
 
             let storyboard = [];
-            storyboard.push({ 
-                type: 'intro', 
-                title: tripData ? tripData.nombre : 'MI GRAN VIAJE', 
-                subtitle: 'Organiza tu interrail en interrahub.com', 
-                duration: TITLE_TIME 
-            });
+            storyboard.push({ type: 'intro', title: tripData ? tripData.nombre : 'MI GRAN VIAJE', subtitle: 'Organiza tu interrail en interrahub.com', duration: TITLE_TIME });
 
             images.forEach(p => {
                 storyboard.push({ 
-                    type: 'photo', 
-                    originalFile: p.file, // Usamos la referencia en memoria nativa sin duplicar blobs
-                    duration: TIME_PER_PHOTO,
+                    type: 'photo', originalFile: p.file, duration: TIME_PER_PHOTO,
                     zoomType: Math.random() > 0.5 ? 'in' : 'out', 
-                    panX: (Math.random() - 0.5) * 0.1,
-                    panY: (Math.random() - 0.5) * 0.1,
+                    panX: (Math.random() - 0.5) * 0.1, panY: (Math.random() - 0.5) * 0.1,
                     destination: p.destination 
                 });
             });
@@ -641,46 +558,35 @@
             return storyboard;
         }
 
-        // ==========================================
-        // ALGORITMO EXTREMO DE OPTIMIZACIÓN DE MEMORIA
-        // Evita crashes por desbordamiento usando Blob y baja resolución
-        // ==========================================
         async function loadAndScaleImage(file) {
             return new Promise((resolve, reject) => {
                 const img = new Image();
                 const tempUrl = URL.createObjectURL(file);
                 img.onload = () => {
-                    const MAX_DIM = 1080; // Reducción extrema a 1080p para salvar memoria RAM
-                    let w = img.width;
-                    let h = img.height;
+                    const MAX_DIM = isMobile ? 800 : 1080; // Optimización radical: 800px para móviles, salva el 50% de RAM
+                    let w = img.width, h = img.height;
                     
                     if (w > MAX_DIM || h > MAX_DIM) {
                         const ratio = Math.min(MAX_DIM / w, MAX_DIM / h);
-                        w = Math.round(w * ratio);
-                        h = Math.round(h * ratio);
+                        w = Math.round(w * ratio); h = Math.round(h * ratio);
                     }
                     
                     const cvs = document.createElement('canvas');
                     cvs.width = w; cvs.height = h;
-                    const ctx = cvs.getContext('2d');
-                    ctx.drawImage(img, 0, 0, w, h);
+                    cvs.getContext('2d').drawImage(img, 0, 0, w, h);
                     
-                    // Transición a Blob asíncrono. Bloquea menos el hilo y evita desbordamiento en memoria Base64
                     cvs.toBlob((blob) => {
-                        URL.revokeObjectURL(tempUrl); // Liberamos la foto original de RAM inmediatamente
-                        if (!blob) { reject(new Error("Error optimizando imagen")); return; }
+                        URL.revokeObjectURL(tempUrl); 
+                        if (!blob) { reject(new Error("Error optimizando")); return; }
                         
                         const optimizedUrl = URL.createObjectURL(blob);
                         const scaledImg = new Image();
-                        scaledImg.onload = () => resolve(scaledImg);
+                        scaledImg.onload = () => { resolve({ img: scaledImg, url: optimizedUrl }); };
                         scaledImg.onerror = reject;
                         scaledImg.src = optimizedUrl;
-                    }, 'image/jpeg', 0.55); // Compresión agresiva al 55% para máximo ahorro de memoria
+                    }, 'image/jpeg', 0.6); 
                 };
-                img.onerror = () => {
-                    URL.revokeObjectURL(tempUrl);
-                    reject(new Error("No se pudo leer la imagen original"));
-                };
+                img.onerror = () => { URL.revokeObjectURL(tempUrl); reject(new Error("No se pudo leer la imagen")); };
                 img.src = tempUrl;
             });
         }
@@ -689,9 +595,7 @@
             const container = document.getElementById('toast-container');
             const toast = document.createElement('div');
             toast.className = 'toast';
-            let icon = '<i data-lucide="check-circle" style="color: var(--success); width:20px;"></i>';
-            if (type === 'error') icon = '<i data-lucide="alert-circle" style="color: var(--accent); width:20px;"></i>';
-
+            let icon = type === 'error' ? '<i data-lucide="alert-circle" style="color: var(--accent); width:20px;"></i>' : '<i data-lucide="check-circle" style="color: var(--success); width:20px;"></i>';
             toast.innerHTML = `${icon} <span>${message}</span>`;
             container.appendChild(toast);
             lucide.createIcons();
@@ -700,167 +604,92 @@
 
         function fitText(ctx, text, maxWidth, startSize) {
             let size = startSize;
-            do {
-                ctx.font = `800 ${size}px "Sora", sans-serif`;
-                size -= 5;
-            } while (ctx.measureText(text).width > maxWidth && size > 20);
+            do { ctx.font = `800 ${size}px "Sora", sans-serif`; size -= 5; } while (ctx.measureText(text).width > maxWidth && size > 20);
             return size + 5; 
         }
 
-        // ==========================================
-        // GENERADOR DE HISTORIA IG (9:16) ACTUALIZADO
-        // Algoritmo dinámico y súper estético
-        // ==========================================
         async function generateInstagramCollage(storyboard) {
             updateProgress('Creando Story...', 'Diseñando un layout perfecto para Instagram...', 25);
-            
             const canvas = document.getElementById('collage-canvas');
             const ctx = canvas.getContext('2d');
-            const W = canvas.width; const H = canvas.height;
+            const W = canvas.width, H = canvas.height;
 
             const photoClips = storyboard.filter(s => s.type === 'photo');
             if(photoClips.length === 0) return;
 
-            // Extraemos hasta 6 fotos para un collage enriquecido
-            let selectedPhotos = [];
+            let selectedUrls = [];
             const numPhotos = 6;
             const step = Math.max(1, Math.floor(photoClips.length / numPhotos));
-            for(let i=0; i < photoClips.length && selectedPhotos.length < numPhotos; i+=step) {
+            for(let i=0; i < photoClips.length && selectedUrls.length < numPhotos; i+=step) {
                 try {
-                    let img = await loadAndScaleImage(photoClips[i].originalFile);
-                    selectedPhotos.push(img);
+                    let loaded = await loadAndScaleImage(photoClips[i].originalFile);
+                    selectedUrls.push(loaded);
                 } catch(e){}
             }
-            if(selectedPhotos.length === 0) return;
+            if(selectedUrls.length === 0) return;
 
-            // 1. Fondo de lienzo (Blur + Gradient oscuro)
-            ctx.fillStyle = '#111';
-            ctx.fillRect(0,0,W,H);
+            ctx.fillStyle = '#111'; ctx.fillRect(0,0,W,H);
             
-            let bgImg = selectedPhotos[0];
+            let bgImg = selectedUrls[0].img;
             let ratio = Math.max(W / bgImg.width, H / bgImg.height);
-            let dW = bgImg.width * ratio;
-            let dH = bgImg.height * ratio;
-            
             ctx.filter = 'blur(50px) brightness(0.6)';
-            ctx.drawImage(bgImg, (W - dW)/2, (H - dH)/2, dW, dH);
+            ctx.drawImage(bgImg, (W - (bgImg.width * ratio))/2, (H - (bgImg.height * ratio))/2, bgImg.width * ratio, bgImg.height * ratio);
             ctx.filter = 'none';
 
-            // Gradiente overlay para que las fotos resalten mucho más
             let gradOverlay = ctx.createLinearGradient(0, 0, 0, H);
-            gradOverlay.addColorStop(0, "rgba(0,0,0,0.2)");
-            gradOverlay.addColorStop(1, "rgba(0,0,0,0.85)");
-            ctx.fillStyle = gradOverlay;
-            ctx.fillRect(0,0,W,H);
+            gradOverlay.addColorStop(0, "rgba(0,0,0,0.2)"); gradOverlay.addColorStop(1, "rgba(0,0,0,0.85)");
+            ctx.fillStyle = gradOverlay; ctx.fillRect(0,0,W,H);
 
-            // 2. Patrón Cascade Polaroid (Posiciones dinámicas en Z)
             const polaroidStyles = [
-                { x: W/2 - 150, y: 320, rot: -6, scale: 0.65 },
-                { x: W/2 + 180, y: 520, rot: 8, scale: 0.7 },
-                { x: W/2 - 180, y: 820, rot: -4, scale: 0.75 },
-                { x: W/2 + 160, y: 1050, rot: 5, scale: 0.7 },
-                { x: W/2 - 130, y: 1350, rot: -7, scale: 0.75 },
-                { x: W/2 + 150, y: 1550, rot: 6, scale: 0.65 }
+                { x: W/2 - 150, y: 320, rot: -6, scale: 0.65 }, { x: W/2 + 180, y: 520, rot: 8, scale: 0.7 },
+                { x: W/2 - 180, y: 820, rot: -4, scale: 0.75 }, { x: W/2 + 160, y: 1050, rot: 5, scale: 0.7 },
+                { x: W/2 - 130, y: 1350, rot: -7, scale: 0.75 }, { x: W/2 + 150, y: 1550, rot: 6, scale: 0.65 }
             ];
 
             const drawPolaroid = (img, config) => {
-                ctx.save();
-                ctx.translate(config.x, config.configY || config.y); 
-                ctx.rotate(config.rot * Math.PI / 180);
-                
-                // Ancho de polaroid estandarizado
-                const pWidth = 750;
-                const pRatio = pWidth / img.width;
-                const pHeight = img.height * pRatio;
-
+                ctx.save(); ctx.translate(config.x, config.y); ctx.rotate(config.rot * Math.PI / 180);
+                const pWidth = 750, pHeight = img.height * (pWidth / img.width);
                 ctx.scale(config.scale, config.scale);
-                
-                // Efecto papel foto con sombra dura muy estética
-                ctx.shadowColor = 'rgba(0,0,0,0.6)';
-                ctx.shadowBlur = 40;
-                ctx.shadowOffsetY = 20;
-                ctx.fillStyle = '#ffffff';
-                ctx.fillRect(-pWidth/2 - 25, -pHeight/2 - 25, pWidth + 50, pHeight + 110);
-                
-                // Pintar la foto dentro
-                ctx.shadowColor = 'transparent';
-                ctx.drawImage(img, -pWidth/2, -pHeight/2, pWidth, pHeight);
+                ctx.shadowColor = 'rgba(0,0,0,0.6)'; ctx.shadowBlur = 40; ctx.shadowOffsetY = 20;
+                ctx.fillStyle = '#ffffff'; ctx.fillRect(-pWidth/2 - 25, -pHeight/2 - 25, pWidth + 50, pHeight + 110);
+                ctx.shadowColor = 'transparent'; ctx.drawImage(img, -pWidth/2, -pHeight/2, pWidth, pHeight);
                 ctx.restore();
             };
 
-            // Dibujamos el array completo de fotos obtenidas
-            for(let i=0; i<selectedPhotos.length; i++) {
-                if(polaroidStyles[i]) {
-                    drawPolaroid(selectedPhotos[i], polaroidStyles[i]);
-                }
-            }
+            for(let i=0; i<selectedUrls.length; i++) if(polaroidStyles[i]) drawPolaroid(selectedUrls[i].img, polaroidStyles[i]);
 
-            // 3. Cargar logotipo de Interrahub dinámicamente
             const logoImg = await new Promise((resolve) => {
-                const img = new Image();
-                img.onload = () => resolve(img);
-                img.onerror = () => resolve(null); // Fallback silencioso si falla
+                const img = new Image(); img.onload = () => resolve(img); img.onerror = () => resolve(null);
                 img.src = 'interrahublogo.PNG'; 
             });
 
-            // 4. Branding inferior (Píldora premium)
             ctx.save();
-            ctx.shadowColor = "rgba(0,0,0,0.7)";
-            ctx.shadowBlur = 25;
-            ctx.shadowOffsetY = 10;
+            ctx.shadowColor = "rgba(0,0,0,0.7)"; ctx.shadowBlur = 25; ctx.shadowOffsetY = 10;
             ctx.fillStyle = "rgba(15, 15, 15, 0.85)";
-            
-            // Medidas de la píldora
-            const pillWidth = 600;
-            const pillHeight = 90;
-            const pillX = W/2 - pillWidth/2;
-            const pillY = 1770;
+            const pillW = 600, pillH = 90, pillX = W/2 - pillW/2, pillY = 1770;
+            ctx.beginPath(); ctx.roundRect(pillX, pillY, pillW, pillH, 45); ctx.fill();
 
-            ctx.beginPath();
-            ctx.roundRect(pillX, pillY, pillWidth, pillHeight, 45);
-            ctx.fill();
-
-            // Dibujar Logo + Texto dentro de la píldora
             if (logoImg) {
-                const logoSize = 60;
-                ctx.drawImage(logoImg, pillX + 30, pillY + (pillHeight - logoSize)/2, logoSize, logoSize);
-                
-                ctx.font = '700 28px "Sora", sans-serif';
-                ctx.fillStyle = "#ffffff";
-                ctx.textAlign = "left";
-                ctx.textBaseline = "middle";
-                ctx.letterSpacing = "0.5px";
-                ctx.fillText("Generado con interrahub.com", pillX + 115, pillY + pillHeight/2 + 2);
-            } else {
-                ctx.font = '700 28px "Sora", sans-serif';
-                ctx.fillStyle = "#ffffff";
-                ctx.textAlign = "center";
-                ctx.textBaseline = "middle";
-                ctx.fillText("Generado con interrahub.com", W/2, pillY + pillHeight/2 + 2);
+                ctx.drawImage(logoImg, pillX + 30, pillY + (pillH - 60)/2, 60, 60);
+                ctx.font = '700 28px "Sora", sans-serif'; ctx.fillStyle = "#ffffff"; ctx.textAlign = "left"; ctx.textBaseline = "middle";
+                ctx.fillText("Generado con interrahub.com", pillX + 115, pillY + pillH/2 + 2);
             }
             ctx.restore();
 
-            // 5. Guardar resultado final
             const collageData = canvas.toDataURL('image/jpeg', 0.95); 
             document.getElementById('output-collage').src = collageData;
             document.getElementById('btn-download-collage').href = collageData;
+
+            // Liberar imágenes del collage de memoria RAM
+            selectedUrls.forEach(obj => { obj.img.src = ''; URL.revokeObjectURL(obj.url); });
 
             document.getElementById('btn-share-ig').onclick = async () => {
                 try {
                     const blob = await (await fetch(collageData)).blob();
                     const file = new File([blob], 'InterraHub_Historia.jpg', { type: 'image/jpeg' });
-                    if (navigator.share) {
-                        await navigator.share({
-                            title: 'Mi Viaje',
-                            text: 'El resumen de mis aventuras gracias a InterraHub.',
-                            files: [file]
-                        });
-                    } else {
-                        showToast("Tu navegador no soporta compartir directamente.", "error");
-                    }
-                } catch(e) {
-                    console.log("Compartir cancelado o no soportado");
-                }
+                    if (navigator.share) await navigator.share({ title: 'Mi Viaje', files: [file] });
+                    else showToast("Tu navegador no soporta compartir directamente.", "error");
+                } catch(e) {}
             };
         }
 
@@ -869,28 +698,9 @@
             const ctx = canvas.getContext('2d');
             const W = canvas.width; const H = canvas.height;
 
-            updateProgress('Precargando Memoria...', 'Optimizando imágenes masivas para evitar saturación de RAM', 30);
+            updateProgress('Configurando Motor...', 'Inicializando renderizado en vivo y gestionando RAM', 30);
             
-            let loadedCount = 0;
-            let totalPhotos = storyboard.filter(s => s.type === 'photo').length;
-
-            for (let i = 0; i < storyboard.length; i++) {
-                if (storyboard[i].type === 'photo') {
-                    try {
-                        // LA MAGIA DE LA OPTIMIZACIÓN DE MEMORIA AQUÍ
-                        storyboard[i].imgEl = await loadAndScaleImage(storyboard[i].originalFile);
-                        storyboard[i].aspect = storyboard[i].imgEl.width / storyboard[i].imgEl.height;
-                        loadedCount++;
-                        updateProgress('Optimizando...', `Imagen ${loadedCount} de ${totalPhotos} lista (Comprimida y Segura)`, 30 + (loadedCount/totalPhotos)*20);
-                    } catch(e) {
-                        storyboard[i].imgEl = null; 
-                    }
-                }
-            }
-
-            updateProgress('Configurando Grabador...', 'Iniciando sonido y cámaras', 55);
             const stream = canvas.captureStream(30); 
-            
             let audioCtx = new (window.AudioContext || window.webkitAudioContext)();
             let dest = audioCtx.createMediaStreamDestination();
             let tracks = [...stream.getVideoTracks()];
@@ -898,43 +708,59 @@
 
             if (audioFile) {
                 try {
-                    const audioData = await audioFile.arrayBuffer();
-                    const audioBuffer = await audioCtx.decodeAudioData(audioData);
-                    source = audioCtx.createBufferSource();
-                    source.buffer = audioBuffer;
-                    source.connect(dest);
+                    const audioBuffer = await audioCtx.decodeAudioData(await audioFile.arrayBuffer());
+                    source = audioCtx.createBufferSource(); source.buffer = audioBuffer; source.connect(dest);
                     tracks.push(...dest.stream.getAudioTracks());
-                } catch(e) {
-                    console.warn("Audio ignorado.", e);
-                }
+                } catch(e) {}
             }
 
             const mixedStream = new MediaStream(tracks);
-            
-            let mimeTypes = ['video/webm; codecs=vp9,opus', 'video/webm; codecs=vp8,opus', 'video/webm', 'video/mp4'];
-            let selectedMime = '';
-            for(let mime of mimeTypes) {
-                if(MediaRecorder.isTypeSupported(mime)) {
-                    selectedMime = mime; break;
-                }
-            }
+            let selectedMime = ['video/webm; codecs=vp9,opus', 'video/webm; codecs=vp8,opus', 'video/webm', 'video/mp4'].find(m => MediaRecorder.isTypeSupported(m)) || '';
 
-            const mediaRecorder = new MediaRecorder(mixedStream, { mimeType: selectedMime, videoBitsPerSecond: 12000000 });
+            const mediaRecorder = new MediaRecorder(mixedStream, { mimeType: selectedMime, videoBitsPerSecond: isMobile ? 5000000 : 12000000 });
             let chunks = [];
             mediaRecorder.ondataavailable = e => { if (e.data.size > 0) chunks.push(e.data); };
-            
             let renderPromise = new Promise(resolve => mediaRecorder.onstop = resolve);
             
             let totalDuration = storyboard.reduce((sum, clip) => sum + clip.duration, 0);
-            let startTime = 0;
+            let startTime = performance.now();
+
+            // =========================================================
+            // ARQUITECTURA "LAZY LOADING" - LA CLAVE PARA QUE NO FALLE
+            // =========================================================
+            let currentLoadedClipIdx = -1;
+
+            const loadClipImage = async (index) => {
+                let clip = storyboard[index];
+                if(clip && clip.type === 'photo' && !clip.imgEl && !clip.isLoading) {
+                    clip.isLoading = true;
+                    try {
+                        let result = await loadAndScaleImage(clip.originalFile);
+                        clip.imgEl = result.img;
+                        clip.objUrl = result.url; // Lo guardamos para poder destruirlo
+                        clip.aspect = clip.imgEl.width / clip.imgEl.height;
+                    } catch(e) {}
+                    clip.isLoading = false;
+                }
+            };
+
+            const unloadClipImage = (index) => {
+                let clip = storyboard[index];
+                if(clip && clip.type === 'photo' && clip.imgEl) {
+                    clip.imgEl.src = ''; // Forzar vaciado
+                    URL.revokeObjectURL(clip.objUrl); // Eliminar de RAM
+                    clip.imgEl = null;
+                    clip.objUrl = null;
+                }
+            };
+
+            // Precargar el primer clip antes de darle a REC
+            const firstPhotoIdx = storyboard.findIndex(s => s.type === 'photo');
+            if(firstPhotoIdx !== -1) await loadClipImage(firstPhotoIdx);
 
             return new Promise((resolveFinal, rejectFinal) => {
-                
                 mediaRecorder.start();
                 if(source) source.start(0);
-                
-                // Reloj absoluto robusto para evitar desincronizaciones si el navegador congela la tab un ms
-                startTime = performance.now();
 
                 function renderFrame(now) {
                     let elapsed = (now - startTime) / 1000; 
@@ -945,22 +771,16 @@
                         updateProgress('¡Casi listo!', 'Empaquetando el vídeo final...', 99);
                         
                         renderPromise.then(() => {
-                            const blob = new Blob(chunks, { type: selectedMime });
-                            const videoUrl = URL.createObjectURL(blob);
-                            
-                            isProcessing = false; // Levantamos flag de seguridad
+                            const videoUrl = URL.createObjectURL(new Blob(chunks, { type: selectedMime }));
+                            isProcessing = false; 
                             document.getElementById('progress-section').style.display = 'none';
                             document.getElementById('render-warning').style.display = 'none';
                             document.getElementById('result-section').style.display = 'block';
                             
-                            const vidEl = document.getElementById('output-video');
-                            vidEl.src = videoUrl;
-                            
+                            document.getElementById('output-video').src = videoUrl;
                             const btnDownload = document.getElementById('btn-download-video');
                             btnDownload.href = videoUrl;
-                            
-                            const ext = selectedMime.includes('mp4') ? 'mp4' : 'webm';
-                            btnDownload.download = `${tripData ? tripData.nombre.replace(/\s+/g, '_') : 'Recuerdo'}_InterraHub.${ext}`;
+                            btnDownload.download = `${tripData ? tripData.nombre.replace(/\s+/g, '_') : 'Recuerdo'}_InterraHub.${selectedMime.includes('mp4') ? 'mp4' : 'webm'}`;
                             
                             showToast("¡Memorias renderizadas con éxito!", "success");
                             resolveFinal();
@@ -968,225 +788,114 @@
                         return; 
                     }
 
-                    let perc = 55 + (elapsed / totalDuration) * 44;
-                    updateProgress('Grabando...', `Renderizando frames (No cambies de pestaña): ${Math.round((elapsed/totalDuration)*100)}%`, perc);
+                    updateProgress('Grabando...', `Renderizando (No cambies de pestaña): ${Math.round((elapsed/totalDuration)*100)}%`, 30 + (elapsed / totalDuration) * 69);
 
-                    let clipStart = 0;
-                    let currentClip = null;
-                    let clipIndex = 0;
+                    let clipStart = 0, currentClip = null, clipIndex = 0;
                     for (let i = 0; i < storyboard.length; i++) {
                         if (elapsed >= clipStart && elapsed < clipStart + storyboard[i].duration) {
-                            currentClip = storyboard[i];
-                            clipIndex = i;
-                            break;
+                            currentClip = storyboard[i]; clipIndex = i; break;
                         }
                         clipStart += storyboard[i].duration;
                     }
 
+                    // LÓGICA DE CARGA Y DESTRUCCIÓN DINÁMICA DE MEMORIA
+                    if (clipIndex !== currentLoadedClipIdx) {
+                        if (currentLoadedClipIdx >= 0) unloadClipImage(currentLoadedClipIdx - 1); // Liberar RAM del clip anterior
+                        loadClipImage(clipIndex + 1); // Empezar a cargar el siguiente silenciosamente
+                        currentLoadedClipIdx = clipIndex;
+                    }
+
                     if (currentClip) {
                         let progress = (elapsed - clipStart) / currentClip.duration; 
-
                         let grad = ctx.createLinearGradient(0, 0, W, H);
-                        grad.addColorStop(0, "#0a0a0a");
-                        grad.addColorStop(1, "#1a1a2e");
-                        ctx.fillStyle = grad;
-                        ctx.fillRect(0, 0, W, H);
+                        grad.addColorStop(0, "#0a0a0a"); grad.addColorStop(1, "#1a1a2e");
+                        ctx.fillStyle = grad; ctx.fillRect(0, 0, W, H);
 
                         if (currentClip.type === 'photo' && currentClip.imgEl) {
                             let scale = currentClip.zoomType === 'in' ? 1 + (0.15 * progress) : 1.15 - (0.15 * progress);
-                            let dx = currentClip.panX * W * progress;
-                            let dy = currentClip.panY * H * progress;
+                            let dx = currentClip.panX * W * progress, dy = currentClip.panY * H * progress;
 
-                            ctx.save();
-                            ctx.translate(W/2 + dx, H/2 + dy);
-                            ctx.scale(scale, scale);
-
-                            let imgAspect = currentClip.aspect;
-                            let canvasAspect = W / H;
+                            ctx.save(); ctx.translate(W/2 + dx, H/2 + dy); ctx.scale(scale, scale);
+                            let imgAspect = currentClip.aspect, canvasAspect = W / H;
 
                             if (imgAspect < canvasAspect - 0.2) { 
-                                ctx.filter = 'blur(50px) brightness(0.3)';
-                                ctx.drawImage(currentClip.imgEl, -W/2, -H/2, W, H);
-                                ctx.filter = 'none';
-                                let drawW = H * imgAspect;
-                                ctx.drawImage(currentClip.imgEl, -drawW/2, -H/2, drawW, H);
+                                ctx.filter = 'blur(50px) brightness(0.3)'; ctx.drawImage(currentClip.imgEl, -W/2, -H/2, W, H);
+                                ctx.filter = 'none'; let drawW = H * imgAspect; ctx.drawImage(currentClip.imgEl, -drawW/2, -H/2, drawW, H);
                             } else { 
                                 let drawH = W / imgAspect;
-                                if(drawH < H) {
-                                    drawH = H; let drawW = H * imgAspect;
-                                    ctx.drawImage(currentClip.imgEl, -drawW/2, -H/2, drawW, H);
-                                } else {
-                                    ctx.drawImage(currentClip.imgEl, -W/2, -drawH/2, W, drawH);
-                                }
+                                if(drawH < H) { drawH = H; let drawW = H * imgAspect; ctx.drawImage(currentClip.imgEl, -drawW/2, -H/2, drawW, H); } 
+                                else { ctx.drawImage(currentClip.imgEl, -W/2, -drawH/2, W, drawH); }
                             }
                             ctx.restore();
 
-                            ctx.fillStyle = "#000000";
-                            ctx.fillRect(0, 0, W, 120);       
-                            ctx.fillRect(0, H - 120, W, 120); 
+                            ctx.fillStyle = "#000000"; ctx.fillRect(0, 0, W, 120); ctx.fillRect(0, H - 120, W, 120); 
 
                             let locName = currentClip.destination || 'Descubriendo el mundo';
                             if (locName !== 'Descubriendo el mundo') {
-                                
-                                let isFirstOfDest = true;
-                                let isLastOfDest = true;
-                                
-                                if (clipIndex > 0 && storyboard[clipIndex - 1].destination === locName) isFirstOfDest = false;
-                                if (clipIndex < storyboard.length - 1 && storyboard[clipIndex + 1].destination === locName) isLastOfDest = false;
+                                let isFirst = clipIndex === 0 || storyboard[clipIndex - 1].destination !== locName;
+                                let isLast = clipIndex === storyboard.length - 1 || storyboard[clipIndex + 1].destination !== locName;
+                                let slideX = W * 0.05, opacity = 1;
 
-                                let slideX = W * 0.05; 
-                                let opacity = 1;
+                                if (isFirst && progress < 0.15) { opacity = progress / 0.15; slideX = (W * 0.05) - 30 + (30 * opacity); }
+                                if (isLast && progress > 0.85) opacity = (1 - progress) / 0.15; 
 
-                                if (isFirstOfDest && progress < 0.15) {
-                                    opacity = progress / 0.15;
-                                    slideX = (W * 0.05) - 30 + (30 * opacity); 
-                                }
-                                if (isLastOfDest && progress > 0.85) {
-                                    opacity = (1 - progress) / 0.15; 
-                                }
-
-                                ctx.save();
-                                ctx.globalAlpha = opacity * 0.8; 
+                                ctx.save(); ctx.globalAlpha = opacity * 0.8; 
                                 let textGrad = ctx.createLinearGradient(0, 0, W * 0.5, 0);
-                                textGrad.addColorStop(0, "rgba(0,0,0,0.85)");
-                                textGrad.addColorStop(0.5, "rgba(0,0,0,0.3)");
-                                textGrad.addColorStop(1, "rgba(0,0,0,0)");
-                                ctx.fillStyle = textGrad;
-                                ctx.fillRect(0, H - 340, W * 0.5, 220); 
+                                textGrad.addColorStop(0, "rgba(0,0,0,0.85)"); textGrad.addColorStop(0.5, "rgba(0,0,0,0.3)"); textGrad.addColorStop(1, "rgba(0,0,0,0)");
+                                ctx.fillStyle = textGrad; ctx.fillRect(0, H - 340, W * 0.5, 220); 
                                 ctx.restore();
 
-                                ctx.save();
-                                ctx.globalAlpha = opacity;
-                                ctx.textAlign = "left";
-                                ctx.textBaseline = "middle";
-                                ctx.shadowColor = "rgba(0,0,0,0.85)";
-                                ctx.shadowBlur = 10;
-                                ctx.shadowOffsetY = 3;
+                                ctx.save(); ctx.globalAlpha = opacity; ctx.textAlign = "left"; ctx.textBaseline = "middle";
+                                ctx.shadowColor = "rgba(0,0,0,0.85)"; ctx.shadowBlur = 10; ctx.shadowOffsetY = 3;
 
-                                ctx.font = '300 24px "Poppins", sans-serif';
-                                ctx.fillStyle = "#e0e0e0";
-                                ctx.letterSpacing = "6px"; 
+                                ctx.font = '300 24px "Poppins", sans-serif'; ctx.fillStyle = "#e0e0e0"; ctx.letterSpacing = "6px"; 
                                 ctx.fillText("RECUERDA CUANDO VISITASTEIS", slideX, H - 240);
-
-                                ctx.font = '800 60px "Sora", sans-serif';
-                                ctx.fillStyle = "#ffffff";
-                                ctx.letterSpacing = "0px";
+                                ctx.font = '800 60px "Sora", sans-serif'; ctx.fillStyle = "#ffffff"; ctx.letterSpacing = "0px";
                                 ctx.fillText(locName.toUpperCase(), slideX, H - 170);
-
                                 ctx.restore();
                             }
-
                         } else if (currentClip.type === 'credits') {
-                            let startY = H + 200;
-                            let listHeight = (globalVisitedCities.length * 60) + (globalUserNames.length * 60) + 600;
-                            let endY = -listHeight;
-                            let currentY = startY + (endY - startY) * progress;
+                            let startY = H + 200, listHeight = (globalVisitedCities.length * 60) + (globalUserNames.length * 60) + 600;
+                            let currentY = startY + ((-listHeight) - startY) * progress;
 
-                            ctx.save();
-                            ctx.textAlign = 'center';
-                            ctx.textBaseline = 'middle';
-                            ctx.shadowColor = "rgba(0,0,0,0.9)";
-                            ctx.shadowBlur = 20;
+                            ctx.save(); ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.shadowColor = "rgba(0,0,0,0.9)"; ctx.shadowBlur = 20;
 
                             let yOffset = currentY;
-
-                            ctx.font = '800 55px "Sora", sans-serif';
-                            ctx.fillStyle = '#ff4d4d'; 
-                            ctx.letterSpacing = "4px";
-                            ctx.fillText("DESTINOS EXPLORADOS", W/2, yOffset);
-                            yOffset += 100;
-
-                            ctx.font = '600 45px "Playfair Display", serif';
-                            ctx.fillStyle = '#ffffff';
-                            ctx.letterSpacing = "2px";
-                            if (globalVisitedCities.length === 0) {
-                                ctx.fillText("Aventura sin límites", W/2, yOffset);
-                                yOffset += 70;
-                            } else {
-                                globalVisitedCities.forEach(city => {
-                                    ctx.fillText(city, W/2, yOffset);
-                                    yOffset += 70;
-                                });
-                            }
+                            ctx.font = '800 55px "Sora", sans-serif'; ctx.fillStyle = '#ff4d4d'; ctx.letterSpacing = "4px"; ctx.fillText("DESTINOS EXPLORADOS", W/2, yOffset); yOffset += 100;
+                            ctx.font = '600 45px "Playfair Display", serif'; ctx.fillStyle = '#ffffff'; ctx.letterSpacing = "2px";
+                            if (globalVisitedCities.length === 0) { ctx.fillText("Aventura sin límites", W/2, yOffset); yOffset += 70; } 
+                            else { globalVisitedCities.forEach(city => { ctx.fillText(city, W/2, yOffset); yOffset += 70; }); }
 
                             yOffset += 80;
-
-                            ctx.font = '800 55px "Sora", sans-serif';
-                            ctx.fillStyle = '#4da6ff'; 
-                            ctx.letterSpacing = "4px";
-                            ctx.fillText("LOS AVENTUREROS", W/2, yOffset);
-                            yOffset += 100;
-
-                            ctx.font = '600 45px "Playfair Display", serif';
-                            ctx.fillStyle = '#ffffff';
-                            ctx.letterSpacing = "2px";
-                            globalUserNames.forEach(user => {
-                                ctx.fillText(user, W/2, yOffset);
-                                yOffset += 70;
-                            });
+                            ctx.font = '800 55px "Sora", sans-serif'; ctx.fillStyle = '#4da6ff'; ctx.letterSpacing = "4px"; ctx.fillText("LOS AVENTUREROS", W/2, yOffset); yOffset += 100;
+                            ctx.font = '600 45px "Playfair Display", serif'; ctx.fillStyle = '#ffffff'; ctx.letterSpacing = "2px";
+                            globalUserNames.forEach(user => { ctx.fillText(user, W/2, yOffset); yOffset += 70; });
 
                             yOffset += 150;
-
-                            ctx.font = '800 45px "Sora", sans-serif';
-                            ctx.fillStyle = '#ffffff';
-                            ctx.letterSpacing = "0px";
-                            ctx.fillText("Interra-hub.", W/2, yOffset);
-                            yOffset += 60;
-                            
-                            ctx.font = '400 25px "Sora", sans-serif';
-                            ctx.fillStyle = '#888888';
-                            ctx.fillText(`© ${new Date().getFullYear()} Creado automáticamente con Interra-hub`, W/2, yOffset);
-
+                            ctx.font = '800 45px "Sora", sans-serif'; ctx.fillStyle = '#ffffff'; ctx.letterSpacing = "0px"; ctx.fillText("Interra-hub.", W/2, yOffset); yOffset += 60;
+                            ctx.font = '400 25px "Sora", sans-serif'; ctx.fillStyle = '#888888'; ctx.fillText(`© ${new Date().getFullYear()} Creado automáticamente con Interra-hub`, W/2, yOffset);
                             ctx.restore();
-
                         } else if (currentClip.type === 'intro') {
-                            
                             let scale = 1 + (0.05 * progress);
-                            ctx.save();
-                            ctx.translate(W/2, H/2);
-                            ctx.scale(scale, scale);
-                            
-                            ctx.textAlign = 'center';
-                            ctx.textBaseline = 'middle';
-                            
-                            ctx.shadowColor = "rgba(0,0,0,0.9)";
-                            ctx.shadowBlur = 25;
-                            ctx.shadowOffsetY = 5;
-
-                            ctx.font = '800 40px "Sora", sans-serif';
-                            ctx.fillStyle = '#ff4d4d'; 
-                            ctx.letterSpacing = "8px";
-                            ctx.fillText("ESTE HA SIDO TU VIAJE", 0, -80);
+                            ctx.save(); ctx.translate(W/2, H/2); ctx.scale(scale, scale);
+                            ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.shadowColor = "rgba(0,0,0,0.9)"; ctx.shadowBlur = 25; ctx.shadowOffsetY = 5;
+                            ctx.font = '800 40px "Sora", sans-serif'; ctx.fillStyle = '#ff4d4d'; ctx.letterSpacing = "8px"; ctx.fillText("ESTE HA SIDO TU VIAJE", 0, -80);
                             
                             let optimalSize = fitText(ctx, currentClip.title.toUpperCase(), W - 150, 130);
-                            ctx.font = `800 ${optimalSize}px "Sora", sans-serif`;
-                            ctx.fillStyle = '#ffffff';
-                            ctx.letterSpacing = "0px";
-                            ctx.fillText(currentClip.title.toUpperCase(), 0, 30);
-
-                            ctx.font = '400 28px "Sora", sans-serif';
-                            ctx.fillStyle = '#4da6ff'; 
-                            ctx.fillText(currentClip.subtitle, 0, 150);
-                                
+                            ctx.font = `800 ${optimalSize}px "Sora", sans-serif`; ctx.fillStyle = '#ffffff'; ctx.letterSpacing = "0px"; ctx.fillText(currentClip.title.toUpperCase(), 0, 30);
+                            ctx.font = '400 28px "Sora", sans-serif'; ctx.fillStyle = '#4da6ff'; ctx.fillText(currentClip.subtitle, 0, 150);
                             ctx.restore();
                         }
 
                         let fadeFactor = 1;
-                        if (progress < TRANSITION_TIME / currentClip.duration) {
-                            fadeFactor = progress / (TRANSITION_TIME / currentClip.duration);
-                        } else if (progress > 1 - (TRANSITION_TIME / currentClip.duration)) {
-                            fadeFactor = (1 - progress) / (TRANSITION_TIME / currentClip.duration);
-                        }
+                        if (progress < TRANSITION_TIME / currentClip.duration) fadeFactor = progress / (TRANSITION_TIME / currentClip.duration);
+                        else if (progress > 1 - (TRANSITION_TIME / currentClip.duration)) fadeFactor = (1 - progress) / (TRANSITION_TIME / currentClip.duration);
                         
-                        if (fadeFactor < 1) {
-                            ctx.fillStyle = `rgba(10, 10, 15, ${1 - fadeFactor})`; 
-                            ctx.fillRect(0, 0, W, H);
-                        }
+                        if (fadeFactor < 1) { ctx.fillStyle = `rgba(10, 10, 15, ${1 - fadeFactor})`; ctx.fillRect(0, 0, W, H); }
                     }
 
                     requestAnimationFrame(renderFrame);
                 }
-                
                 requestAnimationFrame(renderFrame);
             });
         }
