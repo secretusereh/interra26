@@ -82,14 +82,20 @@
         .trip-header h1 { font-size: 3.5rem; font-weight: 800; letter-spacing: -2px; margin-bottom: 0.5rem; word-break: break-word; }
         .trip-header p { color: var(--text-muted); font-size: 1.1rem; }
 
-        /* Ajuste sofisticado de diseño escalable y responsive */
+        /* Ajuste sofisticado de diseño escalable y responsive (Pestañas Centradas) */
+        .tabs-wrapper {
+            position: relative;
+            max-width: 1000px;
+            margin: 2rem auto 0;
+            border-bottom: 1px solid var(--border-subtle);
+            display: flex;
+            align-items: center;
+        }
+
         .tabs-container {
             display: flex; 
-            justify-content: flex-start; 
+            justify-content: center; /* Pestañas centradas globalmente */
             gap: 2rem; 
-            border-bottom: 1px solid var(--border-subtle);
-            max-width: 1000px; 
-            margin: 2rem auto 0; 
             padding: 0 5% 2px; 
             overflow-x: auto; 
             white-space: nowrap;
@@ -97,9 +103,39 @@
             -webkit-overflow-scrolling: touch; 
             scroll-behavior: smooth;
             scroll-snap-type: x mandatory;
+            width: 100%;
         }
         .tabs-container::-webkit-scrollbar { display: none; } 
         
+        @media (max-width: 850px) {
+            .tabs-container {
+                justify-content: flex-start; /* Evita recortes en scroll izquierdo en móviles */
+            }
+        }
+        
+        /* Flechas indicadoras laterales para móviles */
+        .scroll-arrow {
+            display: none;
+            position: absolute;
+            top: 0; bottom: 0;
+            width: 40px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            z-index: 10;
+            color: var(--text-muted);
+            align-items: center;
+            transition: var(--transition);
+        }
+        .scroll-arrow:hover { color: var(--primary); }
+        .scroll-arrow.left { left: 0; background: linear-gradient(90deg, var(--bg-color) 40%, transparent); justify-content: flex-start; padding-left: 5px; }
+        .scroll-arrow.right { right: 0; background: linear-gradient(270deg, var(--bg-color) 40%, transparent); justify-content: flex-end; padding-right: 5px; }
+
+        @media (max-width: 900px) {
+            .scroll-arrow { display: flex; }
+            .tabs-container { padding: 0 40px 2px; } /* Deja espacio extra para las flechas */
+        }
+
         .tab-btn {
             background: transparent; color: var(--text-muted); border: none; font-size: 1.1rem; font-weight: 600;
             padding: 1rem 0; cursor: pointer; position: relative; transition: var(--transition);
@@ -655,17 +691,21 @@
         <p id="trip-dates">---</p>
     </div>
 
-    <div class="tabs-container">
-        <button class="tab-btn active" id="tab-btn-itinerario" onclick="switchTab('itinerario', this)">Itinerario</button>
-        <button class="tab-btn" id="tab-btn-mapa" onclick="switchTab('mapa', this)">Mapa</button>
-        <button class="tab-btn" id="tab-btn-finance" onclick="switchTab('finance', this)">Finance</button>
-        <button class="tab-btn" id="tab-btn-extra" onclick="switchTab('extra', this)">Extra Info</button>
-        <button class="tab-btn" id="tab-btn-memories" onclick="switchTab('memories', this)">Memories</button>
-        <button class="tab-btn" id="tab-btn-entretenimiento" onclick="switchTab('entretenimiento', this)">Entretenimiento</button>
-        <button class="tab-btn" id="tab-btn-usuarios" onclick="switchTab('usuarios', this)">
-            Equipo y Configuración
-            <span class="tab-badge" id="solicitudes-badge">0</span>
-        </button>
+    <div class="tabs-wrapper">
+        <button class="scroll-arrow left" onclick="scrollTabs(-1)" aria-label="Desplazar izquierda"><i data-lucide="chevron-left"></i></button>
+        <div class="tabs-container" id="main-tabs-container">
+            <button class="tab-btn active" id="tab-btn-itinerario" onclick="switchTab('itinerario', this)">Itinerario</button>
+            <button class="tab-btn" id="tab-btn-mapa" onclick="switchTab('mapa', this)">Mapa</button>
+            <button class="tab-btn" id="tab-btn-finance" onclick="switchTab('finance', this)">Finance</button>
+            <button class="tab-btn" id="tab-btn-extra" onclick="switchTab('extra', this)">Extra Info</button>
+            <button class="tab-btn" id="tab-btn-memories" onclick="switchTab('memories', this)">Memories</button>
+            <button class="tab-btn" id="tab-btn-entretenimiento" onclick="switchTab('entretenimiento', this)">Entretenimiento</button>
+            <button class="tab-btn" id="tab-btn-usuarios" onclick="switchTab('usuarios', this)">
+                Equipo y Configuración
+                <span class="tab-badge" id="solicitudes-badge">0</span>
+            </button>
+        </div>
+        <button class="scroll-arrow right" onclick="scrollTabs(1)" aria-label="Desplazar derecha"><i data-lucide="chevron-right"></i></button>
     </div>
 
     <main id="tab-itinerario" class="tab-content active">
@@ -690,7 +730,7 @@
             </button>
         </div>
         
-        <div class="tabs-container" style="margin: 0 0 2rem 0; border-bottom: 1px solid var(--border-subtle); justify-content: flex-start; gap: 1rem; padding: 0;">
+        <div class="tabs-container" style="margin: 0 0 2rem 0; border-bottom: 1px solid var(--border-subtle); justify-content: center; gap: 1rem; padding: 0;">
             <button class="tab-btn active" id="subtab-btn-gastos" onclick="switchFinanceTab('gastos')">Historial</button>
             <button class="tab-btn" id="subtab-btn-saldos" onclick="switchFinanceTab('saldos')">Saldos y Deudas</button>
         </div>
@@ -740,15 +780,8 @@
             </div>
         </div>
 
-        <div class="user-section" style="text-align: center; padding: 4rem 2rem; border: 1px dashed var(--border-subtle);">
-            <i data-lucide="camera" style="width: 64px; height: 64px; color: var(--accent); margin-bottom: 1.5rem; opacity: 0.8;"></i>
-            <h2 style="font-size: 2rem; font-weight: 800; margin-bottom: 1rem; letter-spacing: -0.5px;">Memories</h2>
-            <p style="color: var(--text-muted); font-size: 1.05rem; max-width: 500px; margin: 0 auto 2rem; line-height: 1.6;">
-                El carrete de tu viaje. Muy pronto podréis subir, compartir y revivir todos los recuerdos y fotografías de esta aventura en un álbum colaborativo.
-            </p>
-            <div style="display: flex; justify-content: center;">
-                <span class="badge-novedad" style="position: static; animation: pulseNovedad 2s infinite; display: inline-flex;"><i data-lucide="sparkles" style="width: 16px;"></i> MUCHÍSIMO MÁS PRÓXIMAMENTE</span>
-            </div>
+        <div style="text-align: center; padding: 2rem 0;">
+            <p style="color: var(--text-muted); font-size: 1.1rem; font-weight: 600;">Pronto mucho mas...</p>
         </div>
     </main>
 
@@ -1149,6 +1182,14 @@
             const btnRecuerdos = document.getElementById('btn-generador-recuerdos');
             if (btnRecuerdos) {
                 btnRecuerdos.href = `recuerdoviaje.html?id=${tripId}`;
+            }
+        }
+
+        // ── FUNCION DESPLAZAMIENTO TABS ──
+        window.scrollTabs = function(direction) {
+            const container = document.getElementById('main-tabs-container');
+            if (container) {
+                container.scrollBy({ left: direction * 200, behavior: 'smooth' });
             }
         }
 
