@@ -62,7 +62,7 @@
 
         .game-container {
             max-width: 1400px; margin: 3rem auto; padding: 0 5%;
-            display: grid; grid-template-columns: 1fr 400px; gap: 3rem;
+            display: grid; grid-template-columns: 1fr 450px; gap: 3rem;
         }
         @media (max-width: 1024px) { .game-container { grid-template-columns: 1fr; margin: 2rem auto; gap: 2rem;} }
 
@@ -89,11 +89,16 @@
             width: 100%; max-width: 400px; aspect-ratio: 1/1; border-radius: 20px;
             background: #000; overflow: hidden; position: relative;
             box-shadow: 0 20px 40px rgba(0,0,0,0.6); margin-bottom: 2rem; border: 2px solid var(--border-glow);
+            display: flex; justify-content: center; align-items: center;
         }
         .player-img {
             width: 100%; height: 100%; object-fit: cover; object-position: top;
-            filter: blur(40px); transform: scale(1.1); transition: filter 0.8s ease;
+            filter: blur(40px); transform: scale(1.15); transition: filter 0.8s ease; display: none;
         }
+        
+        /* Spinner Interno mientras la API descarga la foto real */
+        .api-loader { width: 30px; height: 30px; border: 3px solid rgba(255,255,255,0.1); border-top-color: var(--wc-red); border-radius: 50%; animation: spin 1s linear infinite; position: absolute; z-index: 5; }
+
         .overlay-status {
             position: absolute; inset: 0; background: rgba(0, 166, 81, 0.4); z-index: 10;
             display: flex; justify-content: center; align-items: center; opacity: 0; transition: 0.3s; pointer-events: none;
@@ -104,9 +109,7 @@
 
         /* INDICADOR DE INTENTOS */
         .attempts-bar { display: flex; gap: 10px; margin-bottom: 2rem; }
-        .attempt-dot {
-            width: 40px; height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px; transition: 0.3s;
-        }
+        .attempt-dot { width: 40px; height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px; transition: 0.3s; }
         .attempt-dot.active { background: var(--primary); box-shadow: 0 0 10px rgba(255,255,255,0.5); }
         .attempt-dot.wrong { background: var(--wc-red); box-shadow: 0 0 10px rgba(227, 0, 63, 0.5); }
 
@@ -134,13 +137,21 @@
         }
         .suggestion-item:hover { background: rgba(255,255,255,0.05); padding-left: 1.5rem; color: var(--wc-gold); }
 
-        /* Botón Continuar / Siguiente */
+        /* Botones de Acción */
         .btn-next {
             background: linear-gradient(135deg, var(--wc-blue), #003366); color: white; border: none;
             padding: 1.2rem 3rem; border-radius: 12px; font-weight: 800; font-size: 1.2rem;
             cursor: pointer; transition: var(--transition); margin-top: 2rem; display: none; text-transform: uppercase;
         }
         .btn-next:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0, 75, 135, 0.5); }
+
+        .btn-submit {
+            background: linear-gradient(135deg, var(--wc-gold), #B8860B); color: var(--wc-navy); border: none;
+            padding: 1.2rem 3rem; border-radius: 12px; font-weight: 800; font-size: 1.2rem; display: none;
+            cursor: pointer; transition: var(--transition); margin-top: 2rem; text-transform: uppercase; letter-spacing: 1px;
+            box-shadow: 0 10px 20px rgba(212, 175, 55, 0.3);
+        }
+        .btn-submit.submitting { animation: pulseScore 1s infinite alternate; }
 
         /* ESTADO FINAL (Overlay) */
         .end-overlay {
@@ -179,7 +190,7 @@
 
         @keyframes spin { 100% { transform: rotate(360deg); } }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes shake { 0%, 100% {transform: translateX(0);} 25% {transform: translateX(-10px);} 75% {transform: translateX(10px);} }
+        @keyframes pulseScore { from { box-shadow: 0 10px 20px rgba(212, 175, 55, 0.3); } to { box-shadow: 0 10px 40px rgba(212, 175, 55, 0.7); } }
 
         @media (max-width: 768px) {
             .game-container { grid-template-columns: 1fr; padding: 0 5%; gap: 1.5rem; margin: 1.5rem auto;}
@@ -196,11 +207,11 @@
 
     <div id="page-loader">
         <div class="loader-ring"></div>
-        <p style="margin-top: 20px; font-family: 'Teko', sans-serif; font-size: 1.5rem; letter-spacing: 2px; color: var(--text-muted);">PREPARANDO VESTUARIO...</p>
+        <p style="margin-top: 20px; font-family: 'Teko', sans-serif; font-size: 1.5rem; letter-spacing: 2px; color: var(--text-muted);">CALIBRANDO LENTES...</p>
     </div>
 
     <nav>
-        <button class="btn-nav" onclick="goBack()"><i data-lucide="arrow-left"></i> Panel</button>
+        <button class="btn-nav" onclick="goBack()"><i data-lucide="arrow-left"></i> Vestuarios</button>
         <div class="logo-wc">Blur <span>26</span></div>
         <div style="width: 80px;"></div>
     </nav>
@@ -210,10 +221,11 @@
         <div class="play-panel" id="arena">
             
             <div class="end-overlay" id="end-screen">
-                <div class="end-title">RONDA FINALIZADA</div>
-                <p style="color: var(--text-muted); font-size: 1.1rem; margin-top: 10px;">Tu puntuación final (Max 3000):</p>
+                <div class="end-title">RONDA COMPLETADA</div>
+                <p style="color: var(--text-muted); font-size: 1.1rem; margin-top: 10px;">Puntuación total de la jornada:</p>
                 <div class="end-score" id="final-score-display">0</div>
-                <button class="btn-next" style="display:flex;" onclick="startNewSession()"><i data-lucide="rotate-cw"></i> JUGAR OTRA VEZ</button>
+                <p style="color: var(--wc-green); font-size: 0.95rem; display: none;" id="new-record-msg">¡NUEVO RÉCORD PERSONAL!</p>
+                <button class="btn-next" style="display:flex; margin-top: 1rem;" onclick="startNewSession()"><i data-lucide="rotate-cw"></i> JUGAR OTRA VEZ</button>
             </div>
 
             <div class="hud-top">
@@ -225,6 +237,7 @@
             </div>
 
             <div class="player-img-container">
+                <div class="api-loader" id="api-loader"></div>
                 <img id="player-image" src="" alt="Jugador Oculto" class="player-img">
                 <div class="overlay-status" id="overlay-status">
                     <i data-lucide="check-circle" id="icon-success" style="display:none;"></i>
@@ -246,17 +259,18 @@
             </div>
 
             <button class="btn-next" id="btn-next" onclick="nextRound()">SIGUIENTE JUGADOR <i data-lucide="arrow-right"></i></button>
+            <button class="btn-submit" id="btn-submit" onclick="submitGameToVAR()">ENVIAR MARCADOR AL VAR <i data-lucide="shield-check"></i></button>
 
         </div>
 
         <div class="leaderboard-panel">
             <h2><i data-lucide="eye" style="color: var(--wc-blue);"></i> Ojo de Halcón</h2>
-            <p>Clasificación basada en la mejor puntuación de una ronda perfecta (6 jugadores) de cada miembro del grupo.</p>
+            <p>Clasificación basada en la mejor puntuación de una ronda (6 jugadores) de cada miembro del viaje.</p>
             
             <div class="lb-list" id="leaderboard-container">
                 <div style="text-align: center; color: var(--text-muted); margin-top: 3rem;">
                     <div class="loader-ring" style="width: 30px; height: 30px; margin: 0 auto 15px; border-width: 2px;"></div>
-                    <p>Sincronizando marcador...</p>
+                    <p>Sincronizando récords...</p>
                 </div>
             </div>
         </div>
@@ -300,34 +314,20 @@
         }
 
         // ==========================================
-        // LÓGICA DE JUGADORES (CSV / FALLBACK)
+        // LÓGICA DE JUGADORES (CSV NATIVO)
         // ==========================================
         let PLAYERS_DB = []; 
-        // Fallback robusto en caso de que el archivo CSV no exista o de error
-        const FALLBACK_DB = [
-            { name: "Lionel Messi", img: "https://upload.wikimedia.org/wikipedia/commons/b/b4/Lionel-Messi-Argentina-2022-FIFA-World-Cup_%28cropped%29.jpg" },
-            { name: "Kylian Mbappé", img: "https://upload.wikimedia.org/wikipedia/commons/5/57/2019-07-17_SG_Dynamo_Dresden_vs._Paris_Saint-Germain_by_Sandro_Halank%E2%80%93129_%28cropped%29.jpg" },
-            { name: "Erling Haaland", img: "https://upload.wikimedia.org/wikipedia/commons/0/07/Erling_Haaland_2023_%28cropped%29.jpg" },
-            { name: "Vinícius Júnior", img: "https://upload.wikimedia.org/wikipedia/commons/f/f3/Vinicius_Jr_2021.jpg" },
-            { name: "Jude Bellingham", img: "https://upload.wikimedia.org/wikipedia/commons/b/bf/Jude_Bellingham_2020_%28cropped%29.jpg" },
-            { name: "Kevin De Bruyne", img: "https://upload.wikimedia.org/wikipedia/commons/4/41/Kevin_De_Bruyne_201807091.jpg" },
-            { name: "Luka Modrić", img: "https://upload.wikimedia.org/wikipedia/commons/e/e9/ISL-HRV_%287%29.jpg" },
-            { name: "Harry Kane", img: "https://upload.wikimedia.org/wikipedia/commons/2/23/Harry_Kane_in_2018.jpg" },
-            { name: "Antoine Griezmann", img: "https://upload.wikimedia.org/wikipedia/commons/a/a5/Antoine_Griezmann_2018.jpg" },
-            { name: "Pedri", img: "https://upload.wikimedia.org/wikipedia/commons/b/b3/Pedri_2021.jpg" }
-        ];
-
         let currentUser = null;
         let userProfile = { nombre: 'Jugador', avatarColor: '#004B87' };
         let userMaxScore = 0;
 
-        // Estado del Juego
+        // Estado del Juego (5 Intentos: 500, 400, 300, 200, 100)
         const BLUR_STAGES = ['40px', '25px', '15px', '8px', '3px']; 
         const POINTS_STAGE = [500, 400, 300, 200, 100];
         
         let sessionPlayers = [];
-        let currentRound = 0; // 0 to 5
-        let currentAttempt = 0; // 0 to 4
+        let currentRound = 0; // 0 a 5
+        let currentAttempt = 0; // 0 a 4
         let sessionScore = 0;
         let isRoundLocked = false;
 
@@ -339,7 +339,7 @@
             currentUser = user;
             
             await fetchUserData();
-            await loadCSVData();
+            await loadCSVData(); // Lee los 225 nombres del CSV
             setupLeaderboard();
 
             startNewSession();
@@ -358,7 +358,7 @@
                 const sDocId = `${tripId}_${currentUser.uid}`;
                 const sSnap = await getDoc(doc(db, "worldcup_blur_scores", sDocId));
                 if (sSnap.exists()) userMaxScore = sSnap.data().maxScore || 0;
-            } catch (e) { console.warn("Modo fallback activado."); }
+            } catch (e) { console.warn("Modo offline detectado."); }
         }
 
         async function loadCSVData() {
@@ -370,22 +370,48 @@
                 const lines = text.split('\n');
                 
                 PLAYERS_DB = [];
-                for(let i=1; i<lines.length; i++) { // Salta el header
+                for(let i=1; i<lines.length; i++) { // Salta header
                     if(!lines[i].trim()) continue;
-                    // Manejo básico de CSV (Asume Nombre, URL)
-                    const parts = lines[i].split(',');
-                    if(parts.length >= 2) {
-                        PLAYERS_DB.push({ 
-                            name: parts[0].replace(/"/g,'').trim(), 
-                            img: parts.slice(1).join(',').replace(/"/g,'').trim() 
-                        });
-                    }
+                    const name = lines[i].split(',')[0].replace(/"/g,'').trim();
+                    if(name) PLAYERS_DB.push({ name: name });
                 }
-                if(PLAYERS_DB.length < 6) throw new Error("CSV muy pequeño");
+                if(PLAYERS_DB.length < 6) throw new Error("CSV pequeño");
             } catch(e) {
-                console.log("Cargando base de datos interna de respaldo...");
-                PLAYERS_DB = [...FALLBACK_DB];
+                console.log("No se pudo cargar el CSV. Cargando respaldo interno de emergencia...");
+                // Respaldo por si suben mal el CSV
+                PLAYERS_DB = [{name:"Lionel Messi"}, {name:"Kylian Mbappé"}, {name:"Erling Haaland"}, {name:"Vinícius Júnior"}, {name:"Jude Bellingham"}, {name:"Kevin De Bruyne"}, {name:"Luka Modrić"}, {name:"Harry Kane"}];
             }
+        }
+
+        // ==========================================
+        // MOTOR DE IMÁGENES (WIKIPEDIA API AJAX)
+        // ==========================================
+        async function fetchPlayerImageFromWiki(playerName) {
+            const encoded = encodeURIComponent(playerName);
+            const url = `https://es.wikipedia.org/w/api.php?action=query&titles=${encoded}&prop=pageimages&format=json&pithumbsize=600&origin=*`;
+            
+            try {
+                const res = await fetch(url);
+                const data = await res.json();
+                const pages = data.query.pages;
+                const pageId = Object.keys(pages)[0];
+                
+                if (pages[pageId].thumbnail) {
+                    return pages[pageId].thumbnail.source;
+                } else {
+                    // Si no lo encuentra en español, prueba en inglés
+                    const urlEn = `https://en.wikipedia.org/w/api.php?action=query&titles=${encoded}&prop=pageimages&format=json&pithumbsize=600&origin=*`;
+                    const resEn = await fetch(urlEn);
+                    const dataEn = await resEn.json();
+                    const pagesEn = dataEn.query.pages;
+                    const pageIdEn = Object.keys(pagesEn)[0];
+                    if(pagesEn[pageIdEn].thumbnail) return pagesEn[pageIdEn].thumbnail.source;
+                }
+            } catch(e) {
+                console.log("Error API Wiki", e);
+            }
+            // Si Wikipedia no tiene foto, silueta por defecto
+            return "https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/User_icon_2.svg/480px-User_icon_2.svg.png";
         }
 
         // ==========================================
@@ -393,8 +419,9 @@
         // ==========================================
         window.startNewSession = function() {
             document.getElementById('end-screen').classList.remove('active');
+            document.getElementById('new-record-msg').style.display = 'none';
             
-            // Elegir 6 jugadores aleatorios de la DB
+            // Elegir 6 jugadores aleatorios para la ronda
             let shuffled = [...PLAYERS_DB].sort(() => 0.5 - Math.random());
             sessionPlayers = shuffled.slice(0, 6);
             
@@ -405,53 +432,80 @@
             loadRound();
         }
 
-        function loadRound() {
+        async function loadRound() {
             isRoundLocked = false;
             currentAttempt = 0;
             
             document.getElementById('current-round-text').innerText = currentRound + 1;
             document.getElementById('search-area').style.display = 'block';
             document.getElementById('btn-next').style.display = 'none';
+            document.getElementById('btn-submit').style.display = 'none';
             document.getElementById('search-input').value = '';
             document.getElementById('suggestions-box').style.display = 'none';
+            document.getElementById('search-input').disabled = false;
             
-            // Quitar overlays de exito/fallo
+            // Reset visuales
             const overlay = document.getElementById('overlay-status');
             overlay.className = 'overlay-status';
             document.getElementById('icon-success').style.display = 'none';
             document.getElementById('icon-fail').style.display = 'none';
 
-            // Resetear barra de intentos
             const dots = document.querySelectorAll('.attempt-dot');
             dots.forEach(d => { d.className = 'attempt-dot'; });
             dots[0].classList.add('active');
 
-            // Cargar imagen con máximo blur
+            // Lógica asíncrona de la imagen
             const imgEl = document.getElementById('player-image');
-            imgEl.src = sessionPlayers[currentRound].img;
+            const loader = document.getElementById('api-loader');
+            
+            imgEl.style.display = 'none';
+            loader.style.display = 'block';
+            
+            const playerUrl = await fetchPlayerImageFromWiki(sessionPlayers[currentRound].name);
+            
+            imgEl.src = playerUrl;
             imgEl.style.filter = `blur(${BLUR_STAGES[0]})`;
             
-            // Foco al input
-            document.getElementById('search-input').focus();
+            imgEl.onload = () => {
+                loader.style.display = 'none';
+                imgEl.style.display = 'block';
+                document.getElementById('search-input').focus();
+            };
         }
 
         window.nextRound = function() {
             currentRound++;
             if (currentRound >= 6) {
-                endSession();
+                // Finalizó los 6 jugadores
+                document.getElementById('search-area').style.display = 'none';
+                document.getElementById('btn-next').style.display = 'none';
+                document.getElementById('btn-submit').style.display = 'flex';
             } else {
                 loadRound();
             }
         }
 
-        function endSession() {
-            document.getElementById('final-score-display').innerText = sessionScore;
-            document.getElementById('end-screen').classList.add('active');
-            confetti({ particleCount: 200, spread: 90, origin: { y: 0.6 }, colors: ['#004B87', '#E3003F', '#ffffff'] });
-            
+        window.submitGameToVAR = async function() {
+            const btn = document.getElementById('btn-submit');
+            btn.classList.add('submitting');
+            btn.innerHTML = '<div class="loader-ring" style="width:24px; height:24px; border-width:2px; border-top-color:var(--wc-navy);"></div> REGISTRANDO...';
+            btn.disabled = true;
+
             if (sessionScore > userMaxScore) {
-                saveMaxScore(sessionScore);
+                await saveMaxScore(sessionScore);
+                document.getElementById('new-record-msg').style.display = 'block';
             }
+
+            setTimeout(() => {
+                document.getElementById('final-score-display').innerText = sessionScore;
+                document.getElementById('end-screen').classList.add('active');
+                confetti({ particleCount: 200, spread: 90, origin: { y: 0.6 }, colors: ['#004B87', '#E3003F', '#ffffff'] });
+                
+                btn.style.display = 'none';
+                btn.disabled = false;
+                btn.classList.remove('submitting');
+                btn.innerHTML = 'ENVIAR MARCADOR AL VAR <i data-lucide="shield-check"></i>';
+            }, 1000);
         }
 
         async function saveMaxScore(newScore) {
@@ -474,7 +528,7 @@
         }
 
         // ==========================================
-        // BUSCADOR Y VALIDACIÓN
+        // BUSCADOR PREDICTIVO
         // ==========================================
         const inputEl = document.getElementById('search-input');
         const suggBox = document.getElementById('suggestions-box');
@@ -484,13 +538,9 @@
             const val = this.value.toLowerCase().trim();
             suggBox.innerHTML = '';
             
-            if (val.length < 2) {
-                suggBox.style.display = 'none';
-                return;
-            }
+            if (val.length < 2) { suggBox.style.display = 'none'; return; }
 
-            // Filtrar todos los nombres de la BD (sin importar si están en la ronda o no)
-            const matches = PLAYERS_DB.filter(p => p.name.toLowerCase().includes(val)).slice(0, 8); // Max 8 resultados
+            const matches = PLAYERS_DB.filter(p => p.name.toLowerCase().includes(val)).slice(0, 8); 
 
             if (matches.length > 0) {
                 matches.forEach(m => {
@@ -507,7 +557,6 @@
             }
         });
 
-        // Ocultar buscador si click fuera
         document.addEventListener('click', (e) => {
             if(!document.getElementById('search-area').contains(e.target)) suggBox.style.display = 'none';
         });
@@ -522,7 +571,6 @@
 
             const dots = document.querySelectorAll('.attempt-dot');
             const imgEl = document.getElementById('player-image');
-            const arena = document.getElementById('arena');
 
             if (isCorrect) {
                 // ÉXITO
@@ -531,27 +579,30 @@
                 document.getElementById('live-score').innerText = sessionScore;
                 
                 imgEl.style.filter = 'blur(0px)';
-                dots[currentAttempt].classList.add('active'); // Opcional, marcar verde
+                dots[currentAttempt].classList.add('active'); 
                 
                 const overlay = document.getElementById('overlay-status');
                 overlay.className = 'overlay-status success';
                 document.getElementById('icon-success').style.display = 'block';
                 
                 document.getElementById('search-area').style.display = 'none';
-                document.getElementById('btn-next').style.display = 'flex';
+                
+                // Si es el último jugador (ronda 6), mostrar botón submit. Si no, botón next.
+                if (currentRound === 5) document.getElementById('btn-submit').style.display = 'flex';
+                else document.getElementById('btn-next').style.display = 'flex';
                 
             } else {
                 // FALLO
                 dots[currentAttempt].classList.remove('active');
                 dots[currentAttempt].classList.add('wrong');
                 
-                arena.style.animation = 'shake 0.4s';
-                setTimeout(() => arena.style.animation = '', 400);
+                document.getElementById('arena').style.animation = 'shake 0.4s';
+                setTimeout(() => document.getElementById('arena').style.animation = '', 400);
 
                 currentAttempt++;
                 
                 if (currentAttempt >= 5) {
-                    // SE ACABARON LOS INTENTOS -> REVELAR
+                    // SE ACABARON LOS INTENTOS -> REVELAR FOTO
                     isRoundLocked = true;
                     imgEl.style.filter = 'blur(0px)';
                     
@@ -562,7 +613,9 @@
                     inputEl.value = `Era: ${targetName}`;
                     inputEl.disabled = true;
                     
-                    document.getElementById('btn-next').style.display = 'flex';
+                    if (currentRound === 5) document.getElementById('btn-submit').style.display = 'flex';
+                    else document.getElementById('btn-next').style.display = 'flex';
+
                 } else {
                     // SIGUIENTE INTENTO -> REDUCIR BLUR
                     dots[currentAttempt].classList.add('active');
@@ -574,7 +627,7 @@
         }
 
         // ==========================================
-        // LEADERBOARD TV BROADCAST Failsafe
+        // LEADERBOARD TV BROADCAST
         // ==========================================
         function setupLeaderboard() {
             const scoresRef = collection(db, "worldcup_blur_scores");
