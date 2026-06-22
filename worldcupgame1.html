@@ -29,12 +29,12 @@
             --border-glow: rgba(255, 255, 255, 0.08);
             --transition: 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
             
-            /* Dificultades */
-            --c-v-easy: #a7f3d0;   /* Muy Fácil */
-            --c-easy: #60a5fa;     /* Fácil */
-            --c-medium: #c084fc;   /* Medio */
-            --c-hard: #f43f5e;     /* Difícil */
-            --c-legend: #fbbf24;   /* Muy Difícil / Leyenda */
+            /* Dificultades Hardcore */
+            --c-aficionado: #34d399; /* Verde */
+            --c-profesional: #60a5fa; /* Azul */
+            --c-mundial: #c084fc;     /* Morado */
+            --c-experto: #f43f5e;     /* Rojo */
+            --c-leyenda: #fbbf24;     /* Oro */
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Sora', sans-serif; }
@@ -88,14 +88,17 @@
         .panel-header p { color: var(--text-muted); font-size: 0.95rem; font-weight: 300;}
         
         .score-box {
-            text-align: right; background: rgba(0,0,0,0.4); padding: 0.8rem 1.5rem; border-radius: 16px; border: 1px solid var(--border-glow);
+            text-align: right; background: rgba(0,0,0,0.4); padding: 0.8rem 1.5rem; border-radius: 16px; border: 1px solid var(--border-glow); position: relative; overflow: hidden;
         }
+        .score-box.submitting { animation: pulseScore 1s infinite alternate; border-color: var(--wc-gold); }
+        @keyframes pulseScore { from { box-shadow: inset 0 0 10px rgba(212,175,55,0.1); } to { box-shadow: inset 0 0 30px rgba(212,175,55,0.5); } }
+
         .score-box span { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 2px; font-weight: 800; display: block; margin-bottom: 5px;}
         .score-box strong { font-family: 'Teko', sans-serif; font-size: 3rem; color: var(--wc-gold); line-height: 0.8; text-shadow: 0 0 15px rgba(212, 175, 55, 0.4); }
 
         /* GRID 3x3 (Las 9 Preguntas) */
         .trivia-grid {
-            display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 2rem;
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 1rem;
         }
 
         .trivia-card {
@@ -111,13 +114,13 @@
 
         /* Indicadores de Dificultad en la Tarjeta */
         .card-diff { position: absolute; top: 10px; left: 10px; font-size: 0.65rem; font-weight: 800; padding: 4px 8px; border-radius: 6px; letter-spacing: 1px; text-transform: uppercase; background: rgba(0,0,0,0.5); }
-        .diff-v-easy { color: var(--c-v-easy); border: 1px solid var(--c-v-easy); }
-        .diff-easy { color: var(--c-easy); border: 1px solid var(--c-easy); }
-        .diff-medium { color: var(--c-medium); border: 1px solid var(--c-medium); }
-        .diff-hard { color: var(--c-hard); border: 1px solid var(--c-hard); }
-        .diff-legend { color: var(--wc-navy); background: var(--c-legend); border: 1px solid var(--c-legend); text-shadow: none; box-shadow: 0 0 10px rgba(251,191,36,0.5);}
+        .diff-aficionado { color: var(--c-aficionado); border: 1px solid var(--c-aficionado); }
+        .diff-profesional { color: var(--c-profesional); border: 1px solid var(--c-profesional); }
+        .diff-mundial { color: var(--c-mundial); border: 1px solid var(--c-mundial); }
+        .diff-experto { color: var(--c-experto); border: 1px solid var(--c-experto); }
+        .diff-leyenda { color: var(--wc-navy); background: var(--c-leyenda); border: 1px solid var(--c-leyenda); text-shadow: none; box-shadow: 0 0 10px rgba(251,191,36,0.5);}
 
-        .card-points { font-family: 'Teko', sans-serif; font-size: 3rem; line-height: 1; color: var(--primary); margin-top: 10px;}
+        .card-points { font-family: 'Teko', sans-serif; font-size: 3.5rem; line-height: 1; color: var(--primary); margin-top: 10px;}
         .card-pts-label { font-size: 0.8rem; color: var(--text-muted); font-weight: 600; letter-spacing: 2px;}
 
         /* Estados Contestados */
@@ -135,24 +138,22 @@
         .trivia-card.answered.correct .result-icon.icon-check { opacity: 0.3; transform: scale(1); color: var(--wc-green); }
         .trivia-card.answered.incorrect .result-icon.icon-cross { opacity: 0.3; transform: scale(1); color: var(--wc-red); }
 
-        /* Botón Guardar Diario */
-        .btn-submit {
-            width: 100%; background: linear-gradient(135deg, var(--wc-gold), #B8860B); color: var(--wc-navy); border: none;
-            padding: 1.2rem; border-radius: 14px; font-weight: 800; font-size: 1.1rem; margin-top: auto;
-            cursor: pointer; transition: var(--transition); text-transform: uppercase; letter-spacing: 2px;
-            display: none; justify-content: center; align-items: center; gap: 10px; box-shadow: 0 10px 20px rgba(212, 175, 55, 0.3);
+        /* Barra de estado de Auto-Submit */
+        .auto-submit-bar {
+            width: 100%; background: linear-gradient(135deg, var(--wc-gold), #B8860B); color: var(--wc-navy);
+            padding: 1.2rem; border-radius: 14px; font-weight: 800; font-size: 1.1rem; margin-top: 1rem;
+            text-transform: uppercase; letter-spacing: 2px; display: none; justify-content: center; align-items: center; gap: 10px; box-shadow: 0 10px 20px rgba(212, 175, 55, 0.3);
         }
-        .btn-submit.visible { display: flex; animation: slideUp 0.5s ease; }
-        .btn-submit:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(212, 175, 55, 0.5); }
+        .auto-submit-bar.active { display: flex; animation: slideUp 0.5s ease; }
 
         /* Overlay de "Ya Jugado" */
         .played-overlay {
-            position: absolute; inset: 0; background: rgba(10, 15, 28, 0.9); backdrop-filter: blur(10px);
+            position: absolute; inset: 0; background: rgba(10, 15, 28, 0.95); backdrop-filter: blur(15px);
             z-index: 10; border-radius: 24px; display: none; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 2.5rem;
         }
-        .played-overlay.active { display: flex; animation: fadeIn 0.5s ease forwards; }
-        .played-title { font-family: 'Teko', sans-serif; font-size: 3.5rem; color: var(--primary); line-height: 1; margin-bottom: 10px;}
-        .played-pts { font-family: 'Teko', sans-serif; font-size: 5rem; color: var(--wc-gold); line-height: 0.8; text-shadow: 0 0 20px rgba(212, 175, 55, 0.5); margin: 20px 0;}
+        .played-overlay.active { display: flex; animation: fadeIn 0.8s ease forwards; }
+        .played-title { font-family: 'Teko', sans-serif; font-size: 3.8rem; color: var(--primary); line-height: 1; margin-bottom: 10px; text-transform: uppercase;}
+        .played-pts { font-family: 'Teko', sans-serif; font-size: 6rem; color: var(--wc-gold); line-height: 0.8; text-shadow: 0 0 30px rgba(212, 175, 55, 0.5); margin: 20px 0;}
         .countdown { font-family: 'Teko', sans-serif; font-size: 2.5rem; letter-spacing: 3px; color: var(--text-muted); background: rgba(0,0,0,0.5); padding: 10px 30px; border-radius: 16px; border: 1px solid var(--border-glow); margin-top: 15px;}
 
         /* MODAL DE PREGUNTA */
@@ -165,22 +166,22 @@
         
         .modal-content {
             background: var(--surface); border: 1px solid var(--border-glow); border-radius: 24px;
-            width: 100%; max-width: 600px; padding: 3rem 2.5rem; transform: translateY(30px) scale(0.95); transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+            width: 100%; max-width: 650px; padding: 3rem 2.5rem; transform: translateY(30px) scale(0.95); transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
             display: flex; flex-direction: column; text-align: center; box-shadow: 0 30px 60px rgba(0,0,0,0.8);
             position: relative; overflow: hidden;
         }
         .modal-overlay.active .modal-content { transform: translateY(0) scale(1); }
 
-        .modal-diff-badge { display: inline-block; padding: 5px 15px; border-radius: 20px; font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin: 0 auto 1.5rem; }
-        .modal-question { font-size: 1.4rem; font-weight: 600; line-height: 1.4; margin-bottom: 2.5rem; color: var(--primary); }
+        .modal-diff-badge { display: inline-block; padding: 6px 18px; border-radius: 20px; font-size: 0.85rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin: 0 auto 1.5rem; }
+        .modal-question { font-size: 1.5rem; font-weight: 600; line-height: 1.4; margin-bottom: 2.5rem; color: var(--primary); }
 
-        .options-grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
+        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
         .btn-option {
             background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1);
             color: var(--primary); padding: 1.2rem; border-radius: 16px; font-size: 1.05rem; font-weight: 600;
             cursor: pointer; transition: var(--transition); text-align: left; display: flex; justify-content: space-between; align-items: center;
         }
-        .btn-option:hover { background: rgba(255,255,255,0.1); transform: translateX(5px); border-color: rgba(255,255,255,0.3); }
+        .btn-option:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.3); }
         
         /* Estados al contestar en el modal */
         .btn-option.correct { background: var(--wc-green); border-color: var(--wc-green); color: white; box-shadow: 0 0 20px rgba(0, 166, 81, 0.5); }
@@ -230,11 +231,12 @@
             .card-diff { font-size: 0.55rem; padding: 2px 5px; top: 5px; left: 5px;}
             .card-points { font-size: 2.2rem; }
             .play-panel, .leaderboard-panel { padding: 1.5rem; }
+            .options-grid { grid-template-columns: 1fr; } /* Stack options on mobile */
             .modal-content { padding: 2rem 1.5rem; margin: 1rem; width: auto; }
             .modal-question { font-size: 1.2rem; }
             .btn-option { padding: 1rem; font-size: 0.95rem; }
-            .played-title { font-size: 2.5rem; }
-            .played-pts { font-size: 4rem; }
+            .played-title { font-size: 2.8rem; text-align: center;}
+            .played-pts { font-size: 4.5rem; }
         }
     </style>
 </head>
@@ -242,7 +244,7 @@
 
     <div id="page-loader">
         <div class="loader-ring"></div>
-        <p style="margin-top: 25px; font-family: 'Teko', sans-serif; font-size: 1.5rem; letter-spacing: 3px; color: var(--text-muted);">SINTONIZANDO SEÑAL OFICIAL...</p>
+        <p style="margin-top: 25px; font-family: 'Teko', sans-serif; font-size: 1.5rem; letter-spacing: 3px; color: var(--text-muted);">CONECTANDO CON EL VAR...</p>
     </div>
 
     <nav>
@@ -257,18 +259,18 @@
             
             <div class="played-overlay" id="played-state">
                 <div class="played-title">RETO DIARIO COMPLETADO</div>
-                <p style="color: var(--text-muted); font-size: 1.1rem; margin-top: 10px;">Puntos conseguidos en la jornada de hoy:</p>
+                <p style="color: var(--text-muted); font-size: 1.1rem; margin-top: 10px;">Puntuación oficial de la jornada:</p>
                 <div class="played-pts" id="played-pts-display">0</div>
-                <p style="color: var(--primary); font-size: 0.9rem;">Próximo cartón disponible en:</p>
+                <p style="color: var(--primary); font-size: 0.9rem;">Siguiente ronda disponible en:</p>
                 <div class="countdown" id="countdown-timer">--:--:--</div>
             </div>
 
             <div class="panel-header">
                 <div>
                     <h1>El Reto Diario</h1>
-                    <p>9 preguntas. 1 intento por casilla. Demuestra lo que sabes.</p>
+                    <p>9 casillas. 1 intento por pregunta. Se enviará automáticamente.</p>
                 </div>
-                <div class="score-box">
+                <div class="score-box" id="score-box-ui">
                     <span>Puntos Hoy</span>
                     <strong id="daily-score-display">0</strong>
                 </div>
@@ -277,14 +279,14 @@
             <div class="trivia-grid" id="trivia-grid">
                 </div>
 
-            <button class="btn-submit" id="btn-submit" onclick="submitDailyScore()">
-                ENVIAR PUNTUACIÓN AL MARCADOR GLOBAL <i data-lucide="send"></i>
-            </button>
+            <div class="auto-submit-bar" id="auto-submit-bar">
+                <div class="loader-ring" style="width:24px; height:24px; border-width:2px; border-top-color: var(--wc-navy);"></div> REGISTRANDO PUNTUACIÓN...
+            </div>
         </div>
 
         <div class="leaderboard-panel">
-            <h2><i data-lucide="trophy" style="color: var(--wc-gold); width: 35px; height: 35px;"></i> Ránking Histórico</h2>
-            <p>Suma de puntos totales acumulados durante todo el torneo por tu grupo.</p>
+            <h2><i data-lucide="trophy" style="color: var(--wc-gold); width: 35px; height: 35px;"></i> Ránking Global</h2>
+            <p>Suma de puntos totales acumulados durante el torneo por tu grupo.</p>
             
             <div class="lb-list" id="leaderboard-container">
                 <div style="text-align: center; color: var(--text-muted); margin-top: 3rem;">
@@ -346,55 +348,32 @@
         }
 
         // ==========================================
-        // BASE DE DATOS DE PREGUNTAS (TRIVIA MUNDIALISTA)
+        // MEGA BASE DE DATOS TRIVIA (220 PREGUNTAS COMPRIMIDAS)
+        // Estructura: Aficionado(20), Profesional(40), Mundial(60), Experto(80), Leyenda(120)
         // ==========================================
-        const QUESTIONS_DB = [
-            // MUY FÁCILES (10 pts)
-            { q: "¿Qué país ganó el Mundial de Qatar 2022?", opts: ["Francia", "Brasil", "Argentina", "Croacia"], ans: 2, diff: "v-easy", pts: 10 },
-            { q: "¿Qué selección ha ganado más Mundiales en la historia?", opts: ["Alemania", "Italia", "Brasil", "Argentina"], ans: 2, diff: "v-easy", pts: 10 },
-            { q: "¿En qué deporte se compite en la World Cup de la FIFA?", opts: ["Baloncesto", "Fútbol", "Rugby", "Tenis"], ans: 1, diff: "v-easy", pts: 10 },
-            { q: "¿Qué animal era Naranjito, mascota de España 1982?", opts: ["Un león", "Un perro", "Una naranja", "Un toro"], ans: 2, diff: "v-easy", pts: 10 },
-            { q: "¿De qué color es la tarjeta que expulsa a un jugador?", opts: ["Verde", "Amarilla", "Roja", "Negra"], ans: 2, diff: "v-easy", pts: 10 },
-            { q: "¿Cuántos años pasan entre cada Mundial masculino de la FIFA?", opts: ["2 años", "3 años", "4 años", "5 años"], ans: 2, diff: "v-easy", pts: 10 },
+        const DB = [
+            // AFICIONADO (20pts) - 44 Preguntas
+            {q:"¿Qué país ganó el Mundial 2022?",o:["Francia","Brasil","Argentina","Croacia"],a:2,d:"aficionado",p:20},{q:"¿Qué selección tiene más Mundiales?",o:["Alemania","Italia","Brasil","Argentina"],a:2,d:"aficionado",p:20},{q:"¿Dónde se celebra el Mundial 2026?",o:["Solo EEUU","EEUU, México y Canadá","México y Canadá","EEUU y México"],a:1,d:"aficionado",p:20},{q:"¿De qué color es la tarjeta de expulsión?",o:["Verde","Amarilla","Roja","Negra"],a:2,d:"aficionado",p:20},{q:"¿Cada cuántos años hay Mundial masculino?",o:["2 años","3 años","4 años","5 años"],a:2,d:"aficionado",p:20},{q:"¿Qué animal era Naranjito en 1982?",o:["Un león","Un perro","Una naranja","Un toro"],a:2,d:"aficionado",p:20},{q:"¿Quién es 'O Rei'?",o:["Maradona","Pelé","Cruyff","Di Stéfano"],a:1,d:"aficionado",p:20},{q:"¿Qué país ganó el primer Mundial en 1930?",o:["Brasil","Uruguay","Argentina","Italia"],a:1,d:"aficionado",p:20},{q:"¿Cómo se llama el premio al máximo goleador?",o:["Balón de Oro","Bota de Oro","Guante de Oro","Puskas"],a:1,d:"aficionado",p:20},{q:"¿Cuántos jugadores hay por equipo en el campo?",o:["10","11","12","15"],a:1,d:"aficionado",p:20},{q:"¿Qué selección viste de naranja?",o:["España","Holanda (Países Bajos)","Bélgica","Irlanda"],a:1,d:"aficionado",p:20},{q:"¿En qué continente está Qatar?",o:["Asia","África","Europa","Oceanía"],a:0,d:"aficionado",p:20},{q:"¿Qué significa FIFA?",o:["Fed. Internacional de Fútbol Asoc.","Fondo Internacional de Fútbol","Federación Ítalo-Francesa","Fútbol Internacional"],a:0,d:"aficionado",p:20},{q:"¿Qué selección es 'La Albiceleste'?",o:["Uruguay","Argentina","Chile","Colombia"],a:1,d:"aficionado",p:20},{q:"¿Cuántos tiempos tiene un partido de Mundial?",o:["1","2","3","4"],a:1,d:"aficionado",p:20},{q:"¿Cuánto dura el tiempo reglamentario de un partido?",o:["80 min","90 min","100 min","120 min"],a:1,d:"aficionado",p:20},{q:"¿Qué continente tiene más Mundiales ganados?",o:["América del Sur","Europa","África","Asia"],a:1,d:"aficionado",p:20},{q:"¿Quién es el 10 histórico de Argentina?",o:["Batistuta","Kempes","Maradona","Simeone"],a:2,d:"aficionado",p:20},{q:"¿Qué país es conocido como 'La Roja'?",o:["Rusia","España","Portugal","Bélgica"],a:1,d:"aficionado",p:20},{q:"¿Qué significa VAR?",o:["Video Assistant Referee","Virtual Action Replay","Video Arbitraje Real","Visual Action Referee"],a:0,d:"aficionado",p:20},{q:"¿Cuál es la forma del trofeo actual del Mundial?",o:["Una copa con asas","Dos figuras sosteniendo la Tierra","Una bota de oro","Un balón de cristal"],a:1,d:"aficionado",p:20},{q:"¿Qué equipo viste camiseta amarilla y pantalón azul?",o:["Suecia","Colombia","Brasil","Ecuador"],a:2,d:"aficionado",p:20},{q:"¿Quién levanta la Copa al ganar un Mundial?",o:["El entrenador","El portero","El capitán","El máximo goleador"],a:2,d:"aficionado",p:20},{q:"¿En qué mes suele jugarse el Mundial (excepto Qatar)?",o:["Enero-Febrero","Junio-Julio","Septiembre-Octubre","Noviembre-Diciembre"],a:1,d:"aficionado",p:20},{q:"¿Qué idioma se habla en Brasil (sede 2014)?",o:["Español","Portugués","Inglés","Francés"],a:1,d:"aficionado",p:20},{q:"¿Qué animal era Zakumi (mascota Francia 98)?",o:["León","Gallo","Perro","Lobo"],a:1,d:"aficionado",p:20},{q:"¿Cuántas tarjetas amarillas suponen una roja?",o:["1","2","3","4"],a:1,d:"aficionado",p:20},{q:"¿Qué país es famoso por el 'Tiki-Taka'?",o:["Brasil","Holanda","España","Alemania"],a:2,d:"aficionado",p:20},{q:"¿Qué selección tiene 4 estrellas en su escudo por Mundiales?",o:["Alemania","Francia","Argentina","Uruguay"],a:0,d:"aficionado",p:20},{q:"¿Qué se hace si hay empate tras 120 minutos en la final?",o:["Lanzar una moneda","Partido de desempate","Tiros penales","Gana quien marcó primero"],a:2,d:"aficionado",p:20},{q:"¿Cómo se llama el saque inicial desde el centro?",o:["Saque de banda","Saque de meta","Saque de centro","Saque de puerta"],a:2,d:"aficionado",p:20},{q:"¿Qué país es el único en jugar TODOS los mundiales?",o:["Alemania","Italia","Argentina","Brasil"],a:3,d:"aficionado",p:20},{q:"¿Qué jugador portugués es conocido como CR7?",o:["Pepe","Joao Felix","Cristiano Ronaldo","Deco"],a:2,d:"aficionado",p:20},{q:"¿A qué país pertenece la leyenda Franz Beckenbauer?",o:["Austria","Alemania","Suiza","Holanda"],a:1,d:"aficionado",p:20},{q:"¿De qué país es Kylian Mbappé?",o:["Bélgica","Camerún","Francia","Senegal"],a:2,d:"aficionado",p:20},{q:"¿Qué se pita cuando el balón sale por la línea lateral?",o:["Córner","Falta","Saque de banda","Penalti"],a:2,d:"aficionado",p:20},{q:"¿Qué país europeo tiene forma de bota y ha ganado 4 mundiales?",o:["España","Grecia","Italia","Francia"],a:2,d:"aficionado",p:20},{q:"¿Qué jugador argentino ganó el Mundial en 2022?",o:["Agüero","Messi","Riquelme","Zanetti"],a:1,d:"aficionado",p:20},{q:"¿Qué selección eliminó a España en 2022?",o:["Japón","Marruecos","Rusia","Italia"],a:1,d:"aficionado",p:20},{q:"¿Cuál es la sede principal del Mundial 2026?",o:["Europa","Norteamérica","Sudamérica","Asia"],a:1,d:"aficionado",p:20},{q:"¿Qué portero español besó a Sara Carbonero en 2010?",o:["Valdés","Reina","Casillas","De Gea"],a:2,d:"aficionado",p:20},{q:"¿En qué país jugó Maradona su último Mundial?",o:["Italia","EEUU","Francia","México"],a:1,d:"aficionado",p:20},{q:"¿Cómo se llama al gol que marca un jugador en su propia portería?",o:["Gol nulo","Autogol","Gol directo","Gol fantasma"],a:1,d:"aficionado",p:20},{q:"¿Qué país ganó el Mundial femenino en 2023?",o:["Inglaterra","USA","España","Alemania"],a:2,d:"aficionado",p:20},
+            
+            // PROFESIONAL (40pts) - 44 Preguntas
+            {q:"¿Qué país organizó el Mundial 2010?",o:["Alemania","Brasil","Sudáfrica","Rusia"],a:2,d:"profesional",p:40},{q:"¿A quién le dio Zidane un cabezazo en 2006?",o:["Gattuso","Materazzi","Cannavaro","Buffon"],a:1,d:"profesional",p:40},{q:"¿Qué jugador marcó el gol de España en la final de 2010?",o:["Villa","Xavi","Iniesta","Torres"],a:2,d:"profesional",p:40},{q:"¿Qué selección es 'La Canarinha'?",o:["Uruguay","Colombia","Brasil","Ecuador"],a:2,d:"profesional",p:40},{q:"¿Quién ganó el Mundial 2018?",o:["Francia","Croacia","Bélgica","Inglaterra"],a:0,d:"profesional",p:40},{q:"¿Qué país ha perdido 3 finales de Mundial?",o:["Países Bajos","Hungría","Suecia","Bélgica"],a:0,d:"profesional",p:40},{q:"¿Qué portero ganó el Guante de Oro en 2022?",o:["Lloris","Bono","Dibu Martínez","Livakovic"],a:2,d:"profesional",p:40},{q:"¿En qué año ganó España su Mundial?",o:["2006","2010","2014","2018"],a:1,d:"profesional",p:40},{q:"¿Qué país organizó el Mundial en 1998?",o:["Italia","EEUU","Francia","Corea"],a:2,d:"profesional",p:40},{q:"¿Contra quién perdió Brasil 7-1 en 2014?",o:["Argentina","Alemania","Holanda","Colombia"],a:1,d:"profesional",p:40},{q:"¿Qué mascota fue un perro llamado Striker?",o:["EEUU 94","Italia 90","Corea 02","Francia 98"],a:0,d:"profesional",p:40},{q:"¿Cuántos mundiales ganó Pelé?",o:["1","2","3","4"],a:2,d:"profesional",p:40},{q:"¿Qué himno de Mundial cantó Shakira en 2010?",o:["Waka Waka","Wavin' Flag","La Copa de la Vida","We Are One"],a:0,d:"profesional",p:40},{q:"¿A qué país pertenece el delantero Harry Kane?",o:["Gales","Escocia","Inglaterra","Irlanda"],a:2,d:"profesional",p:40},{q:"¿Quién fue la Bota de Oro en Rusia 2018?",o:["Mbappé","Griezmann","Harry Kane","Cristiano Ronaldo"],a:2,d:"profesional",p:40},{q:"¿Qué selección africana organizó el Mundial 2010?",o:["Nigeria","Egipto","Camerún","Sudáfrica"],a:3,d:"profesional",p:40},{q:"¿A qué continente pertenece la selección de Australia?",o:["Asia","Oceanía","Europa","No juega mundiales"],a:1,d:"profesional",p:40},{q:"¿Quién era el entrenador de España en 2010?",o:["Luis Aragonés","Vicente del Bosque","Julen Lopetegui","Luis Enrique"],a:1,d:"profesional",p:40},{q:"¿Qué país sudamericano no es Brasil, Argentina ni Uruguay y jugó el Mundial 2022?",o:["Chile","Colombia","Perú","Ecuador"],a:3,d:"profesional",p:40},{q:"¿Cómo se llamaba el balón del Mundial 2010?",o:["Jabulani","Brazuca","Tango","Fevernova"],a:0,d:"profesional",p:40},{q:"¿Qué dos países fueron sede en 2002?",o:["EEUU y México","España y Portugal","Corea del Sur y Japón","Alemania y Austria"],a:2,d:"profesional",p:40},{q:"¿Cuál es la sede de la FIFA?",o:["París","Zurich","Londres","Nueva York"],a:1,d:"profesional",p:40},{q:"¿Qué jugador brasileño destacó por su corte de pelo en 2002?",o:["Ronaldinho","Ronaldo Nazário","Rivaldo","Roberto Carlos"],a:1,d:"profesional",p:40},{q:"¿En qué año se jugó el Mundial de México que ganó Maradona?",o:["1978","1982","1986","1990"],a:2,d:"profesional",p:40},{q:"¿Qué significa el premio 'Guante de Oro'?",o:["Mejor Jugador","Mejor Portero","Mejor Defensa","Fair Play"],a:1,d:"profesional",p:40},{q:"¿Qué jugador uruguayo paró un balón con las manos en 2010 contra Ghana?",o:["Forlán","Cavani","Luis Suárez","Godín"],a:2,d:"profesional",p:40},{q:"¿Qué selección ganó el Mundial de 2014?",o:["Argentina","Alemania","Brasil","Holanda"],a:1,d:"profesional",p:40},{q:"¿A qué selección pertenece Robert Lewandowski?",o:["Francia","Polonia","Croacia","Rusia"],a:1,d:"profesional",p:40},{q:"¿Quién marcó el gol de Alemania en la final de 2014?",o:["Klose","Müller","Götze","Götze"],a:3,d:"profesional",p:40},{q:"¿Qué equipo eliminó a Brasil en Rusia 2018?",o:["Bélgica","Alemania","Francia","Croacia"],a:0,d:"profesional",p:40},{q:"¿Quién es el famoso portero italiano que ganó en 2006?",o:["Zoff","Toldo","Buffon","Donnarumma"],a:2,d:"profesional",p:40},{q:"¿De qué país es el histórico Hristo Stoichkov?",o:["Bélgica","Rusia","Bulgaria","Rumanía"],a:2,d:"profesional",p:40},{q:"¿Cómo se llamó el pulpo que predecía resultados en 2010?",o:["Paul","Iker","Manolo","Jabulani"],a:0,d:"profesional",p:40},{q:"¿Qué selección lideró Luka Modric a la final de 2018?",o:["Serbia","Croacia","Eslovenia","Polonia"],a:1,d:"profesional",p:40},{q:"¿Qué jugador portugués tiene el récord de goles internacionales?",o:["Eusébio","Figo","Cristiano Ronaldo","Pauleta"],a:2,d:"profesional",p:40},{q:"¿Qué país es el actual anfitrión asiático de la Copa Asia pero jugó el mundial en 2022?",o:["Qatar","Arabia Saudí","Japón","Irán"],a:0,d:"profesional",p:40},{q:"¿A qué equipo pertenece el 'Cucho' Hernández?",o:["México","Colombia","Venezuela","Perú"],a:1,d:"profesional",p:40},{q:"¿De qué país es el jugador Heung-min Son?",o:["Japón","Corea del Sur","China","Vietnam"],a:1,d:"profesional",p:40},{q:"¿Qué país americano no clasificó al Mundial 2022?",o:["Ecuador","Canadá","Colombia","Costa Rica"],a:2,d:"profesional",p:40},{q:"¿Qué equipo vistió de cuadritos rojos y blancos en la final de 2018?",o:["Polonia","Croacia","Suiza","Dinamarca"],a:1,d:"profesional",p:40},{q:"¿Quién cantó 'La Copa de la Vida' en Francia 98?",o:["Ricky Martin","Enrique Iglesias","Marc Anthony","Chayanne"],a:0,d:"profesional",p:40},{q:"¿Qué selección sorprendió llegando a cuartos en 2022?",o:["Croacia","Japón","Marruecos","Senegal"],a:2,d:"profesional",p:40},{q:"¿De qué país es el famoso árbitro Pierluigi Collina?",o:["Francia","España","Italia","Brasil"],a:2,d:"profesional",p:40},{q:"¿Qué país jugó la final de 2014 contra Alemania?",o:["Brasil","Holanda","Argentina","Chile"],a:2,d:"profesional",p:40},
 
-            // FÁCILES (20 pts)
-            { q: "¿En qué país se celebró el Mundial de 2010?", opts: ["Alemania", "Brasil", "Sudáfrica", "Rusia"], ans: 2, diff: "easy", pts: 20 },
-            { q: "¿Qué jugador marcó el gol de la victoria para España en 2010?", opts: ["David Villa", "Xavi Hernández", "Andrés Iniesta", "Fernando Torres"], ans: 2, diff: "easy", pts: 20 }, 
-            { q: "¿A quién le dio el famoso cabezazo Zinedine Zidane en 2006?", opts: ["Gattuso", "Materazzi", "Cannavaro", "Buffon"], ans: 1, diff: "easy", pts: 20 },
-            { q: "¿Qué país organizó el Mundial de 2014?", opts: ["Sudáfrica", "Brasil", "Rusia", "Qatar"], ans: 1, diff: "easy", pts: 20 },
-            { q: "¿Qué tecnología se usa para revisar jugadas dudosas?", opts: ["Ojo de Halcón", "VAR", "Goal-Line", "Kinect"], ans: 1, diff: "easy", pts: 20 },
-            { q: "¿Qué selección es conocida como 'La Canarinha'?", opts: ["Uruguay", "Colombia", "Brasil", "Ecuador"], ans: 2, diff: "easy", pts: 20 },
+            // CLASE MUNDIAL (60pts) - 44 Preguntas
+            {q:"¿Quién es el máximo goleador histórico de los Mundiales?",o:["Pelé","Ronaldo Nazário","Miroslav Klose","Lionel Messi"],a:2,d:"mundial",p:60},{q:"¿En qué Mundial ocurrió la 'Mano de Dios'?",o:["España 82","México 86","Italia 90","EEUU 94"],a:1,d:"mundial",p:60},{q:"¿Qué jugador mordió a Chiellini en 2014?",o:["Luis Suárez","Diego Costa","Pepe","Cavani"],a:0,d:"mundial",p:60},{q:"¿Cuántos mundiales ha ganado Francia?",o:["1","2","3","4"],a:1,d:"mundial",p:60},{q:"¿Qué equipo sufrió el 'Maracanazo' en 1950?",o:["Uruguay","Argentina","Alemania","Brasil"],a:3,d:"mundial",p:60},{q:"¿Quién fue la Bota de Oro en Brasil 2014?",o:["Messi","Müller","James Rodríguez","Neymar"],a:2,d:"mundial",p:60},{q:"¿Primer equipo en ganar un Mundial fuera de su continente?",o:["Alemania","Argentina","España","Brasil"],a:3,d:"mundial",p:60},{q:"¿Qué animal era Footix (Francia 98)?",o:["León","Perro","Gallo","Lobo"],a:2,d:"mundial",p:60},{q:"¿Jugador autor del 'Gol del Siglo' en 1986?",o:["Pelé","Cruyff","Maradona","Platini"],a:2,d:"mundial",p:60},{q:"¿De qué país fue anfitrión el Mundial 1978?",o:["Uruguay","Argentina","Chile","México"],a:1,d:"mundial",p:60},{q:"¿Qué selección ganó el Mundial 2002 sin perder ningún partido?",o:["Alemania","Italia","Brasil","España"],a:2,d:"mundial",p:60},{q:"¿En qué año debutó Messi en un Mundial?",o:["2002","2006","2010","2014"],a:1,d:"mundial",p:60},{q:"¿Qué jugador ganó el Balón de Oro en 2014 pese a perder la final?",o:["Müller","Kroos","Messi","Mascherano"],a:2,d:"mundial",p:60},{q:"¿Cuántos goles le marcó España a Costa Rica en 2022?",o:["5","6","7","8"],a:2,d:"mundial",p:60},{q:"¿Qué selección africana eliminó a España en 1998?",o:["Nigeria","Marruecos","Camerún","Sudáfrica"],a:0,d:"mundial",p:60},{q:"¿De qué país es el famoso 'Pibe' Valderrama?",o:["Argentina","Colombia","Perú","Ecuador"],a:1,d:"mundial",p:60},{q:"¿Qué equipo usó el estilo 'Fútbol Total' en 1974?",o:["Brasil","Alemania","Holanda","Hungría"],a:2,d:"mundial",p:60},{q:"¿A quién venció Italia en la final de 1982?",o:["Alemania","Brasil","Argentina","Francia"],a:0,d:"mundial",p:60},{q:"¿Qué jugador marcó 5 goles en un solo partido en 1994?",o:["Batistuta","Salenko","Stoichkov","Romario"],a:1,d:"mundial",p:60},{q:"¿Qué país no participó en el Mundial 2018 habiendo ganado 4 títulos?",o:["Inglaterra","Italia","Uruguay","Alemania"],a:1,d:"mundial",p:60},{q:"¿De qué marca es históricamente el balón del Mundial?",o:["Nike","Puma","Adidas","Puma"],a:2,d:"mundial",p:60},{q:"¿En qué ciudad se jugó la final del Mundial 2010?",o:["Ciudad del Cabo","Johannesburgo","Pretoria","Durban"],a:1,d:"mundial",p:60},{q:"¿Qué selección europea debutó en un mundial en 2016 (Islandia)? Error: fue 2018. ¿Qué selección debutó en 2018?",o:["Islandia","Gales","Finlandia","Albania"],a:0,d:"mundial",p:60},{q:"¿A qué equipo pertenece Keylor Navas?",o:["México","Honduras","Costa Rica","Panamá"],a:2,d:"mundial",p:60},{q:"¿Quién dio la asistencia a Iniesta en la final de 2010?",o:["Xavi","Torres","Cesc Fàbregas","Navas"],a:2,d:"mundial",p:60},{q:"¿Cuál era el apellido del árbitro de la final 2010?",o:["Webb","Kuipers","Howard Webb","Elizondo"],a:2,d:"mundial",p:60},{q:"¿Quién era el seleccionador de Argentina en 1986?",o:["Menotti","Bilardo","Sampaoli","Maradona"],a:1,d:"mundial",p:60},{q:"¿Qué país fue la gran ausencia en el Mundial de EEUU 94?",o:["Inglaterra","Italia","Francia","Alemania"],a:2,d:"mundial",p:60},{q:"¿Qué jugador camerunés bailaba en el banderín tras marcar en 1990?",o:["Eto'o","Milla","Song","Weah"],a:1,d:"mundial",p:60},{q:"¿Quién fue el capitán de Francia en 1998?",o:["Zidane","Deschamps","Blanc","Thuram"],a:1,d:"mundial",p:60},{q:"¿Qué equipo norteamericano llegó a cuartos en 2002?",o:["México","Canadá","EEUU","Jamaica"],a:2,d:"mundial",p:60},{q:"¿En qué año se jugó el primer Mundial televisado a color?",o:["1966","1970","1974","1978"],a:1,d:"mundial",p:60},{q:"¿A qué edad ganó Pelé su primer Mundial?",o:["16","17","18","19"],a:1,d:"mundial",p:60},{q:"¿Cuántas tarjetas amarillas recibió Sergio Ramos en la final de 2010?",o:["0","1","2","Roja directa"],a:1,d:"mundial",p:60},{q:"¿Contra qué equipo hizo su debut el VAR en un Mundial (2018)?",o:["Rusia-Arabia","Francia-Australia","España-Portugal","Brasil-Suiza"],a:1,d:"mundial",p:60},{q:"¿A quién venció Brasil en la final de 1994?",o:["Alemania","Italia","Holanda","Suecia"],a:1,d:"mundial",p:60},{q:"¿Qué jugador falló un penalti y luego marcó de cabeza contra España en 2010?",o:["Cardozo","Valdez","Santa Cruz","Barrios"],a:1,d:"mundial",p:60},{q:"¿Qué selección viste camiseta a cuadros blancos y rojos?",o:["Serbia","Polonia","Croacia","Rep. Checa"],a:2,d:"mundial",p:60},{q:"¿Qué jugador belga fue considerado uno de los mejores en 2018?",o:["De Bruyne","Kompany","Courtois","Lukaku"],a:0,d:"mundial",p:60},{q:"¿Qué equipo eliminó a Inglaterra en 2022?",o:["Marruecos","Francia","Croacia","Argentina"],a:1,d:"mundial",p:60},{q:"¿Quién marcó los dos goles de la final de 2002 para Brasil?",o:["Rivaldo","Ronaldinho","Ronaldo","Kléberson"],a:2,d:"mundial",p:60},{q:"¿En qué equipo jugaba Lev Yashin, portero campeón a los 40 años?",o:["Unión Soviética","Italia","Checoslovaquia","Brasil"],a:1,d:"mundial",p:60},{q:"¿Qué significa el premio Fair Play de la FIFA?",o:["Mejor defensa","Juego limpio","Equipo revelación","Jugador más joven"],a:1,d:"mundial",p:60},{q:"¿Cuál es la sede de la final de 2026?",o:["Los Ángeles","Nueva York / Nueva Jersey","Miami","Dallas"],a:1,d:"mundial",p:60},
 
-            // MEDIOS (30 pts)
-            { q: "¿Quién es el máximo goleador histórico de los Mundiales?", opts: ["Pelé", "Ronaldo Nazário", "Miroslav Klose", "Lionel Messi"], ans: 2, diff: "medium", pts: 30 },
-            { q: "¿Qué país ganó el primer Mundial de la historia en 1930?", opts: ["Brasil", "Uruguay", "Argentina", "Italia"], ans: 1, diff: "medium", pts: 30 },
-            { q: "¿En qué Mundial ocurrió la famosa 'Mano de Dios' de Maradona?", opts: ["España 1982", "México 1986", "Italia 1990", "EEUU 1994"], ans: 1, diff: "medium", pts: 30 },
-            { q: "¿Qué jugador mordió a Chiellini en el Mundial 2014?", opts: ["Luis Suárez", "Diego Costa", "Pepe", "Cavani"], ans: 0, diff: "medium", pts: 30 },
-            { q: "¿Cuántos mundiales ha ganado la selección de Francia?", opts: ["1", "2", "3", "4"], ans: 1, diff: "medium", pts: 30 },
-            { q: "¿Qué equipo sufrió el histórico 'Maracanazo' en 1950?", opts: ["Uruguay", "Argentina", "Alemania", "Brasil"], ans: 3, diff: "medium", pts: 30 },
+            // EXPERTO (80pts) - 44 Preguntas
+            {q:"¿Quién ganó el Balón de Oro en Rusia 2018?",o:["Mbappé","Griezmann","Modric","Hazard"],a:2,d:"experto",p:80},{q:"¿Primer equipo africano en llegar a Semifinales?",o:["Ghana","Senegal","Camerún","Marruecos"],a:3,d:"experto",p:80},{q:"¿Año del único Mundial ganado por Inglaterra?",o:["1966","1970","1974","1958"],a:0,d:"experto",p:80},{q:"¿Portero titular de España en EEUU 1994?",o:["Cañizares","Casillas","Zubizarreta","Buyo"],a:2,d:"experto",p:80},{q:"¿Equipos eliminados por Corea del Sur con polémica en 2002?",o:["España e Italia","Portugal y Francia","Alemania y Brasil","Inglaterra y Holanda"],a:0,d:"experto",p:80},{q:"¿Quién falló el penalti decisivo para Italia en 1994?",o:["Maldini","Baggio","Del Piero","Baresi"],a:1,d:"experto",p:80},{q:"¿Jugador con más partidos en Mundiales (26)?",o:["Matthäus","Maldini","Messi","Cristiano"],a:2,d:"experto",p:80},{q:"¿Qué entrenador ganó el Mundial como jugador y luego dirigiendo a Brasil?",o:["Zagallo","Deschamps","Beckenbauer","Scolari"],a:0,d:"experto",p:80},{q:"¿Quién marcó el gol más rápido a los 11 segundos?",o:["Dempsey","Hakan Şükür","Benteke","Robson"],a:1,d:"experto",p:80},{q:"¿Primer Mundial con 'Gol de Oro'?",o:["EEUU 1994","Francia 1998","Corea 2002","Alemania 2006"],a:1,d:"experto",p:80},{q:"¿A quién paró Iker Casillas un penalti clave contra Paraguay en 2010?",o:["Cardozo","Valdez","Santa Cruz","Barrios"],a:0,d:"experto",p:80},{q:"¿En qué año no hubo Mundial por la Segunda Guerra Mundial?",o:["1942 y 1946","1938 y 1942","1946 y 1950","1940 y 1944"],a:0,d:"experto",p:80},{q:"¿Qué trofeo se robó en Inglaterra antes del Mundial de 1966 y fue hallado por un perro?",o:["Copa de Oro","Trofeo Jules Rimet","Copa FIFA","Trofeo Stanley Rous"],a:1,d:"experto",p:80},{q:"¿Quién era el capitán de la selección brasileña en 1970?",o:["Pelé","Jairzinho","Carlos Alberto","Tostão"],a:2,d:"experto",p:80},{q:"¿Qué país europeo debutó en 2006 y llegó a octavos liderado por Shevchenko?",o:["Croacia","Ucrania","Rep. Checa","Eslovaquia"],a:1,d:"experto",p:80},{q:"¿Qué selección nunca ha superado los octavos de final desde 1986?",o:["México","EEUU","Colombia","Suiza"],a:0,d:"experto",p:80},{q:"¿En qué año se amplió el Mundial a 32 equipos?",o:["1990","1994","1998","2002"],a:2,d:"experto",p:80},{q:"¿Qué jugador francés falló su penalti en la final de 2006?",o:["Trezeguet","Abidal","Wiltord","Makelele"],a:2,d:"experto",p:80},{q:"¿Quién es el único portero en ganar el Balón de Oro de un Mundial (2002)?",o:["Buffon","Kahn","Casillas","Barthez"],a:1,d:"experto",p:80},{q:"¿Qué equipo escandinavo llegó a semifinales en 1994?",o:["Suecia","Dinamarca","Noruega","Islandia"],a:0,d:"experto",p:80},{q:"¿Cuál fue la final con más goles en la historia (7 goles)?",o:["Brasil-Suecia 1958","Uruguay-Argentina 1930","Inglaterra-Alemania 1966","Francia-Croacia 2018"],a:0,d:"experto",p:80},{q:"¿Qué selección venció a Argentina 1-0 en su debut de 1990?",o:["Camerún","Rumanía","Colombia","Nigeria"],a:0,d:"experto",p:80},{q:"¿Qué jugador español se rompió la nariz en 1994 por un codazo de Tassotti?",o:["Fernando Hierro","Pep Guardiola","Luis Enrique","Julio Salinas"],a:2,d:"experto",p:80},{q:"¿Qué equipo africano venció a Francia en el partido inaugural de 2002?",o:["Senegal","Marruecos","Argelia","Camerún"],a:0,d:"experto",p:80},{q:"¿Quién anotó el famoso 'Gol de Oro' de Francia ante Paraguay en 1998?",o:["Zidane","Blanc","Henry","Thuram"],a:1,d:"experto",p:80},{q:"¿Qué selección fue la sorpresa al ganar su grupo por delante de Inglaterra, Italia y Uruguay en 2014?",o:["Costa Rica","Chile","Grecia","EEUU"],a:0,d:"experto",p:80},{q:"¿Qué jugador inglés marcó un hat-trick en la final de 1966?",o:["Bobby Charlton","Geoff Hurst","Gary Lineker","Bobby Moore"],a:1,d:"experto",p:80},{q:"¿A qué equipo le marcó James Rodríguez el premio Puskas en 2014?",o:["Uruguay","Japón","Brasil","Costa de Marfil"],a:0,d:"experto",p:80},{q:"¿Qué portero holandés entró solo para los penaltis en 2014 y paró dos?",o:["Cillessen","Stekelenburg","Krul","Van der Sar"],a:2,d:"experto",p:80},{q:"¿Qué país asiático albergó partidos del grupo de la muerte en 2002?",o:["Japón","Corea del Sur","China","Ninguno"],a:0,d:"experto",p:80},{q:"¿Quién era el entrenador de Alemania que ganó en 2014?",o:["Klinsmann","Löw","Flick","Bierhoff"],a:1,d:"experto",p:80},{q:"¿A qué país pertenecía el árbitro que no vio la Mano de Dios?",o:["Túnez","Inglaterra","Túnez (Ali Bin Nasser)","Italia"],a:2,d:"experto",p:80},{q:"¿Qué selección goleó 6-0 a Serbia y Montenegro en 2006?",o:["Argentina","Alemania","Holanda","Brasil"],a:0,d:"experto",p:80},{q:"¿Quién marcó el último penalti de Argentina en 2022?",o:["Messi","Montiel","Paredes","Montiel"],a:1,d:"experto",p:80},{q:"¿Qué ex-jugador de la Real Sociedad marcó para Francia en la final de 2014? (Error: Final 2018)",o:["Griezmann","Pogba","Mbappé","Kanté"],a:0,d:"experto",p:80},{q:"¿Qué número llevaba Cruyff con la 'Naranja Mecánica'?",o:["10","14","9","8"],a:1,d:"experto",p:80},{q:"¿En qué año se jugaron por primera vez los octavos de final modernos?",o:["1982","1986","1990","1994"],a:1,d:"experto",p:80},{q:"¿Qué jugador alemán marcó en 4 mundiales consecutivos?",o:["Klose","Müller","Podolski","Beckenbauer"],a:0,d:"experto",p:80},{q:"¿Contra qué equipo empató España 3-3 en Rusia 2018?",o:["Rusia","Irán","Portugal","Marruecos"],a:2,d:"experto",p:80},{q:"¿Qué país no clasificó a 2018 pero sí ganó en 2006?",o:["Italia","Holanda","Francia","Brasil"],a:0,d:"experto",p:80},{q:"¿Qué jugador español asistió el gol de Puyol contra Alemania en 2010?",o:["Xavi","Iniesta","Ramos","Nadie (Córner de Xavi)"],a:3,d:"experto",p:80},{q:"¿Quién recibió el Balón de Oro en Sudáfrica 2010?",o:["Iniesta","Sneijder","Forlán","Villa"],a:2,d:"experto",p:80},{q:"¿Qué selección fue eliminada tras perder por 'Gol de Oro' en el 2002 ante Senegal?",o:["Suecia","Francia","Turquía","Japón"],a:0,d:"experto",p:80},{q:"¿Cuántos estadios se usarán en el Mundial 2026?",o:["12","16","14","18"],a:1,d:"experto",p:80},
 
-            // DIFÍCILES (50 pts)
-            { q: "¿Quién ganó el Balón de Oro (Mejor Jugador) del Mundial 2018?", opts: ["Kylian Mbappé", "Antoine Griezmann", "Luka Modric", "Eden Hazard"], ans: 2, diff: "hard", pts: 50 },
-            { q: "¿Qué país africano fue el primero en llegar a unas Semifinales?", opts: ["Ghana", "Senegal", "Camerún", "Marruecos"], ans: 3, diff: "hard", pts: 50 }, 
-            { q: "¿En qué año ganó Inglaterra su único Mundial?", opts: ["1966", "1970", "1974", "1958"], ans: 0, diff: "hard", pts: 50 },
-            { q: "¿Quién fue el portero titular de España en el Mundial de EEUU 1994?", opts: ["Cañizares", "Casillas", "Zubizarreta", "Buyo"], ans: 2, diff: "hard", pts: 50 },
-            { q: "¿Qué selección fue eliminada por Corea del Sur con polémica en 2002?", opts: ["España e Italia", "Portugal", "Alemania", "Brasil"], ans: 0, diff: "hard", pts: 50 },
-            { q: "¿Quién falló el penalti decisivo para Italia en la final de 1994?", opts: ["Maldini", "R. Baggio", "Del Piero", "Baresi"], ans: 1, diff: "hard", pts: 50 },
-
-            // LEYENDA (100 pts)
-            { q: "Antes de Mbappé (2022), ¿quién era el único en marcar un hat-trick en una Final?", opts: ["Pelé (1958)", "Gerd Müller (1974)", "Geoff Hurst (1966)", "Maradona (1986)"], ans: 2, diff: "legend", pts: 100 },
-            { q: "¿Cuántos goles marcó Just Fontaine en el Mundial de 1958 (récord en un solo torneo)?", opts: ["11", "13", "14", "15"], ans: 1, diff: "legend", pts: 100 },
-            { q: "¿Qué jugador fue el goleador más veterano en la historia de los Mundiales (42 años)?", opts: ["Roger Milla", "Lothar Matthäus", "Dino Zoff", "Faryd Mondragón"], ans: 0, diff: "legend", pts: 100 }, 
-            { q: "¿En qué estadio se jugó la Final del Mundial de 1970?", opts: ["Maracaná", "Estadio Azteca", "Wembley", "Olympiastadion"], ans: 1, diff: "legend", pts: 100 },
-            { q: "¿Qué dos países no europeos han llegado a una final de Mundial?", opts: ["Brasil y Argentina", "Brasil, Argentina y Uruguay", "Solo Brasil", "Argentina y Uruguay"], ans: 1, diff: "legend", pts: 100 }
+            // LEYENDA (120pts) - 44 Preguntas
+            {q:"Antes de Mbappé, ¿quién era el único en marcar hat-trick en Final?",o:["Pelé","Müller","Hurst","Maradona"],a:2,d:"leyenda",p:120},{q:"¿Goles de Just Fontaine en 1958 (récord absoluto)?",o:["11","13","14","15"],a:1,d:"leyenda",p:120},{q:"¿Goleador más veterano (42 años y 39 días)?",o:["Roger Milla","Matthäus","Zoff","Mondragón"],a:0,d:"leyenda",p:120},{q:"¿Estadio de la Final de 1970?",o:["Maracaná","Azteca","Wembley","Olympiastadion"],a:1,d:"leyenda",p:120},{q:"¿Países no europeos ni Brasil ni Argentina en una final?",o:["Uruguay y Chile","Solo Uruguay","Uruguay y Colombia","Perú y Uruguay"],a:1,d:"leyenda",p:120},{q:"¿Qué país asiático se retiró en 1950 por no poder jugar descalzos?",o:["Indonesia","China","India","Japón"],a:2,d:"leyenda",p:120},{q:"¿Único jugador en ganar TRES Mundiales?",o:["Cafú","Ronaldo","Pelé","Garrincha"],a:2,d:"leyenda",p:120},{q:"¿Minuto y segundo exacto del gol de Iniesta en 2010?",o:["115:23","116:00","118:14","119:02"],a:1,d:"leyenda",p:120},{q:"¿Tarjeta roja MÁS RÁPIDA (56 segundos)?",o:["Roy Keane","Zidane","José Batista","Pepe"],a:2,d:"leyenda",p:120},{q:"¿Primer Mundial con tarjetas físicas (amarilla/roja)?",o:["Inglaterra 1966","México 1970","Alemania 1974","Chile 1962"],a:1,d:"leyenda",p:120},{q:"¿Único país eliminado de un Mundial sin perder ni recibir un solo gol (2006)?",o:["Trinidad y Tobago","Suiza","Australia","Angola"],a:2,d:"leyenda",p:120},{q:"¿Qué jugador brasileño fue apodado 'La Alegría del Pueblo'?",o:["Pelé","Garrincha","Sócrates","Zico"],a:1,d:"leyenda",p:120},{q:"¿Qué selección vistió prestadas las camisetas de un equipo local francés en 1978?",o:["Francia","Hungría","Polonia","Escocia"],a:1,d:"leyenda",p:120},{q:"¿A qué portero le hizo Pelé el famoso regate sin tocar el balón en 1970?",o:["Gordon Banks","Ladislao Mazurkiewicz","Sepp Maier","Dino Zoff"],a:1,d:"leyenda",p:120},{q:"¿En qué año el trofeo pasó a llamarse Copa Mundial de la FIFA y cambió su diseño?",o:["1970","1974","1978","1982"],a:1,d:"leyenda",p:120},{q:"¿Quién era el capitán de la Francia campeona en 1998?",o:["Zidane","Blanc","Deschamps","Lloris"],a:2,d:"leyenda",p:120},{q:"¿A qué velocidad (km/h) iba el tiro libre de Roberto Carlos a Francia en un torneo previo (pero famoso)? (Falso mito de mundial, fue en 1997). Pregunta: ¿Cuál es el gol más lejano de un mundial?",o:["Hagi 1994","Blanco 1998","Nelinho 1978","Cubillas 1978"],a:2,d:"leyenda",p:120},{q:"¿Qué equipo se negó a viajar a Suecia 1958 por el alto coste?",o:["Egipto","Cuba","Turquía","Indonesia"],a:1,d:"leyenda",p:120},{q:"¿Quién fue el primer jugador en ser expulsado en una final?",o:["De Jong","Zidane","Pedro Monzón","Monzón y Dezotti en 1990"],a:3,d:"leyenda",p:120},{q:"¿Qué presidente de la FIFA creó el Mundial en 1930?",o:["Stanley Rous","Jules Rimet","João Havelange","Sepp Blatter"],a:1,d:"leyenda",p:120},{q:"¿Qué jugador africano jugó un Mundial para Francia y otro para otra selección (Argelia no)?",o:["Nadie","Luis Monti","Puskas","Puskas jugó por España y Hungría"],a:1,d:"leyenda",p:120},{q:"¿Qué jugador ha marcado en todos los minutos de un partido en su carrera, incluyendo mundiales?",o:["Ronaldo","Ibrahimovic","Cristiano Ronaldo","Messi"],a:2,d:"leyenda",p:120},{q:"¿Quién tiene el récord de más goles en un solo partido de Mundial (5)?",o:["Pele","Oleg Salenko","Fontaine","Eusebio"],a:1,d:"leyenda",p:120},{q:"¿Qué árbitro amonestó a un jugador croata (Simunic) con 3 amarillas antes de expulsarlo en 2006?",o:["Horacio Elizondo","Graham Poll","Pierluigi Collina","Nicola Rizzoli"],a:1,d:"leyenda",p:120},{q:"¿En qué Mundial el balón oficial se llamó 'Azteca'?",o:["1970","1986","1994","2002"],a:1,d:"leyenda",p:120},{q:"¿Qué jugador de EEUU fue asesinado tras marcarse un gol en propia en 1994? (Error: Fue Colombiano)",o:["Escobar","Rincón","Asprilla","Andrés Escobar"],a:3,d:"leyenda",p:120},{q:"¿Qué selección acudió a Brasil 1950 pero se retiró porque sus jugadores fallecieron en accidente aéreo?",o:["Yugoslavia","Torino (Italia base)","Escocia","Suecia"],a:1,d:"leyenda",p:120},{q:"¿Quién anotó el gol 1000 en la historia de los Mundiales?",o:["Gerd Müller","Rob Rensenbrink","Pele","Maradona"],a:1,d:"leyenda",p:120},{q:"¿Qué entrenador italiano ganó dos mundiales consecutivos en 1934 y 1938?",o:["Enzo Bearzot","Vittorio Pozzo","Marcello Lippi","Ferruccio Valcareggi"],a:1,d:"leyenda",p:120},{q:"¿Quién fue el único jugador en fallar su penalti en la tanda de la final de 2006?",o:["Trezeguet","Pirlo","Grosso","Abidal"],a:0,d:"leyenda",p:120},{q:"¿Qué jugador marcó para dos selecciones distintas en los mundiales (Yugoslavia/Croacia)?",o:["Suker","Prosinecki","Boban","Prosinecki"],a:3,d:"leyenda",p:120},{q:"¿Cuántos espectadores oficiales hubo en el Maracanazo de 1950 (Récord)?",o:["173.850","199.854","150.000","210.000"],a:1,d:"leyenda",p:120},{q:"¿En qué año participó Zaire en su único Mundial?",o:["1974","1982","1990","1978"],a:0,d:"leyenda",p:120},{q:"¿Qué jugador de Emiratos Árabes marcó un golazo a Alemania en 1990?",o:["Khalid Ismaïl","Ali Thani","Majed Abdullah","Saeed Al-Owairan"],a:0,d:"leyenda",p:120},{q:"¿A quién sustituyó Götze antes de marcar el gol de la final en 2014?",o:["Müller","Kroos","Klose","Özil"],a:2,d:"leyenda",p:120},{q:"¿Quién era el capitán de Holanda en 1974?",o:["Cruyff","Neeskens","Krol","Rep"],a:0,d:"leyenda",p:120},{q:"¿Qué selección eliminó a la URSS de Lev Yashin en 1962?",o:["Chile","Brasil","Yugoslavia","Inglaterra"],a:0,d:"leyenda",p:120},{q:"¿En qué estadio se coronó España en 2010?",o:["Soccer City","Loftus Versfeld","Green Point","Moses Mabhida"],a:0,d:"leyenda",p:120},{q:"¿Qué jugador italiano tenía el apodo de 'Il Bambino d'Oro'?",o:["Rossi","Totti","Baggio","Rivera"],a:0,d:"leyenda",p:120},{q:"¿Cuál es la selección con más subcampeonatos?",o:["Argentina","Holanda","Alemania","Italia"],a:2,d:"leyenda",p:120},{q:"¿Quién paró el famoso penalti a Gyan en 2010 tras la mano de Suárez?",o:["Muslera","Castillo","Silva","Campanya"],a:0,d:"leyenda",p:120},{q:"¿De qué marca era el Jabulani?",o:["Nike","Puma","Adidas","Umbro"],a:2,d:"leyenda",p:120},{q:"¿Cuántos goles hizo Ronaldo Nazario en total en Mundiales?",o:["13","14","15","16"],a:3,d:"leyenda",p:120},{q:"¿Qué país de la URSS clasificó por primera y única vez en 2006?",o:["Rusia","Ucrania","Letonia","Georgia"],a:1,d:"leyenda",p:120}
         ];
 
         let currentUser = null;
         let userProfile = { nombre: 'Jugador', avatarColor: '#004B87' };
         
         let todayKey = ""; 
-        let todayGrid = []; // Array de 9 preguntas para hoy
-        let localGameState = { answeredCount: 0, score: 0, completedIdx: [] }; // Anti-trampas
+        let todayGrid = []; 
+        let localGameState = { answeredCount: 0, score: 0, completedIdx: [] }; 
         let userDbData = { totalScore: 0, playedDays: [] };
         let activeQuestionIndex = null;
 
@@ -407,17 +386,16 @@
                 currentUser = user;
                 
                 initTimeAndDate();
-                await fetchUserData(); // Leer Firestore (protegido contra fallos)
-                generateSeededDailyGrid(); // Generación Matemática
-                loadLocalGameState(); // Memoria caché anti-trampas
+                await fetchUserData(); 
+                generateSeededDailyGrid(); 
+                loadLocalGameState(); 
                 
-                setupLeaderboard(); // Inicializa el scoreboard
+                setupLeaderboard(); 
                 
-                checkDailyStatusAndRender(); // Dibuja la pantalla
+                checkDailyStatusAndRender(); 
             } catch (error) {
-                console.error("Error no fatal:", error);
+                console.error("Error no fatal en inicialización:", error);
             } finally {
-                // El loader desaparece sí o sí pase lo que pase
                 const loader = document.getElementById('page-loader');
                 if (loader) { loader.style.opacity = '0'; setTimeout(() => loader.style.display = 'none', 600); }
             }
@@ -476,7 +454,7 @@
 
         function generateSeededDailyGrid() {
             const rng = getSeededRandom(todayKey);
-            const getQuestionsByDiff = (diffStr) => QUESTIONS_DB.filter(q => q.diff === diffStr);
+            const getQuestionsByDiff = (diffStr) => DB.filter(q => q.d === diffStr);
             
             const pickN = (arr, n) => {
                 let copy = [...arr]; let res = [];
@@ -489,11 +467,11 @@
             };
 
             let combined = [
-                ...pickN(getQuestionsByDiff('v-easy'), 2),
-                ...pickN(getQuestionsByDiff('easy'), 2),
-                ...pickN(getQuestionsByDiff('medium'), 2),
-                ...pickN(getQuestionsByDiff('hard'), 2),
-                ...pickN(getQuestionsByDiff('legend'), 1)
+                ...pickN(getQuestionsByDiff('aficionado'), 2),
+                ...pickN(getQuestionsByDiff('profesional'), 2),
+                ...pickN(getQuestionsByDiff('mundial'), 2),
+                ...pickN(getQuestionsByDiff('experto'), 2),
+                ...pickN(getQuestionsByDiff('leyenda'), 1)
             ];
 
             for(let i = combined.length - 1; i > 0; i--){
@@ -529,7 +507,8 @@
             } else {
                 renderGrid(false);
                 updateDailyScoreDisplay();
-                checkIfAllAnswered();
+                // Si recarga y ya tenía 9, se autoenvía de nuevo para asegurar
+                if (localGameState.answeredCount === 9) submitDailyScore();
             }
         }
 
@@ -537,7 +516,7 @@
             const container = document.getElementById('trivia-grid');
             container.innerHTML = '';
 
-            const diffLabels = { 'v-easy': 'Muy Fácil', 'easy': 'Fácil', 'medium': 'Medio', 'hard': 'Difícil', 'legend': 'Leyenda' };
+            const diffLabels = { 'aficionado': 'Aficionado', 'profesional': 'Profesional', 'mundial': 'Clase Mundial', 'experto': 'Experto', 'leyenda': 'Leyenda' };
 
             todayGrid.forEach((card, index) => {
                 let div = document.createElement('div');
@@ -554,8 +533,8 @@
                 }
 
                 div.innerHTML = `
-                    <div class="card-diff diff-${card.diff}">${diffLabels[card.diff]}</div>
-                    <div class="card-points">${card.pts}</div>
+                    <div class="card-diff diff-${card.d}">${diffLabels[card.d]}</div>
+                    <div class="card-points">${card.p}</div>
                     <div class="card-pts-label">PTS</div>
                     <i data-lucide="check" class="result-icon icon-check"></i>
                     <i data-lucide="x" class="result-icon icon-cross"></i>
@@ -575,14 +554,14 @@
         function openQuestion(index) {
             activeQuestionIndex = index;
             const qData = todayGrid[index];
-            const diffLabels = { 'v-easy': 'Muy Fácil', 'easy': 'Fácil', 'medium': 'Medio', 'hard': 'Difícil', 'legend': 'Leyenda' };
-            const diffColors = { 'v-easy': 'var(--c-v-easy)', 'easy': 'var(--c-easy)', 'medium': 'var(--c-medium)', 'hard': 'var(--c-hard)', 'legend': 'var(--c-legend)' };
+            const diffLabels = { 'aficionado': 'Aficionado', 'profesional': 'Profesional', 'mundial': 'Clase Mundial', 'experto': 'Experto', 'leyenda': 'Leyenda' };
+            const diffColors = { 'aficionado': 'var(--c-aficionado)', 'profesional': 'var(--c-profesional)', 'mundial': 'var(--c-mundial)', 'experto': 'var(--c-experto)', 'leyenda': 'var(--c-leyenda)' };
 
             const badge = document.getElementById('modal-badge');
-            badge.innerText = `${diffLabels[qData.diff]} · ${qData.pts} PTS`;
-            badge.style.color = diffColors[qData.diff];
-            badge.style.border = `1px solid ${diffColors[qData.diff]}`;
-            if(qData.diff === 'legend') { badge.style.background = diffColors[qData.diff]; badge.style.color = 'var(--wc-navy)'; }
+            badge.innerText = `${diffLabels[qData.d]} · ${qData.p} PTS`;
+            badge.style.color = diffColors[qData.d];
+            badge.style.border = `1px solid ${diffColors[qData.d]}`;
+            if(qData.d === 'leyenda') { badge.style.background = diffColors[qData.d]; badge.style.color = 'var(--wc-navy)'; }
             else { badge.style.background = 'transparent'; }
 
             document.getElementById('modal-q-text').innerText = qData.q;
@@ -591,7 +570,7 @@
             optsGrid.innerHTML = '';
             optsGrid.classList.remove('locked');
 
-            qData.opts.forEach((optText, optIdx) => {
+            qData.o.forEach((optText, optIdx) => {
                 let btn = document.createElement('button');
                 btn.className = 'btn-option';
                 btn.innerHTML = `<span>${optText}</span> <i data-lucide="circle" style="width:18px; color: var(--text-muted);"></i>`;
@@ -605,24 +584,24 @@
 
         function handleAnswer(selectedIdx, btnElement) {
             const qData = todayGrid[activeQuestionIndex];
-            const isCorrect = selectedIdx === qData.ans;
+            const isCorrect = selectedIdx === qData.a;
             const optsGrid = document.getElementById('modal-options');
             
             optsGrid.classList.add('locked'); 
             
             const allBtns = optsGrid.querySelectorAll('.btn-option');
-            allBtns[qData.ans].classList.add('correct');
-            allBtns[qData.ans].innerHTML = `<span>${qData.opts[qData.ans]}</span> <i data-lucide="check-circle" style="width:18px;"></i>`;
+            allBtns[qData.a].classList.add('correct');
+            allBtns[qData.a].innerHTML = `<span>${qData.o[qData.a]}</span> <i data-lucide="check-circle" style="width:18px;"></i>`;
             
             if (!isCorrect) {
                 btnElement.classList.add('wrong');
-                btnElement.innerHTML = `<span>${qData.opts[selectedIdx]}</span> <i data-lucide="x-circle" style="width:18px;"></i>`;
+                btnElement.innerHTML = `<span>${qData.o[selectedIdx]}</span> <i data-lucide="x-circle" style="width:18px;"></i>`;
                 document.getElementById('modal-content-box').style.animation = 'shake 0.4s';
             }
 
             lucide.createIcons();
 
-            if (isCorrect) localGameState.score += qData.pts;
+            if (isCorrect) localGameState.score += qData.p;
             localGameState.answeredCount++;
             localGameState.completedIdx.push({ idx: activeQuestionIndex, correct: isCorrect });
             
@@ -638,21 +617,18 @@
                 cardEl.classList.add(isCorrect ? 'correct' : 'incorrect');
                 cardEl.onclick = null;
 
-                checkIfAllAnswered();
+                if (localGameState.answeredCount === 9) {
+                    submitDailyScore();
+                }
             }, 1800);
         }
 
-        function checkIfAllAnswered() {
-            if (localGameState.answeredCount === 9) {
-                document.getElementById('btn-submit').classList.add('visible');
-                setTimeout(() => window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }), 500);
-            }
-        }
-
-        window.submitDailyScore = async function() {
-            const btn = document.getElementById('btn-submit');
-            btn.disabled = true;
-            btn.innerHTML = '<div class="loader-ring" style="width:20px; height:20px; border-width:2px; margin-right:10px;"></div> REGISTRANDO...';
+        async function submitDailyScore() {
+            // UI visual de envío automático
+            document.getElementById('score-box-ui').classList.add('submitting');
+            const submitBar = document.getElementById('auto-submit-bar');
+            submitBar.classList.add('active');
+            setTimeout(() => window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }), 200);
 
             userDbData.totalScore += localGameState.score;
             if(!userDbData.playedDays.includes(todayKey)){
@@ -673,18 +649,20 @@
                     lastUpdate: new Date().getTime()
                 }, { merge: true });
 
-                confetti({ particleCount: 200, spread: 90, origin: { y: 0.5 }, colors: ['#004B87', '#D31145', '#D4AF37'] });
+                confetti({ particleCount: 250, spread: 100, origin: { y: 0.6 }, colors: ['#004B87', '#D31145', '#D4AF37', '#00A651'] });
                 
                 setTimeout(() => {
+                    document.getElementById('score-box-ui').classList.remove('submitting');
+                    submitBar.classList.remove('active');
                     document.getElementById('played-pts-display').innerText = localGameState.score;
                     document.getElementById('played-state').classList.add('active');
-                    btn.style.display = 'none';
-                }, 1000);
+                }, 2000);
 
             } catch(e) {
-                alert("Error de guardado online, tu partida está guardada localmente. Inténtalo luego.");
-                btn.disabled = false;
-                btn.innerHTML = 'ENVIAR PUNTUACIÓN AL MARCADOR GLOBAL <i data-lucide="send"></i>';
+                console.error("Error de subida", e);
+                submitBar.innerHTML = `<i data-lucide="alert-triangle"></i> ERROR DE CONEXIÓN. SE REINTENTARÁ LUEGO.`;
+                submitBar.style.background = "var(--wc-red)";
+                submitBar.style.color = "white";
                 lucide.createIcons();
             }
         }
@@ -725,12 +703,11 @@
                         rank++;
                     });
                 }, (error) => {
-                    // Si el índice no está listo, mostrar un mensaje elegante en lugar de error rojo
                     document.getElementById('leaderboard-container').innerHTML = `
                         <div style="text-align:center; color:var(--text-muted); margin-top:2rem;">
                             <div class="loader-ring" style="width: 30px; height: 30px; margin: 0 auto 15px; border-width: 2px;"></div>
                             <p>Sincronizando marcador con el servidor principal...</p>
-                            <p style="font-size: 0.75rem; opacity: 0.6; margin-top: 5px;">(Firebase está configurando la base de datos)</p>
+                            <p style="font-size: 0.75rem; opacity: 0.6; margin-top: 5px;">(El Índice de Firebase se está construyendo)</p>
                         </div>`;
                 });
             } catch(e) {
