@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Survival Trivia | World Cup 26</title>
+    
+    <link rel="icon" type="image/png" href="interrahublogo.PNG">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;800&family=Teko:wght@500;700&display=swap" rel="stylesheet">
+    
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <style>
+        /* =========================================
+           ESTÉTICA E-SPORTS / MODO SUPERVIVENCIA
+           ========================================= */
+        :root {
+            --wc-navy: #060913;
+            --wc-red: #E3003F;
+            --wc-red-dark: #8a0026;
+            --wc-gold: #FFC20E;
+            --wc-green: #00A651;
+            --surface: rgba(15, 20, 35, 0.75);
+            --primary: #ffffff;
+            --text-muted: #8b9bb4;
+            --border-glow: rgba(227, 0, 63, 0.15);
+            --transition: 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Sora', sans-serif; }
+
+        body {
+            background-color: var(--wc-navy);
+            background-image: 
+                radial-gradient(circle at 50% -20%, rgba(227, 0, 63, 0.15), transparent 60%),
+                radial-gradient(circle at 50% 120%, rgba(255, 194, 14, 0.05), transparent 50%);
+            color: var(--primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            background-attachment: fixed;
+        }
+
+        /* Nav */
+        nav {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 1.2rem 5%; background: rgba(6, 9, 19, 0.9); backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-glow); position: sticky; top: 0; z-index: 100;
+        }
+        .btn-nav { background: transparent; color: var(--text-muted); border: none; cursor: pointer; display: flex; align-items: center; gap: 8px; font-weight: 600; transition: var(--transition); font-size: 0.9rem;}
+        .btn-nav:hover { color: var(--primary); transform: translateX(-4px); }
+        .logo-wc { display: flex; align-items: center; gap: 8px; font-family: 'Teko', sans-serif; font-size: 2.2rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--primary); line-height: 1;}
+        .logo-wc span { color: var(--wc-red); }
+
+        /* Loader */
+        #page-loader {
+            position: fixed; inset: 0; background: var(--wc-navy); z-index: 9999;
+            display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.6s ease;
+        }
+        .loader-ring { width: 60px; height: 60px; border: 3px solid rgba(255,255,255,0.1); border-top-color: var(--wc-red); border-radius: 50%; animation: spin 1s cubic-bezier(0.5, 0, 0.5, 1) infinite; }
+
+        /* Layout Main */
+        .game-container {
+            max-width: 1400px; margin: 3rem auto; padding: 0 5%;
+            display: grid; grid-template-columns: 1.3fr 1fr; gap: 3rem;
+        }
+        @media (max-width: 1024px) { .game-container { grid-template-columns: 1fr; margin: 2rem auto; gap: 2rem;} }
+
+        /* =========================================
+           PANEL DE JUEGO (ARENA)
+           ========================================= */
+        .play-panel {
+            background: var(--surface); border: 1px solid var(--border-glow);
+            border-radius: 24px; padding: 3rem; backdrop-filter: blur(24px);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.8), inset 0 0 40px rgba(227, 0, 63, 0.05);
+            position: relative; display: flex; flex-direction: column; overflow: hidden;
+            min-height: 550px; justify-content: center;
+        }
+
+        /* ESTADO 1: PANTALLA DE INICIO */
+        #state-start { display: flex; flex-direction: column; align-items: center; text-align: center; }
+        .hero-icon { width: 80px; height: 80px; color: var(--wc-red); margin-bottom: 1.5rem; filter: drop-shadow(0 0 15px rgba(227,0,63,0.5)); animation: float 3s ease-in-out infinite;}
+        .title-start { font-family: 'Teko', sans-serif; font-size: 4.5rem; line-height: 1; color: var(--primary); text-transform: uppercase; margin-bottom: 10px; text-shadow: 0 5px 15px rgba(0,0,0,0.5);}
+        .desc-start { color: var(--text-muted); font-size: 1.1rem; line-height: 1.5; max-width: 80%; margin-bottom: 2.5rem; }
+        .btn-massive {
+            background: linear-gradient(135deg, var(--wc-red), var(--wc-red-dark)); color: white;
+            border: none; padding: 1.2rem 3rem; border-radius: 16px; font-weight: 800; font-size: 1.5rem;
+            cursor: pointer; transition: var(--transition); text-transform: uppercase; letter-spacing: 2px;
+            box-shadow: 0 15px 30px rgba(227, 0, 63, 0.4); display: flex; align-items: center; gap: 10px; font-family: 'Teko', sans-serif;
+        }
+        .btn-massive:hover { transform: translateY(-5px) scale(1.05); box-shadow: 0 20px 40px rgba(227, 0, 63, 0.6); }
+
+        /* ESTADO 2: JUGANDO */
+        #state-playing { display: none; flex-direction: column; height: 100%; justify-content: space-between;}
+        
+        .hud-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
+        .hud-lives { display: flex; gap: 8px; }
+        .heart { width: 30px; height: 30px; color: var(--wc-red); fill: var(--wc-red); transition: 0.3s; filter: drop-shadow(0 0 5px rgba(227,0,63,0.5));}
+        .heart.lost { color: rgba(255,255,255,0.1); fill: transparent; filter: none; transform: scale(0.8); }
+        
+        .hud-score { background: rgba(0,0,0,0.5); padding: 0.5rem 1.5rem; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); text-align: center;}
+        .hud-score span { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; display: block; font-weight: 800;}
+        .hud-score strong { font-family: 'Teko', sans-serif; font-size: 2.5rem; color: var(--wc-gold); line-height: 0.9; }
+
+        .question-text { font-size: 1.8rem; font-weight: 600; line-height: 1.3; text-align: center; margin-bottom: 2rem; min-height: 100px; display: flex; align-items: center; justify-content: center;}
+
+        .timer-container { width: 100%; height: 8px; background: rgba(255,255,255,0.1); border-radius: 10px; overflow: hidden; margin-bottom: 2.5rem; position: relative;}
+        .timer-bar { height: 100%; width: 100%; background: var(--wc-green); border-radius: 10px; transition: width 0.1s linear, background-color 0.3s; }
+        .timer-bar.warning { background: var(--wc-gold); }
+        .timer-bar.danger { background: var(--wc-red); }
+
+        .answers-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .btn-ans {
+            background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1);
+            color: var(--primary); padding: 1.5rem 1rem; border-radius: 16px; font-size: 1.1rem; font-weight: 600;
+            cursor: pointer; transition: 0.2s; text-align: center; position: relative; overflow: hidden;
+        }
+        .btn-ans:hover:not(.locked) { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.3); transform: translateY(-3px); }
+        .btn-ans:active:not(.locked) { transform: scale(0.97); }
+        
+        .btn-ans.correct { background: var(--wc-green); border-color: var(--wc-green); color: white; box-shadow: 0 0 20px rgba(0,166,81,0.5); transform: scale(1.05); z-index: 10;}
+        .btn-ans.wrong { background: var(--wc-red); border-color: var(--wc-red); color: white; opacity: 0.8;}
+        .answers-grid.locked .btn-ans { pointer-events: none; }
+
+        /* ESTADO 3: GAME OVER */
+        #state-gameover { display: none; flex-direction: column; align-items: center; text-align: center; justify-content: center; height: 100%;}
+        .go-title { font-family: 'Teko', sans-serif; font-size: 4rem; color: var(--wc-red); line-height: 1; margin-bottom: 10px; text-transform: uppercase; text-shadow: 0 0 20px rgba(227,0,63,0.5);}
+        .go-score { font-family: 'Teko', sans-serif; font-size: 6rem; color: var(--wc-gold); line-height: 0.8; margin: 1rem 0 2rem; text-shadow: 0 0 30px rgba(255,194,14,0.4);}
+        .go-msg { color: var(--text-muted); font-size: 1.1rem; margin-bottom: 2rem;}
+
+        /* =========================================
+           PANEL DERECHO (LEADERBOARD)
+           ========================================= */
+        .leaderboard-panel {
+            background: var(--surface); border: 1px solid var(--border-glow);
+            border-radius: 24px; padding: 2.5rem; backdrop-filter: blur(24px);
+            display: flex; flex-direction: column; max-height: 800px;
+        }
+        .leaderboard-panel h2 { font-family: 'Teko', sans-serif; font-size: 2.8rem; text-transform: uppercase; margin-bottom: 0.5rem; color: var(--primary); letter-spacing: 1px; line-height: 1; display: flex; align-items: center; gap: 10px;}
+        .leaderboard-panel p { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 2rem; font-weight: 300; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 1.5rem;}
+
+        .lb-list { flex: 1; overflow-y: auto; padding-right: 5px; display: flex; flex-direction: column; gap: 12px; }
+        .lb-list::-webkit-scrollbar { width: 4px; }
+        .lb-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+
+        .rank-card {
+            display: flex; align-items: center; padding: 1rem 1.2rem; background: rgba(0,0,0,0.4);
+            border-radius: 16px; border: 1px solid transparent; transition: var(--transition);
+        }
+        .rank-card:hover { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.1); }
+        .rank-card.is-me { border-color: var(--wc-red); background: rgba(227, 0, 63, 0.1); box-shadow: 0 0 15px rgba(227, 0, 63, 0.2); }
+
+        .rank-pos { font-family: 'Teko', sans-serif; font-size: 2rem; width: 40px; color: var(--text-muted); line-height: 1; text-align: center; }
+        .rank-card:nth-child(1) .rank-pos { color: var(--wc-gold); text-shadow: 0 0 15px rgba(255,194,14,0.6); font-size: 2.6rem; }
+        .rank-card:nth-child(2) .rank-pos { color: #e2e8f0; font-size: 2.3rem; text-shadow: 0 0 10px rgba(255,255,255,0.3);}
+        .rank-card:nth-child(3) .rank-pos { color: #cd7f32; font-size: 2.1rem;}
+
+        .rank-user { flex: 1; font-weight: 600; font-size: 1.05rem; display: flex; align-items: center; gap: 12px; }
+        .rank-avatar { width: 36px; height: 36px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 0.9rem; color: white; font-weight: 800; border: 2px solid rgba(255,255,255,0.15); }
+        .rank-pts { font-family: 'Teko', sans-serif; font-size: 2.5rem; color: var(--primary); line-height: 1; }
+
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+        @keyframes float { 0%, 100% {transform: translateY(0);} 50% {transform: translateY(-10px);} }
+        @keyframes shake { 0%, 100% {transform: translateX(0);} 25% {transform: translateX(-15px) rotate(-2deg);} 75% {transform: translateX(15px) rotate(2deg);} }
+        @keyframes flashRed { 0% {box-shadow: inset 0 0 0 rgba(227,0,63,0);} 50% {box-shadow: inset 0 0 100px rgba(227,0,63,0.5);} 100% {box-shadow: inset 0 0 0 rgba(227,0,63,0);} }
+
+        @media (max-width: 768px) {
+            .play-panel { padding: 2rem 1.5rem; min-height: 450px;}
+            .title-start { font-size: 3.5rem; }
+            .desc-start { max-width: 100%; font-size: 0.95rem;}
+            .answers-grid { grid-template-columns: 1fr; gap: 10px; }
+            .btn-ans { padding: 1.2rem; font-size: 1rem; }
+            .question-text { font-size: 1.3rem; margin-bottom: 1.5rem; min-height: 80px;}
+            .hud-score strong { font-size: 2rem; }
+            .go-title { font-size: 3rem; }
+            .go-score { font-size: 5rem; }
+            .leaderboard-panel { padding: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="page-loader">
+        <div class="loader-ring"></div>
+        <p style="margin-top: 25px; font-family: 'Teko', sans-serif; font-size: 1.5rem; letter-spacing: 3px; color: var(--text-muted);">CALENTANDO MOTORES...</p>
+    </div>
+
+    <nav>
+        <button class="btn-nav" onclick="goBack()"><i data-lucide="arrow-left"></i> Vestuarios</button>
+        <div class="logo-wc">Survival <span>26</span></div>
+        <div style="width: 90px;"></div>
+    </nav>
+
+    <div class="game-container">
+        
+        <div class="play-panel" id="arena">
+            
+            <div id="state-start">
+                <i data-lucide="flame" class="hero-icon"></i>
+                <div class="title-start">Muerte Súbita</div>
+                <p class="desc-start">10 segundos por pregunta. 3 vidas. Preguntas infinitas. ¿Cuántos aciertos puedes encadenar antes de caer eliminado?</p>
+                <button class="btn-massive" onclick="startGame()">
+                    <i data-lucide="play-circle"></i> EMPEZAR RETO
+                </button>
+            </div>
+
+            <div id="state-playing">
+                <div class="hud-top">
+                    <div class="hud-lives" id="hud-lives">
+                        <i data-lucide="heart" class="heart"></i>
+                        <i data-lucide="heart" class="heart"></i>
+                        <i data-lucide="heart" class="heart"></i>
+                    </div>
+                    <div class="hud-score">
+                        <span>Racha Actual</span>
+                        <strong id="current-score">0</strong>
+                    </div>
+                </div>
+
+                <div class="timer-container">
+                    <div class="timer-bar" id="timer-bar"></div>
+                </div>
+
+                <div class="question-text" id="question-text">¿Cargando pregunta...?</div>
+
+                <div class="answers-grid" id="answers-grid">
+                    </div>
+            </div>
+
+            <div id="state-gameover">
+                <div class="go-title">¡ELIMINADO!</div>
+                <p class="go-msg" id="go-msg">Tu racha ha llegado a su fin.</p>
+                <div class="go-score" id="final-score">0</div>
+                
+                <button class="btn-massive" onclick="resetToStart()" style="background: linear-gradient(135deg, var(--wc-blue), #002b52); box-shadow: 0 10px 20px rgba(0, 75, 135, 0.4); margin-top: 1rem; font-size: 1.2rem; padding: 1rem 2.5rem;">
+                    <i data-lucide="rotate-ccw"></i> VOLVER A INTENTARLO
+                </button>
+            </div>
+
+        </div>
+
+        <div class="leaderboard-panel">
+            <h2><i data-lucide="crosshair" style="color: var(--wc-red); width: 35px; height: 35px;"></i> Récords de Supervivencia</h2>
+            <p>La clasificación muestra la racha máxima de aciertos seguidos conseguida por cada jugador del grupo.</p>
+            
+            <div class="lb-list" id="leaderboard-container">
+                <div style="text-align: center; color: var(--text-muted); margin-top: 3rem;">
+                    <div class="loader-ring" style="width: 30px; height: 30px; margin: 0 auto 15px; border-width: 2px; border-top-color: var(--wc-red);"></div>
+                    <p>Sincronizando récords...</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc, collection, query, where, onSnapshot, orderBy } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+        // ==========================================
+        // CONFIGURACIÓN FIREBASE
+        // ==========================================
+        const firebaseConfig = {
+            apiKey: "AIzaSyDRkUJnDLzknFz3KOnPEm4UFsgf6R4z1Uk",
+            authDomain: "interra26-22ecd.firebaseapp.com",
+            projectId: "interra26-22ecd",
+            storageBucket: "interra26-22ecd.firebasestorage.app",
+            messagingSenderId: "960505222050",
+            appId: "1:960505222050:web:a9943c6fec9532141f98fb"
+        };
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // RASTREO ID
+        const urlParams = new URLSearchParams(window.location.search);
+        let tripId = urlParams.get('id');
+        if (!tripId) {
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key && key.startsWith('lastTipTime_')) { tripId = key.replace('lastTipTime_', ''); break; }
+                if (key && key.startsWith('financeTourDone_')) { tripId = key.replace('financeTourDone_', ''); break; }
+            }
+        }
+        if (!tripId) tripId = "Mundial_SalaPublica"; 
+
+        window.goBack = () => {
+            if (tripId !== "Mundial_SalaPublica") window.location.href = `viaje.html?id=${tripId}`;
+            else window.location.href = 'panel.html';
+        }
+
+        // ==========================================
+        // BASE DE DATOS DE PREGUNTAS (SHUFFLED)
+        // ==========================================
+        const DB = [
+            {q:"¿Qué país tiene más mundiales?", o:["Alemania","Brasil","Italia","Argentina"], a:1},
+            {q:"¿Quién ganó el Mundial 2010?", o:["Holanda","Alemania","España","Brasil"], a:2},
+            {q:"¿En qué año ganó Argentina su tercer Mundial?", o:["2014","2018","2022","1986"], a:2},
+            {q:"¿Qué jugador es conocido como 'El Pelusa'?", o:["Messi","Maradona","Kempes","Di María"], a:1},
+            {q:"¿Dónde se jugó el Mundial de 1998?", o:["Italia","Corea/Japón","Francia","Alemania"], a:2},
+            {q:"¿Quién marcó el gol de Alemania en la final de 2014?", o:["Müller","Kroos","Götze","Klose"], a:2},
+            {q:"¿Qué país organizó el Mundial 2006?", o:["Alemania","Sudáfrica","Japón","Rusia"], a:0},
+            {q:"¿A quién le dio un cabezazo Zidane en 2006?", o:["Gattuso","Cannavaro","Materazzi","Totti"], a:2},
+            {q:"¿Quién es el máximo goleador histórico de los mundiales?", o:["Ronaldo","Pelé","Klose","Messi"], a:2},
+            {q:"¿Cuántos mundiales ganó Pelé?", o:["1","2","3","4"], a:2},
+            {q:"¿Qué país africano llegó a Semifinales en 2022?", o:["Senegal","Ghana","Camerún","Marruecos"], a:3},
+            {q:"¿De qué país es la mascota Naranjito?", o:["España","México","Holanda","Brasil"], a:0},
+            {q:"¿Qué país perdió 7-1 en su propio Mundial?", o:["Alemania","Rusia","Sudáfrica","Brasil"], a:3},
+            {q:"¿Qué tecnología debutó en 2018?", o:["Ojo de Halcón","VAR","Firma de Gol","Chip en el balón"], a:1},
+            {q:"¿Quién era el portero de España en 2010?", o:["De Gea","Valdés","Casillas","Reina"], a:2},
+            {q:"¿Qué selección es 'La Albiceleste'?", o:["Uruguay","Colombia","Argentina","Chile"], a:2},
+            {q:"¿Qué animal era la mascota del Mundial 2010?", o:["Un león","Un leopardo","Un elefante","Un rinoceronte"], a:1},
+            {q:"¿En qué continente se jugó el Mundial 2002?", o:["Europa","Asia","África","América"], a:1},
+            {q:"¿Qué jugador mordió a Chiellini en 2014?", o:["Pepe","Luis Suárez","Diego Costa","Balotelli"], a:1},
+            {q:"¿Quién falló el penalti decisivo para Italia en 1994?", o:["Baresi","Maldini","Roberto Baggio","Del Piero"], a:2},
+            {q:"¿Qué equipo ganó el Mundial de 1966?", o:["Alemania","Brasil","Inglaterra","Uruguay"], a:2},
+            {q:"¿Cómo se llamaba el balón de Sudáfrica 2010?", o:["Tango","Brazuca","Jabulani","Al Rihla"], a:2},
+            {q:"¿Quién cantó el himno oficial de 2010 (Waka Waka)?", o:["Ricky Martin","Jennifer Lopez","Shakira","Pitbull"], a:2},
+            {q:"¿Qué jugador ganó el Balón de Oro del Mundial 2018?", o:["Mbappé","Modric","Griezmann","Hazard"], a:1},
+            {q:"¿Qué país ganó el primer mundial en 1930?", o:["Argentina","Brasil","Uruguay","Italia"], a:2},
+            {q:"¿Qué selección fue campeona en 1994?", o:["Brasil","Italia","Suecia","Rumanía"], a:0},
+            {q:"¿Cuántos mundiales tiene Francia?", o:["1","2","3","4"], a:1},
+            {q:"¿Qué jugador marcó el 'Gol del Siglo' en 1986?", o:["Pelé","Maradona","Platini","Cruyff"], a:1},
+            {q:"¿Qué selección viste de Naranja?", o:["Bélgica","Costa de Marfil","Países Bajos","Irlanda"], a:2},
+            {q:"¿En qué año se jugó el Mundial de España?", o:["1978","1982","1986","1990"], a:1},
+            {q:"¿Quién es el jugador con más partidos en Mundiales?", o:["Messi","Matthäus","Maldini","Klose"], a:0},
+            {q:"¿Qué país fue sede del Mundial 2018?", o:["Qatar","Rusia","Brasil","Francia"], a:1},
+            {q:"¿Qué equipo eliminó a España en 2022?", o:["Japón","Rusia","Marruecos","Croacia"], a:2},
+            {q:"¿Cuál es la sede principal del Mundial 2026?", o:["Sudamérica","Europa","Norteamérica","Asia"], a:2},
+            {q:"¿Quién marcó los dos goles de la final de 2002?", o:["Rivaldo","Ronaldinho","Ronaldo Nazário","Roberto Carlos"], a:2},
+            {q:"¿Qué país sufrió el famoso 'Maracanazo'?", o:["Uruguay","Argentina","Brasil","Alemania"], a:2},
+            {q:"¿Qué jugador es conocido como CR7?", o:["Messi","Cristiano Ronaldo","Rooney","Neymar"], a:1},
+            {q:"¿Qué color de tarjeta expulsa a un jugador?", o:["Verde","Azul","Amarilla","Roja"], a:3},
+            {q:"¿Qué selección ganó el Mundial Femenino 2023?", o:["EEUU","Inglaterra","España","Alemania"], a:2},
+            {q:"¿De qué país es la estrella Kylian Mbappé?", o:["Senegal","Camerún","Bélgica","Francia"], a:3},
+            {q:"¿En qué país jugaba Andrés Iniesta en 2010?", o:["Inglaterra","España","Italia","Alemania"], a:1},
+            {q:"¿Qué jugador marcó un hat-trick en la final de 2022?", o:["Messi","Mbappé","Di María","Griezmann"], a:1},
+            {q:"¿Qué país europeo tiene 4 Mundiales ganados?", o:["España","Alemania e Italia","Solo Alemania","Francia"], a:1},
+            {q:"¿En qué ciudad se jugó la final de 2014?", o:["Sao Paulo","Brasilia","Río de Janeiro","Belo Horizonte"], a:2},
+            {q:"¿Qué animal predecía resultados en el Mundial 2010?", o:["Un perro","Un gato","Un pulpo","Un loro"], a:2}
+        ];
+
+        let currentUser = null;
+        let userProfile = { nombre: 'Jugador', avatarColor: '#E3003F' };
+        let userDbData = { maxStreak: 0 };
+        
+        // Game State
+        let currentPool = [];
+        let score = 0;
+        let lives = 3;
+        let currentQuestion = null;
+        
+        // Timer State
+        let timerInterval;
+        let timeLeft = 100; // 100% (representa 10 segundos)
+
+        // ==========================================
+        // INIT
+        // ==========================================
+        onAuthStateChanged(auth, async (user) => {
+            try {
+                if (!user) { window.location.href = 'registro.html'; return; }
+                currentUser = user;
+                
+                await fetchUserData(); 
+                setupLeaderboard();
+
+            } catch (error) {
+                console.error("Error inicialización:", error);
+            } finally {
+                const loader = document.getElementById('page-loader');
+                if (loader) { loader.style.opacity = '0'; setTimeout(() => loader.style.display = 'none', 600); }
+            }
+        });
+
+        async function fetchUserData() {
+            try {
+                const uSnap = await getDoc(doc(db, "usuarios", currentUser.uid));
+                if (uSnap.exists()) {
+                    userProfile.nombre = uSnap.data().nombre || currentUser.email.split('@')[0];
+                    userProfile.avatarColor = uSnap.data().avatarColor || '#E3003F';
+                }
+
+                const sDocId = `${tripId}_${currentUser.uid}`;
+                const sSnap = await getDoc(doc(db, "worldcup_survival_scores", sDocId));
+                if (sSnap.exists()) {
+                    userDbData.maxStreak = sSnap.data().maxStreak || 0;
+                }
+            } catch (e) { console.warn("Modo fallback activado."); }
+        }
+
+        // ==========================================
+        // GAME LOGIC
+        // ==========================================
+        function shuffle(array) {
+            let currentIndex = array.length, randomIndex;
+            while (currentIndex != 0) {
+                randomIndex = Math.floor(Math.random() * currentIndex);
+                currentIndex--;
+                [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+            }
+            return array;
+        }
+
+        window.startGame = function() {
+            // Setup UI
+            document.getElementById('state-start').style.display = 'none';
+            document.getElementById('state-gameover').style.display = 'none';
+            document.getElementById('state-playing').style.display = 'flex';
+            
+            // Reset Vars
+            score = 0;
+            lives = 3;
+            document.getElementById('current-score').innerText = score;
+            updateLivesUI();
+            
+            // Prepare questions pool
+            currentPool = shuffle([...DB]);
+            
+            nextQuestion();
+        }
+
+        function nextQuestion() {
+            if (lives <= 0) { endGame(); return; }
+            
+            // Reset timer & UI
+            clearInterval(timerInterval);
+            timeLeft = 100;
+            updateTimerUI();
+            
+            const grid = document.getElementById('answers-grid');
+            grid.classList.remove('locked');
+            grid.innerHTML = '';
+
+            // Get next question (loop if pool is empty)
+            if (currentPool.length === 0) currentPool = shuffle([...DB]);
+            currentQuestion = currentPool.pop();
+
+            document.getElementById('question-text').innerText = currentQuestion.q;
+
+            currentQuestion.o.forEach((optText, idx) => {
+                let btn = document.createElement('button');
+                btn.className = 'btn-ans';
+                btn.innerText = optText;
+                btn.onclick = () => handleAnswer(idx, btn);
+                grid.appendChild(btn);
+            });
+
+            startTimer();
+        }
+
+        function startTimer() {
+            // 100% de la barra en 10 segundos -> decrementa 1% cada 100ms
+            timerInterval = setInterval(() => {
+                timeLeft -= 1;
+                updateTimerUI();
+
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    handleTimeout();
+                }
+            }, 100);
+        }
+
+        function updateTimerUI() {
+            const bar = document.getElementById('timer-bar');
+            bar.style.width = `${timeLeft}%`;
+            
+            if (timeLeft > 50) { bar.className = 'timer-bar'; }
+            else if (timeLeft > 20) { bar.className = 'timer-bar warning'; }
+            else { bar.className = 'timer-bar danger'; }
+        }
+
+        function handleTimeout() {
+            document.getElementById('answers-grid').classList.add('locked');
+            triggerDamage();
+            loseLife();
+            setTimeout(nextQuestion, 1200);
+        }
+
+        function handleAnswer(selectedIdx, btnEl) {
+            clearInterval(timerInterval); // Stop clock
+            const grid = document.getElementById('answers-grid');
+            grid.classList.add('locked');
+
+            const isCorrect = selectedIdx === currentQuestion.a;
+            const allBtns = grid.querySelectorAll('.btn-ans');
+
+            // Show correct answer visually
+            allBtns[currentQuestion.a].classList.add('correct');
+
+            if (isCorrect) {
+                score++;
+                document.getElementById('current-score').innerText = score;
+            } else {
+                btnEl.classList.add('wrong');
+                triggerDamage();
+                loseLife();
+            }
+
+            setTimeout(nextQuestion, 1200);
+        }
+
+        function triggerDamage() {
+            const arena = document.getElementById('arena');
+            arena.style.animation = 'shake 0.4s ease, flashRed 0.4s ease';
+            setTimeout(() => { arena.style.animation = ''; }, 400);
+        }
+
+        function loseLife() {
+            lives--;
+            updateLivesUI();
+        }
+
+        function updateLivesUI() {
+            const hearts = document.querySelectorAll('.heart');
+            hearts.forEach((h, idx) => {
+                if (idx < lives) h.classList.remove('lost');
+                else h.classList.add('lost');
+            });
+        }
+
+        function endGame() {
+            document.getElementById('state-playing').style.display = 'none';
+            document.getElementById('state-gameover').style.display = 'flex';
+            
+            document.getElementById('final-score').innerText = score;
+            
+            if (score > userDbData.maxStreak) {
+                document.getElementById('go-msg').innerText = "¡NUEVO RÉCORD PERSONAL!";
+                document.getElementById('go-msg').style.color = "var(--wc-gold)";
+                confetti({ particleCount: 200, spread: 90, origin: { y: 0.6 }, colors: ['#E3003F', '#FFC20E', '#ffffff'] });
+                saveScoreToFirebase(score);
+            } else {
+                document.getElementById('go-msg').innerText = `Tu récord actual sigue siendo de ${userDbData.maxStreak}.`;
+                document.getElementById('go-msg').style.color = "var(--text-muted)";
+            }
+        }
+
+        window.resetToStart = function() {
+            document.getElementById('state-gameover').style.display = 'none';
+            document.getElementById('state-start').style.display = 'flex';
+        }
+
+        // ==========================================
+        // FIREBASE SYNC & LEADERBOARD
+        // ==========================================
+        async function saveScoreToFirebase(newRecord) {
+            userDbData.maxStreak = newRecord;
+            const scoreDocId = `${tripId}_${currentUser.uid}`;
+            const ref = doc(db, "worldcup_survival_scores", scoreDocId);
+
+            try {
+                await setDoc(ref, {
+                    uid: currentUser.uid,
+                    tripId: tripId,
+                    userName: userProfile.nombre,
+                    avatarColor: userProfile.avatarColor,
+                    maxStreak: newRecord,
+                    lastUpdate: new Date().getTime()
+                }, { merge: true });
+            } catch(e) {
+                console.error("Error sincronizando récord:", e);
+            }
+        }
+
+        function setupLeaderboard() {
+            const scoresRef = collection(db, "worldcup_survival_scores");
+            const q = query(scoresRef, where("tripId", "==", tripId), orderBy("maxStreak", "desc"));
+
+            try {
+                onSnapshot(q, (snapshot) => {
+                    const container = document.getElementById('leaderboard-container');
+                    container.innerHTML = '';
+
+                    if (snapshot.empty) {
+                        container.innerHTML = `<div style="text-align:center; color:var(--text-muted); margin-top:2rem;">Sé el primero en jugar y establecer un récord.</div>`;
+                        return;
+                    }
+
+                    let rank = 1;
+                    snapshot.forEach((doc) => {
+                        const data = doc.data();
+                        const isMe = data.uid === currentUser.uid;
+                        const initial = data.userName ? data.userName.charAt(0).toUpperCase() : '?';
+
+                        container.innerHTML += `
+                            <div class="rank-card ${isMe ? 'is-me' : ''}">
+                                <div class="rank-pos">${rank}</div>
+                                <div class="rank-user">
+                                    <div class="rank-avatar" style="background-color: ${data.avatarColor || 'var(--wc-red)'}">${initial}</div>
+                                    ${data.userName} ${isMe ? '<span style="font-size:0.6rem; background: var(--wc-red); color: white; padding:2px 6px; border-radius:4px; margin-left: 5px;">TÚ</span>' : ''}
+                                </div>
+                                <div class="rank-pts">${data.maxStreak}</div>
+                            </div>
+                        `;
+                        rank++;
+                    });
+                }, (error) => {
+                    document.getElementById('leaderboard-container').innerHTML = `
+                        <div style="text-align:center; color:var(--text-muted); margin-top:2rem;">
+                            <div class="loader-ring" style="width: 30px; height: 30px; margin: 0 auto 15px; border-width: 2px; border-top-color: var(--wc-red);"></div>
+                            <p>Sincronizando récords...</p>
+                            <p style="font-size: 0.75rem; opacity: 0.6; margin-top: 5px;">(Firebase está construyendo el índice de datos)</p>
+                        </div>`;
+                });
+            } catch(e) {
+                document.getElementById('leaderboard-container').innerHTML = `<div style="text-align:center; color:var(--text-muted); margin-top:2rem;">Error conectando al marcador.</div>`;
+            }
+        }
+
+        lucide.createIcons();
+    </script>
+</body>
+</html>
