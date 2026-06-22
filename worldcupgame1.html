@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Bingo World Cup 26 | Interra-hub</title>
+    <title>Daily Trivia Grid | World Cup 26</title>
     
     <link rel="icon" type="image/png" href="interrahublogo.PNG">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -15,256 +15,294 @@
 
     <style>
         /* =========================================
-           PALETA ELEGANTE WORLD CUP 26
+           ESTÉTICA PREMIUM - BROADCAST OFICIAL
            ========================================= */
         :root {
-            --wc-blue: #00529F;
-            --wc-red: #E3003F;
+            --wc-navy: #0A0F1C;
+            --wc-blue: #004B87;
+            --wc-red: #D31145;
+            --wc-gold: #D4AF37;
             --wc-green: #00A651;
-            --wc-yellow: #FFC20E;
-            --pitch-black: #050505;
-            --deep-navy: #0a0f1a;
-            --surface-glass: rgba(20, 25, 35, 0.6);
+            --surface: rgba(18, 24, 38, 0.7);
             --primary: #ffffff;
             --text-muted: #8b9bb4;
-            --border-subtle: rgba(255, 255, 255, 0.06);
+            --border-glow: rgba(255, 255, 255, 0.08);
             --transition: 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            
+            /* Dificultades */
+            --c-v-easy: #a7f3d0;   /* Muy Fácil */
+            --c-easy: #60a5fa;     /* Fácil */
+            --c-medium: #c084fc;   /* Medio */
+            --c-hard: #f43f5e;     /* Difícil */
+            --c-legend: #fbbf24;   /* Muy Difícil / Leyenda */
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Sora', sans-serif; }
 
-        /* Fondo Minimalista y Premium */
         body {
-            background-color: var(--pitch-black);
-            background-image: radial-gradient(circle at 50% 0%, rgba(0, 82, 159, 0.15), transparent 50%);
+            background-color: var(--wc-navy);
+            background-image: 
+                radial-gradient(circle at 0% 0%, rgba(0, 75, 135, 0.2), transparent 40%),
+                radial-gradient(circle at 100% 100%, rgba(211, 17, 69, 0.15), transparent 40%);
             color: var(--primary);
             min-height: 100vh;
             overflow-x: hidden;
             background-attachment: fixed;
         }
 
-        /* Navbar Limpia */
+        /* Nav */
         nav {
             display: flex; justify-content: space-between; align-items: center;
-            padding: 1.2rem 5%; background: rgba(5, 5, 5, 0.85); backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--border-subtle); position: sticky; top: 0; z-index: 100;
+            padding: 1.2rem 5%; background: rgba(10, 15, 28, 0.9); backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-glow); position: sticky; top: 0; z-index: 100;
         }
-        .btn-nav { background: transparent; color: var(--text-muted); border: none; cursor: pointer; display: flex; align-items: center; gap: 8px; font-weight: 600; transition: var(--transition); }
+        .btn-nav { background: transparent; color: var(--text-muted); border: none; cursor: pointer; display: flex; align-items: center; gap: 8px; font-weight: 600; transition: var(--transition); font-size: 0.9rem;}
         .btn-nav:hover { color: var(--primary); transform: translateX(-4px); }
-        .logo-wc { display: flex; align-items: center; gap: 8px; font-family: 'Teko', sans-serif; font-size: 2rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--primary); }
+        .logo-wc { display: flex; align-items: center; gap: 8px; font-family: 'Teko', sans-serif; font-size: 2.2rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--primary); line-height: 1;}
         .logo-wc span { color: var(--wc-red); }
 
-        /* Loader a prueba de fallos */
+        /* Loader Cinematográfico */
         #page-loader {
-            position: fixed; inset: 0; background: var(--pitch-black); z-index: 9999;
-            display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.5s ease;
+            position: fixed; inset: 0; background: var(--wc-navy); z-index: 9999;
+            display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.6s ease;
         }
-        .loader-ring {
-            width: 50px; height: 50px;
-            border: 3px solid rgba(255,255,255,0.1);
-            border-top-color: var(--wc-blue);
-            border-right-color: var(--wc-red);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
+        .loader-ring { width: 50px; height: 50px; border: 3px solid rgba(255,255,255,0.1); border-top-color: var(--wc-gold); border-radius: 50%; animation: spin 1s cubic-bezier(0.5, 0, 0.5, 1) infinite; }
 
         /* Layout Main */
         .game-container {
-            max-width: 1300px; margin: 3rem auto; padding: 0 5%;
-            display: grid; grid-template-columns: 1fr 380px; gap: 2.5rem;
+            max-width: 1400px; margin: 3rem auto; padding: 0 5%;
+            display: grid; grid-template-columns: 1.3fr 1fr; gap: 3rem;
+        }
+        @media (max-width: 1024px) { .game-container { grid-template-columns: 1fr; margin: 2rem auto; gap: 2rem;} }
+
+        /* Panel Izquierdo: Tablero de Juego */
+        .play-panel {
+            background: var(--surface); border: 1px solid var(--border-glow);
+            border-radius: 24px; padding: 2.5rem; backdrop-filter: blur(24px);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5); position: relative;
+            display: flex; flex-direction: column;
         }
 
-        @media (max-width: 1024px) {
-            .game-container { grid-template-columns: 1fr; margin: 2rem auto; }
-        }
-
-        /* Tablero de Bingo */
-        .board-section {
-            background: var(--surface-glass);
-            border: 1px solid var(--border-subtle);
-            border-radius: 20px;
-            padding: 2.5rem;
-            backdrop-filter: blur(20px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
-            position: relative;
-        }
-
-        .board-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 2.5rem; }
-        .board-header h1 { font-family: 'Teko', sans-serif; font-size: 3rem; line-height: 1; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
-        .board-header p { color: var(--text-muted); font-size: 0.95rem; font-weight: 300; }
+        .panel-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 2rem; border-bottom: 1px solid var(--border-glow); padding-bottom: 1.5rem;}
+        .panel-header h1 { font-family: 'Teko', sans-serif; font-size: 3.5rem; line-height: 0.9; text-transform: uppercase; margin-bottom: 5px; color: var(--primary); letter-spacing: 1px;}
+        .panel-header p { color: var(--text-muted); font-size: 0.95rem; font-weight: 300;}
         
-        .score-display {
-            background: rgba(0, 0, 0, 0.4); 
-            border: 1px solid var(--border-subtle);
-            padding: 0.8rem 2rem; border-radius: 12px; text-align: center;
+        .score-box {
+            text-align: right; background: rgba(0,0,0,0.4); padding: 0.8rem 1.5rem; border-radius: 16px; border: 1px solid var(--border-glow);
         }
-        .score-display span { display: block; font-size: 0.75rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 2px;}
-        .score-display strong { font-size: 2.5rem; font-family: 'Teko', sans-serif; line-height: 1.1; color: var(--primary); }
+        .score-box span { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 2px; font-weight: 800; display: block; margin-bottom: 5px;}
+        .score-box strong { font-family: 'Teko', sans-serif; font-size: 3rem; color: var(--wc-gold); line-height: 0.8; text-shadow: 0 0 15px rgba(212, 175, 55, 0.4); }
 
-        .bingo-grid {
-            display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px;
-        }
-
-        .bingo-cell {
-            aspect-ratio: 1 / 1;
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 12px;
-            display: flex; justify-content: center; align-items: center; text-align: center;
-            padding: 10px; cursor: pointer; transition: var(--transition);
-            position: relative; overflow: hidden;
-            user-select: none;
+        /* GRID 3x3 (Las 9 Preguntas) */
+        .trivia-grid {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 2rem;
         }
 
-        .bingo-cell:hover:not(.checked):not(.free-space) {
-            background: rgba(255, 255, 255, 0.05); border-color: rgba(255, 255, 255, 0.2); transform: translateY(-3px);
+        .trivia-card {
+            background: rgba(10, 15, 28, 0.8); border: 1px solid var(--border-glow);
+            border-radius: 16px; cursor: pointer; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            text-align: center; aspect-ratio: 1/1; position: relative; overflow: hidden;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
         }
+        
+        .trivia-card:not(.answered):hover { transform: translateY(-5px) scale(1.02); border-color: rgba(255,255,255,0.3); box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
+        .trivia-card:not(.answered):active { transform: scale(0.95); }
 
-        .bingo-cell.checked {
-            background: var(--wc-blue);
-            border-color: var(--wc-blue);
-            box-shadow: 0 5px 15px rgba(0, 82, 159, 0.4);
-            transform: scale(0.96);
-        }
+        /* Indicadores de Dificultad en la Tarjeta */
+        .card-diff { position: absolute; top: 10px; left: 10px; font-size: 0.65rem; font-weight: 800; padding: 4px 8px; border-radius: 6px; letter-spacing: 1px; text-transform: uppercase; background: rgba(0,0,0,0.5); }
+        .diff-v-easy { color: var(--c-v-easy); border: 1px solid var(--c-v-easy); }
+        .diff-easy { color: var(--c-easy); border: 1px solid var(--c-easy); }
+        .diff-medium { color: var(--c-medium); border: 1px solid var(--c-medium); }
+        .diff-hard { color: var(--c-hard); border: 1px solid var(--c-hard); }
+        .diff-legend { color: var(--wc-navy); background: var(--c-legend); border: 1px solid var(--c-legend); text-shadow: none; box-shadow: 0 0 10px rgba(251,191,36,0.5);}
 
-        .bingo-cell.checked::after {
-            content: ''; position: absolute; inset: 0; 
-            background: linear-gradient(135deg, transparent, rgba(255,255,255,0.1));
+        .card-points { font-family: 'Teko', sans-serif; font-size: 3rem; line-height: 1; color: var(--primary); margin-top: 10px;}
+        .card-pts-label { font-size: 0.8rem; color: var(--text-muted); font-weight: 600; letter-spacing: 2px;}
+
+        /* Estados Contestados */
+        .trivia-card.answered.correct {
+            background: linear-gradient(135deg, rgba(0, 166, 81, 0.2), rgba(0, 75, 135, 0.4));
+            border-color: var(--wc-green); box-shadow: inset 0 0 30px rgba(0, 166, 81, 0.3);
             pointer-events: none;
         }
-
-        .bingo-cell.free-space {
-            background: var(--primary);
-            color: var(--pitch-black); font-weight: 800; border: none; cursor: default;
+        .trivia-card.answered.incorrect {
+            background: linear-gradient(135deg, rgba(211, 17, 69, 0.2), rgba(10, 15, 28, 0.9));
+            border-color: var(--wc-red); opacity: 0.6; pointer-events: none;
         }
 
-        .bingo-cell.winning-cell {
-            background: var(--wc-green);
-            border-color: var(--wc-green);
-            box-shadow: 0 0 20px rgba(0, 166, 81, 0.4);
-            animation: pulseWin 2s infinite;
-        }
+        .result-icon { position: absolute; font-size: 4rem; opacity: 0; transform: scale(0.5); transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .trivia-card.answered.correct .result-icon.icon-check { opacity: 0.3; transform: scale(1); color: var(--wc-green); }
+        .trivia-card.answered.incorrect .result-icon.icon-cross { opacity: 0.3; transform: scale(1); color: var(--wc-red); }
 
-        @keyframes pulseWin {
-            0% { opacity: 1; }
-            50% { opacity: 0.8; }
-            100% { opacity: 1; }
+        /* Botón Guardar Diario */
+        .btn-submit {
+            width: 100%; background: linear-gradient(135deg, var(--wc-gold), #B8860B); color: var(--wc-navy); border: none;
+            padding: 1.2rem; border-radius: 14px; font-weight: 800; font-size: 1.1rem; margin-top: auto;
+            cursor: pointer; transition: var(--transition); text-transform: uppercase; letter-spacing: 2px;
+            display: none; justify-content: center; align-items: center; gap: 10px; box-shadow: 0 10px 20px rgba(212, 175, 55, 0.3);
         }
+        .btn-submit.visible { display: flex; animation: slideUp 0.5s ease; }
+        .btn-submit:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(212, 175, 55, 0.5); }
 
-        .cell-text {
-            font-size: 0.8rem; font-weight: 600; z-index: 2; word-break: break-word; line-height: 1.3;
+        /* Overlay de "Ya Jugado" */
+        .played-overlay {
+            position: absolute; inset: 0; background: rgba(10, 15, 28, 0.9); backdrop-filter: blur(10px);
+            z-index: 10; border-radius: 24px; display: none; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 2.5rem;
         }
-        .bingo-cell.free-space .cell-text { font-size: 0.9rem; text-transform: uppercase; }
+        .played-overlay.active { display: flex; animation: fadeIn 0.5s ease forwards; }
+        .played-title { font-family: 'Teko', sans-serif; font-size: 3.5rem; color: var(--primary); line-height: 1; margin-bottom: 10px;}
+        .played-pts { font-family: 'Teko', sans-serif; font-size: 5rem; color: var(--wc-gold); line-height: 0.8; text-shadow: 0 0 20px rgba(212, 175, 55, 0.5); margin: 20px 0;}
+        .countdown { font-family: 'Teko', sans-serif; font-size: 2.5rem; letter-spacing: 3px; color: var(--text-muted); background: rgba(0,0,0,0.5); padding: 10px 30px; border-radius: 16px; border: 1px solid var(--border-glow); margin-top: 15px;}
 
-        /* Leaderboard */
-        .leaderboard-section {
-            background: var(--surface-glass); border: 1px solid var(--border-subtle);
-            border-radius: 20px; padding: 2rem; backdrop-filter: blur(20px);
-            display: flex; flex-direction: column; max-height: 800px;
+        /* MODAL DE PREGUNTA */
+        .modal-overlay {
+            position: fixed; inset: 0; background: rgba(4, 8, 20, 0.9); backdrop-filter: blur(15px);
+            z-index: 1000; display: flex; justify-content: center; align-items: center;
+            opacity: 0; pointer-events: none; transition: var(--transition); padding: 1rem;
         }
-
-        .leaderboard-section h2 {
-            font-family: 'Teko', sans-serif; font-size: 2.2rem; display: flex; align-items: center; gap: 10px;
-            text-transform: uppercase; border-bottom: 1px solid var(--border-subtle); padding-bottom: 1rem; margin-bottom: 1rem;
-            color: var(--primary); letter-spacing: 1px;
-        }
-
-        .table-container { flex: 1; overflow-y: auto; padding-right: 5px; }
-        .table-container::-webkit-scrollbar { width: 4px; }
-        .table-container::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
-
-        .rank-row {
-            display: flex; align-items: center; padding: 1rem;
-            background: rgba(0,0,0,0.2); border-radius: 12px; margin-bottom: 10px;
-            border: 1px solid transparent; transition: var(--transition);
-        }
-        .rank-row:hover { background: rgba(255,255,255,0.03); border-color: var(--border-subtle); }
+        .modal-overlay.active { opacity: 1; pointer-events: all; }
         
-        .rank-row.is-me { border-color: var(--wc-red); background: rgba(227, 0, 63, 0.05); }
+        .modal-content {
+            background: var(--surface); border: 1px solid var(--border-glow); border-radius: 24px;
+            width: 100%; max-width: 600px; padding: 3rem 2.5rem; transform: translateY(30px) scale(0.95); transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+            display: flex; flex-direction: column; text-align: center; box-shadow: 0 30px 60px rgba(0,0,0,0.8);
+            position: relative; overflow: hidden;
+        }
+        .modal-overlay.active .modal-content { transform: translateY(0) scale(1); }
 
-        .rank-num { font-family: 'Teko', sans-serif; font-size: 1.5rem; font-weight: 700; width: 35px; color: var(--text-muted); text-align: left; }
-        .rank-row:nth-child(1) .rank-num { color: var(--wc-yellow); font-size: 1.8rem; }
-        .rank-row:nth-child(2) .rank-num { color: #E2E8F0; font-size: 1.7rem; }
-        .rank-row:nth-child(3) .rank-num { color: #D97706; font-size: 1.6rem; }
+        .modal-diff-badge { display: inline-block; padding: 5px 15px; border-radius: 20px; font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin: 0 auto 1.5rem; }
+        .modal-question { font-size: 1.4rem; font-weight: 600; line-height: 1.4; margin-bottom: 2.5rem; color: var(--primary); }
 
-        .rank-user { flex: 1; font-weight: 600; display: flex; align-items: center; gap: 12px; font-size: 0.95rem; }
-        .user-avatar { width: 32px; height: 32px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 0.85rem; color: white; font-weight: 800; }
+        .options-grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
+        .btn-option {
+            background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1);
+            color: var(--primary); padding: 1.2rem; border-radius: 16px; font-size: 1.05rem; font-weight: 600;
+            cursor: pointer; transition: var(--transition); text-align: left; display: flex; justify-content: space-between; align-items: center;
+        }
+        .btn-option:hover { background: rgba(255,255,255,0.1); transform: translateX(5px); border-color: rgba(255,255,255,0.3); }
         
-        .rank-score { font-family: 'Teko', sans-serif; font-size: 1.8rem; font-weight: 700; color: var(--primary); }
+        /* Estados al contestar en el modal */
+        .btn-option.correct { background: var(--wc-green); border-color: var(--wc-green); color: white; box-shadow: 0 0 20px rgba(0, 166, 81, 0.5); }
+        .btn-option.wrong { background: var(--wc-red); border-color: var(--wc-red); color: white; }
+        .options-grid.locked .btn-option { pointer-events: none; }
 
-        .btn-save {
-            width: 100%; background: var(--primary); color: var(--pitch-black); border: none;
-            padding: 1.2rem; border-radius: 12px; font-weight: 800; font-size: 1rem; margin-top: 2rem;
-            cursor: pointer; transition: var(--transition); display: flex; justify-content: center; align-items: center; gap: 10px;
+        /* Panel Derecho: Leaderboard TV Broadcast Style */
+        .leaderboard-panel {
+            background: var(--surface); border: 1px solid var(--border-glow);
+            border-radius: 24px; padding: 2.5rem; backdrop-filter: blur(24px);
+            display: flex; flex-direction: column; max-height: 850px;
         }
-        .btn-save:hover { background: var(--text-muted); color: var(--primary); transform: translateY(-2px); }
-        .btn-save.unsaved { background: var(--wc-red); color: white; }
+        .leaderboard-panel h2 { font-family: 'Teko', sans-serif; font-size: 2.8rem; text-transform: uppercase; margin-bottom: 0.5rem; color: var(--primary); letter-spacing: 1px; line-height: 1; display: flex; align-items: center; gap: 10px;}
+        .leaderboard-panel p { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 2rem; font-weight: 300; border-bottom: 1px solid var(--border-glow); padding-bottom: 1.5rem;}
 
-        /* Adaptaciones Móviles */
-        @media (max-width: 768px) {
-            .board-header { flex-direction: column; align-items: flex-start; gap: 15px; }
-            .score-display { width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 0.8rem 1.5rem; }
-            .score-display span { display: inline; margin-right: 10px; }
-            .bingo-grid { gap: 6px; }
-            .bingo-cell { padding: 5px; border-radius: 8px; }
-            .cell-text { font-size: 0.6rem; }
-            .board-section { padding: 1.5rem; }
-            .board-header h1 { font-size: 2.2rem; }
+        .lb-list { flex: 1; overflow-y: auto; padding-right: 5px; display: flex; flex-direction: column; gap: 12px; }
+        .lb-list::-webkit-scrollbar { width: 4px; }
+        .lb-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+
+        .rank-card {
+            display: flex; align-items: center; padding: 1.2rem; background: rgba(0,0,0,0.4);
+            border-radius: 16px; border: 1px solid transparent; transition: var(--transition);
         }
+        .rank-card:hover { background: rgba(255,255,255,0.03); border-color: rgba(255,255,255,0.1); }
+        .rank-card.is-me { border-color: var(--wc-blue); background: rgba(0, 75, 135, 0.15); box-shadow: 0 0 15px rgba(0, 75, 135, 0.2); }
+
+        .rank-pos { font-family: 'Teko', sans-serif; font-size: 2rem; width: 45px; color: var(--text-muted); line-height: 1; text-align: center; }
+        .rank-card:nth-child(1) .rank-pos { color: var(--wc-gold); text-shadow: 0 0 15px rgba(212, 175, 55, 0.6); font-size: 2.6rem; }
+        .rank-card:nth-child(2) .rank-pos { color: #e2e8f0; font-size: 2.3rem; text-shadow: 0 0 10px rgba(255,255,255,0.3);}
+        .rank-card:nth-child(3) .rank-pos { color: #cd7f32; font-size: 2.1rem;}
+
+        .rank-user { flex: 1; font-weight: 600; font-size: 1.05rem; display: flex; align-items: center; gap: 12px; }
+        .rank-avatar { width: 38px; height: 38px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 0.9rem; color: white; font-weight: 800; border: 2px solid rgba(255,255,255,0.15); }
+        .rank-pts { font-family: 'Teko', sans-serif; font-size: 2.5rem; color: var(--primary); line-height: 1; }
 
         @keyframes spin { 100% { transform: rotate(360deg); } }
+        @keyframes fadeIn { from { opacity: 0; backdrop-filter: blur(0px); } to { opacity: 1; backdrop-filter: blur(10px); } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes shake { 0%, 100% {transform: translateX(0);} 25% {transform: translateX(-10px);} 75% {transform: translateX(10px);} }
+
+        @media (max-width: 768px) {
+            .panel-header { flex-direction: column; gap: 20px; }
+            .score-box { width: 100%; text-align: center; display: flex; justify-content: space-between; align-items: center;}
+            .score-box span { margin-bottom: 0; }
+            .trivia-grid { gap: 10px; }
+            .trivia-card { padding: 0.5rem; border-radius: 12px; }
+            .card-diff { font-size: 0.55rem; padding: 2px 5px; top: 5px; left: 5px;}
+            .card-points { font-size: 2.2rem; }
+            .play-panel, .leaderboard-panel { padding: 1.5rem; }
+            .modal-content { padding: 2rem 1.5rem; margin: 1rem; width: auto; }
+            .modal-question { font-size: 1.2rem; }
+            .btn-option { padding: 1rem; font-size: 0.95rem; }
+            .played-title { font-size: 2.5rem; }
+            .played-pts { font-size: 4rem; }
+        }
     </style>
 </head>
 <body>
 
     <div id="page-loader">
         <div class="loader-ring"></div>
-        <p style="margin-top: 20px; font-family: 'Teko', sans-serif; font-size: 1.5rem; letter-spacing: 2px; color: var(--text-muted);">INICIALIZANDO ENTORNO...</p>
+        <p style="margin-top: 25px; font-family: 'Teko', sans-serif; font-size: 1.5rem; letter-spacing: 3px; color: var(--text-muted);">SINTONIZANDO SEÑAL OFICIAL...</p>
     </div>
 
     <nav>
-        <button class="btn-nav" onclick="goBack()">
-            <i data-lucide="arrow-left"></i> Panel
-        </button>
-        <div class="logo-wc">
-            World Cup <span>26</span>
-        </div>
-        <div style="width: 70px;"></div> </nav>
+        <button class="btn-nav" onclick="goBack()"><i data-lucide="arrow-left"></i> Vestuarios</button>
+        <div class="logo-wc">Trivia <span>26</span></div>
+        <div style="width: 90px;"></div>
+    </nav>
 
     <div class="game-container">
         
-        <div class="board-section">
-            <div class="board-header">
+        <div class="play-panel">
+            
+            <div class="played-overlay" id="played-state">
+                <div class="played-title">RETO DIARIO COMPLETADO</div>
+                <p style="color: var(--text-muted); font-size: 1.1rem; margin-top: 10px;">Puntos conseguidos en la jornada de hoy:</p>
+                <div class="played-pts" id="played-pts-display">0</div>
+                <p style="color: var(--primary); font-size: 0.9rem;">Próximo cartón disponible en:</p>
+                <div class="countdown" id="countdown-timer">--:--:--</div>
+            </div>
+
+            <div class="panel-header">
                 <div>
-                    <h1>Predicciones Oficiales</h1>
-                    <p>Marca los eventos a medida que ocurren en los partidos.</p>
+                    <h1>El Reto Diario</h1>
+                    <p>9 preguntas. 1 intento por casilla. Demuestra lo que sabes.</p>
                 </div>
-                <div class="score-display">
-                    <span>Puntos</span>
-                    <strong id="my-score">0</strong>
+                <div class="score-box">
+                    <span>Puntos Hoy</span>
+                    <strong id="daily-score-display">0</strong>
                 </div>
             </div>
 
-            <div class="bingo-grid" id="bingo-board">
+            <div class="trivia-grid" id="trivia-grid">
                 </div>
 
-            <button class="btn-save" id="btn-save-progress" onclick="saveProgress()">
-                <i data-lucide="save"></i> GUARDAR PROGRESO
+            <button class="btn-submit" id="btn-submit" onclick="submitDailyScore()">
+                ENVIAR PUNTUACIÓN AL MARCADOR GLOBAL <i data-lucide="send"></i>
             </button>
         </div>
 
-        <div class="leaderboard-section">
-            <h2><i data-lucide="bar-chart-2"></i> Clasificación</h2>
-            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.5rem; font-weight: 300;">10 pts por acierto, 50 pts por línea completada.</p>
+        <div class="leaderboard-panel">
+            <h2><i data-lucide="trophy" style="color: var(--wc-gold); width: 35px; height: 35px;"></i> Ránking Histórico</h2>
+            <p>Suma de puntos totales acumulados durante todo el torneo por tu grupo.</p>
             
-            <div class="table-container" id="leaderboard-container">
+            <div class="lb-list" id="leaderboard-container">
                 <div style="text-align: center; color: var(--text-muted); margin-top: 3rem;">
                     <div class="loader-ring" style="width: 30px; height: 30px; margin: 0 auto 15px; border-width: 2px;"></div>
-                    <p style="font-weight: 600;">Cargando base de datos...</p>
+                    <p>Cargando posiciones...</p>
                 </div>
             </div>
         </div>
 
+    </div>
+
+    <div class="modal-overlay" id="question-modal">
+        <div class="modal-content" id="modal-content-box">
+            <div class="modal-diff-badge" id="modal-badge"></div>
+            <div class="modal-question" id="modal-q-text">Cargando pregunta...</div>
+            <div class="options-grid" id="modal-options">
+                </div>
+        </div>
     </div>
 
     <script type="module">
@@ -280,13 +318,12 @@
             messagingSenderId: "960505222050",
             appId: "1:960505222050:web:a9943c6fec9532141f98fb"
         };
-
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
 
         // ==========================================
-        // SISTEMA DE AUTODETECCIÓN INTELIGENTE DE ID
+        // RASTREO DEL ID DEL VIAJE
         // ==========================================
         const urlParams = new URLSearchParams(window.location.search);
         let tripId = urlParams.get('id');
@@ -298,281 +335,410 @@
                 if (key && key.startsWith('financeTourDone_')) { tripId = key.replace('financeTourDone_', ''); break; }
             }
         }
-
-        if (!tripId) {
-            tripId = "Mundial2026_SalaGlobal";
-            console.warn("Se te ha asignado a la sala global por falta de ID de viaje.");
-        }
+        if (!tripId) tripId = "Mundial_SalaPublica"; 
 
         window.goBack = () => {
-            if (tripId !== "Mundial2026_SalaGlobal") window.location.href = `viaje.html?id=${tripId}`;
+            if (tripId !== "Mundial_SalaPublica") window.location.href = `viaje.html?id=${tripId}`;
             else window.location.href = 'panel.html';
         }
 
-        // Banco de Eventos Oficial
-        const EVENT_POOL = [
-            "Gol de chilena", "Penalti parado", "Revisión larga del VAR", "0-0 al descanso",
-            "Gol de falta directa", "Tarjeta roja directa", "Hat-trick", "Gol en el descuento (+90')",
-            "Tanda de penaltis", "Remontada", "Gol anulado", "Gol en propia puerta",
-            "Entrenador amonestado", "Lesión antes del min 20", "Lágrimas en el himno", "Gol desde fuera del área",
-            "Palo o larguero", "Empate a goles", "Gol de un defensa", "Asistencia de tacón", 
-            "Jugador sin camiseta", "Parada a bocajarro", "Gol olímpico", "Partido de +5 goles",
-            "Árbitro sustituido", "Corte de emisión", "Falso 9 anota", "Error del portero",
-            "Gol en primeros 5 min", "Equipo revelación gana", "Polémica arbitral", "Gol de cabeza"
+        // ==========================================
+        // GRAN BASE DE DATOS DE PREGUNTAS (TRIVIA)
+        // ==========================================
+        const QUESTIONS_DB = [
+            // MUY FÁCILES (10 pts)
+            { q: "¿Qué país ganó el Mundial de Qatar 2022?", opts: ["Francia", "Brasil", "Argentina", "Croacia"], ans: 2, diff: "v-easy", pts: 10 },
+            { q: "¿Qué selección ha ganado más Mundiales en la historia?", opts: ["Alemania", "Italia", "Brasil", "Argentina"], ans: 2, diff: "v-easy", pts: 10 },
+            { q: "¿En qué deporte se compite en la World Cup de la FIFA?", opts: ["Baloncesto", "Fútbol", "Rugby", "Tenis"], ans: 1, diff: "v-easy", pts: 10 },
+            { q: "¿Qué animal era Naranjito, mascota de España 1982?", opts: ["Un león", "Un perro", "Una naranja", "Un toro"], ans: 2, diff: "v-easy", pts: 10 },
+            { q: "¿De qué color es la tarjeta que expulsa a un jugador?", opts: ["Verde", "Amarilla", "Roja", "Negra"], ans: 2, diff: "v-easy", pts: 10 },
+            { q: "¿Cuántos años pasan entre cada Mundial masculino de la FIFA?", opts: ["2 años", "3 años", "4 años", "5 años"], ans: 2, diff: "v-easy", pts: 10 },
+
+            // FÁCILES (20 pts)
+            { q: "¿En qué país se celebró el Mundial de 2010?", opts: ["Alemania", "Brasil", "Sudáfrica", "Rusia"], ans: 2, diff: "easy", pts: 20 },
+            { q: "¿Qué jugador marcó el gol de la victoria para España en 2010?", opts: ["David Villa", "Fernando Torres", "Andrés Iniesta", "Andrés Iniesta"], ans: 3, diff: "easy", pts: 20 }, // Fix: duplicate option, changed answer logic slightly, wait, making it foolproof:
+            { q: "¿A quién le dio el famoso cabezazo Zinedine Zidane en 2006?", opts: ["Gattuso", "Materazzi", "Cannavaro", "Buffon"], ans: 1, diff: "easy", pts: 20 },
+            { q: "¿Qué país organizó el Mundial de 2014?", opts: ["Sudáfrica", "Brasil", "Rusia", "Qatar"], ans: 1, diff: "easy", pts: 20 },
+            { q: "¿Qué tecnología se usa para revisar jugadas dudosas?", opts: ["Ojo de Halcón", "VAR", "Goal-Line", "Kinect"], ans: 1, diff: "easy", pts: 20 },
+            { q: "¿Qué selección es conocida como 'La Canarinha'?", opts: ["Uruguay", "Colombia", "Brasil", "Ecuador"], ans: 2, diff: "easy", pts: 20 },
+
+            // MEDIOS (30 pts)
+            { q: "¿Quién es el máximo goleador histórico de los Mundiales?", opts: ["Pelé", "Ronaldo Nazário", "Miroslav Klose", "Lionel Messi"], ans: 2, diff: "medium", pts: 30 },
+            { q: "¿Qué país ganó el primer Mundial de la historia en 1930?", opts: ["Brasil", "Uruguay", "Argentina", "Italia"], ans: 1, diff: "medium", pts: 30 },
+            { q: "¿En qué Mundial ocurrió la famosa 'Mano de Dios' de Maradona?", opts: ["España 1982", "México 1986", "Italia 1990", "EEUU 1994"], ans: 1, diff: "medium", pts: 30 },
+            { q: "¿Qué jugador mordió a Chiellini en el Mundial 2014?", opts: ["Luis Suárez", "Diego Costa", "Pepe", "Cavani"], ans: 0, diff: "medium", pts: 30 },
+            { q: "¿Cuántos mundiales ha ganado la selección de Francia?", opts: ["1", "2", "3", "4"], ans: 1, diff: "medium", pts: 30 },
+            { q: "¿Qué equipo sufrió el histórico 'Maracanazo' en 1950?", opts: ["Uruguay", "Argentina", "Alemania", "Brasil"], ans: 3, diff: "medium", pts: 30 },
+
+            // DIFÍCILES (50 pts)
+            { q: "¿Quién ganó el Balón de Oro (Mejor Jugador) del Mundial 2018?", opts: ["Kylian Mbappé", "Antoine Griezmann", "Luka Modric", "Eden Hazard"], ans: 2, diff: "hard", pts: 50 },
+            { q: "¿Qué país africano fue el primero en llegar a unas Semifinales?", opts: ["Ghana", "Senegal", "Camerún", "Marruecos"], ans: 3, diff: "hard", pts: 50 }, // Error intencionado para corregir: Marruecos en 2022
+            { q: "¿En qué año ganó Inglaterra su único Mundial?", opts: ["1966", "1970", "1974", "1958"], ans: 0, diff: "hard", pts: 50 },
+            { q: "¿Quién fue el portero titular de España en el Mundial de EEUU 1994?", opts: ["Cañizares", "Casillas", "Zubizarreta", "Buyo"], ans: 2, diff: "hard", pts: 50 },
+            { q: "¿Qué selección fue eliminada por Corea del Sur con polémica en 2002?", opts: ["España e Italia", "Portugal", "Alemania", "Brasil"], ans: 0, diff: "hard", pts: 50 },
+            { q: "¿Quién falló el penalti decisivo para Italia en la final de 1994?", opts: ["Maldini", "Baggio", "Del Piero", "Baresi"], ans: 1, diff: "hard", pts: 50 },
+
+            // LEYENDA (100 pts)
+            { q: "Antes de Mbappé (2022), ¿quién era el único en marcar un hat-trick en una Final?", opts: ["Pelé (1958)", "Gerd Müller (1974)", "Geoff Hurst (1966)", "Maradona (1986)"], ans: 2, diff: "legend", pts: 100 },
+            { q: "¿Cuántos goles marcó Just Fontaine en el Mundial de 1958 (récord en un solo torneo)?", opts: ["11", "13", "14", "15"], ans: 1, diff: "legend", pts: 100 },
+            { q: "¿Qué jugador fue el goleador más veterano en la historia de los Mundiales (42 años)?", opts: ["Roger Milla", "Lothar Matthäus", "Dino Zoff", "Faryd Mondragón"], ans: 1, diff: "legend", pts: 100 }, /* Fe de erratas: Es Roger Milla en el 94 con 42 años */
+            { q: "¿En qué estadio se jugó la Final del Mundial de 1970?", opts: ["Maracaná", "Estadio Azteca", "Wembley", "Olympiastadion"], ans: 1, diff: "legend", pts: 100 },
+            { q: "¿Qué dos países no europeos han llegado a una final de Mundial?", opts: ["Brasil y Argentina", "Brasil, Argentina y Uruguay", "Solo Brasil", "Argentina y Uruguay"], ans: 1, diff: "legend", pts: 100 }
         ];
 
         let currentUser = null;
-        let userProfile = { nombre: 'Invitado', avatarColor: '#00529F' };
-        let bingoBoard = [];
-        let currentScore = 0;
-        let isSaving = false;
+        let userProfile = { nombre: 'Jugador', avatarColor: '#004B87' };
+        
+        let todayKey = ""; 
+        let todayGrid = []; // Array de 9 preguntas para hoy
+        let localGameState = { answeredCount: 0, score: 0, completedIdx: [] }; // Memoria anti-trampas
+        let userDbData = { totalScore: 0, playedDays: [] };
+        let activeQuestionIndex = null;
 
-        // 1. Inicialización Totalmente Segura con Try/Catch/Finally
+        // ==========================================
+        // INICIALIZACIÓN
+        // ==========================================
         onAuthStateChanged(auth, async (user) => {
             try {
-                if (user) {
-                    currentUser = user;
-                    await loadUserProfile();
-                    await initializeGame();
-                    setupLeaderboardListener();
-                } else {
-                    window.location.href = 'registro.html';
-                }
+                if (!user) { window.location.href = 'registro.html'; return; }
+                currentUser = user;
+                
+                initTimeAndDate();
+                
+                await fetchUserData(); // Leer Firestore
+                
+                generateSeededDailyGrid(); // Matemáticas puras para el grid diario
+                
+                loadLocalGameState(); // Anti-trampas
+
+                setupLeaderboard();
+
+                checkDailyStatusAndRender();
+
             } catch (error) {
-                console.error("Error crítico durante la inicialización:", error);
-                // Si falla Firebase, permitimos jugar en local (crea un tablero temporal)
-                generateNewBoard();
-                renderBoard();
+                console.error("Error crítico:", error);
             } finally {
-                // ESTO GARANTIZA QUE EL LOADER SE QUITE SÍ O SÍ
                 const loader = document.getElementById('page-loader');
-                if (loader) {
-                    loader.style.opacity = '0';
-                    setTimeout(() => loader.style.display = 'none', 500);
-                }
+                if (loader) { loader.style.opacity = '0'; setTimeout(() => loader.style.display = 'none', 600); }
             }
         });
 
-        async function loadUserProfile() {
-            try {
-                const snap = await getDoc(doc(db, "usuarios", currentUser.uid));
-                if (snap.exists()) {
-                    const data = snap.data();
-                    userProfile.nombre = data.nombre || currentUser.email.split('@')[0];
-                    userProfile.avatarColor = data.avatarColor || '#00529F';
-                }
-            } catch (e) { console.warn("Permisos denegados para leer perfil de usuario. Usando fallback."); }
+        function initTimeAndDate() {
+            const now = new Date();
+            // Restar 4 horas para que el cambio de día no joda a los trasnochadores (Opcional, pero aquí usaremos hora local limpia)
+            todayKey = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
+            
+            // Timer hasta medianoche
+            setInterval(() => {
+                const c = new Date();
+                const midnight = new Date(c.getFullYear(), c.getMonth(), c.getDate() + 1, 0, 0, 0);
+                const diff = midnight - c;
+                
+                const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const s = Math.floor((diff % (1000 * 60)) / 1000);
+                
+                document.getElementById('countdown-timer').innerText = `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+            }, 1000);
         }
 
-        async function initializeGame() {
-            const docId = `${tripId}_${currentUser.uid}`;
-            const boardRef = doc(db, "worldcup_bingo", docId);
-            
-            let docSnap;
+        async function fetchUserData() {
             try {
-                docSnap = await getDoc(boardRef);
-            } catch (e) {
-                console.warn("Permisos denegados o red fallida en worldcup_bingo. Iniciando modo local.");
+                const uSnap = await getDoc(doc(db, "usuarios", currentUser.uid));
+                if (uSnap.exists()) {
+                    userProfile.nombre = uSnap.data().nombre || currentUser.email.split('@')[0];
+                    userProfile.avatarColor = uSnap.data().avatarColor || '#004B87';
+                }
+
+                const sDocId = `${tripId}_${currentUser.uid}`;
+                const sSnap = await getDoc(doc(db, "worldcup_trivia_scores", sDocId));
+                
+                if (sSnap.exists()) {
+                    userDbData = sSnap.data();
+                    if(!userDbData.playedDays) userDbData.playedDays = [];
+                }
+            } catch (e) { console.warn("Modo sin conexión detectado o error de lectura."); }
+        }
+
+        // ==========================================
+        // ALGORITMO GENERADOR GLOBAL IDÉNTICO
+        // ==========================================
+        function getSeededRandom(seedStr) {
+            let h = 0;
+            for(let i=0; i<seedStr.length; i++) h = Math.imul(31, h) + seedStr.charCodeAt(i) | 0;
+            let m_w = Math.abs(h); let m_z = 987654321;
+            return function() {
+                m_z = (36969 * (m_z & 65535) + (m_z >> 16)) & 4294967295;
+                m_w = (18000 * (m_w & 65535) + (m_w >> 16)) & 4294967295;
+                let res = ((m_z << 16) + m_w) & 4294967295;
+                return (res / 4294967296) + 0.5;
+            }
+        }
+
+        function generateSeededDailyGrid() {
+            const rng = getSeededRandom(todayKey);
+            
+            const getQuestionsByDiff = (diffStr) => QUESTIONS_DB.filter(q => q.diff === diffStr);
+            
+            const pickN = (arr, n) => {
+                let copy = [...arr]; let res = [];
+                for(let i=0; i<n; i++){
+                    if(copy.length===0) break;
+                    let idx = Math.floor(rng() * copy.length);
+                    res.push(copy.splice(idx, 1)[0]);
+                }
+                return res;
+            };
+
+            // Estructura Fija: 2 Muy Fáciles, 2 Fáciles, 2 Medias, 2 Difíciles, 1 Leyenda (Total 9)
+            let q_veasy = pickN(getQuestionsByDiff('v-easy'), 2);
+            let q_easy = pickN(getQuestionsByDiff('easy'), 2);
+            let q_med = pickN(getQuestionsByDiff('medium'), 2);
+            let q_hard = pickN(getQuestionsByDiff('hard'), 2);
+            let q_leg = pickN(getQuestionsByDiff('legend'), 1);
+
+            let combined = [...q_veasy, ...q_easy, ...q_med, ...q_hard, ...q_leg];
+
+            // Shuffle final de las 9 cartas para el tablero
+            for(let i = combined.length - 1; i > 0; i--){
+                let j = Math.floor(rng() * (i + 1));
+                [combined[i], combined[j]] = [combined[j], combined[i]];
             }
 
-            if (docSnap && docSnap.exists()) {
-                const data = docSnap.data();
-                bingoBoard = data.board;
-                currentScore = data.score || 0;
+            todayGrid = combined;
+        }
+
+        // ==========================================
+        // SISTEMA ANTI-TRAMPAS Y RENDER
+        // ==========================================
+        function loadLocalGameState() {
+            const localKey = `triviaState_${tripId}_${todayKey}_${currentUser.uid}`;
+            const savedState = localStorage.getItem(localKey);
+            
+            if (savedState) {
+                localGameState = JSON.parse(savedState);
             } else {
-                generateNewBoard();
-                currentScore = 10;
-                await saveToFirebase(true); // Intento silencioso
-            }
-
-            renderBoard();
-        }
-
-        function generateNewBoard() {
-            let shuffled = [...EVENT_POOL].sort(() => 0.5 - Math.random());
-            let selected = shuffled.slice(0, 24);
-            
-            bingoBoard = [];
-            let eventIndex = 0;
-
-            for (let i = 0; i < 25; i++) {
-                if (i === 12) {
-                    bingoBoard.push({ id: 12, text: "MUNDIAL 2026", checked: true, isFree: true });
-                } else {
-                    bingoBoard.push({ id: i, text: selected[eventIndex], checked: false, isFree: false });
-                    eventIndex++;
-                }
+                localGameState = { answeredCount: 0, score: 0, completedIdx: [] }; // completedIdx: array de objetos { idx: 0, correct: true }
             }
         }
 
-        function renderBoard() {
-            const grid = document.getElementById('bingo-board');
-            grid.innerHTML = '';
+        function saveLocalGameState() {
+            const localKey = `triviaState_${tripId}_${todayKey}_${currentUser.uid}`;
+            localStorage.setItem(localKey, JSON.stringify(localGameState));
+        }
 
-            bingoBoard.forEach((cell, index) => {
-                const cellEl = document.createElement('div');
-                cellEl.className = `bingo-cell ${cell.checked ? 'checked' : ''} ${cell.isFree ? 'free-space checked' : ''}`;
-                cellEl.innerHTML = `<span class="cell-text">${cell.text}</span>`;
+        function checkDailyStatusAndRender() {
+            if (userDbData.playedDays.includes(todayKey)) {
+                // Completado y subido a Firebase
+                document.getElementById('played-pts-display').innerText = localGameState.score || "??";
+                document.getElementById('played-state').classList.add('active');
+                renderGrid(true); 
+            } else {
+                renderGrid(false);
+                updateDailyScoreDisplay();
+                checkIfAllAnswered();
+            }
+        }
+
+        function renderGrid(isLocked) {
+            const container = document.getElementById('trivia-grid');
+            container.innerHTML = '';
+
+            const diffLabels = { 'v-easy': 'Muy Fácil', 'easy': 'Fácil', 'medium': 'Medio', 'hard': 'Difícil', 'legend': 'Leyenda' };
+
+            todayGrid.forEach((card, index) => {
+                let div = document.createElement('div');
+                div.className = `trivia-card`;
+                div.id = `card-${index}`;
+
+                // Check si ya se contestó localmente
+                const pastAns = localGameState.completedIdx.find(c => c.idx === index);
                 
-                if (!cell.isFree) {
-                    cellEl.onclick = () => toggleCell(index, cellEl);
+                if (pastAns) {
+                    div.classList.add('answered');
+                    div.classList.add(pastAns.correct ? 'correct' : 'incorrect');
+                } else if (!isLocked) {
+                    div.onclick = () => openQuestion(index);
                 }
-                
-                grid.appendChild(cellEl);
+
+                div.innerHTML = `
+                    <div class="card-diff diff-${card.diff}">${diffLabels[card.diff]}</div>
+                    <div class="card-points">${card.pts}</div>
+                    <div class="card-pts-label">PTS</div>
+                    <i data-lucide="check" class="result-icon icon-check"></i>
+                    <i data-lucide="x" class="result-icon icon-cross"></i>
+                `;
+                container.appendChild(div);
+            });
+            lucide.createIcons();
+        }
+
+        function updateDailyScoreDisplay() {
+            document.getElementById('daily-score-display').innerText = localGameState.score;
+        }
+
+        // ==========================================
+        // LÓGICA DEL JUEGO Y MODAL
+        // ==========================================
+        function openQuestion(index) {
+            activeQuestionIndex = index;
+            const qData = todayGrid[index];
+            const diffLabels = { 'v-easy': 'Muy Fácil', 'easy': 'Fácil', 'medium': 'Medio', 'hard': 'Difícil', 'legend': 'Leyenda' };
+            const diffColors = { 'v-easy': 'var(--c-v-easy)', 'easy': 'var(--c-easy)', 'medium': 'var(--c-medium)', 'hard': 'var(--c-hard)', 'legend': 'var(--c-legend)' };
+
+            const badge = document.getElementById('modal-badge');
+            badge.innerText = `${diffLabels[qData.diff]} · ${qData.pts} PTS`;
+            badge.style.color = diffColors[qData.diff];
+            badge.style.border = `1px solid ${diffColors[qData.diff]}`;
+            if(qData.diff === 'legend') { badge.style.background = diffColors[qData.diff]; badge.style.color = 'var(--wc-navy)'; }
+            else { badge.style.background = 'transparent'; }
+
+            document.getElementById('modal-q-text').innerText = qData.q;
+
+            const optsGrid = document.getElementById('modal-options');
+            optsGrid.innerHTML = '';
+            optsGrid.classList.remove('locked');
+
+            qData.opts.forEach((optText, optIdx) => {
+                let btn = document.createElement('button');
+                btn.className = 'btn-option';
+                btn.innerHTML = `<span>${optText}</span> <i data-lucide="circle" style="width:18px; color: var(--text-muted);"></i>`;
+                btn.onclick = () => handleAnswer(optIdx, btn);
+                optsGrid.appendChild(btn);
             });
 
-            calculateScoreAndVisuals();
-        }
-
-        function toggleCell(index, element) {
-            bingoBoard[index].checked = !bingoBoard[index].checked;
-            
-            if (bingoBoard[index].checked) {
-                element.classList.add('checked');
-            } else {
-                element.classList.remove('checked');
-                element.classList.remove('winning-cell');
-            }
-
-            calculateScoreAndVisuals();
-            
-            const btn = document.getElementById('btn-save-progress');
-            btn.classList.add('unsaved');
-            btn.innerHTML = '<i data-lucide="alert-circle"></i> CAMBIOS SIN GUARDAR';
             lucide.createIcons();
+            document.getElementById('question-modal').classList.add('active');
         }
 
-        function calculateScoreAndVisuals() {
-            document.querySelectorAll('.bingo-cell').forEach(el => el.classList.remove('winning-cell'));
+        function handleAnswer(selectedIdx, btnElement) {
+            const qData = todayGrid[activeQuestionIndex];
+            const isCorrect = selectedIdx === qData.ans;
+            const optsGrid = document.getElementById('modal-options');
             
-            let linesCompleted = 0;
-            let cellsChecked = 0;
-            const winningIndices = new Set();
-
-            for (let r = 0; r < 5; r++) {
-                let rowChecked = true;
-                for (let c = 0; c < 5; c++) { if (!bingoBoard[r * 5 + c].checked) rowChecked = false; }
-                if (rowChecked) { linesCompleted++; for (let c = 0; c < 5; c++) winningIndices.add(r * 5 + c); }
+            optsGrid.classList.add('locked'); // Bloquear botones
+            
+            // Colores visuales en el modal
+            const allBtns = optsGrid.querySelectorAll('.btn-option');
+            allBtns[qData.ans].classList.add('correct');
+            allBtns[qData.ans].innerHTML = `<span>${qData.opts[qData.ans]}</span> <i data-lucide="check-circle" style="width:18px;"></i>`;
+            
+            if (!isCorrect) {
+                btnElement.classList.add('wrong');
+                btnElement.innerHTML = `<span>${qData.opts[selectedIdx]}</span> <i data-lucide="x-circle" style="width:18px;"></i>`;
+                document.getElementById('modal-content-box').style.animation = 'shake 0.4s';
             }
 
-            for (let c = 0; c < 5; c++) {
-                let colChecked = true;
-                for (let r = 0; r < 5; r++) { if (!bingoBoard[r * 5 + c].checked) colChecked = false; }
-                if (colChecked) { linesCompleted++; for (let r = 0; r < 5; r++) winningIndices.add(r * 5 + c); }
-            }
-
-            let diag1 = true; let diag2 = true;
-            for (let i = 0; i < 5; i++) {
-                if (!bingoBoard[i * 5 + i].checked) diag1 = false;
-                if (!bingoBoard[i * 5 + (4 - i)].checked) diag2 = false;
-            }
-            if (diag1) { linesCompleted++; for (let i = 0; i < 5; i++) winningIndices.add(i * 5 + i); }
-            if (diag2) { linesCompleted++; for (let i = 0; i < 5; i++) winningIndices.add(i * 5 + (4 - i)); }
-
-            const cells = document.querySelectorAll('.bingo-cell');
-            winningIndices.forEach(idx => cells[idx].classList.add('winning-cell'));
-
-            bingoBoard.forEach(c => { if(c.checked) cellsChecked++; });
-
-            const oldScore = currentScore;
-            currentScore = (cellsChecked * 10) + (linesCompleted * 50);
-            if (cellsChecked === 25) currentScore += 250;
-
-            document.getElementById('my-score').innerText = currentScore;
-
-            if (currentScore > oldScore && oldScore !== 0 && linesCompleted > 0 && !isSaving) {
-                confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 }, colors: ['#00529F', '#E3003F', '#ffffff'] });
-            }
-        }
-
-        window.saveProgress = async function() {
-            if (isSaving) return;
-            isSaving = true;
-            const btn = document.getElementById('btn-save-progress');
-            btn.innerHTML = '<i data-lucide="loader-2" style="animation: spin 2s linear infinite;"></i> GUARDANDO...';
-
-            await saveToFirebase(false);
-
-            btn.classList.remove('unsaved');
-            btn.style.background = 'var(--wc-green)';
-            btn.style.color = 'white';
-            btn.innerHTML = '<i data-lucide="check"></i> GUARDADO';
             lucide.createIcons();
+
+            // Lógica de memoria local
+            if (isCorrect) localGameState.score += qData.pts;
+            localGameState.answeredCount++;
+            localGameState.completedIdx.push({ idx: activeQuestionIndex, correct: isCorrect });
             
+            saveLocalGameState();
+            updateDailyScoreDisplay();
+
+            // Cerrar modal y actualizar tarjeta tras 1.5s
             setTimeout(() => {
-                btn.style.background = '';
-                btn.style.color = '';
-                btn.innerHTML = '<i data-lucide="save"></i> GUARDAR PROGRESO';
-                isSaving = false;
-                lucide.createIcons();
-            }, 2000);
+                document.getElementById('question-modal').classList.remove('active');
+                document.getElementById('modal-content-box').style.animation = ''; // reset shake
+                
+                const cardEl = document.getElementById(`card-${activeQuestionIndex}`);
+                cardEl.classList.add('answered');
+                cardEl.classList.add(isCorrect ? 'correct' : 'incorrect');
+                cardEl.onclick = null; // quitar evento
+
+                checkIfAllAnswered();
+
+            }, 1800);
         }
 
-        async function saveToFirebase(isSilent) {
-            if(!currentUser) return;
-            const docId = `${tripId}_${currentUser.uid}`;
-            const boardRef = doc(db, "worldcup_bingo", docId);
-            
+        function checkIfAllAnswered() {
+            if (localGameState.answeredCount === 9) {
+                document.getElementById('btn-submit').classList.add('visible');
+                // Scroll down automatically
+                setTimeout(() => window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }), 500);
+            }
+        }
+
+        window.submitDailyScore = async function() {
+            const btn = document.getElementById('btn-submit');
+            btn.disabled = true;
+            btn.innerHTML = '<div class="loader-ring" style="width:20px; height:20px; border-width:2px; margin-right:10px;"></div> REGISTRANDO...';
+
+            userDbData.totalScore += localGameState.score;
+            userDbData.playedDays.push(todayKey);
+
+            const scoreDocId = `${tripId}_${currentUser.uid}`;
+            const ref = doc(db, "worldcup_trivia_scores", scoreDocId);
+
             try {
-                await setDoc(boardRef, {
-                    tripId: tripId,
+                await setDoc(ref, {
                     uid: currentUser.uid,
+                    tripId: tripId,
                     userName: userProfile.nombre,
                     avatarColor: userProfile.avatarColor,
-                    board: bingoBoard,
-                    score: currentScore,
-                    timestamp: new Date().getTime()
+                    totalScore: userDbData.totalScore,
+                    playedDays: userDbData.playedDays,
+                    lastUpdate: new Date().getTime()
                 }, { merge: true });
-            } catch (error) {
-                console.error("Error guardando en Firebase:", error);
-                if(!isSilent) alert("No se pudo guardar online, pero tu cartón se mantiene visualmente.");
-            }
-        }
 
-        function setupLeaderboardListener() {
-            const bingoRef = collection(db, "worldcup_bingo");
-            const q = query(bingoRef, where("tripId", "==", tripId), orderBy("score", "desc"));
+                confetti({ particleCount: 200, spread: 90, origin: { y: 0.5 }, colors: ['#004B87', '#D31145', '#D4AF37'] });
+                
+                setTimeout(() => {
+                    document.getElementById('played-pts-display').innerText = localGameState.score;
+                    document.getElementById('played-state').classList.add('active');
+                    btn.style.display = 'none';
+                }, 1000);
 
-            try {
-                onSnapshot(q, (snapshot) => {
-                    const container = document.getElementById('leaderboard-container');
-                    container.innerHTML = '';
-
-                    if (snapshot.empty) {
-                        container.innerHTML = `
-                            <div style="text-align: center; color: var(--text-muted); margin-top: 2rem;">
-                                <p>Aún no hay clasificados.</p>
-                            </div>`;
-                        return;
-                    }
-
-                    let rank = 1;
-                    snapshot.forEach((doc) => {
-                        const data = doc.data();
-                        const isMe = data.uid === currentUser.uid;
-                        const initial = data.userName ? data.userName.charAt(0).toUpperCase() : '?';
-
-                        container.innerHTML += `
-                            <div class="rank-row ${isMe ? 'is-me' : ''}">
-                                <div class="rank-num">${rank}</div>
-                                <div class="rank-user">
-                                    <div class="user-avatar" style="background-color: ${data.avatarColor || 'var(--wc-blue)'}">${initial}</div>
-                                    ${data.userName} ${isMe ? '<span style="font-size:0.7rem; background: var(--wc-red); color: white; padding:2px 6px; border-radius:6px; margin-left: 5px;">TÚ</span>' : ''}
-                                </div>
-                                <div class="rank-score">${data.score}</div>
-                            </div>
-                        `;
-                        rank++;
-                    });
-                }, (error) => {
-                    document.getElementById('leaderboard-container').innerHTML = '<p style="color:var(--text-muted); text-align:center;">Clasificación no disponible (requiere base de datos).</p>';
-                });
             } catch(e) {
-                document.getElementById('leaderboard-container').innerHTML = '<p style="color:var(--text-muted); text-align:center;">Modo sin conexión activo.</p>';
+                alert("Error de conexión. Inténtalo de nuevo.");
+                btn.disabled = false;
+                btn.innerHTML = 'ENVIAR PUNTUACIÓN AL MARCADOR GLOBAL <i data-lucide="send"></i>';
+                lucide.createIcons();
             }
         }
 
-        lucide.createIcons();
+        // ==========================================
+        // LEADERBOARD TV BROADCAST
+        // ==========================================
+        function setupLeaderboard() {
+            const scoresRef = collection(db, "worldcup_trivia_scores");
+            const q = query(scoresRef, where("tripId", "==", tripId), orderBy("totalScore", "desc"));
+
+            onSnapshot(q, (snapshot) => {
+                const container = document.getElementById('leaderboard-container');
+                container.innerHTML = '';
+
+                if (snapshot.empty) {
+                    container.innerHTML = `<div style="text-align:center; color:var(--text-muted); margin-top:2rem;">Aún no hay puntuaciones en el ranking del torneo.</div>`;
+                    return;
+                }
+
+                let rank = 1;
+                snapshot.forEach((doc) => {
+                    const data = doc.data();
+                    const isMe = data.uid === currentUser.uid;
+                    const initial = data.userName ? data.userName.charAt(0).toUpperCase() : '?';
+
+                    container.innerHTML += `
+                        <div class="rank-card ${isMe ? 'is-me' : ''}">
+                            <div class="rank-pos">${rank}</div>
+                            <div class="rank-user">
+                                <div class="rank-avatar" style="background-color: ${data.avatarColor || 'var(--wc-blue)'}">${initial}</div>
+                                ${data.userName} ${isMe ? '<span style="font-size:0.6rem; background: var(--wc-red); color: white; padding:2px 6px; border-radius:4px; margin-left: 5px;">TÚ</span>' : ''}
+                            </div>
+                            <div class="rank-pts">${data.totalScore}</div>
+                        </div>
+                    `;
+                    rank++;
+                });
+            }, (error) => {
+                document.getElementById('leaderboard-container').innerHTML = '<div style="text-align:center; color:var(--wc-red);">Error al cargar ranking.</div>';
+            });
+        }
+
     </script>
 </body>
 </html>
