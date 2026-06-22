@@ -15,240 +15,232 @@
 
     <style>
         /* =========================================
-           PALETA OFICIAL WORLD CUP 26 Y DISEÑO
+           PALETA ELEGANTE WORLD CUP 26
            ========================================= */
         :root {
             --wc-blue: #00529F;
             --wc-red: #E3003F;
             --wc-green: #00A651;
-            --wc-purple: #662483;
             --wc-yellow: #FFC20E;
-            --pitch-dark: #020617;
-            --surface: rgba(15, 23, 42, 0.75);
+            --pitch-black: #050505;
+            --deep-navy: #0a0f1a;
+            --surface-glass: rgba(20, 25, 35, 0.6);
             --primary: #ffffff;
-            --text-muted: #94a3b8;
-            --neon-glow: 0 0 20px rgba(227, 0, 63, 0.6);
-            --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --text-muted: #8b9bb4;
+            --border-subtle: rgba(255, 255, 255, 0.06);
+            --transition: 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Sora', sans-serif; }
 
-        /* Fondo estilo Estadio (Césped + Focos de luz) */
+        /* Fondo Minimalista y Premium */
         body {
-            background-color: var(--pitch-dark);
-            background-image: 
-                radial-gradient(circle at 10% 0%, rgba(255, 255, 255, 0.1) 0%, transparent 40%),
-                radial-gradient(circle at 90% 0%, rgba(255, 255, 255, 0.1) 0%, transparent 40%),
-                linear-gradient(rgba(2, 6, 23, 0.9), rgba(2, 6, 23, 0.95)),
-                repeating-linear-gradient(0deg, transparent, transparent 60px, rgba(255,255,255,0.02) 60px, rgba(255,255,255,0.02) 120px);
+            background-color: var(--pitch-black);
+            background-image: radial-gradient(circle at 50% 0%, rgba(0, 82, 159, 0.15), transparent 50%);
             color: var(--primary);
             min-height: 100vh;
             overflow-x: hidden;
             background-attachment: fixed;
         }
 
-        /* Nav */
+        /* Navbar Limpia */
         nav {
             display: flex; justify-content: space-between; align-items: center;
-            padding: 1rem 5%; background: rgba(2, 6, 23, 0.85); backdrop-filter: blur(20px);
-            border-bottom: 2px solid var(--wc-red); position: sticky; top: 0; z-index: 100;
-            box-shadow: 0 4px 30px rgba(227, 0, 63, 0.2);
+            padding: 1.2rem 5%; background: rgba(5, 5, 5, 0.85); backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-subtle); position: sticky; top: 0; z-index: 100;
         }
-        .btn-nav { background: transparent; color: var(--primary); border: none; cursor: pointer; display: flex; align-items: center; gap: 8px; font-weight: 600; transition: var(--transition); }
-        .btn-nav:hover { color: var(--wc-yellow); transform: translateX(-5px); }
-        .logo-wc { display: flex; align-items: center; gap: 10px; font-family: 'Teko', sans-serif; font-size: 2.2rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+        .btn-nav { background: transparent; color: var(--text-muted); border: none; cursor: pointer; display: flex; align-items: center; gap: 8px; font-weight: 600; transition: var(--transition); }
+        .btn-nav:hover { color: var(--primary); transform: translateX(-4px); }
+        .logo-wc { display: flex; align-items: center; gap: 8px; font-family: 'Teko', sans-serif; font-size: 2rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--primary); }
         .logo-wc span { color: var(--wc-red); }
 
+        /* Loader a prueba de fallos */
         #page-loader {
-            position: fixed; inset: 0; background: var(--pitch-dark); z-index: 9999;
+            position: fixed; inset: 0; background: var(--pitch-black); z-index: 9999;
             display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.5s ease;
-            background-image: radial-gradient(circle at center, #00529F 0%, var(--pitch-dark) 60%);
         }
-        .loader-ball { width: 60px; height: 60px; animation: bounceBall 1s infinite alternate cubic-bezier(0.5, 0.05, 1, 0.5); }
-        @keyframes bounceBall { from { transform: translateY(-50px) rotate(0deg); } to { transform: translateY(0) rotate(360deg); } }
+        .loader-ring {
+            width: 50px; height: 50px;
+            border: 3px solid rgba(255,255,255,0.1);
+            border-top-color: var(--wc-blue);
+            border-right-color: var(--wc-red);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
 
         /* Layout Main */
         .game-container {
-            max-width: 1400px; margin: 2rem auto; padding: 0 5%;
-            display: grid; grid-template-columns: 1fr 400px; gap: 2rem;
+            max-width: 1300px; margin: 3rem auto; padding: 0 5%;
+            display: grid; grid-template-columns: 1fr 380px; gap: 2.5rem;
         }
 
         @media (max-width: 1024px) {
-            .game-container { grid-template-columns: 1fr; }
+            .game-container { grid-template-columns: 1fr; margin: 2rem auto; }
         }
 
         /* Tablero de Bingo */
         .board-section {
-            background: var(--surface);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 24px;
+            background: var(--surface-glass);
+            border: 1px solid var(--border-subtle);
+            border-radius: 20px;
             padding: 2.5rem;
-            backdrop-filter: blur(15px);
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(20px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
             position: relative;
-            overflow: hidden;
         }
 
-        /* Resplandor decorativo de fondo en el tablero */
-        .board-section::before {
-            content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
-            background: radial-gradient(circle at 50% 50%, rgba(0, 82, 159, 0.1), transparent 60%);
-            z-index: 0; pointer-events: none;
-        }
-
-        .board-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 2rem; position: relative; z-index: 1; }
-        .board-header h1 { font-family: 'Teko', sans-serif; font-size: 3.5rem; line-height: 0.9; text-transform: uppercase; margin-bottom: 5px; text-shadow: 0 4px 15px rgba(0,0,0,0.5);}
-        .board-header p { color: var(--text-muted); font-size: 1rem; }
+        .board-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 2.5rem; }
+        .board-header h1 { font-family: 'Teko', sans-serif; font-size: 3rem; line-height: 1; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+        .board-header p { color: var(--text-muted); font-size: 0.95rem; font-weight: 300; }
         
         .score-display {
-            background: linear-gradient(135deg, rgba(227, 0, 63, 0.1), rgba(0, 82, 159, 0.1)); 
-            border: 2px solid var(--wc-red);
-            padding: 1rem 2rem; border-radius: 20px; text-align: center;
-            box-shadow: var(--neon-glow);
+            background: rgba(0, 0, 0, 0.4); 
+            border: 1px solid var(--border-subtle);
+            padding: 0.8rem 2rem; border-radius: 12px; text-align: center;
         }
-        .score-display span { display: block; font-size: 0.85rem; color: var(--primary); font-weight: 800; text-transform: uppercase; letter-spacing: 2px;}
-        .score-display strong { font-size: 3rem; font-family: 'Teko', sans-serif; line-height: 1; color: var(--wc-yellow); text-shadow: 0 0 10px rgba(255, 194, 14, 0.5); }
+        .score-display span { display: block; font-size: 0.75rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 2px;}
+        .score-display strong { font-size: 2.5rem; font-family: 'Teko', sans-serif; line-height: 1.1; color: var(--primary); }
 
         .bingo-grid {
-            display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px;
-            background: rgba(0,0,0,0.4); padding: 15px; border-radius: 20px;
-            position: relative; z-index: 1; border: 1px solid rgba(255,255,255,0.05);
+            display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px;
         }
 
         .bingo-cell {
             aspect-ratio: 1 / 1;
-            background: rgba(255,255,255,0.03);
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
             display: flex; justify-content: center; align-items: center; text-align: center;
-            padding: 10px; cursor: pointer; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            padding: 10px; cursor: pointer; transition: var(--transition);
             position: relative; overflow: hidden;
             user-select: none;
-            box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
         }
 
         .bingo-cell:hover:not(.checked):not(.free-space) {
-            background: rgba(255,255,255,0.1); transform: translateY(-4px) scale(1.02); border-color: var(--wc-blue);
-            box-shadow: 0 10px 20px rgba(0, 82, 159, 0.3);
+            background: rgba(255, 255, 255, 0.05); border-color: rgba(255, 255, 255, 0.2); transform: translateY(-3px);
         }
 
         .bingo-cell.checked {
-            background: linear-gradient(135deg, var(--wc-blue), var(--wc-red));
-            border-color: transparent;
-            box-shadow: 0 8px 25px rgba(227, 0, 63, 0.5);
-            transform: scale(0.95);
+            background: var(--wc-blue);
+            border-color: var(--wc-blue);
+            box-shadow: 0 5px 15px rgba(0, 82, 159, 0.4);
+            transform: scale(0.96);
         }
 
         .bingo-cell.checked::after {
-            content: '⚽'; position: absolute; font-size: 3rem; opacity: 0.15; transform: rotate(-15deg);
+            content: ''; position: absolute; inset: 0; 
+            background: linear-gradient(135deg, transparent, rgba(255,255,255,0.1));
+            pointer-events: none;
         }
 
         .bingo-cell.free-space {
-            background: linear-gradient(135deg, #FFC20E, #F7941E);
-            color: #000; font-weight: 800; border: none; cursor: default;
-            box-shadow: 0 0 20px rgba(255, 194, 14, 0.4);
+            background: var(--primary);
+            color: var(--pitch-black); font-weight: 800; border: none; cursor: default;
         }
 
         .bingo-cell.winning-cell {
-            animation: pulseWin 1.5s infinite;
+            background: var(--wc-green);
+            border-color: var(--wc-green);
+            box-shadow: 0 0 20px rgba(0, 166, 81, 0.4);
+            animation: pulseWin 2s infinite;
         }
 
         @keyframes pulseWin {
-            0% { box-shadow: 0 0 0 0 rgba(227, 0, 63, 0.8); border: 2px solid var(--wc-yellow); }
-            70% { box-shadow: 0 0 0 20px rgba(227, 0, 63, 0); border: 2px solid var(--wc-yellow); }
-            100% { box-shadow: 0 0 0 0 rgba(227, 0, 63, 0); border: 2px solid var(--wc-yellow); }
+            0% { opacity: 1; }
+            50% { opacity: 0.8; }
+            100% { opacity: 1; }
         }
 
         .cell-text {
-            font-size: 0.85rem; font-weight: 600; z-index: 2; word-break: break-word; line-height: 1.3;
+            font-size: 0.8rem; font-weight: 600; z-index: 2; word-break: break-word; line-height: 1.3;
         }
+        .bingo-cell.free-space .cell-text { font-size: 0.9rem; text-transform: uppercase; }
 
         /* Leaderboard */
         .leaderboard-section {
-            background: var(--surface); border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 24px; padding: 2rem; backdrop-filter: blur(15px);
-            display: flex; flex-direction: column; max-height: 850px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+            background: var(--surface-glass); border: 1px solid var(--border-subtle);
+            border-radius: 20px; padding: 2rem; backdrop-filter: blur(20px);
+            display: flex; flex-direction: column; max-height: 800px;
         }
 
         .leaderboard-section h2 {
-            font-family: 'Teko', sans-serif; font-size: 2.5rem; display: flex; align-items: center; gap: 10px;
-            text-transform: uppercase; border-bottom: 2px solid rgba(255,255,255,0.05); padding-bottom: 1rem; margin-bottom: 1rem;
-            color: var(--wc-yellow);
+            font-family: 'Teko', sans-serif; font-size: 2.2rem; display: flex; align-items: center; gap: 10px;
+            text-transform: uppercase; border-bottom: 1px solid var(--border-subtle); padding-bottom: 1rem; margin-bottom: 1rem;
+            color: var(--primary); letter-spacing: 1px;
         }
 
         .table-container { flex: 1; overflow-y: auto; padding-right: 5px; }
-        .table-container::-webkit-scrollbar { width: 6px; }
-        .table-container::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 10px; }
+        .table-container::-webkit-scrollbar { width: 4px; }
+        .table-container::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
 
         .rank-row {
-            display: flex; align-items: center; padding: 1.2rem;
-            background: rgba(255,255,255,0.02); border-radius: 16px; margin-bottom: 12px;
-            transition: var(--transition); border: 1px solid rgba(255,255,255,0.05);
+            display: flex; align-items: center; padding: 1rem;
+            background: rgba(0,0,0,0.2); border-radius: 12px; margin-bottom: 10px;
+            border: 1px solid transparent; transition: var(--transition);
         }
-        .rank-row:hover { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.1); transform: translateX(5px); }
+        .rank-row:hover { background: rgba(255,255,255,0.03); border-color: var(--border-subtle); }
         
-        .rank-row.is-me { border-color: var(--wc-red); background: rgba(227, 0, 63, 0.1); box-shadow: 0 0 15px rgba(227, 0, 63, 0.2); }
+        .rank-row.is-me { border-color: var(--wc-red); background: rgba(227, 0, 63, 0.05); }
 
-        .rank-num { font-family: 'Teko', sans-serif; font-size: 1.8rem; font-weight: 700; width: 40px; color: var(--text-muted); text-align: center; }
-        .rank-row:nth-child(1) .rank-num { color: #FFC20E; font-size: 2.2rem; text-shadow: 0 0 10px rgba(255,194,14,0.5); }
-        .rank-row:nth-child(2) .rank-num { color: #E0E0E0; font-size: 2rem; }
-        .rank-row:nth-child(3) .rank-num { color: #CD7F32; font-size: 1.9rem; }
+        .rank-num { font-family: 'Teko', sans-serif; font-size: 1.5rem; font-weight: 700; width: 35px; color: var(--text-muted); text-align: left; }
+        .rank-row:nth-child(1) .rank-num { color: var(--wc-yellow); font-size: 1.8rem; }
+        .rank-row:nth-child(2) .rank-num { color: #E2E8F0; font-size: 1.7rem; }
+        .rank-row:nth-child(3) .rank-num { color: #D97706; font-size: 1.6rem; }
 
-        .rank-user { flex: 1; font-weight: 600; display: flex; align-items: center; gap: 12px; font-size: 1rem; }
-        .user-avatar { width: 38px; height: 38px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 1rem; color: white; font-weight: 800; border: 2px solid rgba(255,255,255,0.2); }
+        .rank-user { flex: 1; font-weight: 600; display: flex; align-items: center; gap: 12px; font-size: 0.95rem; }
+        .user-avatar { width: 32px; height: 32px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 0.85rem; color: white; font-weight: 800; }
         
-        .rank-score { font-family: 'Teko', sans-serif; font-size: 2.2rem; font-weight: 700; color: var(--wc-green); text-shadow: 0 0 10px rgba(0, 166, 81, 0.3);}
+        .rank-score { font-family: 'Teko', sans-serif; font-size: 1.8rem; font-weight: 700; color: var(--primary); }
 
         .btn-save {
-            width: 100%; background: linear-gradient(135deg, var(--wc-blue), #003b73); color: var(--primary); border: none;
-            padding: 1.2rem; border-radius: 16px; font-weight: 800; font-size: 1.1rem; margin-top: 1.5rem; letter-spacing: 1px;
+            width: 100%; background: var(--primary); color: var(--pitch-black); border: none;
+            padding: 1.2rem; border-radius: 12px; font-weight: 800; font-size: 1rem; margin-top: 2rem;
             cursor: pointer; transition: var(--transition); display: flex; justify-content: center; align-items: center; gap: 10px;
-            border: 1px solid rgba(255,255,255,0.1); position: relative; z-index: 1;
         }
-        .btn-save:hover { transform: translateY(-3px); box-shadow: 0 15px 25px rgba(0, 82, 159, 0.4); border-color: var(--wc-blue); }
+        .btn-save:hover { background: var(--text-muted); color: var(--primary); transform: translateY(-2px); }
+        .btn-save.unsaved { background: var(--wc-red); color: white; }
 
         /* Adaptaciones Móviles */
         @media (max-width: 768px) {
-            .board-header { flex-direction: column; align-items: flex-start; gap: 20px; }
-            .score-display { width: 100%; }
-            .bingo-grid { gap: 6px; padding: 8px; }
-            .bingo-cell { padding: 4px; border-radius: 8px; }
-            .cell-text { font-size: 0.65rem; }
-            .board-section { padding: 1.2rem; }
-            .board-header h1 { font-size: 2.5rem; }
+            .board-header { flex-direction: column; align-items: flex-start; gap: 15px; }
+            .score-display { width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 0.8rem 1.5rem; }
+            .score-display span { display: inline; margin-right: 10px; }
+            .bingo-grid { gap: 6px; }
+            .bingo-cell { padding: 5px; border-radius: 8px; }
+            .cell-text { font-size: 0.6rem; }
+            .board-section { padding: 1.5rem; }
+            .board-header h1 { font-size: 2.2rem; }
         }
+
+        @keyframes spin { 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
 
     <div id="page-loader">
-        <svg class="loader-ball" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--primary);">
-            <circle cx="12" cy="12" r="10"></circle>
-            <path d="M12 12l3.5 2M12 12l-3.5 2M12 12V7.5M12 2.5a9.5 9.5 0 0 1 7.5 4M12 21.5a9.5 9.5 0 0 1-7.5-4"></path>
-        </svg>
-        <p style="margin-top: 20px; font-family: 'Teko', sans-serif; font-size: 2rem; letter-spacing: 2px; color: var(--primary);">PREPARANDO EL CÉSPED...</p>
+        <div class="loader-ring"></div>
+        <p style="margin-top: 20px; font-family: 'Teko', sans-serif; font-size: 1.5rem; letter-spacing: 2px; color: var(--text-muted);">INICIALIZANDO ENTORNO...</p>
     </div>
 
     <nav>
         <button class="btn-nav" onclick="goBack()">
-            <i data-lucide="arrow-left"></i> Volver
+            <i data-lucide="arrow-left"></i> Panel
         </button>
         <div class="logo-wc">
-            World Cup <span>26</span> Bingo
+            World Cup <span>26</span>
         </div>
-        <div style="width: 80px;"></div> </nav>
+        <div style="width: 70px;"></div> </nav>
 
     <div class="game-container">
         
         <div class="board-section">
             <div class="board-header">
                 <div>
-                    <h1>Tu Cartón Oficial</h1>
-                    <p>Marca las casillas a medida que ocurran los eventos en el Mundial.</p>
+                    <h1>Predicciones Oficiales</h1>
+                    <p>Marca los eventos a medida que ocurren en los partidos.</p>
                 </div>
                 <div class="score-display">
-                    <span>Puntuación</span>
+                    <span>Puntos</span>
                     <strong id="my-score">0</strong>
                 </div>
             </div>
@@ -257,18 +249,18 @@
                 </div>
 
             <button class="btn-save" id="btn-save-progress" onclick="saveProgress()">
-                <i data-lucide="save"></i> GUARDAR MI PROGRESO
+                <i data-lucide="save"></i> GUARDAR PROGRESO
             </button>
         </div>
 
         <div class="leaderboard-section">
-            <h2><i data-lucide="trophy"></i> Clasificación Global</h2>
-            <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem;">Compite contra los miembros de tu grupo de viaje. 10 pts por casilla, 50 pts por línea completada.</p>
+            <h2><i data-lucide="bar-chart-2"></i> Clasificación</h2>
+            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.5rem; font-weight: 300;">10 pts por acierto, 50 pts por línea completada.</p>
             
             <div class="table-container" id="leaderboard-container">
                 <div style="text-align: center; color: var(--text-muted); margin-top: 3rem;">
-                    <i data-lucide="loader-2" style="animation: spin 2s linear infinite; width: 40px; height: 40px; color: var(--wc-blue);"></i>
-                    <p style="margin-top: 15px; font-weight: 600;">Cargando clasificación...</p>
+                    <div class="loader-ring" style="width: 30px; height: 30px; margin: 0 auto 15px; border-width: 2px;"></div>
+                    <p style="font-weight: 600;">Cargando base de datos...</p>
                 </div>
             </div>
         </div>
@@ -300,23 +292,14 @@
         let tripId = urlParams.get('id');
 
         if (!tripId) {
-            console.log("ID no encontrado en URL. Iniciando protocolo de rastreo...");
-            // Si la URL no tiene ID, buscamos en el localStorage las llaves que usa viaje.html
             for (let i = 0; i < localStorage.length; i++) {
                 const key = localStorage.key(i);
-                if (key && key.startsWith('lastTipTime_')) {
-                    tripId = key.replace('lastTipTime_', '');
-                    break;
-                }
-                if (key && key.startsWith('financeTourDone_')) {
-                    tripId = key.replace('financeTourDone_', '');
-                    break;
-                }
+                if (key && key.startsWith('lastTipTime_')) { tripId = key.replace('lastTipTime_', ''); break; }
+                if (key && key.startsWith('financeTourDone_')) { tripId = key.replace('financeTourDone_', ''); break; }
             }
         }
 
         if (!tripId) {
-            // Si es imposible saber de dónde viene, lo asignamos a una sala general para que no explote
             tripId = "Mundial2026_SalaGlobal";
             console.warn("Se te ha asignado a la sala global por falta de ID de viaje.");
         }
@@ -326,37 +309,50 @@
             else window.location.href = 'panel.html';
         }
 
-        // Banco de Eventos Posibles (Futbol 11 Style)
+        // Banco de Eventos Oficial
         const EVENT_POOL = [
-            "Gol de chilena", "Penalti fallado", "Revisión larga del VAR", "0-0 al descanso",
-            "Gol de falta directa", "Tarjeta roja directa", "Hat-trick de un jugador", "Gol en el descuento (+90')",
-            "Tanda de penaltis", "Remontada en 2ª parte", "Gol anulado por fuera de juego", "Gol en propia puerta",
-            "Entrenador amonestado", "Invasión de campo", "Lágrimas en el himno", "Golazo desde fuera del área",
-            "España pasa de octavos", "Sustitución por lesión en 1ª parte", "Tiro al palo o larguero", "Empate en fase de grupos",
-            "Gol de cabeza de un defensa", "Asistencia de tacón", "Jugador se quita la camiseta", "Parada a bocajarro",
-            "Gol olímpico (córner directo)", "Partido con +5 goles", "Árbitro lesionado/cambiado", "Corte de luz o clima extremo",
-            "Falso 9 anota", "Un equipo africano a Semis", "Cantada del portero", "Gol en los primeros 5 min"
+            "Gol de chilena", "Penalti parado", "Revisión larga del VAR", "0-0 al descanso",
+            "Gol de falta directa", "Tarjeta roja directa", "Hat-trick", "Gol en el descuento (+90')",
+            "Tanda de penaltis", "Remontada", "Gol anulado", "Gol en propia puerta",
+            "Entrenador amonestado", "Lesión antes del min 20", "Lágrimas en el himno", "Gol desde fuera del área",
+            "Palo o larguero", "Empate a goles", "Gol de un defensa", "Asistencia de tacón", 
+            "Jugador sin camiseta", "Parada a bocajarro", "Gol olímpico", "Partido de +5 goles",
+            "Árbitro sustituido", "Corte de emisión", "Falso 9 anota", "Error del portero",
+            "Gol en primeros 5 min", "Equipo revelación gana", "Polémica arbitral", "Gol de cabeza"
         ];
 
         let currentUser = null;
-        let userProfile = { nombre: 'Jugador', avatarColor: '#00529F' };
-        let bingoBoard = []; // Array de 25 elementos
+        let userProfile = { nombre: 'Invitado', avatarColor: '#00529F' };
+        let bingoBoard = [];
         let currentScore = 0;
         let isSaving = false;
 
-        // 1. Inicialización de Autenticación
+        // 1. Inicialización Totalmente Segura con Try/Catch/Finally
         onAuthStateChanged(auth, async (user) => {
-            if (user) {
-                currentUser = user;
-                await loadUserProfile();
-                await initializeGame();
-                setupLeaderboardListener();
-            } else {
-                window.location.href = 'registro.html';
+            try {
+                if (user) {
+                    currentUser = user;
+                    await loadUserProfile();
+                    await initializeGame();
+                    setupLeaderboardListener();
+                } else {
+                    window.location.href = 'registro.html';
+                }
+            } catch (error) {
+                console.error("Error crítico durante la inicialización:", error);
+                // Si falla Firebase, permitimos jugar en local (crea un tablero temporal)
+                generateNewBoard();
+                renderBoard();
+            } finally {
+                // ESTO GARANTIZA QUE EL LOADER SE QUITE SÍ O SÍ
+                const loader = document.getElementById('page-loader');
+                if (loader) {
+                    loader.style.opacity = '0';
+                    setTimeout(() => loader.style.display = 'none', 500);
+                }
             }
         });
 
-        // 2. Cargar Perfil de Usuario
         async function loadUserProfile() {
             try {
                 const snap = await getDoc(doc(db, "usuarios", currentUser.uid));
@@ -365,34 +361,34 @@
                     userProfile.nombre = data.nombre || currentUser.email.split('@')[0];
                     userProfile.avatarColor = data.avatarColor || '#00529F';
                 }
-            } catch (e) { console.error("Error cargando perfil", e); }
+            } catch (e) { console.warn("Permisos denegados para leer perfil de usuario. Usando fallback."); }
         }
 
-        // 3. Iniciar o Cargar Tablero del Jugador
         async function initializeGame() {
             const docId = `${tripId}_${currentUser.uid}`;
             const boardRef = doc(db, "worldcup_bingo", docId);
-            const docSnap = await getDoc(boardRef);
+            
+            let docSnap;
+            try {
+                docSnap = await getDoc(boardRef);
+            } catch (e) {
+                console.warn("Permisos denegados o red fallida en worldcup_bingo. Iniciando modo local.");
+            }
 
-            if (docSnap.exists()) {
-                // Si ya jugaba, cargar su cartón
+            if (docSnap && docSnap.exists()) {
                 const data = docSnap.data();
                 bingoBoard = data.board;
                 currentScore = data.score || 0;
             } else {
-                // Generar un cartón totalmente nuevo y único
                 generateNewBoard();
-                currentScore = 10; // 10 puntos de regalo por la casilla central
-                await saveToFirebase(true); // Guardar silenciosamente el cartón recién creado
+                currentScore = 10;
+                await saveToFirebase(true); // Intento silencioso
             }
 
             renderBoard();
-            document.getElementById('page-loader').style.opacity = '0';
-            setTimeout(() => document.getElementById('page-loader').style.display = 'none', 500);
         }
 
         function generateNewBoard() {
-            // Mezclar aleatoriamente el banco de eventos
             let shuffled = [...EVENT_POOL].sort(() => 0.5 - Math.random());
             let selected = shuffled.slice(0, 24);
             
@@ -401,8 +397,7 @@
 
             for (let i = 0; i < 25; i++) {
                 if (i === 12) {
-                    // Casilla central GRATIS y épica
-                    bingoBoard.push({ id: 12, text: "LA COPA ES NUESTRA (GRATIS)", checked: true, isFree: true });
+                    bingoBoard.push({ id: 12, text: "MUNDIAL 2026", checked: true, isFree: true });
                 } else {
                     bingoBoard.push({ id: i, text: selected[eventIndex], checked: false, isFree: false });
                     eventIndex++;
@@ -410,7 +405,6 @@
             }
         }
 
-        // 4. Renderizar Tablero e Interacciones
         function renderBoard() {
             const grid = document.getElementById('bingo-board');
             grid.innerHTML = '';
@@ -442,48 +436,31 @@
 
             calculateScoreAndVisuals();
             
-            // Botón de guardar cambia a rojo indicando cambios no guardados
             const btn = document.getElementById('btn-save-progress');
-            btn.style.background = 'var(--wc-red)';
-            btn.style.color = 'white';
+            btn.classList.add('unsaved');
             btn.innerHTML = '<i data-lucide="alert-circle"></i> CAMBIOS SIN GUARDAR';
             lucide.createIcons();
         }
 
-        // 5. Lógica de Puntos y Animaciones (Lineas y Bingo)
         function calculateScoreAndVisuals() {
-            // Limpiar animaciones de línea anteriores
             document.querySelectorAll('.bingo-cell').forEach(el => el.classList.remove('winning-cell'));
             
             let linesCompleted = 0;
             let cellsChecked = 0;
             const winningIndices = new Set();
 
-            // Check Filas
             for (let r = 0; r < 5; r++) {
                 let rowChecked = true;
-                for (let c = 0; c < 5; c++) {
-                    if (!bingoBoard[r * 5 + c].checked) rowChecked = false;
-                }
-                if (rowChecked) {
-                    linesCompleted++;
-                    for (let c = 0; c < 5; c++) winningIndices.add(r * 5 + c);
-                }
+                for (let c = 0; c < 5; c++) { if (!bingoBoard[r * 5 + c].checked) rowChecked = false; }
+                if (rowChecked) { linesCompleted++; for (let c = 0; c < 5; c++) winningIndices.add(r * 5 + c); }
             }
 
-            // Check Columnas
             for (let c = 0; c < 5; c++) {
                 let colChecked = true;
-                for (let r = 0; r < 5; r++) {
-                    if (!bingoBoard[r * 5 + c].checked) colChecked = false;
-                }
-                if (colChecked) {
-                    linesCompleted++;
-                    for (let r = 0; r < 5; r++) winningIndices.add(r * 5 + c);
-                }
+                for (let r = 0; r < 5; r++) { if (!bingoBoard[r * 5 + c].checked) colChecked = false; }
+                if (colChecked) { linesCompleted++; for (let r = 0; r < 5; r++) winningIndices.add(r * 5 + c); }
             }
 
-            // Check Diagonales
             let diag1 = true; let diag2 = true;
             for (let i = 0; i < 5; i++) {
                 if (!bingoBoard[i * 5 + i].checked) diag1 = false;
@@ -492,64 +469,47 @@
             if (diag1) { linesCompleted++; for (let i = 0; i < 5; i++) winningIndices.add(i * 5 + i); }
             if (diag2) { linesCompleted++; for (let i = 0; i < 5; i++) winningIndices.add(i * 5 + (4 - i)); }
 
-            // Aplicar pulso visual a las líneas ganadoras
             const cells = document.querySelectorAll('.bingo-cell');
             winningIndices.forEach(idx => cells[idx].classList.add('winning-cell'));
 
-            // Calcular casillas totales marcadas
             bingoBoard.forEach(c => { if(c.checked) cellsChecked++; });
 
-            // Puntuación: 10 pts por casilla, 50 pts extra por línea completada
             const oldScore = currentScore;
             currentScore = (cellsChecked * 10) + (linesCompleted * 50);
-            
-            // Pleno al 15 (Cartón lleno Bonus)
             if (cellsChecked === 25) currentScore += 250;
 
             document.getElementById('my-score').innerText = currentScore;
 
-            // Disparar confeti oficial del Mundial si consigue una línea nueva
             if (currentScore > oldScore && oldScore !== 0 && linesCompleted > 0 && !isSaving) {
-                shootConfetti();
+                confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 }, colors: ['#00529F', '#E3003F', '#ffffff'] });
             }
         }
 
-        function shootConfetti() {
-            confetti({ 
-                particleCount: 150, 
-                spread: 80, 
-                origin: { y: 0.6 }, 
-                colors: ['#00529F', '#E3003F', '#00A651', '#FFC20E'] 
-            });
-        }
-
-        // 6. Guardado en Firebase
         window.saveProgress = async function() {
             if (isSaving) return;
             isSaving = true;
             const btn = document.getElementById('btn-save-progress');
-            btn.innerHTML = '<i data-lucide="loader-2" style="animation: spin 2s linear infinite;"></i> GUARDANDO DATOS...';
+            btn.innerHTML = '<i data-lucide="loader-2" style="animation: spin 2s linear infinite;"></i> GUARDANDO...';
 
             await saveToFirebase(false);
 
+            btn.classList.remove('unsaved');
             btn.style.background = 'var(--wc-green)';
             btn.style.color = 'white';
-            btn.style.borderColor = 'transparent';
-            btn.innerHTML = '<i data-lucide="check-circle"></i> ESTADÍSTICAS ACTUALIZADAS';
+            btn.innerHTML = '<i data-lucide="check"></i> GUARDADO';
             lucide.createIcons();
             
-            // Volver al estado normal del botón
             setTimeout(() => {
                 btn.style.background = '';
                 btn.style.color = '';
-                btn.style.borderColor = '';
-                btn.innerHTML = '<i data-lucide="save"></i> GUARDAR MI PROGRESO';
+                btn.innerHTML = '<i data-lucide="save"></i> GUARDAR PROGRESO';
                 isSaving = false;
                 lucide.createIcons();
-            }, 2500);
+            }, 2000);
         }
 
         async function saveToFirebase(isSilent) {
+            if(!currentUser) return;
             const docId = `${tripId}_${currentUser.uid}`;
             const boardRef = doc(db, "worldcup_bingo", docId);
             
@@ -564,58 +524,55 @@
                     timestamp: new Date().getTime()
                 }, { merge: true });
             } catch (error) {
-                console.error("Error guardando en la nube", error);
-                if(!isSilent) alert("Hubo un error al guardar. Revisa tu conexión de red.");
+                console.error("Error guardando en Firebase:", error);
+                if(!isSilent) alert("No se pudo guardar online, pero tu cartón se mantiene visualmente.");
             }
         }
 
-        // 7. Leaderboard en Tiempo Real
         function setupLeaderboardListener() {
             const bingoRef = collection(db, "worldcup_bingo");
             const q = query(bingoRef, where("tripId", "==", tripId), orderBy("score", "desc"));
 
-            onSnapshot(q, (snapshot) => {
-                const container = document.getElementById('leaderboard-container');
-                container.innerHTML = '';
+            try {
+                onSnapshot(q, (snapshot) => {
+                    const container = document.getElementById('leaderboard-container');
+                    container.innerHTML = '';
 
-                if (snapshot.empty) {
-                    container.innerHTML = `
-                        <div style="text-align: center; color: var(--text-muted); margin-top: 2rem;">
-                            <i data-lucide="users" style="width: 40px; height: 40px; opacity: 0.5; margin-bottom: 10px;"></i>
-                            <p>Nadie ha guardado puntuaciones en este viaje todavía.</p>
-                            <p style="font-size: 0.8rem; margin-top: 5px;">¡Sé el primero en guardar tu cartón!</p>
-                        </div>`;
-                    lucide.createIcons();
-                    return;
-                }
+                    if (snapshot.empty) {
+                        container.innerHTML = `
+                            <div style="text-align: center; color: var(--text-muted); margin-top: 2rem;">
+                                <p>Aún no hay clasificados.</p>
+                            </div>`;
+                        return;
+                    }
 
-                let rank = 1;
-                snapshot.forEach((doc) => {
-                    const data = doc.data();
-                    const isMe = data.uid === currentUser.uid;
-                    const initial = data.userName ? data.userName.charAt(0).toUpperCase() : '?';
+                    let rank = 1;
+                    snapshot.forEach((doc) => {
+                        const data = doc.data();
+                        const isMe = data.uid === currentUser.uid;
+                        const initial = data.userName ? data.userName.charAt(0).toUpperCase() : '?';
 
-                    container.innerHTML += `
-                        <div class="rank-row ${isMe ? 'is-me' : ''}">
-                            <div class="rank-num">${rank}</div>
-                            <div class="rank-user">
-                                <div class="user-avatar" style="background-color: ${data.avatarColor || 'var(--wc-blue)'}">${initial}</div>
-                                ${data.userName} ${isMe ? '<span style="font-size:0.7rem; background: var(--wc-red); color: white; padding:2px 6px; border-radius:10px; font-weight:800; margin-left: 5px;">TÚ</span>' : ''}
+                        container.innerHTML += `
+                            <div class="rank-row ${isMe ? 'is-me' : ''}">
+                                <div class="rank-num">${rank}</div>
+                                <div class="rank-user">
+                                    <div class="user-avatar" style="background-color: ${data.avatarColor || 'var(--wc-blue)'}">${initial}</div>
+                                    ${data.userName} ${isMe ? '<span style="font-size:0.7rem; background: var(--wc-red); color: white; padding:2px 6px; border-radius:6px; margin-left: 5px;">TÚ</span>' : ''}
+                                </div>
+                                <div class="rank-score">${data.score}</div>
                             </div>
-                            <div class="rank-score">${data.score}</div>
-                        </div>
-                    `;
-                    rank++;
+                        `;
+                        rank++;
+                    });
+                }, (error) => {
+                    document.getElementById('leaderboard-container').innerHTML = '<p style="color:var(--text-muted); text-align:center;">Clasificación no disponible (requiere base de datos).</p>';
                 });
-            });
+            } catch(e) {
+                document.getElementById('leaderboard-container').innerHTML = '<p style="color:var(--text-muted); text-align:center;">Modo sin conexión activo.</p>';
+            }
         }
 
         lucide.createIcons();
-
-        // Estilos para la animación de carga incrustados vía JS
-        const style = document.createElement('style');
-        style.innerHTML = `@keyframes spin { 100% { transform: rotate(360deg); } }`;
-        document.head.appendChild(style);
     </script>
 </body>
 </html>
