@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Bingo World Cup 26 | Interra-hub</title>
+    
+    <link rel="icon" type="image/png" href="interrahublogo.PNG">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;800&family=Teko:wght@500;700&display=swap" rel="stylesheet">
+    
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <style>
+        :root {
+            --wc-blue: #00529F;
+            --wc-red: #E3003F;
+            --wc-green: #059669;
+            --pitch-dark: #020617;
+            --pitch-light: #0f172a;
+            --surface: rgba(30, 41, 59, 0.7);
+            --primary: #ffffff;
+            --text-muted: #94a3b8;
+            --neon-glow: 0 0 15px rgba(227, 0, 63, 0.5);
+            --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Sora', sans-serif; }
+
+        body {
+            background-color: var(--pitch-dark);
+            background-image: 
+                radial-gradient(circle at 15% 50%, rgba(0, 82, 159, 0.15), transparent 25%),
+                radial-gradient(circle at 85% 30%, rgba(227, 0, 63, 0.15), transparent 25%),
+                linear-gradient(to bottom, #020617, #064e3b20);
+            color: var(--primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Nav */
+        nav {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 1rem 5%; background: rgba(2, 6, 23, 0.8); backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255,255,255,0.05); position: sticky; top: 0; z-index: 100;
+        }
+        .btn-nav { background: transparent; color: var(--primary); border: none; cursor: pointer; display: flex; align-items: center; gap: 8px; font-weight: 600; transition: var(--transition); }
+        .btn-nav:hover { color: var(--wc-red); transform: translateX(-5px); }
+        .logo-wc { display: flex; align-items: center; gap: 10px; font-family: 'Teko', sans-serif; font-size: 2rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+        .logo-wc span { color: var(--wc-red); }
+
+        #page-loader {
+            position: fixed; inset: 0; background: var(--pitch-dark); z-index: 9999;
+            display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.5s ease;
+        }
+
+        /* Layout Main */
+        .game-container {
+            max-width: 1300px; margin: 2rem auto; padding: 0 5%;
+            display: grid; grid-template-columns: 1fr 350px; gap: 2rem;
+        }
+
+        @media (max-width: 992px) {
+            .game-container { grid-template-columns: 1fr; }
+        }
+
+        /* Tablero de Bingo */
+        .board-section {
+            background: var(--surface);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 24px;
+            padding: 2rem;
+            backdrop-filter: blur(12px);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .board-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 2rem; }
+        .board-header h1 { font-family: 'Teko', sans-serif; font-size: 3rem; line-height: 1; text-transform: uppercase; margin-bottom: 5px;}
+        .board-header p { color: var(--text-muted); font-size: 0.95rem; }
+        
+        .score-display {
+            background: rgba(0, 0, 0, 0.5); border: 1px solid var(--wc-red);
+            padding: 0.8rem 1.5rem; border-radius: 16px; text-align: center;
+            box-shadow: var(--neon-glow);
+        }
+        .score-display span { display: block; font-size: 0.8rem; color: var(--wc-red); font-weight: 800; text-transform: uppercase; letter-spacing: 1px;}
+        .score-display strong { font-size: 2rem; font-family: 'Teko', sans-serif; line-height: 1; }
+
+        .bingo-grid {
+            display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px;
+            background: rgba(255,255,255,0.02); padding: 10px; border-radius: 16px;
+        }
+
+        .bingo-cell {
+            aspect-ratio: 1 / 1;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            display: flex; justify-content: center; align-items: center; text-align: center;
+            padding: 8px; cursor: pointer; transition: var(--transition);
+            position: relative; overflow: hidden;
+            user-select: none;
+        }
+
+        .bingo-cell:hover:not(.checked):not(.free-space) {
+            background: rgba(255,255,255,0.1); transform: translateY(-2px); border-color: var(--wc-blue);
+        }
+
+        .bingo-cell.checked {
+            background: linear-gradient(135deg, var(--wc-blue), var(--wc-red));
+            border-color: transparent;
+            box-shadow: 0 4px 15px rgba(227, 0, 63, 0.4);
+            transform: scale(0.98);
+        }
+
+        .bingo-cell.checked::after {
+            content: '⚽'; position: absolute; font-size: 2rem; opacity: 0.2;
+        }
+
+        .bingo-cell.free-space {
+            background: linear-gradient(135deg, #d4af37, #ffd700);
+            color: #000; font-weight: 800; border: none; cursor: default;
+        }
+
+        .bingo-cell.winning-cell {
+            animation: pulseWin 1.5s infinite;
+        }
+
+        @keyframes pulseWin {
+            0% { box-shadow: 0 0 0 0 rgba(227, 0, 63, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(227, 0, 63, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(227, 0, 63, 0); }
+        }
+
+        .cell-text {
+            font-size: 0.85rem; font-weight: 600; z-index: 2; word-break: break-word; line-height: 1.2;
+        }
+
+        /* Leaderboard */
+        .leaderboard-section {
+            background: var(--surface); border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 24px; padding: 2rem; backdrop-filter: blur(12px);
+            display: flex; flex-direction: column; max-height: 800px;
+        }
+
+        .leaderboard-section h2 {
+            font-family: 'Teko', sans-serif; font-size: 2.2rem; display: flex; align-items: center; gap: 10px;
+            text-transform: uppercase; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 1rem; margin-bottom: 1rem;
+        }
+
+        .table-container { flex: 1; overflow-y: auto; padding-right: 5px; }
+        .table-container::-webkit-scrollbar { width: 6px; }
+        .table-container::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 10px; }
+
+        .rank-row {
+            display: flex; align-items: center; padding: 1rem;
+            background: rgba(255,255,255,0.03); border-radius: 12px; margin-bottom: 10px;
+            transition: var(--transition); border: 1px solid transparent;
+        }
+        .rank-row:hover { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.1); transform: translateX(5px); }
+        
+        .rank-row.is-me { border-color: var(--wc-blue); background: rgba(0, 82, 159, 0.1); }
+
+        .rank-num { font-family: 'Teko', sans-serif; font-size: 1.5rem; font-weight: 700; width: 30px; color: var(--text-muted); }
+        .rank-row:nth-child(1) .rank-num { color: #ffd700; }
+        .rank-row:nth-child(2) .rank-num { color: #c0c0c0; }
+        .rank-row:nth-child(3) .rank-num { color: #cd7f32; }
+
+        .rank-user { flex: 1; font-weight: 600; display: flex; align-items: center; gap: 10px; font-size: 0.95rem; }
+        .user-avatar { width: 32px; height: 32px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 0.8rem; color: white; font-weight: 800; }
+        
+        .rank-score { font-family: 'Teko', sans-serif; font-size: 1.8rem; font-weight: 700; color: var(--wc-red); }
+
+        .btn-save {
+            width: 100%; background: var(--primary); color: var(--pitch-dark); border: none;
+            padding: 1rem; border-radius: 12px; font-weight: 800; font-size: 1rem; margin-top: 1rem;
+            cursor: pointer; transition: var(--transition); display: flex; justify-content: center; align-items: center; gap: 8px;
+        }
+        .btn-save:hover { background: var(--wc-blue); color: white; transform: translateY(-2px); box-shadow: 0 10px 20px rgba(0, 82, 159, 0.3); }
+
+        /* Adaptaciones Móviles */
+        @media (max-width: 768px) {
+            .board-header { flex-direction: column; align-items: flex-start; gap: 15px; }
+            .score-display { width: 100%; }
+            .bingo-grid { gap: 5px; padding: 5px; }
+            .bingo-cell { padding: 4px; border-radius: 8px; }
+            .cell-text { font-size: 0.6rem; }
+            .board-section { padding: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="page-loader">
+        <i data-lucide="trophy" style="width: 48px; height: 48px; color: var(--wc-red); animation: pulseWin 1s infinite;"></i>
+        <p style="margin-top: 15px; font-family: 'Teko', sans-serif; font-size: 1.5rem; letter-spacing: 1px;">CALENTANDO MOTORES...</p>
+    </div>
+
+    <nav>
+        <button class="btn-nav" onclick="goBack()">
+            <i data-lucide="arrow-left"></i> Volver al Viaje
+        </button>
+        <div class="logo-wc">
+            World Cup <span>26</span> Bingo
+        </div>
+        <div style="width: 100px;"></div> </nav>
+
+    <div class="game-container">
+        
+        <div class="board-section">
+            <div class="board-header">
+                <div>
+                    <h1>Tu Cartón de Predicciones</h1>
+                    <p>Marca las casillas a medida que ocurran en el Mundial.</p>
+                </div>
+                <div class="score-display">
+                    <span>Puntuación</span>
+                    <strong id="my-score">0</strong>
+                </div>
+            </div>
+
+            <div class="bingo-grid" id="bingo-board">
+                </div>
+
+            <button class="btn-save" id="btn-save-progress" onclick="saveProgress()">
+                <i data-lucide="save"></i> GUARDAR PROGRESO
+            </button>
+        </div>
+
+        <div class="leaderboard-section">
+            <h2><i data-lucide="bar-chart-2" style="color: var(--wc-blue); width: 30px; height: 30px;"></i> Clasificación Global</h2>
+            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.5rem;">Compite contra los miembros de tu grupo de viaje. 10 pts por casilla, 50 pts por línea completada.</p>
+            
+            <div class="table-container" id="leaderboard-container">
+                <div style="text-align: center; color: var(--text-muted); margin-top: 2rem;">
+                    <i data-lucide="loader-2" style="animation: spin 2s linear infinite;"></i>
+                    <p style="margin-top: 10px;">Cargando clasificación...</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc, collection, query, where, onSnapshot, orderBy } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDRkUJnDLzknFz3KOnPEm4UFsgf6R4z1Uk",
+            authDomain: "interra26-22ecd.firebaseapp.com",
+            projectId: "interra26-22ecd",
+            storageBucket: "interra26-22ecd.firebasestorage.app",
+            messagingSenderId: "960505222050",
+            appId: "1:960505222050:web:a9943c6fec9532141f98fb"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // Obtener ID del viaje de la URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const tripId = urlParams.get('id');
+
+        window.goBack = () => {
+            if (tripId) window.location.href = `viaje.html?id=${tripId}`;
+            else window.location.href = 'panel.html';
+        }
+
+        if (!tripId) {
+            alert("No se encontró el viaje. Volviendo al panel.");
+            window.location.href = 'panel.html';
+        }
+
+        // Banco de Eventos Posibles (Futbol 11 Style)
+        const EVENT_POOL = [
+            "Gol de chilena", "Penalti fallado", "Revisión larga del VAR", "0-0 al descanso",
+            "Gol de falta directa", "Expulsión directa", "Hattrick de un jugador", "Gol en el descuento (+90')",
+            "Tanda de penaltis", "Remontada en 2ª parte", "Gol anulado por fuera de juego", "Gol en propia puerta",
+            "Entrenador amonestado", "Invasión de campo", "Lágrimas en el himno", "Gol desde fuera del área",
+            "España pasa de octavos", "Sustitución por lesión en 1ª parte", "Palo o larguero", "Empate en fase de grupos",
+            "Gol de cabeza de un defensa", "Asistencia de tacón", "Jugador se quita la camiseta", "Parada a bocajarro",
+            "Gol olímpico (córner directo)", "Partido con +5 goles", "Árbitro lesionado/cambiado", "Corte de luz o clima extremo",
+            "Falso 9 anota", "Un equipo africano a Semis", "Error garrafal del portero (Cantada)", "Gol en los primeros 5 min"
+        ];
+
+        let currentUser = null;
+        let userProfile = { nombre: 'Jugador', avatarColor: '#00529F' };
+        let bingoBoard = []; // Array de 25 elementos { id, text, checked }
+        let currentScore = 0;
+        let isSaving = false;
+
+        // 1. Auth Init
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                currentUser = user;
+                await loadUserProfile();
+                await initializeGame();
+                setupLeaderboardListener();
+            } else {
+                window.location.href = 'registro.html';
+            }
+        });
+
+        // 2. Load User Profile from 'usuarios' collection
+        async function loadUserProfile() {
+            try {
+                const snap = await getDoc(doc(db, "usuarios", currentUser.uid));
+                if (snap.exists()) {
+                    const data = snap.data();
+                    userProfile.nombre = data.nombre || currentUser.email.split('@')[0];
+                    userProfile.avatarColor = data.avatarColor || '#00529F';
+                }
+            } catch (e) { console.error("Error perfil", e); }
+        }
+
+        // 3. Initialize or Load Board
+        async function initializeGame() {
+            const docId = `${tripId}_${currentUser.uid}`;
+            const boardRef = doc(db, "worldcup_bingo", docId);
+            const docSnap = await getDoc(boardRef);
+
+            if (docSnap.exists()) {
+                // Load existing
+                const data = docSnap.data();
+                bingoBoard = data.board;
+                currentScore = data.score || 0;
+            } else {
+                // Generate new board
+                generateNewBoard();
+                currentScore = 10; // 10 base points for the FREE space
+                await saveToFirebase(true); // Save initial generation silently
+            }
+
+            renderBoard();
+            document.getElementById('page-loader').style.opacity = '0';
+            setTimeout(() => document.getElementById('page-loader').style.display = 'none', 500);
+        }
+
+        function generateNewBoard() {
+            // Shuffle and pick 24 unique events
+            let shuffled = [...EVENT_POOL].sort(() => 0.5 - Math.random());
+            let selected = shuffled.slice(0, 24);
+            
+            bingoBoard = [];
+            let eventIndex = 0;
+
+            for (let i = 0; i < 25; i++) {
+                if (i === 12) {
+                    bingoBoard.push({ id: 12, text: "MUNDIAL 2026 (GRATIS)", checked: true, isFree: true });
+                } else {
+                    bingoBoard.push({ id: i, text: selected[eventIndex], checked: false, isFree: false });
+                    eventIndex++;
+                }
+            }
+        }
+
+        // 4. Render Board & Interactions
+        function renderBoard() {
+            const grid = document.getElementById('bingo-board');
+            grid.innerHTML = '';
+
+            bingoBoard.forEach((cell, index) => {
+                const cellEl = document.createElement('div');
+                cellEl.className = `bingo-cell ${cell.checked ? 'checked' : ''} ${cell.isFree ? 'free-space checked' : ''}`;
+                cellEl.innerHTML = `<span class="cell-text">${cell.text}</span>`;
+                
+                if (!cell.isFree) {
+                    cellEl.onclick = () => toggleCell(index, cellEl);
+                }
+                
+                grid.appendChild(cellEl);
+            });
+
+            calculateScoreAndVisuals();
+        }
+
+        function toggleCell(index, element) {
+            bingoBoard[index].checked = !bingoBoard[index].checked;
+            
+            if (bingoBoard[index].checked) {
+                element.classList.add('checked');
+                // Mini pop animation
+                element.style.transform = 'scale(1.1)';
+                setTimeout(() => element.style.transform = 'scale(0.98)', 150);
+            } else {
+                element.classList.remove('checked');
+                element.classList.remove('winning-cell');
+                element.style.transform = '';
+            }
+
+            calculateScoreAndVisuals();
+            
+            // Auto-save logic can be debounced, or handled by the button. 
+            // We'll trust the user to click Save, but update UI immediately.
+            const btn = document.getElementById('btn-save-progress');
+            btn.style.background = 'var(--wc-red)';
+            btn.innerHTML = '<i data-lucide="save"></i> CAMBIOS SIN GUARDAR';
+            lucide.createIcons();
+        }
+
+        // 5. Game Logic (Lines & Score)
+        function calculateScoreAndVisuals() {
+            // Remove previous winning animations
+            document.querySelectorAll('.bingo-cell').forEach(el => el.classList.remove('winning-cell'));
+            
+            let linesCompleted = 0;
+            let cellsChecked = 0;
+            const winningIndices = new Set();
+
+            // Check Rows
+            for (let r = 0; r < 5; r++) {
+                let rowChecked = true;
+                for (let c = 0; c < 5; c++) {
+                    if (!bingoBoard[r * 5 + c].checked) rowChecked = false;
+                }
+                if (rowChecked) {
+                    linesCompleted++;
+                    for (let c = 0; c < 5; c++) winningIndices.add(r * 5 + c);
+                }
+            }
+
+            // Check Cols
+            for (let c = 0; c < 5; c++) {
+                let colChecked = true;
+                for (let r = 0; r < 5; r++) {
+                    if (!bingoBoard[r * 5 + c].checked) colChecked = false;
+                }
+                if (colChecked) {
+                    linesCompleted++;
+                    for (let r = 0; r < 5; r++) winningIndices.add(r * 5 + c);
+                }
+            }
+
+            // Check Diagonals
+            let diag1 = true; let diag2 = true;
+            for (let i = 0; i < 5; i++) {
+                if (!bingoBoard[i * 5 + i].checked) diag1 = false;
+                if (!bingoBoard[i * 5 + (4 - i)].checked) diag2 = false;
+            }
+            if (diag1) { linesCompleted++; for (let i = 0; i < 5; i++) winningIndices.add(i * 5 + i); }
+            if (diag2) { linesCompleted++; for (let i = 0; i < 5; i++) winningIndices.add(i * 5 + (4 - i)); }
+
+            // Apply visual pulse to winning lines
+            const cells = document.querySelectorAll('.bingo-cell');
+            winningIndices.forEach(idx => cells[idx].classList.add('winning-cell'));
+
+            // Total checked (excluding free space which is always checked but counts)
+            bingoBoard.forEach(c => { if(c.checked) cellsChecked++; });
+
+            // Score Logic: 10 pts per cell, 50 pts per line
+            const oldScore = currentScore;
+            currentScore = (cellsChecked * 10) + (linesCompleted * 50);
+            
+            // Full Bingo Bonus
+            if (cellsChecked === 25) currentScore += 200;
+
+            document.getElementById('my-score').innerText = currentScore;
+
+            // Confetti if new line achieved
+            if (currentScore > oldScore && oldScore !== 0 && linesCompleted > 0 && !isSaving) {
+                shootConfetti();
+            }
+        }
+
+        function shootConfetti() {
+            confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 }, colors: ['#00529F', '#E3003F', '#ffffff'] });
+        }
+
+        // 6. Firebase Saving
+        window.saveProgress = async function() {
+            if (isSaving) return;
+            isSaving = true;
+            const btn = document.getElementById('btn-save-progress');
+            btn.innerHTML = '<i data-lucide="loader-2" style="animation: spin 2s linear infinite;"></i> GUARDANDO...';
+
+            await saveToFirebase(false);
+
+            btn.style.background = 'var(--wc-green)';
+            btn.innerHTML = '<i data-lucide="check"></i> GUARDADO';
+            lucide.createIcons();
+            
+            setTimeout(() => {
+                btn.style.background = 'var(--primary)';
+                btn.style.color = 'var(--pitch-dark)';
+                btn.innerHTML = '<i data-lucide="save"></i> GUARDAR PROGRESO';
+                isSaving = false;
+                lucide.createIcons();
+            }, 2000);
+        }
+
+        async function saveToFirebase(isSilent) {
+            const docId = `${tripId}_${currentUser.uid}`;
+            const boardRef = doc(db, "worldcup_bingo", docId);
+            
+            try {
+                await setDoc(boardRef, {
+                    tripId: tripId,
+                    uid: currentUser.uid,
+                    userName: userProfile.nombre,
+                    avatarColor: userProfile.avatarColor,
+                    board: bingoBoard,
+                    score: currentScore,
+                    timestamp: new Date().getTime()
+                }, { merge: true });
+            } catch (error) {
+                console.error("Error saving board", error);
+                if(!isSilent) alert("Hubo un error al guardar. Revisa tu conexión.");
+            }
+        }
+
+        // 7. Real-time Leaderboard
+        function setupLeaderboardListener() {
+            const bingoRef = collection(db, "worldcup_bingo");
+            const q = query(bingoRef, where("tripId", "==", tripId), orderBy("score", "desc"));
+
+            onSnapshot(q, (snapshot) => {
+                const container = document.getElementById('leaderboard-container');
+                container.innerHTML = '';
+
+                if (snapshot.empty) {
+                    container.innerHTML = '<p style="color:var(--text-muted); text-align:center;">Aún nadie ha guardado puntos.</p>';
+                    return;
+                }
+
+                let rank = 1;
+                snapshot.forEach((doc) => {
+                    const data = doc.data();
+                    const isMe = data.uid === currentUser.uid;
+                    const initial = data.userName ? data.userName.charAt(0).toUpperCase() : '?';
+
+                    container.innerHTML += `
+                        <div class="rank-row ${isMe ? 'is-me' : ''}">
+                            <div class="rank-num">${rank}</div>
+                            <div class="rank-user">
+                                <div class="user-avatar" style="background-color: ${data.avatarColor || 'var(--wc-blue)'}">${initial}</div>
+                                ${data.userName} ${isMe ? '<span style="font-size:0.7rem; background:rgba(255,255,255,0.1); padding:2px 6px; border-radius:10px;">TÚ</span>' : ''}
+                            </div>
+                            <div class="rank-score">${data.score}</div>
+                        </div>
+                    `;
+                    rank++;
+                });
+            });
+        }
+
+        lucide.createIcons();
+
+        // Spin animation injected dynamically for loaders
+        const style = document.createElement('style');
+        style.innerHTML = `@keyframes spin { 100% { transform: rotate(360deg); } }`;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
