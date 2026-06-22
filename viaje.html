@@ -660,6 +660,7 @@
         <button class="tab-btn" id="tab-btn-mapa" onclick="switchTab('mapa', this)">Mapa</button>
         <button class="tab-btn" id="tab-btn-finance" onclick="switchTab('finance', this)">Finance</button>
         <button class="tab-btn" id="tab-btn-extra" onclick="switchTab('extra', this)">Extra Info</button>
+        <button class="tab-btn" id="tab-btn-memories" onclick="switchTab('memories', this)">Memories</button>
         <button class="tab-btn" id="tab-btn-entretenimiento" onclick="switchTab('entretenimiento', this)">Entretenimiento</button>
         <button class="tab-btn" id="tab-btn-usuarios" onclick="switchTab('usuarios', this)">
             Equipo y Configuración
@@ -725,15 +726,7 @@
         </div>
     </main>
 
-    <main id="tab-entretenimiento" class="tab-content">
-        <div id="countdown-container" class="countdown-banner">
-            <h3>🌍 <span id="countdown-trip-name">Cargando viaje...</span></h3>
-            <div class="timer-box">
-                <i data-lucide="hourglass"></i> 
-                <span id="countdown-timer">Calculando tiempo...</span>
-            </div>
-        </div>
-
+    <main id="tab-memories" class="tab-content">
         <div class="games-grid-full" style="margin-top: 0; padding-top: 0; border-top: none; margin-bottom: 2rem;">
             <div class="game-card" style="position: relative; border: 1px solid var(--accent); background: linear-gradient(145deg, rgba(20,20,20,0.8), rgba(255,77,77,0.1)); flex-direction: row; align-items: center; padding: 1.2rem;">
                 <span class="badge-novedad sticker"><i data-lucide="sparkles" style="width: 14px;"></i> NOVEDAD!</span>
@@ -744,6 +737,27 @@
                     <p style="font-size: 0.85rem;">Genera recuerdos inolvidables de tu viaje e inmortaliza momentos.</p>
                 </div>
                 <a href="#" id="btn-generador-recuerdos" class="btn-play" style="width: auto; padding: 0.6rem 1.2rem; margin-top: 0;">ENTRAR</a>
+            </div>
+        </div>
+
+        <div class="user-section" style="text-align: center; padding: 4rem 2rem; border: 1px dashed var(--border-subtle);">
+            <i data-lucide="camera" style="width: 64px; height: 64px; color: var(--accent); margin-bottom: 1.5rem; opacity: 0.8;"></i>
+            <h2 style="font-size: 2rem; font-weight: 800; margin-bottom: 1rem; letter-spacing: -0.5px;">Memories</h2>
+            <p style="color: var(--text-muted); font-size: 1.05rem; max-width: 500px; margin: 0 auto 2rem; line-height: 1.6;">
+                El carrete de tu viaje. Muy pronto podréis subir, compartir y revivir todos los recuerdos y fotografías de esta aventura en un álbum colaborativo.
+            </p>
+            <div style="display: flex; justify-content: center;">
+                <span class="badge-novedad" style="position: static; animation: pulseNovedad 2s infinite; display: inline-flex;"><i data-lucide="sparkles" style="width: 16px;"></i> MUCHÍSIMO MÁS PRÓXIMAMENTE</span>
+            </div>
+        </div>
+    </main>
+
+    <main id="tab-entretenimiento" class="tab-content">
+        <div id="countdown-container" class="countdown-banner">
+            <h3>🌍 <span id="countdown-trip-name">Cargando viaje...</span></h3>
+            <div class="timer-box">
+                <i data-lucide="hourglass"></i> 
+                <span id="countdown-timer">Calculando tiempo...</span>
             </div>
         </div>
 
